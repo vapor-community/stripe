@@ -1,6 +1,6 @@
 import XCTest
-@testable import vapor_stripeTests
+@testable import StripeTests
 
 XCTMain([
-    testCase(vapor_stripeTests.allTests),
+    testCase(ProviderTests.allTests),
 ])

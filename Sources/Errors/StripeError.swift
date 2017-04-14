@@ -6,22 +6,23 @@
 //
 //
 
-import Foundation
+public enum StripeError: Error {
 
-enum StripeError: Error {
-    
     // Provider Errors
     case missingConfig
     case missingAPIKey
-    
+
+    // Serialization
+    case serializationIssue
+
     // API Error's
     case apiConnectionError
     case apiError
     case authenticationError
     case cardError
     case invalidRequestError
-    case rate_LimitError
+    case rateLimitError
     case validationError
-    
-    
+
+
 }

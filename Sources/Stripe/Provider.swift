@@ -7,14 +7,16 @@
 //
 
 import Vapor
+import API
+import Errors
 
-private var _stripe: StripeClass?
+private var _stripe: StripeClient?
 
 extension Droplet {
     /*
      Enables use of the `drop.stripe?` convenience methods.
      */
-    public var stripe: StripeClass? {
+    public var stripe: StripeClient? {
         get {
             return _stripe
         }
@@ -25,10 +27,10 @@ extension Droplet {
 }
 
 public final class Provider: Vapor.Provider {
-    
+
     public let apiKey: String
-    public let stripe: StripeClass
-    
+    public let stripe: StripeClient
+
     public convenience init(config: Config) throws {
         guard let stripeConfig = config["stripe"]?.object else {
             throw StripeError.missingConfig
@@ -38,22 +40,23 @@ public final class Provider: Vapor.Provider {
         }
         try self.init(apiKey: apiKey)
     }
-    
+
     public init(apiKey: String) throws {
         self.apiKey = apiKey
-        self.stripe = try StripeClass(apiKey: apiKey)
+        self.stripe = try StripeClient(apiKey: apiKey)
     }
-    
+
     public func boot(_ drop: Droplet) {
+        self.stripe.initializeRoutes()
         drop.stripe = self.stripe
     }
-    
+
     public func afterInit(_ drop: Droplet) {
-        
+
     }
-    
+
     public func beforeRun(_ drop: Droplet) {
-        
+
     }
-    
+
 }
