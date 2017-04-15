@@ -24,5 +24,6 @@ public enum StripeError: Error {
     case rateLimitError
     case validationError
 
-
+    // Other
+    case invalidSourceType
 }

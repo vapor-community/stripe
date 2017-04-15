@@ -25,10 +25,12 @@ public class StripeRequest<T : StripeModelProtocol> {
     var response: HTTP.Response!
     let httpClient = EngineClient.factory
 
-    init(client: StripeClient, method: HTTPMethod = .get, route: String, query: [String : NodeRepresentable] = [:], body: BodyRepresentable?, headers: [HeaderKey : String]? = nil) throws {
+    init(client: StripeClient, method: HTTPMethod = .get, route: API, query: [String : NodeRepresentable] = [:], body: BodyRepresentable?, headers: [HeaderKey : String]? = nil) throws {
         self.client = client
 
         var allHeaders = DefaultHeaders
+        allHeaders["Authorization"] = "Bearer \(self.client.apiKey)"
+        
         if let headers = headers {
             headers.forEach {
                 allHeaders[$0.key] = $0.value
@@ -36,11 +38,11 @@ public class StripeRequest<T : StripeModelProtocol> {
         }
 
         switch method {
-        case .get: self.response = try self.httpClient.get(route, query: query, allHeaders, body, through: [])
-        case .post: self.response = try self.httpClient.post(route, query: query, allHeaders, body, through: [])
-        case .patch: self.response = try self.httpClient.patch(route, query: query, allHeaders, body, through: [])
-        case .put: self.response = try self.httpClient.put(route, query: query, allHeaders, body, through: [])
-        case .delete: self.response = try self.httpClient.delete(route, query: query, allHeaders, body, through: [])
+        case .get: self.response = try self.httpClient.get(route.endpoint, query: query, allHeaders, body, through: [])
+        case .post: self.response = try self.httpClient.post(route.endpoint, query: query, allHeaders, body, through: [])
+        case .patch: self.response = try self.httpClient.patch(route.endpoint, query: query, allHeaders, body, through: [])
+        case .put: self.response = try self.httpClient.put(route.endpoint, query: query, allHeaders, body, through: [])
+        case .delete: self.response = try self.httpClient.delete(route.endpoint, query: query, allHeaders, body, through: [])
         }
     }
 

@@ -16,11 +16,13 @@ internal let DefaultHeaders = [HeaderKey("Stripe-Version"): "2017-04-06"]
 
 internal enum API {
     
+    case balance
     case charges
     
     var endpoint: String {
         switch self {
-        case .charges: return APIBase + APIVersion + "charges/"
+        case .balance: return APIBase + APIVersion + "balance"
+        case .charges: return APIBase + APIVersion + "charges"
         }
     }
     
