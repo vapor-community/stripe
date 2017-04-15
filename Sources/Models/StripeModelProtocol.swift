@@ -8,6 +8,4 @@
 
 import Node
 
-public protocol StripeModelProtocol: NodeInitializable, NodeRepresentable {
-
-}
+public protocol StripeModelProtocol: NodeInitializable, NodeRepresentable { }

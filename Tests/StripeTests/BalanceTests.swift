@@ -28,12 +28,26 @@ class BalanceTests: XCTestCase {
     
     static var allTests = [
         ("testBalance", testBalance),
+        ("testBalanceHistoryTransactionitem", testBalanceHistoryTransactionitem),
+        ("testBalanceHistory", testBalanceHistory),
     ]
     
     func testBalance() throws {
         let drop = try self.makeDroplet()
-        let balance = try drop.stripe?.balance.getBalance().serializedResponse()
-        XCTAssertNotNil(balance)
+        let object = try drop.stripe?.balance.retrieveBalance().serializedResponse()
+        XCTAssertNotNil(object)
+    }
+    
+    func testBalanceHistoryTransactionitem() throws {
+        let drop = try self.makeDroplet()
+        let object = try drop.stripe?.balance.retrieveBalance(forTransaction: "txn_TRANSACTION_ID").serializedResponse()
+        XCTAssertNotNil(object)
+    }
+    
+    func testBalanceHistory() throws {
+        let drop = try self.makeDroplet()
+        let object = try drop.stripe?.balance.history().serializedResponse()
+        XCTAssertNotNil(object)
     }
     
 }

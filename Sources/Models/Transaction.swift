@@ -33,7 +33,7 @@ public class Transfer: StripeModelProtocol {
             "currency": self.currency,
             "amount": self.amount,
             "source_types": types
-            ])
+        ])
     }
     
 }
