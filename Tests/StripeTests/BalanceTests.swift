@@ -11,19 +11,6 @@ import XCTest
 @testable import Stripe
 @testable import Vapor
 
-extension XCTestCase {
-    func makeDroplet() throws -> Droplet {
-        let config = Config([
-            "stripe": [
-                "apiKey": "API_KEY" // Add your own API Key for tests
-            ],
-        ])
-        let drop = try Droplet(config: config)
-        try drop.addProvider(Stripe.Provider.self)
-        return drop
-    }
-}
-
 class BalanceTests: XCTestCase {
     
     static var allTests = [

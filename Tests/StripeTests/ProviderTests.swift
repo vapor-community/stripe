@@ -9,14 +9,7 @@ class ProviderTests: XCTestCase {
     ]
 
     func testProvider() throws {
-        let config = Config([
-            "stripe": [
-                "apiKey": "API_KEY"
-            ],
-        ])
-        let drop = try Droplet(config: config)
-        try drop.addProvider(Stripe.Provider.self)
-
+        let drop = try makeDroplet()
         XCTAssertEqual(drop.stripe?.apiKey, "API_KEY")
     }
 }
