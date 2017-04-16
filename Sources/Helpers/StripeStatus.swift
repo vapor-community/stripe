@@ -9,5 +9,10 @@
 import Foundation
 
 public enum StripeStatus: String {
+    case success = "success"
+    case succeeded = "succeeded"
+    case failed = "failed"
     case pending = "pending"
+    case cancelled = "cancelled"
+    case chargeable = "chargeable"
 }
