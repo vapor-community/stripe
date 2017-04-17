@@ -14,9 +14,7 @@ import HTTP
 
 public final class Filter {
     
-    public init() {
-        
-    }
+    public init() { }
     
     /**
      Can either be a UNIX timestamp, or a dictionary with these key/values
@@ -86,7 +84,13 @@ public final class Filter {
     internal func createBody() throws -> Node {
         var node = Node([:])
         if let value = self.created {
-            node["created"] = value
+            if let value = value.object {
+                for (key, value) in value {
+                    node["created[\(key)]"] = value
+                }
+            } else {
+                node["created"] = value
+            }
         }
         
         if let value = self.customerId {
