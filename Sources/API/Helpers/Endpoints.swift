@@ -12,7 +12,10 @@ import HTTP
 internal let APIBase = "https://api.stripe.com/"
 internal let APIVersion = "v1/"
 
-internal let DefaultHeaders = [StripeHeader.Version: "2017-04-06"]
+internal let DefaultHeaders = [
+    HeaderKey.contentType: "application/x-www-form-urlencoded",
+    StripeHeader.Version: "2017-04-06"
+]
 
 internal struct StripeHeader {
     static let Version = HeaderKey("Stripe-Version")

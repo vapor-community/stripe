@@ -10,13 +10,15 @@ import XCTest
 
 @testable import Stripe
 @testable import Vapor
+@testable import API
 
 class BalanceTests: XCTestCase {
     
     static var allTests = [
         ("testBalance", testBalance),
-        ("testBalanceHistoryTransactionitem", testBalanceHistoryTransactionitem),
+        ("testBalanceTransactionItem", testBalanceTransactionItem),
         ("testBalanceHistory", testBalanceHistory),
+        ("testFilterBalanceHistory", testFilterBalanceHistory),
     ]
     
     func testBalance() throws {
@@ -25,7 +27,7 @@ class BalanceTests: XCTestCase {
         XCTAssertNotNil(object)
     }
     
-    func testBalanceHistoryTransactionitem() throws {
+    func testBalanceTransactionItem() throws {
         let drop = try self.makeDroplet()
         let object = try drop.stripe?.balance.retrieveBalance(forTransaction: TestTransactionID).serializedResponse()
         XCTAssertNotNil(object)
@@ -35,6 +37,14 @@ class BalanceTests: XCTestCase {
         let drop = try self.makeDroplet()
         let object = try drop.stripe?.balance.history().serializedResponse()
         XCTAssertNotNil(object)
+    }
+    
+    func testFilterBalanceHistory() throws {
+        let drop = try self.makeDroplet()
+        let filter = Filter()
+        filter.limit = 1
+        let object = try drop.stripe?.balance.history(forFilter: filter).serializedResponse()
+        XCTAssertEqual(object?.items.count, 1)
     }
     
 }

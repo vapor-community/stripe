@@ -16,11 +16,13 @@ import Helpers
  */
 public final class ShippingLabel: StripeModelProtocol {
     
-    public let address: ShippingAddress
-    public let carrier: String
-    public let name: String
-    public let phone: String
-    public let trackingNumber: String
+    public var address: ShippingAddress?
+    public var carrier: String?
+    public var name: String?
+    public var phone: String?
+    public var trackingNumber: String?
+    
+    public init() { }
     
     public init(node: Node) throws {
         self.address = try node.get("address")
@@ -31,13 +33,14 @@ public final class ShippingLabel: StripeModelProtocol {
     }
     
     public func makeNode(in context: Context?) throws -> Node {
-        return try Node(node: [
+        let object: [String: Any?] = [
             "address": self.address,
             "carrier": self.carrier,
             "name": self.name,
             "phone": self.phone,
             "tracking_number": self.trackingNumber,
-        ])
+        ]
+        return try Node(node: object)
     }
     
 }

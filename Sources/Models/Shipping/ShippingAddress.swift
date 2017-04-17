@@ -17,12 +17,14 @@ import Helpers
 
 public final class ShippingAddress: StripeModelProtocol {
     
-    public let city: String
-    public let country: String
-    public let addressLine1: String
-    public let addressLine2: String
-    public let postalCode: String
-    public let state: String
+    public var city: String?
+    public var country: String?
+    public var addressLine1: String?
+    public var addressLine2: String?
+    public var postalCode: String?
+    public var state: String?
+    
+    public init() { }
     
     public init(node: Node) throws {
         self.city = try node.get("city")
@@ -34,14 +36,15 @@ public final class ShippingAddress: StripeModelProtocol {
     }
     
     public func makeNode(in context: Context?) throws -> Node {
-        return try Node(node: [
+        let object: [String : Any?] = [
             "city": self.city,
             "country": self.country,
             "line1": self.addressLine1,
             "line2": self.addressLine2,
             "postal_code": self.postalCode,
             "state": self.state
-        ])
+        ]
+        return try Node(node: object)
     }
     
 }

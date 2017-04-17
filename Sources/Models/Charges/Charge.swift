@@ -81,10 +81,8 @@ public final class Charge: StripeModelProtocol {
         self.refunds = try node.get("refunds")
         self.status = try StripeStatus(rawValue: node.get("status"))
         
-        if let shippingLabel: [String: Any]? = try node.get("shipping") {
-            if let _ = shippingLabel {
-                self.shippingLabel = try node.get("shipping")
-            }
+        if let _ = node["shipping"]?.object {
+            self.shippingLabel = try node.get("shipping")
         }
         
         self.metadata = try node.get("metadata")

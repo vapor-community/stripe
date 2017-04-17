@@ -43,26 +43,15 @@ public final class BalanceRoutes {
      Returns a list of transactions that have contributed to the Stripe account balance (e.g., charges, transfers, and so forth). 
      The transactions are returned in sorted order, with the most recent transactions appearing first.
      
-     - parameter limit:       Limit the amount of data returned.
-     - parameter availableOn: A filter on the list based on the object available_on field.
-     - parameter created:     A  filter on the list based on the object created field.
+     - parameter filter: A Filter item to ass query parameters when fetching results
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func history(limit: Int?=nil, availableOn: Date?=nil, created: Date?=nil) throws -> StripeRequest<BalanceHistoryList> {
+    public func history(forFilter filter: Filter?=nil) throws -> StripeRequest<BalanceHistoryList> {
         var query = [String : NodeRepresentable]()
-        if let limit = limit {
-            query["limit"] = limit
+        if let data = try filter?.createQuery() {
+            query = data
         }
-        
-        if let availableOn = availableOn {
-            query["available_on"] = availableOn.timeIntervalSince1970
-        }
-        
-        if let created = created {
-            query["created"] = created.timeIntervalSince1970
-        }
-        
         return try StripeRequest(client: self.client, method: .get, route: .balanceHistory, query: query, body: nil, headers: nil)
     }
     
