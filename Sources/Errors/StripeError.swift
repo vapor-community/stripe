@@ -20,7 +20,7 @@ public enum StripeError: Error {
     case apiError
     case authenticationError
     case cardError
-    case invalidRequestError
+    case invalidRequestError(String?, String?)
     case rateLimitError
     case validationError
 
