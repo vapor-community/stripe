@@ -12,7 +12,8 @@ public class StripeClient {
 
     public let apiKey: String
 
-    public var balance: BalanceRoutes!
+    public private(set) var balance: BalanceRoutes!
+    public private(set) var charge: ChargeRoutes!
 
     public init(apiKey: String) throws {
         self.apiKey = apiKey
@@ -20,6 +21,7 @@ public class StripeClient {
 
     public func initializeRoutes() {
         self.balance = BalanceRoutes(client: self)
+        self.charge = ChargeRoutes(client: self)
     }
 
 }

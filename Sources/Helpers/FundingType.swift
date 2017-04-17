@@ -14,3 +14,14 @@ public enum FundingType: String {
     case prepaid = "prepaid"
     case unknown = "unknown"
 }
+
+extension FundingType {
+    public init?(optionalRawValue: String?) {
+        if let rawValue = optionalRawValue {
+            if let value = FundingType(rawValue: rawValue) {
+                self = value
+            }
+        }
+        return nil
+    }
+}

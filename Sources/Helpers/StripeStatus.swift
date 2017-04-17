@@ -16,3 +16,14 @@ public enum StripeStatus: String {
     case cancelled = "cancelled"
     case chargeable = "chargeable"
 }
+
+extension StripeStatus {
+    public init?(optionalRawValue: String?) {
+        if let rawValue = optionalRawValue {
+            if let value = StripeStatus(rawValue: rawValue) {
+                self = value
+            }
+        }
+        return nil
+    }
+}

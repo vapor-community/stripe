@@ -29,7 +29,7 @@ public class StripeRequest<T : StripeModelProtocol> {
         self.client = client
 
         var allHeaders = DefaultHeaders
-        allHeaders["Authorization"] = "Bearer \(self.client.apiKey)"
+        allHeaders[StripeHeader.Authorization] = "Bearer \(self.client.apiKey)"
         
         if let headers = headers {
             headers.forEach {
@@ -50,7 +50,7 @@ public class StripeRequest<T : StripeModelProtocol> {
     public func serializedResponse() throws -> T {
         guard self.response.status == .ok else { throw self.response.status }
         guard let value = self.response.json else { throw StripeError.serializationIssue }
-        return try T(node: value.makeNode(in: nil))
+        return try T(node: value)
     }
 
 }

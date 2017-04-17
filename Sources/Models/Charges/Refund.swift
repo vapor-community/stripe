@@ -18,10 +18,11 @@ import Helpers
 public final class Refund: StripeModelProtocol {
     
     public let object: String
-    public let items: [RefundItem]
     public let hasMore: Bool
     public let totalCount: Int
     public let url: String
+    public private(set) var items: [RefundItem]?
+    
     public var id: String {
         get {
             // /v1/charges/:id/refunds
@@ -39,13 +40,14 @@ public final class Refund: StripeModelProtocol {
     }
     
     public func makeNode(in context: Context?) throws -> Node {
-        return try Node(node: [
+        let object: [String : Any?] = [
             "object": self.object,
             "data": self.items,
             "has_more": self.hasMore,
             "total_count": self.totalCount,
             "url": self.url
-        ])
+        ]
+        return try Node(node: object)
     }
     
 }

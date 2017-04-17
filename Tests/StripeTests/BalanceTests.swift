@@ -27,7 +27,7 @@ class BalanceTests: XCTestCase {
     
     func testBalanceHistoryTransactionitem() throws {
         let drop = try self.makeDroplet()
-        let object = try drop.stripe?.balance.retrieveBalance(forTransaction: "txn_TRANSACTION_ID").serializedResponse()
+        let object = try drop.stripe?.balance.retrieveBalance(forTransaction: TestTransactionID).serializedResponse()
         XCTAssertNotNil(object)
     }
     

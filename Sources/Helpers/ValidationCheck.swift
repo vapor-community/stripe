@@ -14,3 +14,14 @@ public enum ValidationCheck: String {
     case unavailable = "unavailable"
     case unchecked = "unchecked"
 }
+
+extension ValidationCheck {
+    public init?(optionalRawValue: String?) {
+        if let rawValue = optionalRawValue {
+            if let value = ValidationCheck(rawValue: rawValue) {
+                self = value
+            }
+        }
+        return nil
+    }
+}

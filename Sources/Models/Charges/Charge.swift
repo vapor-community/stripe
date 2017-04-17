@@ -25,27 +25,29 @@ public final class Charge: StripeModelProtocol {
     public let balanceTransactionId: String
     public let isCaptured: Bool
     public let created: Date
-    public let currency: StripeCurrency?
     public let customerId: String?
-    public let description: String
+    public let description: String?
     public let destination: String?
     public let failureCode: Int?
     public let failureMessage: String?
-    public let fraud: FraudDetails?
     public let invoiceId: String?
     public let isLiveMode: Bool
-    public let metadata: [String : Any]?
-    public let outcome: Outcome
     public let isPaid: Bool
     public let isRefunded: Bool
-    public let refunds: Refund
-    public let review: String
-    public let shippingLabel: ShippingLabel?
+    public let review: String?
     public let sourceTransfer: String?
     public let statementDescriptor: String?
-    public let status: StripeStatus?
     public let transferGroup: String?
-    
+
+    public private(set) var currency: StripeCurrency?
+    public private(set) var fraud: FraudDetails?
+    public private(set) var outcome: Outcome?
+    public private(set) var refunds: Refund?
+    public private(set) var status: StripeStatus?
+    public private(set) var shippingLabel: ShippingLabel?
+
+    public private(set) var metadata: Node?
+
     public private(set) var card: Card?
     public private(set) var source: Source?
     
@@ -59,33 +61,41 @@ public final class Charge: StripeModelProtocol {
         self.balanceTransactionId = try node.get("balance_transaction")
         self.isCaptured = try node.get("captured")
         self.created = try node.get("created")
-        self.currency = try StripeCurrency(rawValue: node.get("currency"))
         self.customerId = try node.get("customer")
         self.description = try node.get("description")
         self.destination = try node.get("destination")
         self.failureCode = try node.get("failure_code")
         self.failureMessage = try node.get("failure_message")
-        self.fraud = try node.get("fraud_details")
         self.invoiceId = try node.get("invoice")
         self.isLiveMode = try node.get("livemode")
-        self.metadata = try node.get("metadata")
-        self.outcome = try node.get("outcome")
         self.isPaid = try node.get("paid")
         self.isRefunded = try node.get("refunded")
-        self.refunds = try node.get("refunds")
         self.review = try node.get("review")
-        self.shippingLabel = try node.get("shipping")
         self.sourceTransfer = try node.get("source_transfer")
         self.statementDescriptor = try node.get("statement_descriptor")
-        self.status = try StripeStatus(rawValue: node.get("status"))
         self.transferGroup = try node.get("transfer_group")
+
+        self.currency = try StripeCurrency(rawValue: node.get("currency"))
+        self.fraud = try node.get("fraud_details")
+        self.outcome = try node.get("outcome")
+        self.refunds = try node.get("refunds")
+        self.status = try StripeStatus(rawValue: node.get("status"))
         
-        // We have to determine if its a card, or a source item
-        let source: [String : Any] = try node.get("source")
-        if let object = source["object"] as? String, object == "card" {
-            self.card = try node.get("source")
-        } else if let object = source["object"] as? String, object == "source" {
-            self.source = try node.get("source")
+        if let shippingLabel: [String: Any]? = try node.get("shipping") {
+            if let _ = shippingLabel {
+                self.shippingLabel = try node.get("shipping")
+            }
+        }
+        
+        self.metadata = try node.get("metadata")
+        
+        // We have to determine if it's a card or a source item
+        if let sourceNode: Node = try node.get("source") {
+            if let object = sourceNode["object"]?.string, object == "card" {
+                self.card = try node.get("source")
+            } else if let object = sourceNode["object"]?.string, object == "source" {
+                self.source = try node.get("source")
+            }
         }
     }
     

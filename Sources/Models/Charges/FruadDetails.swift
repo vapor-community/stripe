@@ -21,12 +21,21 @@ public enum FraudReport: String {
 
 public final class FraudDetails: StripeModelProtocol {
 
-    public let userReport: FraudReport?
-    public let stripeReport: FraudReport?
+    public var userReport: FraudReport?
+    public var stripeReport: FraudReport?
     
     public init(node: Node) throws {
-        self.userReport = try FraudReport(rawValue: node.get("user_report"))!
-        self.stripeReport = try FraudReport(rawValue: node.get("stripe_report"))!
+        if let value: String? = try node.get("user_report") {
+            if let value = value {
+                self.userReport = FraudReport(rawValue: value)
+            }
+        }
+        
+        if let value: String? = try node.get("stripe_report") {
+            if let value = value {
+                self.stripeReport = FraudReport(rawValue: value)
+            }
+        }
     }
     
     public func makeNode(in context: Context?) throws -> Node {

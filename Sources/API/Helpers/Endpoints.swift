@@ -12,7 +12,13 @@ import HTTP
 internal let APIBase = "https://api.stripe.com/"
 internal let APIVersion = "v1/"
 
-internal let DefaultHeaders = [HeaderKey("Stripe-Version"): "2017-04-06"]
+internal let DefaultHeaders = [StripeHeader.Version: "2017-04-06"]
+
+internal struct StripeHeader {
+    static let Version = HeaderKey("Stripe-Version")
+    static let Authorization = HeaderKey("Authorization")
+    static let Account = HeaderKey("Stripe-Account")
+}
 
 internal enum API {
     
@@ -35,6 +41,7 @@ internal enum API {
      individual charges as well as list all charges. Charges are identified by a unique random ID.
     */
     case charges
+    case charge(String)
     
     var endpoint: String {
         switch self {
@@ -43,6 +50,7 @@ internal enum API {
         case .balanceHistoryTransaction(let id): return APIBase + APIVersion + "balance/history/\(id)"
         
         case .charges: return APIBase + APIVersion + "charges"
+        case .charge(let id): return APIBase + APIVersion + "charges/\(id)"
         }
     }
     

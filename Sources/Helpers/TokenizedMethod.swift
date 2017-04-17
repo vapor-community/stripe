@@ -12,3 +12,14 @@ public enum TokenizedMethod: String {
     case applePay = "apple_pay"
     case androidPay = "android_pay"
 }
+
+extension TokenizedMethod {
+    public init?(optionalRawValue: String?) {
+        if let rawValue = optionalRawValue {
+            if let value = TokenizedMethod(rawValue: rawValue) {
+                self = value
+            }
+        }
+        return nil
+    }
+}
