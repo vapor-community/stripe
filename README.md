@@ -13,24 +13,28 @@ The Stripe API is huge, and therefor I only plan on implementing the things that
 
 ## Getting Started
 In your `Package.swift` file, add a Package
-```swift
+~~~~swift
 .Package(url: "https://github.com/anthonycastelli/vapor-stripe.git", Version(0,0,1, prereleaseIdentifiers: ["beta"]))
-```
+~~~~
 
 You'll need a config file as well. Place a `stripe.json` file in your `Config` folder
-~~~~
+~~~~json
 {
     "apiKey": "YOUR_API_KEY"
 }
 ~~~~
 
 Add the provider to your droplet
-`try drop.addProvider(Stripe.Provider.self)`
+~~~~swift
+try drop.addProvider(Stripe.Provider.self)
+~~~~
 
 And you are all set. Interacting with the API is quite easy. Everything is Node backed with a simple API.
 
 Making calls to the api is a simple one line
-`let object = try drop.stripe?.balance.history().serializedResponse()`
+~~~~swift
+let object = try drop.stripe?.balance.history().serializedResponse()
+~~~~
 The object is returned response model, or model array.
 
 ## Whats Implemented
