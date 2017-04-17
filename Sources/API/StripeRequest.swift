@@ -49,19 +49,20 @@ public class StripeRequest<T : StripeModelProtocol> {
     @discardableResult
     public func serializedResponse() throws -> T {
         guard self.response.status == .ok else {
-            guard let type = self.response.json?["type"] else { throw self.response.status }
+            guard let error = self.response.json?["error"]?.object else { throw self.response.status }
+            guard let type = error["type"]?.string else { throw self.response.status }
             switch type {
-            case "api_connection_error": throw StripeError.apiConnectionError
-            case "api_error": throw StripeError.apiError
-            case "authentication_error": throw StripeError.authenticationError
-            case "card_error": throw StripeError.cardError
-            case "invalid_request_error": throw StripeError.invalidRequestError(self.response.json?["message"]?.string, self.response.json?["param"]?.string)
-            case "rate_limit_error": throw StripeError.cardError
-            case "validation_error": throw StripeError.cardError
-            default: throw self.response.status
+            case "api_connection_error":  throw StripeError.apiConnectionError
+            case "api_error":             throw StripeError.apiError
+            case "authentication_error":  throw StripeError.authenticationError
+            case "card_error":            throw StripeError.cardError
+            case "invalid_request_error": throw StripeError.invalidRequestError(try self.response.json?.get("error"))
+            case "rate_limit_error":      throw StripeError.rateLimitError
+            case "validation_error":      throw StripeError.validationError
+            default:                      throw self.response.status
             }
         }
-        guard let value = self.response.json else { throw StripeError.serializationIssue }
+        guard let value = self.response.json else { throw StripeError.serializationError }
         return try T(node: value)
     }
 
