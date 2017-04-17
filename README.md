@@ -41,7 +41,12 @@ The object is returned response model, or model array.
 * [x] Balance Fetching
     * [x] History
     * [x] Balance by ID
-* [ ] Charges
+* [x] Charges
+    * [x] Creating Charges
+    * [x] Retrieving a charge by id
+    * [x] Listing all charges
+    * [x] Updating a charge
+    * [x] Capturing a charge
 * [ ] Customers
 * [ ] Disputes
 * [ ] Events
