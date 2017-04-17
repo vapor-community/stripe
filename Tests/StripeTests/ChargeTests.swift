@@ -20,7 +20,8 @@ class ChargeTests: XCTestCase {
         ("testRetrieveCharge", testRetrieveCharge),
         ("testListAllCharges", testListAllCharges),
         ("testFilterAllCharges", testFilterAllCharges),
-        ("testChargeUpdate", testChargeUpdate)
+        ("testChargeUpdate", testChargeUpdate),
+        ("testChargeCapture", testChargeCapture)
     ]
     
     func testCharge() throws {
@@ -68,7 +69,12 @@ class ChargeTests: XCTestCase {
         
         let metadata = ["test": "metadata"]
         let object = try drop.stripe?.charge.update(charge: TestChargeID, metadata: metadata, receiptEmail: "test-email@test.com", shippingLabel: shippingLabel).serializedResponse()
-        
+        XCTAssertNotNil(object)
+    }
+    
+    func testChargeCapture() throws {
+        let drop = try self.makeDroplet()
+        let object = try drop.stripe?.charge.capture(charge: TestChargeID).serializedResponse()
         XCTAssertNotNil(object)
     }
 }

@@ -45,6 +45,7 @@ internal enum API {
     */
     case charges
     case charge(String)
+    case captureCharge(String)
     
     var endpoint: String {
         switch self {
@@ -54,6 +55,7 @@ internal enum API {
         
         case .charges: return APIBase + APIVersion + "charges"
         case .charge(let id): return APIBase + APIVersion + "charges/\(id)"
+        case .captureCharge(let id): return APIBase + APIVersion + "charges/\(id)/capture"
         }
     }
     
