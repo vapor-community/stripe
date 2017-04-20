@@ -14,8 +14,8 @@ class ProviderTests: XCTestCase {
                 "apiKey": "API_KEY"
             ],
         ])
+        try config.addProvider(Stripe.Provider.self)
         let drop = try Droplet(config: config)
-        try drop.addProvider(Stripe.Provider.self)
         XCTAssertEqual(drop.stripe?.apiKey, "API_KEY")
     }
 }

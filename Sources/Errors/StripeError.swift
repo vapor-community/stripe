@@ -36,4 +36,5 @@ public enum StripeError: Error {
 
     // Other
     case invalidSourceType
+    case missingParamater(String)
 }

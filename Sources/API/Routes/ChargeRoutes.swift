@@ -26,7 +26,7 @@ public enum ChargeType {
 
 public final class ChargeRoutes {
     
-    var client: StripeClient!
+    let client: StripeClient
     
     init(client: StripeClient) {
         self.client = client

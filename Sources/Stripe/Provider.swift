@@ -28,6 +28,8 @@ extension Droplet {
 
 public final class Provider: Vapor.Provider {
 
+    public static let repositoryName = "vapor-stripe"
+    
     public let apiKey: String
     public let stripe: StripeClient
 
@@ -49,6 +51,10 @@ public final class Provider: Vapor.Provider {
     public func boot(_ drop: Droplet) {
         self.stripe.initializeRoutes()
         drop.stripe = self.stripe
+    }
+    
+    public func boot(_ config: Configs.Config) throws {
+        
     }
 
     public func afterInit(_ drop: Droplet) {

@@ -1,6 +1,5 @@
-# Vapor Strip Provider
+# Vapor Stripe Provider
 
-![Stripe API Coverage](https://img.shields.io/badge/stripe%20api%20coverage-15%25-red.svg)
 ![Swift](http://img.shields.io/badge/swift-3.1-brightgreen.svg)
 ![Vapor](http://img.shields.io/badge/vapor-2.0-brightgreen.svg)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
@@ -47,7 +46,12 @@ The object is returned response model, or model array.
     * [x] Listing all charges
     * [x] Updating a charge
     * [x] Capturing a charge
-* [ ] Customers
+* [x] Customers
+    * [x] Creating
+    * [x] Updating
+    * [x] Deleting
+    * [x] Fetching by Customer ID
+    * [x] Listing All Customers (With filters)
 * [ ] Disputes
 * [ ] Events
 * [ ] Refunds

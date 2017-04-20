@@ -38,14 +38,22 @@ internal enum API {
     case balanceHistoryTransaction(String)
     
     /**
-     Charges
-     
+     CHARGES
      To charge a credit or a debit card, you create a charge object. You can retrieve and refund 
      individual charges as well as list all charges. Charges are identified by a unique random ID.
     */
     case charges
     case charge(String)
     case captureCharge(String)
+    
+    /**
+     CUSTOMERS
+     Customers allow you to perform recurring charges and track multiple charges that are
+     associated with the same customer. The API allows you to create, delete, and update your customers. 
+     You can retrieve individual customers as well as a list of all your customers.
+    */
+    case customers
+    case customer(String)
     
     var endpoint: String {
         switch self {
@@ -56,6 +64,9 @@ internal enum API {
         case .charges: return APIBase + APIVersion + "charges"
         case .charge(let id): return APIBase + APIVersion + "charges/\(id)"
         case .captureCharge(let id): return APIBase + APIVersion + "charges/\(id)/capture"
+            
+        case .customers: return APIBase + APIVersion + "customers"
+        case .customer(let id): return APIBase + APIVersion + "customers/\(id)"
         }
     }
     

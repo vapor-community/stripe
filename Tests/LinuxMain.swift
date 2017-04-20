@@ -3,5 +3,8 @@ import XCTest
 
 XCTMain([
     testCase(ProviderTests.allTests),
+    
     testCase(BalanceTests.allTests),
+    testCase(ChargeTests.allTests),
+    testCase(CustomerTests.allTests),
 ])

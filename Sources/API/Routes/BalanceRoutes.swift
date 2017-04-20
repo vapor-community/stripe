@@ -12,7 +12,7 @@ import Models
 
 public final class BalanceRoutes {
     
-    var client: StripeClient!
+    let client: StripeClient
     
     init(client: StripeClient) {
         self.client = client

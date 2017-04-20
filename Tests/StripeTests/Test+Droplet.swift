@@ -11,9 +11,17 @@ import XCTest
 import Vapor
 import Stripe
 
-let TestTransactionID = "txn_TRANSACTION_ID" // Used for fetching a specific Transaction in the history
-let TestChargeSourceTokenID = "tok_PAYMENT_TOKEN_ID" // Used for creating charges
-let TestChargeID = "ch_CHARGE_ID" // Used for fetching a specific charge
+// Used for fetching a specific Transaction in the history
+let TestTransactionID = "txn_TRANSACTION_ID"
+
+// Used for creating charges
+let TestChargeSourceTokenID = "tok_TOKEN_ID"
+
+// Used for fetching a specific charge
+let TestChargeID = "ch_CHARGE_ID"
+
+// Used for fetching a specific customer
+let TestCustomerID = "cus_CUSTOMER_ID"
 
 extension XCTestCase {
     func makeDroplet() throws -> Droplet {
@@ -22,8 +30,7 @@ extension XCTestCase {
                 "apiKey": "API_KEY" // Add your own API Key for tests
             ],
         ])
-        let drop = try Droplet(config: config)
-        try drop.addProvider(Stripe.Provider.self)
-        return drop
+        try config.addProvider(Stripe.Provider.self)
+        return try Droplet(config: config)
     }
 }
