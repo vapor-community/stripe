@@ -55,6 +55,16 @@ internal enum API {
     case customers
     case customer(String)
     
+    /**
+     TOKENS
+     Tokenization is the process Stripe uses to collect sensitive card or bank account details, 
+     or personally identifiable information (PII), directly from your customers in a secure manner. 
+     A Token representing this information is returned to your server to use. You should use Checkout, 
+     Elements, or Stripe mobile libraries to perform this process, client-side. This ensures that no 
+     sensitive card data touches your server and allows your integration to operate in a PCI compliant way.
+    */
+    case tokens
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -67,6 +77,8 @@ internal enum API {
             
         case .customers: return APIBase + APIVersion + "customers"
         case .customer(let id): return APIBase + APIVersion + "customers/\(id)"
+            
+        case .tokens: return APIBase + APIVersion + "tokens"
         }
     }
     

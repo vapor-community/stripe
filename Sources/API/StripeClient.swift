@@ -15,6 +15,7 @@ public class StripeClient {
     public private(set) var balance: BalanceRoutes!
     public private(set) var charge: ChargeRoutes!
     public private(set) var customer: CustomerRoutes!
+    public private(set) var tokens: TokenRoutes!
 
     public init(apiKey: String) throws {
         self.apiKey = apiKey
@@ -24,6 +25,7 @@ public class StripeClient {
         self.balance = BalanceRoutes(client: self)
         self.charge = ChargeRoutes(client: self)
         self.customer = CustomerRoutes(client: self)
+        self.tokens = TokenRoutes(client: self)
     }
 
 }

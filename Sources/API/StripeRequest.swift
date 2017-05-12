@@ -48,6 +48,7 @@ public class StripeRequest<T : StripeModelProtocol> {
 
     @discardableResult
     public func serializedResponse() throws -> T {
+        print(self.response)
         guard self.response.status == .ok else {
             guard let error = self.response.json?["error"]?.object else { throw self.response.status }
             guard let type = error["type"]?.string else { throw self.response.status }
