@@ -14,15 +14,16 @@ import Vapor
  */
 public final class Token: StripeModelProtocol {
     
-    let id: String
-    let object: String
-    let type: String
-    let clientIp: String?
-    let created: Date
-    let isLive: Bool
-    let isUsed: Bool
+    public let id: String
+    public let object: String
+    public let type: String
+    public let clientIp: String?
+    public let created: Date
+    public let isLive: Bool
+    public let isUsed: Bool
     
-    let card: Card?
+    public private(set) var card: Card?
+    public private(set) var bankAccount: BankAccount?
     
     public init(node: Node) throws {
         self.id = try node.get("id")
@@ -33,20 +34,34 @@ public final class Token: StripeModelProtocol {
         self.isLive = try node.get("livemode")
         self.isUsed = try node.get("used")
         
-        self.card = try node.get("card")
+        if let _ = node["card"] {
+            self.card = try node.get("card")
+        }
+        
+        if let _ = node["bank_account"] {
+            self.bankAccount = try node.get("bank_account")
+        }
     }
     
     public func makeNode(in context: Context?) throws -> Node {
-        let object: [String: Any?] = [
+        var object: [String: Any?] = [
             "id": self.id,
             "object": self.object,
             "type": self.type,
             "client_ip": self.clientIp,
             "created": self.created,
             "livemode": self.isLive,
-            "used": self.isUsed,
-            "card": self.card
+            "used": self.isUsed
         ]
+        
+        if let value = self.card {
+            object["card"] = value
+        }
+        
+        if let value = self.bankAccount {
+            object["bank_account"] = value
+        }
+        
         return try Node(node: object)
     }
     
