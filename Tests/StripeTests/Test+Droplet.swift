@@ -23,6 +23,9 @@ let TestChargeID = "ch_CHARGE_ID"
 // Used for fetching a specific customer
 let TestCustomerID = "cus_CUSTOMER_ID"
 
+// Used for token testing
+let TestTokenID = "tok_TOKEN_ID"
+
 extension XCTestCase {
     func makeDroplet() throws -> Droplet {
         let config = Config([

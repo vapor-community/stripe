@@ -77,8 +77,19 @@ public final class TokenRoutes {
             body["card[currency]"] = Node(currency.rawValue)
         }
         
-        print(body)
         return try StripeRequest(client: self.client, method: .post, route: .tokens, body: Body.data(body.formURLEncoded()), headers: nil)
+    }
+    
+    /**
+     Retrieve a token
+     Retrieves the token with the given ID.
+     
+     - parameter token: The ID of the desired token.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+    */
+    func retrieve(_ token: String) throws -> StripeRequest<Token> {
+        return try StripeRequest(client: self.client, route: .token(token))
     }
 
 }

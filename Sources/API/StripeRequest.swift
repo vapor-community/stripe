@@ -25,7 +25,7 @@ public class StripeRequest<T : StripeModelProtocol> {
     var response: HTTP.Response!
     let httpClient = EngineClient.factory
 
-    init(client: StripeClient, method: HTTPMethod = .get, route: API, query: [String : NodeRepresentable] = [:], body: BodyRepresentable?, headers: [HeaderKey : String]? = nil) throws {
+    init(client: StripeClient, method: HTTPMethod = .get, route: API, query: [String : NodeRepresentable] = [:], body: BodyRepresentable? = nil, headers: [HeaderKey : String]? = nil) throws {
         self.client = client
 
         var allHeaders = DefaultHeaders

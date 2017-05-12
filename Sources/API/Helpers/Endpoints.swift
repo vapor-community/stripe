@@ -64,6 +64,7 @@ internal enum API {
      sensitive card data touches your server and allows your integration to operate in a PCI compliant way.
     */
     case tokens
+    case token(String)
     
     var endpoint: String {
         switch self {
@@ -79,6 +80,7 @@ internal enum API {
         case .customer(let id): return APIBase + APIVersion + "customers/\(id)"
             
         case .tokens: return APIBase + APIVersion + "tokens"
+        case .token(let token): return APIBase + APIVersion + "tokens/\(token)"
         }
     }
     

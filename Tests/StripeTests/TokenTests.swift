@@ -16,11 +16,18 @@ class TokenTests: XCTestCase {
     
     static var allTests = [
         ("testTokenCreation", testTokenCreation),
+        ("testTokenRetrieval", testTokenRetrieval),
     ]
 
     func testTokenCreation() throws {
         let drop = try self.makeDroplet()
         let object = try drop.stripe?.tokens.create(cardNumber: "4242 4242 4242 4242", expirationMonth: 10, expirationYear: 2018, cvc: 123, name: "Test Card").serializedResponse()
+        XCTAssertNotNil(object)
+    }
+    
+    func testTokenRetrieval() throws {
+        let drop = try self.makeDroplet()
+        let object = try drop.stripe?.tokens.retrieve(TestTokenID).serializedResponse()
         XCTAssertNotNil(object)
     }
     
