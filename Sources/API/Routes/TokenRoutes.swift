@@ -57,7 +57,7 @@ public final class TokenRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
-    func createCard(withCardNumber cardNumber: String, expirationMonth: Int, expirationYear: Int, cvc: Int, name: String?, customer: String? = nil, currency: StripeCurrency? = nil) throws -> StripeRequest<Token> {
+    public func createCard(withCardNumber cardNumber: String, expirationMonth: Int, expirationYear: Int, cvc: Int, name: String?, customer: String? = nil, currency: StripeCurrency? = nil) throws -> StripeRequest<Token> {
         var body = Node([:])
         
         body["card[number]"] = Node(self.cleanNumber(cardNumber))
@@ -88,7 +88,7 @@ public final class TokenRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
-    func retrieve(_ token: String) throws -> StripeRequest<Token> {
+    public func retrieve(_ token: String) throws -> StripeRequest<Token> {
         return try StripeRequest(client: self.client, route: .token(token))
     }
 
@@ -123,7 +123,7 @@ public final class TokenRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
     
-    func createBank(country: String, currency: StripeCurrency, accountNumber: String, routingNumber: String? = nil, accountHolderName: String? = nil, accountHolderType: String? = nil, customer: String? = nil) throws -> StripeRequest<Token> {
+    public func createBank(country: String, currency: StripeCurrency, accountNumber: String, routingNumber: String? = nil, accountHolderName: String? = nil, accountHolderType: String? = nil, customer: String? = nil) throws -> StripeRequest<Token> {
         var body = Node([:])
         
         body["bank_account[country]"] = Node(country)
