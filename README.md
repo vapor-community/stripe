@@ -53,7 +53,6 @@ The object is returned response model, or model array.
     * [x] Fetching by Customer ID
     * [x] Listing All Customers (With filters)
 * [ ] Disputes
-* [ ] Events
 * [ ] Refunds
 * [x] Tokens
 	* [x] Card Creation

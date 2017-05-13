@@ -10,12 +10,6 @@ import Foundation
 import Vapor
 import Helpers
 
-public enum RefundReason: String {
-    case duplicate = "duplicate"
-    case fraudulent = "fraudulent"
-    case requestedByCustomer = "requested_by_customer"
-}
-
 public final class RefundItem: StripeModelProtocol {
     
     public let id: String
@@ -25,10 +19,10 @@ public final class RefundItem: StripeModelProtocol {
     public let charge: String?
     public let created: Date
     public let currency: StripeCurrency?
-    public let description: String
-    public let metadata: [String : Any]?
+    public let description: String?
+    public let metadata: Node?
     public let reason: RefundReason?
-    public let receiptNumber: String
+    public let receiptNumber: String?
     public let status: StripeStatus?
     
     public init(node: Node) throws {
@@ -41,7 +35,7 @@ public final class RefundItem: StripeModelProtocol {
         self.currency = try StripeCurrency(rawValue: node.get("currency"))
         self.description = try node.get("description")
         self.metadata = try node.get("metadata")
-        self.reason = try RefundReason(rawValue: node.get("reason"))
+        self.reason = try RefundReason(optionalRawValue: node.get("reason"))
         self.receiptNumber = try node.get("receipt_number")
         self.status = try StripeStatus(rawValue: node.get("status"))
     }
@@ -51,12 +45,12 @@ public final class RefundItem: StripeModelProtocol {
             "id": self.id,
             "object": self.object,
             "amount": self.amount,
-            "balance_transaction": self.balanceTransactionId ?? nil,
-            "charge": self.charge ?? nil,
+            "balance_transaction": self.balanceTransactionId,
+            "charge": self.charge ,
             "created": self.created,
             "currency": self.currency?.rawValue,
             "description": self.description,
-            "metadata": self.metadata ?? nil,
+            "metadata": self.metadata,
             "reason": self.reason?.rawValue,
             "receipt_number": self.receiptNumber,
             "status": self.status?.rawValue

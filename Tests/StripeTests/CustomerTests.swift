@@ -56,9 +56,6 @@ class CustomerTests: XCTestCase {
     
     func testRetrieveAllCustomers() throws {
         let drop = try self.makeDroplet()
-        let customer = Customer()
-        customer.email = "test@stripetest.com"
-        customer.description = "This is a test customer updated"
         let object = try drop.stripe?.customer.listAll().serializedResponse()
         XCTAssertGreaterThanOrEqual(object!.items!.count, 1)
     }

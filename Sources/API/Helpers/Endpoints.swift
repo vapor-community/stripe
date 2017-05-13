@@ -66,6 +66,15 @@ internal enum API {
     case tokens
     case token(String)
     
+    /**
+     REFUNDS
+     Refund objects allow you to refund a charge that has previously been created but not yet refunded. 
+     Funds will be refunded to the credit or debit card that was originally charged. The fees you were 
+     originally charged are also refunded.
+    */
+    case refunds
+    case refund(String)
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -81,6 +90,9 @@ internal enum API {
             
         case .tokens: return APIBase + APIVersion + "tokens"
         case .token(let token): return APIBase + APIVersion + "tokens/\(token)"
+            
+        case .refunds: return APIBase + APIVersion + "refunds"
+        case .refund(let id): return APIBase + APIVersion + "refunds/\(id)"
         }
     }
     

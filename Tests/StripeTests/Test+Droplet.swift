@@ -26,6 +26,9 @@ let TestCustomerID = "cus_CUSTOMER_ID"
 // Used for token testing
 let TestTokenID = "tok_TOKEN_ID"
 
+// Used for refund testing
+let TestRefundID = "re_REFUND_ID"
+
 extension XCTestCase {
     func makeDroplet() throws -> Droplet {
         let config = Config([

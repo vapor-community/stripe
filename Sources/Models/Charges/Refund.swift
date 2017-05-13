@@ -19,14 +19,15 @@ public final class Refund: StripeModelProtocol {
     
     public let object: String
     public let hasMore: Bool
-    public let totalCount: Int
+    public let totalCount: Int?
     public let url: String
     public private(set) var items: [RefundItem]?
     
-    public var id: String {
+    public var id: String? {
         get {
             // /v1/charges/:id/refunds
             let components = self.url.components(separatedBy: "/")
+            guard components.count > 2 else { return nil }
             return components[components.count - 2] // Do a little math here
         }
     }
