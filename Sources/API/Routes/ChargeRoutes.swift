@@ -45,8 +45,8 @@ public final class ChargeRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func create(amount: Int, in currency: StripeCurrency, for type: ChargeType, description: String?=nil) throws -> StripeRequest<Charge> {
-        return try self.create(amount: amount, in: currency, for: type, withFee: nil, toAccount: nil, description: description)
+    public func create(amount: Int, in currency: StripeCurrency, for type: ChargeType, description: String? = nil) throws -> StripeRequest<Charge> {
+        return try self.create(amount: amount, in: currency, for: type, withFee: nil, toAccount: nil, description: description, receiptEmail: nil)
     }
     
     /**
@@ -66,7 +66,7 @@ public final class ChargeRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func create(amount: Int, in currency: StripeCurrency, for type: ChargeType, withFee fee: Int?, toAccount account: String?, description: String?=nil) throws -> StripeRequest<Charge> {
+    public func create(amount: Int, in currency: StripeCurrency, for type: ChargeType, withFee fee: Int?, toAccount account: String?, description: String? = nil, receiptEmail: String? = nil) throws -> StripeRequest<Charge> {
         // Setup our params
         var body: [String : Any] = [
             "amount": amount,
@@ -79,6 +79,10 @@ public final class ChargeRoutes {
         
         if let description = description {
             body["description"] = description
+        }
+        
+        if let receiptEmail = receiptEmail {
+            body["receipt_email"] = receiptEmail
         }
         
         // Create the headers
