@@ -45,7 +45,7 @@ public final class CustomerRoutes {
         body["email"] = Node(email)
         
         if let currency = currency {
-            body["curency"] = Node(currency.rawValue)
+            body["currency"] = Node(currency.rawValue)
         }
         
         if let description = description {
@@ -95,7 +95,11 @@ public final class CustomerRoutes {
         
         if let metadata = customer.metadata {
             for (key, value) in metadata {
-                body["metadata[\(key)]"] = try Node(node: "\(value)")
+                if let value = value {
+                    body["metadata[\(key)]"] = try Node(node: "\(value)")
+                } else {
+                    body["metadata[\(key)]"] = nil
+                }
             }
         }
         
