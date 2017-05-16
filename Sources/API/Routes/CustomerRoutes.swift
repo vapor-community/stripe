@@ -93,13 +93,9 @@ public final class CustomerRoutes {
             body["currency"] = Node(currency.rawValue)
         }
         
-        if let metadata = customer.metadata {
+        if let metadata = customer.metadata?.object {
             for (key, value) in metadata {
-                if let value = value {
-                    body["metadata[\(key)]"] = try Node(node: "\(value)")
-                } else {
-                    body["metadata[\(key)]"] = nil
-                }
+                body["metadata[\(key)]"] = value
             }
         }
         
@@ -157,7 +153,7 @@ public final class CustomerRoutes {
             body["source"] = Node(defaultSourceId)
         }
         
-        if let metadata = customer.metadata {
+        if let metadata = customer.metadata?.object {
             for (key, value) in metadata {
                 body["metadata[\(key)]"] = try Node(node: "\(String(describing: value))")
             }

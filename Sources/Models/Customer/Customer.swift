@@ -27,7 +27,7 @@ public final class Customer: StripeModelProtocol {
     public private(set) var delinquent: Bool?
     public private(set) var isLive: Bool?
     
-    public var metadata: [String : Any?]?
+    public var metadata: Node?
     
     public var currency: StripeCurrency?
     public private(set) var shipping: ShippingLabel?
