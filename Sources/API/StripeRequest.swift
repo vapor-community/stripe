@@ -65,5 +65,25 @@ public class StripeRequest<T : StripeModelProtocol> {
         guard let value = self.response.json else { throw StripeError.serializationError }
         return try T(node: value)
     }
+    
+    @discardableResult
+    public func json() throws -> JSON {
+        guard self.response.status == .ok else {
+            guard let error = self.response.json?["error"]?.object else { throw self.response.status }
+            guard let type = error["type"]?.string else { throw self.response.status }
+            switch type {
+            case "api_connection_error":  throw StripeError.apiConnectionError
+            case "api_error":             throw StripeError.apiError
+            case "authentication_error":  throw StripeError.authenticationError
+            case "card_error":            throw StripeError.cardError
+            case "invalid_request_error": throw StripeError.invalidRequestError(try self.response.json?.get("error"))
+            case "rate_limit_error":      throw StripeError.rateLimitError
+            case "validation_error":      throw StripeError.validationError
+            default:                      throw self.response.status
+            }
+        }
+        guard let value = self.response.json else { throw StripeError.serializationError }
+        return value
+    }
 
 }
