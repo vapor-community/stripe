@@ -158,17 +158,9 @@ public final class CustomerRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func updateDefaultSource(for customer: Customer, inAccount account: String?=nil, source: String) throws -> StripeRequest<Customer> {
+    public func updateDefaultSource(for customer: Customer, source: String) throws -> StripeRequest<Customer> {
         let body = try Node(node: ["default_source": source])
-        
-        var headers: [HeaderKey: String]?
-        
-        // Check if we have an account to set it to
-        if let account = account {
-            headers = ["Stripe-Account": account]
-        }
-        
-        return try StripeRequest(client: self.client, method: .post, route: .customer(customer.id), query: [:], body: Body.data(body.formURLEncoded()), headers: headers)
+        return try StripeRequest(client: self.client, method: .post, route: .customer(customer.id), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
     }
     
     /**
@@ -181,17 +173,9 @@ public final class CustomerRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func updateDefaultSource(for customerId: String, inAccount account: String?=nil, source: String) throws -> StripeRequest<Customer> {
+    public func updateDefaultSource(for customerId: String, source: String) throws -> StripeRequest<Customer> {
         let body = try Node(node: ["default_source": source])
-        
-        var headers: [HeaderKey: String]?
-        
-        // Check if we have an account to set it to
-        if let account = account {
-            headers = ["Stripe-Account": account]
-        }
-        
-        return try StripeRequest(client: self.client, method: .post, route: .customer(customerId), query: [:], body: Body.data(body.formURLEncoded()), headers: headers)
+        return try StripeRequest(client: self.client, method: .post, route: .customer(customerId), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
     }
     
     /**
