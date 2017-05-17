@@ -88,6 +88,7 @@ internal enum API {
             
         case .customers: return APIBase + APIVersion + "customers"
         case .customer(let id): return APIBase + APIVersion + "customers/\(id)"
+        case .customerSources(let id): return APIBase + APIVersion + "customers/\(id)/sources"
             
         case .tokens: return APIBase + APIVersion + "tokens"
         case .token(let token): return APIBase + APIVersion + "tokens/\(token)"
