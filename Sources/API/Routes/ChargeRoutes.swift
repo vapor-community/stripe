@@ -45,8 +45,8 @@ public final class ChargeRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func create(amount: Int, in currency: StripeCurrency, for type: ChargeType, description: String? = nil) throws -> StripeRequest<Charge> {
-        return try self.create(amount: amount, in: currency, for: type, withFee: nil, toAccount: nil, description: description, receiptEmail: nil)
+    public func create(amount: Int, in currency: StripeCurrency, for type: ChargeType, description: String? = nil, capture: Bool = true) throws -> StripeRequest<Charge> {
+        return try self.create(amount: amount, in: currency, for: type, withFee: nil, toAccount: nil, description: description, receiptEmail: nil, capture: capture)
     }
     
     /**
@@ -66,11 +66,12 @@ public final class ChargeRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func create(amount: Int, in currency: StripeCurrency, for type: ChargeType, withFee fee: Int?, toAccount account: String?, description: String? = nil, receiptEmail: String? = nil) throws -> StripeRequest<Charge> {
+    public func create(amount: Int, in currency: StripeCurrency, for type: ChargeType, withFee fee: Int?, toAccount account: String?, description: String? = nil, receiptEmail: String? = nil, capture: Bool = true) throws -> StripeRequest<Charge> {
         // Setup our params
         var body: [String : Any] = [
             "amount": amount,
             "currency": currency.rawValue,
+            "capture": capture
         ]
         switch type {
         case .source(let id): body["source"] = id
