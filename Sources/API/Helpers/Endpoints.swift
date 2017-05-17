@@ -54,6 +54,7 @@ internal enum API {
     */
     case customers
     case customer(String)
+    case customerSources(String)
     
     /**
      TOKENS

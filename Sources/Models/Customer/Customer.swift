@@ -16,7 +16,7 @@ import Helpers
  */
 public final class Customer: StripeModelProtocol {
     
-    public private(set) var id: String?
+    public private(set) var id: String!
     public private(set) var object: String?
     public var accountBalance: Int?
     public private(set) var created: Date?

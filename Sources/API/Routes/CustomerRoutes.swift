@@ -103,6 +103,52 @@ public final class CustomerRoutes {
     }
     
     /**
+     Creats a source for the customer
+     
+     - parameter customer: The customer object to add the source to
+     - parameter account:  A connect account to add the customer to
+     - parameter source:   The source token to add to the customer.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+    */
+    
+    public func createSource(for customer: Customer, inAccount account: String?=nil, source: String) throws -> StripeRequest<Customer> {
+        let body = try Node(node: ["source": source])
+        
+        var headers: [HeaderKey: String]?
+        
+        // Check if we have an account to set it to
+        if let account = account {
+            headers = ["Stripe-Account": account]
+        }
+        
+        return try StripeRequest(client: self.client, method: .post, route: .customerSources(customer.id), query: [:], body: Body.data(body.formURLEncoded()), headers: headers)
+    }
+    
+    /**
+     Creats a source for the customer
+     
+     - parameter customerId: The customer object to add the source to
+     - parameter account:    A connect account to add the customer to
+     - parameter source:     The source token to add to the customer.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
+    
+    public func createSource(for customerId: String, inAccount account: String?=nil, source: String) throws -> StripeRequest<Customer> {
+        let body = try Node(node: ["source": source])
+        
+        var headers: [HeaderKey: String]?
+        
+        // Check if we have an account to set it to
+        if let account = account {
+            headers = ["Stripe-Account": account]
+        }
+        
+        return try StripeRequest(client: self.client, method: .post, route: .customerSources(customerId), query: [:], body: Body.data(body.formURLEncoded()), headers: headers)
+    }
+    
+    /**
      Retrieve a customer
      Retrieves the details of an existing customer. You need only supply the unique customer identifier 
      that was returned upon customer creation.
