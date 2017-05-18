@@ -13,7 +13,7 @@ The Stripe API is huge, and therefor I only plan on implementing the things that
 ## Getting Started
 In your `Package.swift` file, add a Package
 ~~~~swift
-.Package(url: "https://github.com/anthonycastelli/vapor-stripe.git", Version(0,0,1, prereleaseIdentifiers: ["beta"]))
+.Package(url: "https://github.com/vapor-community/stripe.git", Version(0,0,1, prereleaseIdentifiers: ["beta"]))
 ~~~~
 
 You'll need a config file as well. Place a `stripe.json` file in your `Config` folder
