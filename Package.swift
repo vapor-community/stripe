@@ -12,6 +12,6 @@ let package = Package(
         Target(name: "Stripe", dependencies: ["API", "Models", "Errors", "Helpers"]),
     ],
     dependencies: [
-        .Package(url: "https://github.com/vapor/vapor.git", Version(2,0,0, prereleaseIdentifiers: ["beta"])),
+        .Package(url: "https://github.com/vapor/vapor.git", majorVersion: 2),
     ]
 )
