@@ -16,7 +16,7 @@ import Helpers
  */
 public final class Customer: StripeModelProtocol {
     
-    public private(set) var id: String!
+    public private(set) var id: String
     public private(set) var object: String?
     public var accountBalance: Int?
     public private(set) var created: Date?
@@ -34,7 +34,9 @@ public final class Customer: StripeModelProtocol {
     public private(set) var sources: SourceList?
     public private(set) var subscriptions: SubscriptionList?
     
-    public init() { }
+    public init() {
+        self.id = ""
+    }
     
     public init(node: Node) throws {
         self.id = try node.get("id")
