@@ -18,8 +18,7 @@ class CouponTests: XCTestCase
     var drop: Droplet?
     var couponId: String = ""
     
-    override func setUp()
-    {
+    override func setUp() {
         do
         {
             drop = try self.makeDroplet()
@@ -40,8 +39,7 @@ class CouponTests: XCTestCase
         }
     }
     
-    func testCreateCoupon() throws
-    {
+    func testCreateCoupon() throws {
         let coupon = try drop?.stripe?.coupons.create(id: nil,
                                                       duration: .once,
                                                       amountOff: 5,
@@ -54,15 +52,13 @@ class CouponTests: XCTestCase
         XCTAssertNotNil(coupon)
     }
     
-    func testRetrieveCoupon() throws
-    {
+    func testRetrieveCoupon() throws {
         let coupon = try drop?.stripe?.coupons.retrieve(coupon: couponId).serializedResponse()
         
         XCTAssertNotNil(coupon)
     }
     
-    func testUpdateCoupon() throws
-    {
+    func testUpdateCoupon() throws {
         let metadata = ["hello":"world"]
         let updatedCoupon = try drop?.stripe?.coupons.update(metadata: metadata, forCouponId: couponId).serializedResponse()
         
@@ -71,8 +67,7 @@ class CouponTests: XCTestCase
         XCTAssert(updatedCoupon?.metadata?["hello"] == "world")
     }
     
-    func testDeleteCoupon() throws
-    {
+    func testDeleteCoupon() throws {
         let deletedCoupon = try drop?.stripe?.coupons.delete(coupon: couponId).serializedResponse()
         
         XCTAssertNotNil(deletedCoupon)
@@ -80,8 +75,7 @@ class CouponTests: XCTestCase
         XCTAssertTrue(deletedCoupon?.deleted ?? false)
     }
     
-    func testListAllCoupons() throws
-    {
+    func testListAllCoupons() throws {
         let coupons = try drop?.stripe?.coupons.listAll().serializedResponse()
         
         XCTAssertNotNil(coupons)
@@ -96,8 +90,7 @@ class CouponTests: XCTestCase
         }
     }
     
-    func testFilterCoupons() throws
-    {
+    func testFilterCoupons() throws {
         let filter = StripeFilter()
         
         filter.limit = 1

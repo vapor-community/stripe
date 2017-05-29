@@ -14,8 +14,7 @@ import Helpers
  Coupon Model
  https://stripe.com/docs/api/curl#coupon_object
  */
-public final class Coupon: StripeModelProtocol
-{
+public final class Coupon: StripeModelProtocol {
     public var id: String?
     public var amountOff: Int?
     public var currency: StripeCurrency?
@@ -37,13 +36,11 @@ public final class Coupon: StripeModelProtocol
     public var metadata: Node?
     
     
-    required public init(duration: StripeDuration)
-    {
+    required public init(duration: StripeDuration) {
         self.duration = duration
     }
     
-    public init(node: Node) throws
-    {
+    public init(node: Node) throws {
         self.id = try node.get("id")
         self.amountOff = try node.get("amount_off")
         self.created = try node.get("created")
@@ -68,8 +65,7 @@ public final class Coupon: StripeModelProtocol
         self.isValid = try node.get("valid")
     }
     
-    public func makeNode(in context: Context?) throws -> Node
-    {
+    public func makeNode(in context: Context?) throws -> Node {
         let object: [String: Any?] = [
             "id": self.id,
             "object": self.object,

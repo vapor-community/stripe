@@ -6,8 +6,7 @@
 //
 //
 
-public enum StripeDuration: String
-{
+public enum StripeDuration: String {
     case forever = "forever"
     case once = "once"
     case repeating = "repeating"

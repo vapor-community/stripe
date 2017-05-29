@@ -18,8 +18,7 @@ class ChargeTests: XCTestCase {
     var drop: Droplet?
     var chargeId: String = ""
     
-    override func setUp()
-    {
+    override func setUp() {
         do
         {
             drop = try self.makeDroplet()
@@ -43,8 +42,7 @@ class ChargeTests: XCTestCase {
         }
     }
     
-    func testCharge() throws
-    {
+    func testCharge() throws {
         let paymentToken = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
                                                               expirationMonth: 10,
                                                               expirationYear: 2018,
@@ -60,28 +58,24 @@ class ChargeTests: XCTestCase {
         XCTAssertNotNil(object)
     }
     
-    func testRetrieveCharge() throws
-    {
+    func testRetrieveCharge() throws {
         let object = try drop?.stripe?.charge.retrieve(charge: chargeId).serializedResponse()
         XCTAssertNotNil(object)
     }
     
-    func testListAllCharges() throws
-    {
+    func testListAllCharges() throws {
         let object = try drop?.stripe?.charge.listAll().serializedResponse()
         XCTAssertNotNil(object)
     }
     
-    func testFilterAllCharges() throws
-    {
+    func testFilterAllCharges() throws {
         let filter = StripeFilter()
         filter.limit = 1
         let object = try drop?.stripe?.charge.listAll(filter: filter).serializedResponse()
         XCTAssertEqual(object?.items.count, 1)
     }
     
-    func testChargeUpdate() throws
-    {
+    func testChargeUpdate() throws {
         let shippingAddress = ShippingAddress()
         shippingAddress.addressLine1 = "123 Test St"
         shippingAddress.addressLine2 = "456 Apt"
@@ -106,8 +100,7 @@ class ChargeTests: XCTestCase {
         XCTAssertNotNil(object)
     }
     
-    func testChargeCapture() throws
-    {
+    func testChargeCapture() throws {
         let paymentToken = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
                                                                expirationMonth: 10,
                                                                expirationYear: 2018,
@@ -126,4 +119,3 @@ class ChargeTests: XCTestCase {
         XCTAssertNotNil(object)
     }
 }
-

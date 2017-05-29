@@ -13,12 +13,10 @@ import Models
 import Helpers
 import Errors
 
-public final class CouponRoutes
-{
+public final class CouponRoutes {
     let client: StripeClient
     
-    init(client: StripeClient)
-    {
+    init(client: StripeClient) {
         self.client = client
     }
     
@@ -53,44 +51,36 @@ public final class CouponRoutes
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node.
      */
     
-    public func create(id: String?, duration: StripeDuration, amountOff: Int?, currency: StripeCurrency?, durationInMonths: Int?, maxRedemptions: Int?, percentOff: Int?, redeemBy: Date?, metadata: [String: String]?) throws -> StripeRequest<Coupon>
-    {
+    public func create(id: String?, duration: StripeDuration, amountOff: Int?, currency: StripeCurrency?, durationInMonths: Int?, maxRedemptions: Int?, percentOff: Int?, redeemBy: Date?, metadata: [String: String]?) throws -> StripeRequest<Coupon> {
         var body = Node([:])
         
         body["duration"] = Node(duration.rawValue)
         
-        if let amountOff = amountOff
-        {
+        if let amountOff = amountOff {
             body["amount_off"] = Node(amountOff)
         }
         
-        if let currency = currency
-        {
+        if let currency = currency {
             body["currency"] = Node(currency.rawValue)
         }
         
-        if let durationInMonths = durationInMonths
-        {
+        if let durationInMonths = durationInMonths {
             body["duration_in_months"] = Node(durationInMonths)
         }
         
-        if let maxRedemptions = maxRedemptions
-        {
+        if let maxRedemptions = maxRedemptions {
             body["max_redemptions"] = Node(maxRedemptions)
         }
         
-        if let percentOff = percentOff
-        {
+        if let percentOff = percentOff {
             body["percent_off"] = Node(percentOff)
         }
         
-        if let redeemBy = redeemBy
-        {
+        if let redeemBy = redeemBy {
             body["redeem_by"] = Node(Int(redeemBy.timeIntervalSince1970))
         }
         
-        if let metadata = metadata
-        {
+        if let metadata = metadata {
             for (key, value) in metadata {
                 body["metadata[\(key)]"] = try Node(node: value)
             }
@@ -109,44 +99,36 @@ public final class CouponRoutes
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node.
     */
  
-    public func create(coupon: Coupon) throws -> StripeRequest<Coupon>
-    {
+    public func create(coupon: Coupon) throws -> StripeRequest<Coupon> {
         var body = Node([:])
         
         body["duration"] = Node(coupon.duration.rawValue)
         
-        if let amountOff = coupon.amountOff
-        {
+        if let amountOff = coupon.amountOff {
             body["amount_off"] = Node(amountOff)
         }
         
-        if let currency = coupon.currency
-        {
+        if let currency = coupon.currency {
             body["currency"] = Node(currency.rawValue)
         }
         
-        if let durationInMonths = coupon.durationInMonths
-        {
+        if let durationInMonths = coupon.durationInMonths {
             body["duration_in_months"] = Node(durationInMonths)
         }
         
-        if let maxRedemptions = coupon.maxRedemptions
-        {
+        if let maxRedemptions = coupon.maxRedemptions {
             body["max_redemptions"] = Node(maxRedemptions)
         }
         
-        if let percentOff = coupon.percentOff
-        {
+        if let percentOff = coupon.percentOff {
             body["percent_off"] = Node(percentOff)
         }
         
-        if let redeemBy = coupon.redeemBy
-        {
+        if let redeemBy = coupon.redeemBy {
             body["redeem_by"] = Node(redeemBy.timeIntervalSince1970)
         }
         
-        if let metadata = coupon.metadata?.object
-        {
+        if let metadata = coupon.metadata?.object {
             for (key, value) in metadata {
                 body["metadata[\(key)]"] = value
             }
@@ -164,8 +146,7 @@ public final class CouponRoutes
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func retrieve(coupon couponId: String) throws -> StripeRequest<Coupon>
-    {
+    public func retrieve(coupon couponId: String) throws -> StripeRequest<Coupon> {
         return try StripeRequest(client: self.client, method: .get, route: .coupon(couponId), query: [:], body: nil, headers: nil)
     }
     
@@ -181,8 +162,7 @@ public final class CouponRoutes
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func update(metadata: [String:String], forCouponId couponId: String) throws -> StripeRequest<Coupon>
-    {
+    public func update(metadata: [String:String], forCouponId couponId: String) throws -> StripeRequest<Coupon> {
         var body = Node([:])
         
         for (key, value) in metadata
@@ -202,8 +182,7 @@ public final class CouponRoutes
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func delete(coupon couponId: String) throws -> StripeRequest<DeletedObject>
-    {
+    public func delete(coupon couponId: String) throws -> StripeRequest<DeletedObject> {
         return try StripeRequest(client: self.client, method: .delete, route: .coupon(couponId), query: [:], body: nil, headers: nil)
     }
     
@@ -217,8 +196,7 @@ public final class CouponRoutes
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func listAll(filter: StripeFilter?=nil) throws -> StripeRequest<CouponList>
-    {
+    public func listAll(filter: StripeFilter?=nil) throws -> StripeRequest<CouponList> {
         var query = [String : NodeRepresentable]()
         
         if let data = try filter?.createQuery()

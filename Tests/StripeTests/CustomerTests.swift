@@ -18,8 +18,7 @@ class CustomerTests: XCTestCase {
     var drop: Droplet?
     var customerId: String = ""
     
-    override func setUp()
-    {
+    override func setUp() {
         do
         {
             drop = try self.makeDroplet()
@@ -38,8 +37,7 @@ class CustomerTests: XCTestCase {
         }
     }
     
-    func testCreateCustomer() throws
-    {
+    func testCreateCustomer() throws {
         let customer = Customer()
         customer.email = "test@stripetest.com"
         customer.description = "This is a test customer"
@@ -47,14 +45,12 @@ class CustomerTests: XCTestCase {
         XCTAssertNotNil(object)
     }
     
-    func testRetrieveCustomer() throws
-    {
+    func testRetrieveCustomer() throws {
         let object = try drop?.stripe?.customer.retrieve(customer: customerId).serializedResponse()
         XCTAssertNotNil(object)
     }
     
-    func testUpdateCustomer() throws
-    {
+    func testUpdateCustomer() throws {
         let customer = Customer()
         customer.email = "tester@stripetest.com"
         customer.description = "This is a test customer updated"
@@ -62,20 +58,17 @@ class CustomerTests: XCTestCase {
         XCTAssertNotNil(object)
     }
     
-    func testDeleteCustomer() throws
-    {
+    func testDeleteCustomer() throws {
         let object = try drop?.stripe?.customer.delete(customer: customerId).serializedResponse()
         XCTAssertEqual(object?.deleted, true)
     }
     
-    func testRetrieveAllCustomers() throws
-    {
+    func testRetrieveAllCustomers() throws {
         let object = try drop?.stripe?.customer.listAll().serializedResponse()
         XCTAssertGreaterThanOrEqual(object!.items!.count, 1)
     }
     
-    func testFilterCustomers() throws
-    {
+    func testFilterCustomers() throws {
         let filter = StripeFilter()
         filter.limit = 1
         let object = try drop?.stripe?.customer.listAll(filter: filter).serializedResponse()

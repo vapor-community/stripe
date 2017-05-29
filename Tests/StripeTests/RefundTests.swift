@@ -17,8 +17,7 @@ class RefundTests: XCTestCase {
     var drop: Droplet?
     var refundId: String = ""
     
-    override func setUp()
-    {
+    override func setUp() {
         do
         {
             drop = try self.makeDroplet()

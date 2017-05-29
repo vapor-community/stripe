@@ -17,8 +17,7 @@ class BalanceTests: XCTestCase {
     var drop: Droplet?
     var transactionId: String = ""
     
-    override func setUp()
-    {
+    override func setUp() {
         do
         {
             drop = try self.makeDroplet()
@@ -48,8 +47,7 @@ class BalanceTests: XCTestCase {
         XCTAssertNotNil(object)
     }
     
-    func testBalanceTransactionItem() throws
-    {
+    func testBalanceTransactionItem() throws {
         let object = try drop?.stripe?.balance.retrieveBalance(forTransaction: transactionId).serializedResponse()
         XCTAssertNotNil(object)
     }
