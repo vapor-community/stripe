@@ -38,7 +38,7 @@ The object is returned response model, or model array.
 
 ## Testing
 
-To avoid having to remmeber to add tests to `LinuxMain.swift` you can use [Sourcery][sourcery] to add your tets cases there for you. Just install the sourcery binary with Homebrew `brew install sourcery`, navigate to your project flder, and from the command line run the following:
+To avoid having to remmeber to add tests to `LinuxMain.swift` you can use [Sourcery][sourcery] to add your tets cases there for you. Just install the sourcery binary with Homebrew `brew install sourcery`, navigate to your project folder, and from the command line run the following:
 ~~~~bash
 sourcery --sources Tests/ --templates Sourcery/LinuxMain.stencil --args testimports='@testable import StripeTests'
 ~~~~
