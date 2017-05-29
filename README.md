@@ -50,18 +50,14 @@ import XCTest
 extension BalanceTests {
 static var allTests = [
   ("testBalance", testBalance),
-  .
-  .
-  .
+  ...
 ]
 }
 .
 .
 XCTMain([
   testCase(BalanceTests.allTests),
-  .
-  .
-  .
+  ...
 ])
 ~~~~
 
