@@ -8,7 +8,7 @@
 
 import Vapor
 
-/*
+/**
  Token Model
  https://stripe.com/docs/api/curl#token_object
  */
