@@ -14,16 +14,7 @@ import XCTest
 @testable import API
 
 class CouponTests: XCTestCase
-{
-    static var allTests = [
-            ("testCreateCoupon", testCreateCoupon),
-            ("testRetrieveCoupon",testRetrieveCoupon),
-            ("testUpdateCoupon",testUpdateCoupon),
-            ("testDeleteCoupon",testDeleteCoupon),
-            ("testListAllCoupons",testListAllCoupons),
-            ("testFilterCoupons",testFilterCoupons)
-            ]
-    
+{    
     var drop: Droplet?
     var couponId: String = ""
     

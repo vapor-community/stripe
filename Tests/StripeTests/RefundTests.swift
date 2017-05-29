@@ -13,14 +13,7 @@ import XCTest
 @testable import API
 
 class RefundTests: XCTestCase {
-    
-    static var allTests = [
-        ("testRefunding", testRefunding),
-        ("testUpdatingRefund", testUpdatingRefund),
-        ("testRetrievingRefund", testRetrievingRefund),
-        ("testListingAllRefunds", testListingAllRefunds)
-    ]
-    
+        
     var drop: Droplet?
     var refundId: String = ""
     

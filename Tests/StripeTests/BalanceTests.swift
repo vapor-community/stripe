@@ -13,14 +13,7 @@ import XCTest
 @testable import API
 
 class BalanceTests: XCTestCase {
-    
-    static var allTests = [
-        ("testBalance", testBalance),
-        ("testBalanceTransactionItem", testBalanceTransactionItem),
-        ("testBalanceHistory", testBalanceHistory),
-        ("testFilterBalanceHistory", testFilterBalanceHistory),
-    ]
-    
+
     var drop: Droplet?
     var transactionId: String = ""
     

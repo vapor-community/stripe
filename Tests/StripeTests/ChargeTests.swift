@@ -14,15 +14,6 @@ import XCTest
 @testable import API
 
 class ChargeTests: XCTestCase {
-
-    static var allTests = [
-        ("testCharge", testCharge),
-        ("testRetrieveCharge", testRetrieveCharge),
-        ("testListAllCharges", testListAllCharges),
-        ("testFilterAllCharges", testFilterAllCharges),
-        ("testChargeUpdate", testChargeUpdate),
-        ("testChargeCapture", testChargeCapture)
-    ]
     
     var drop: Droplet?
     var chargeId: String = ""

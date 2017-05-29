@@ -14,12 +14,6 @@ import XCTest
 
 class TokenTests: XCTestCase {
     
-    static var allTests = [
-        ("testTokenCreation", testTokenCreation),
-        ("testTokenRetrieval", testTokenRetrieval),
-        ("testBankAccountCreation", testBankAccountCreation),
-    ]
-
     var drop: Droplet?
     var tokenId: String = ""
     

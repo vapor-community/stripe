@@ -14,16 +14,7 @@ import XCTest
 @testable import API
 
 class CustomerTests: XCTestCase {
-    
-    static var allTests = [
-        ("testCreateCustomer ", testCreateCustomer),
-        ("testRetrieveCustomer", testRetrieveCustomer),
-        ("testUpdateCustomer", testUpdateCustomer),
-        ("testDeleteCustomer", testDeleteCustomer),
-        ("testRetrieveAllCustomers", testRetrieveAllCustomers),
-        ("testFilterCustomers", testFilterCustomers)
-    ]
-    
+        
     var drop: Droplet?
     var customerId: String = ""
     
