@@ -4,10 +4,6 @@ import XCTest
 
 class ProviderTests: XCTestCase {
 
-    static var allTests = [
-        ("testProvider", testProvider),
-    ]
-
     func testProvider() throws {
         let config = Config([
             "stripe": [

@@ -21,4 +21,6 @@ public enum ActionType: String {
     case ideal = "ideal"
     case sofort = "sofort"
     case bancontact = "bancontact"
+    
+    case none = "none"
 }

@@ -85,5 +85,4 @@ public class StripeRequest<T : StripeModelProtocol> {
         guard let value = self.response.json else { throw StripeError.serializationError }
         return value
     }
-
 }

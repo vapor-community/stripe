@@ -36,6 +36,31 @@ let object = try drop.stripe?.balance.history().serializedResponse()
 ~~~~
 The object is returned response model, or model array.
 
+## Testing
+
+To avoid having to remember to add tests to `LinuxMain.swift` you can use [Sourcery][sourcery] to add your tets cases there for you. Just install the sourcery binary with Homebrew `brew install sourcery`, navigate to your project folder, and from the command line run the following:
+~~~~bash
+sourcery --sources Tests/ --templates Sourcery/LinuxMain.stencil --args testimports='@testable import StripeTests'
+~~~~
+It will generate the following with your tests added:
+
+~~~~swift
+import XCTest
+@testable import StripeTests
+extension BalanceTests {
+static var allTests = [
+  ("testBalance", testBalance),
+  ...
+]
+}
+.
+.
+XCTMain([
+  testCase(BalanceTests.allTests),
+  ...
+])
+~~~~
+
 ## Whats Implemented
 * [x] Balance Fetching
     * [x] History
@@ -52,6 +77,12 @@ The object is returned response model, or model array.
     * [x] Deleting
     * [x] Fetching by Customer ID
     * [x] Listing All Customers (With filters)
+* [x] Coupons
+    * [x] Creating
+    * [x] Updating
+    * [x] Deleting
+    * [x] Fetching by Coupon ID
+    * [x] Listing All Coupons (With filters)
 * [ ] Disputes
 * [x] Refunds
 	* [x] Creating a Refund
@@ -68,3 +99,4 @@ The object is returned response model, or model array.
 
 [stripe_home]: http://stripe.com "Stripe"
 [stripe_api]: https://stripe.com/docs/api "Stripe API Endpoints"
+[sourcery]: https://github.com/krzysztofzablocki/Sourcery "Sourcery"

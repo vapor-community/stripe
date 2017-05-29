@@ -1,5 +1,5 @@
 //
-//  Filter.swift
+//  StripeFilter.swift
 //  Stripe
 //
 //  Created by Anthony Castelli on 4/16/17.
@@ -12,7 +12,7 @@ import Helpers
 import Node
 import HTTP
 
-public final class Filter {
+public final class StripeFilter {
     
     public init() { }
     
@@ -30,6 +30,26 @@ public final class Filter {
      created = Node(node: UNIX_TIMESTAMP)
      */
     public var created: Node?
+    
+    /**
+     Can either be a UNIX timestamp, or a dictionary with these key/values
+     
+     - gt:  Return values where the created field is after this timestamp.
+     - gte: Return values where the created field is after or equal to this timestamp.
+     - lt:  Return values where the created field is before this timestamp.
+     - lte: Return values where the created field is before or equal to this timestamp.
+     
+     Example:
+     availableOn = Node(node: ["UNIX_TIMESTAMP": "gte"])
+     or
+     availableOn = Node(node: UNIX_TIMESTAMP)
+     */
+    public var availableOn: Node?
+    
+    /**
+     A currency
+     */
+    public var currency: StripeCurrency?
     
     /**
      Only return charges for the customer specified by this customer ID.
@@ -91,6 +111,21 @@ public final class Filter {
             } else {
                 node["created"] = value
             }
+        }
+        
+        if let value = self.created {
+            if let value = value.object {
+                for (key, value) in value {
+                    node["available_on[\(key)]"] = value
+                }
+            } else {
+                node["available_on"] = value
+            }
+        }
+        
+        if let value = self.currency
+        {
+            node["currency"] = value.rawValue.makeNode(in: nil)
         }
         
         if let value = self.customerId {

@@ -1,8 +1,8 @@
 //
-//  CustomerList.swift
+//  CouponList.swift
 //  Stripe
 //
-//  Created by Anthony Castelli on 4/20/17.
+//  Created by Andrew Edwards on 5/28/17.
 //
 //
 
@@ -10,12 +10,11 @@ import Foundation
 import Vapor
 import Helpers
 
-public final class CustomerList: StripeModelProtocol {
-    
+public final class CouponList: StripeModelProtocol {
     public let object: String
     public let url: String
     public let hasMore: Bool
-    public let items: [Customer]?
+    public let items: [Coupon]?
     
     public init(node: Node) throws {
         self.object = try node.get("object")
