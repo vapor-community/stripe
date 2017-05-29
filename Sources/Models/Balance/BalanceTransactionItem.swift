@@ -34,8 +34,8 @@ public final class BalanceTransactionItem: StripeModelProtocol {
         self.fees = try node.get("fee_details")
         self.net = try node.get("net")
         self.source = try node.get("source")
-        self.status = try StripeStatus(rawValue: node.get("status"))!
-        self.type = try ActionType(rawValue: node.get("type"))!
+        self.status = try StripeStatus(rawValue: node.get("status")) ?? StripeStatus.failed
+        self.type = try ActionType(rawValue: node.get("type")) ?? ActionType.none
     }
     
     public func makeNode(in context: Context?) throws -> Node {
