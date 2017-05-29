@@ -52,6 +52,12 @@ The object is returned response model, or model array.
     * [x] Deleting
     * [x] Fetching by Customer ID
     * [x] Listing All Customers (With filters)
+* [x] Coupons
+    * [x] Creating
+    * [x] Updating
+    * [x] Deleting
+    * [x] Fetching by Coupon ID
+    * [x] Listing All Coupons (With filters)
 * [ ] Disputes
 * [x] Refunds
 	* [x] Creating a Refund
