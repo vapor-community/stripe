@@ -19,8 +19,7 @@ class CustomerTests: XCTestCase {
     var customerId: String = ""
     
     override func setUp() {
-        do
-        {
+        do {
             drop = try self.makeDroplet()
             
             let customer = Customer()
@@ -30,9 +29,7 @@ class CustomerTests: XCTestCase {
             customer.description = "This is a test customer"
             
             customerId = try drop?.stripe?.customer.create(customer: customer).serializedResponse().id ?? ""
-        }
-        catch
-        {
+        } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
     }

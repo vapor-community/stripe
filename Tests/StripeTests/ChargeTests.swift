@@ -19,8 +19,7 @@ class ChargeTests: XCTestCase {
     var chargeId: String = ""
     
     override func setUp() {
-        do
-        {
+        do {
             drop = try self.makeDroplet()
             
             let tokenId = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
@@ -35,9 +34,7 @@ class ChargeTests: XCTestCase {
                                                          for: .source(tokenId),
                                                          description: "Vapor Stripe: Test Description")
                                                          .serializedResponse().id ?? ""
-        }
-        catch
-        {
+        } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
     }

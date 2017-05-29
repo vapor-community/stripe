@@ -13,14 +13,12 @@ import XCTest
 @testable import Helpers
 @testable import API
 
-class CouponTests: XCTestCase
-{    
+class CouponTests: XCTestCase {
     var drop: Droplet?
     var couponId: String = ""
     
     override func setUp() {
-        do
-        {
+        do {
             drop = try self.makeDroplet()
             
             couponId = try drop?.stripe?.coupons.create(id: nil,
@@ -32,9 +30,7 @@ class CouponTests: XCTestCase
                                                         percentOff: nil,
                                                         redeemBy: Date().addingTimeInterval(3000),
                                                         metadata: ["meta":"data"]).serializedResponse().id ?? ""
-        }
-        catch
-        {
+        } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
     }
@@ -80,12 +76,9 @@ class CouponTests: XCTestCase
         
         XCTAssertNotNil(coupons)
         
-        if let couponItems = coupons?.items
-        {
+        if let couponItems = coupons?.items {
             XCTAssertGreaterThanOrEqual(couponItems.count, 1)
-        }
-        else
-        {
+        } else {
             XCTFail("Coupons are not present")
         }
     }
@@ -99,12 +92,9 @@ class CouponTests: XCTestCase
         
         XCTAssertNotNil(coupons)
         
-        if let couponItems = coupons?.items
-        {
+        if let couponItems = coupons?.items {
             XCTAssertEqual(couponItems.count, 1)
-        }
-        else
-        {
+        } else {
             XCTFail("Coupons are not present")
         }
     }

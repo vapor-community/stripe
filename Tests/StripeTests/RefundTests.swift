@@ -18,8 +18,7 @@ class RefundTests: XCTestCase {
     var refundId: String = ""
     
     override func setUp() {
-        do
-        {
+        do {
             drop = try self.makeDroplet()
             
             let tokenId = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
@@ -34,9 +33,7 @@ class RefundTests: XCTestCase {
                                                          description: "Vapor Stripe: Test Description").serializedResponse().id ?? ""
             
             refundId = try drop?.stripe?.refunds.refund(charge: chargeId).serializedResponse().id ?? ""
-        }
-        catch
-        {
+        } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
     }

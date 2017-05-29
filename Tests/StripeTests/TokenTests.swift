@@ -18,8 +18,7 @@ class TokenTests: XCTestCase {
     var tokenId: String = ""
     
     override func setUp() {
-        do
-        {
+        do {
             drop = try self.makeDroplet()
             
             tokenId = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
@@ -27,15 +26,12 @@ class TokenTests: XCTestCase {
                                                              expirationYear: 2018,
                                                              cvc: 123,
                                                              name: "Test Card").serializedResponse().id ?? ""
-        }
-        catch
-        {
+        } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
     }
     
-    func testTokenCreation() throws
-    {
+    func testTokenCreation() throws {
         let object = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
                                                          expirationMonth: 10,
                                                          expirationYear: 2018,

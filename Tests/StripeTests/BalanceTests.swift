@@ -18,8 +18,7 @@ class BalanceTests: XCTestCase {
     var transactionId: String = ""
     
     override func setUp() {
-        do
-        {
+        do {
             drop = try self.makeDroplet()
             
             let paymentToken = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
@@ -35,9 +34,7 @@ class BalanceTests: XCTestCase {
                                                          description: "Vapor Stripe: Test Description")
                                                         .serializedResponse()
                                                         .balanceTransactionId ?? ""
-        }
-        catch
-        {
+        } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
     }
