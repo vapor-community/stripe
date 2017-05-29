@@ -14,7 +14,7 @@ internal let APIVersion = "v1/"
 
 internal let DefaultHeaders = [
     HeaderKey.contentType: "application/x-www-form-urlencoded",
-    StripeHeader.Version: "2017-04-06"
+    StripeHeader.Version: "2017-05-25"
 ]
 
 internal struct StripeHeader {
@@ -76,6 +76,14 @@ internal enum API {
     case refunds
     case refund(String)
     
+    /**
+     COUPONS
+     A coupon contains information about a percent-off or amount-off discount you might want to 
+     apply to a customer. Coupons may be applied to invoices or orders.
+     */
+    case coupons
+    case coupon(String)
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -95,6 +103,9 @@ internal enum API {
             
         case .refunds: return APIBase + APIVersion + "refunds"
         case .refund(let id): return APIBase + APIVersion + "refunds/\(id)"
+            
+        case .coupons: return APIBase + APIVersion + "coupons"
+        case .coupon(let id): return APIBase + APIVersion + "coupons/\(id)"
         }
     }
     
