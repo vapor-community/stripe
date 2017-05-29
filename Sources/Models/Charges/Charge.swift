@@ -22,7 +22,7 @@ public final class Charge: StripeModelProtocol {
     public let amountRefunded: Int
     public let application: String?
     public let applicationFee: Int?
-    public let balanceTransactionId: String
+    public let balanceTransactionId: String?
     public let isCaptured: Bool
     public let created: Date
     public let customerId: String?
