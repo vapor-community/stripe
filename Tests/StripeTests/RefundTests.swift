@@ -11,6 +11,7 @@ import XCTest
 @testable import Vapor
 @testable import Models
 @testable import API
+@testable import Helpers
 
 class RefundTests: XCTestCase {
         
@@ -21,18 +22,40 @@ class RefundTests: XCTestCase {
         do {
             drop = try self.makeDroplet()
             
-            let tokenId = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
-                                                              expirationMonth: 10,
-                                                              expirationYear: 2018,
-                                                              cvc: 123,
-                                                              name: "Test Card").serializedResponse().id ?? ""
+            let cardToken = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
+                                                                   expirationMonth: 10,
+                                                                   expirationYear: 2018,
+                                                                   cvc: 123,
+                                                                   name: "Test Card",
+                                                                   customer: nil,
+                                                                   currency: nil)
+                                                                   .serializedResponse().id ?? ""
             
             let chargeId = try drop?.stripe?.charge.create(amount: 10_00,
-                                                         in: .usd,
-                                                         for: .source(tokenId),
-                                                         description: "Vapor Stripe: Test Description").serializedResponse().id ?? ""
+                                                           in: .usd,
+                                                           withFee: nil,
+                                                           toAccount: nil,
+                                                           capture: true,
+                                                           description: "Vapor Stripe: Test Description",
+                                                           destinationAccountId: nil,
+                                                           destinationAmount: nil,
+                                                           transferGroup: nil,
+                                                           onBehalfOf: nil,
+                                                           metadata: nil,
+                                                           receiptEmail: nil,
+                                                           shippingLabel: nil,
+                                                           customer: nil,
+                                                           statementDescriptor: nil,
+                                                           source: cardToken)
+                                                           .serializedResponse().id ?? ""
             
-            refundId = try drop?.stripe?.refunds.refund(charge: chargeId).serializedResponse().id ?? ""
+            refundId = try drop?.stripe?.refunds.createRefund(charge: chargeId,
+                                                              amount: 5_00,
+                                                              metadata: nil,
+                                                              reason: .requestedByCustomer,
+                                                              refundApplicationFee: nil,
+                                                              reverseTransfer: nil)
+                                                              .serializedResponse().id ?? ""
         } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
@@ -40,33 +63,77 @@ class RefundTests: XCTestCase {
     
     func testRefunding() throws {
         
-        let paymentToken = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
-                                                               expirationMonth: 10,
-                                                               expirationYear: 2018,
-                                                               cvc: 123,
-                                                               name: "Test Card").serializedResponse().id ?? ""
+        let cardToken = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
+                                                                    expirationMonth: 10,
+                                                                    expirationYear: 2018,
+                                                                    cvc: 123,
+                                                                    name: "Test Card",
+                                                                    customer: nil,
+                                                                    currency: nil)
+                                                                    .serializedResponse().id ?? ""
         
         let charge = try drop?.stripe?.charge.create(amount: 10_00,
                                                      in: .usd,
-                                                     for: .source(paymentToken),
-                                                     description: "Vapor Stripe: Test Description").serializedResponse().id ?? ""
+                                                     withFee: nil,
+                                                     toAccount: nil,
+                                                     capture: true,
+                                                     description: "Vapor Stripe: Test Description",
+                                                     destinationAccountId: nil,
+                                                     destinationAmount: nil,
+                                                     transferGroup: nil,
+                                                     onBehalfOf: nil,
+                                                     metadata: nil,
+                                                     receiptEmail: nil,
+                                                     shippingLabel: nil,
+                                                     customer: nil,
+                                                     statementDescriptor: nil,
+                                                     source: cardToken)
+                                                     .serializedResponse().id ?? ""
         
-        let object = try drop?.stripe?.refunds.refund(charge: charge).serializedResponse()
-        XCTAssertNotNil(object)
+        let metadata = Node(["hello":"world"])
+        
+        let refund = try drop?.stripe?.refunds.createRefund(charge: charge,
+                                                            amount: 5_00,
+                                                            metadata: metadata,
+                                                            reason: .requestedByCustomer,
+                                                            refundApplicationFee: false,
+                                                            reverseTransfer: false)
+                                                            .serializedResponse()
+        XCTAssertNotNil(refund)
+        
+        XCTAssertEqual(refund?.metadata?.object?["hello"], metadata["hello"])
+        
+        XCTAssertEqual(refund?.amount, 5_00)
+        
+        XCTAssertEqual(refund?.reason, .requestedByCustomer)
     }
     
     func testUpdatingRefund() throws {
-        let object = try drop?.stripe?.refunds.update(refund: refundId, metadata: ["test": "Test Updating a charge"]).serializedResponse()
-        XCTAssertNotNil(object)
+        
+        let metadata = Node(["hello":"world"])
+        
+        let updatedRefund = try drop?.stripe?.refunds.update(metadata: metadata,
+                                                             refund: refundId)
+                                                             .serializedResponse()
+        XCTAssertNotNil(updatedRefund)
+        
+        XCTAssertEqual(updatedRefund?.metadata?.object?["hello"], metadata["hello"])
+        
+        XCTAssertEqual(updatedRefund?.amount, 5_00)
     }
     
     func testRetrievingRefund() throws {
-        let object = try drop?.stripe?.refunds.retrieve(refund: refundId).serializedResponse()
-        XCTAssertNotNil(object)
+        let refund = try drop?.stripe?.refunds.retrieve(refund: refundId).serializedResponse()
+        XCTAssertNotNil(refund)
     }
     
     func testListingAllRefunds() throws {
-        let object = try drop?.stripe?.refunds.listAll().serializedResponse()
-        XCTAssertGreaterThanOrEqual(object!.items!.count, 1)
+        let refunds = try drop?.stripe?.refunds.listAll(byChargeId: nil, filter: nil).serializedResponse()
+        
+        if let refundItems = refunds?.items {
+            XCTAssertGreaterThanOrEqual(refundItems.count, 1)
+        } else {
+            XCTFail("Refunds are not present")
+        }
     }    
 }
