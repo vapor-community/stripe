@@ -16,40 +16,51 @@ import Helpers
  */
 public final class Charge: StripeModelProtocol {
     
-    public let id: String
-    public let object: String
-    public let amount: Int
-    public let amountRefunded: Int
-    public let application: String?
-    public let applicationFee: Int?
-    public let balanceTransactionId: String?
-    public let isCaptured: Bool
-    public let created: Date
-    public let customerId: String?
-    public let description: String?
-    public let destination: String?
-    public let failureCode: Int?
-    public let failureMessage: String?
-    public let invoiceId: String?
-    public let isLiveMode: Bool
-    public let isPaid: Bool
-    public let isRefunded: Bool
-    public let review: String?
-    public let sourceTransfer: String?
-    public let statementDescriptor: String?
-    public let transferGroup: String?
-
+    public private(set) var id: String?
+    public private(set) var object: String?
+    public private(set) var amount: Int?
+    public private(set) var amountRefunded: Int?
+    public private(set) var application: String?
+    public private(set) var applicationFee: Int?
+    public private(set) var balanceTransactionId: String?
+    public private(set) var isCaptured: Bool?
+    public private(set) var created: Date?
     public private(set) var currency: StripeCurrency?
-    public private(set) var fraud: FraudDetails?
+    public private(set) var customerId: String?
+    public private(set) var destination: String?
+    public private(set) var dispute: String?
+    public private(set) var failureCode: String?
+    public private(set) var failureMessage: String?
+    public private(set) var invoiceId: String?
+    public private(set) var isLiveMode: Bool?
+    public private(set) var onBehalfOf: String?
+    public private(set) var order: String?
     public private(set) var outcome: Outcome?
+    public private(set) var isPaid: Bool?
+    public private(set) var recieptNumber: String?
+    public private(set) var isRefunded: Bool?
     public private(set) var refunds: Refund?
-    public private(set) var status: StripeStatus?
-    public private(set) var shippingLabel: ShippingLabel?
-
-    public private(set) var metadata: Node?
-
-    public private(set) var card: Card?
+    public private(set) var review: String?
     public private(set) var source: Source?
+    public private(set) var card: Card?
+    public private(set) var sourceTransfer: String?
+    public private(set) var statementDescriptor: String?
+    public private(set) var status: StripeStatus?
+    public private(set) var transfer: String?
+    
+    /**
+     Only these values are mutable/updatable.
+     https://stripe.com/docs/api/curl#update_charge
+     */
+    
+    public private(set) var description: String?
+    public private(set) var fraud: FraudDetails?
+    public private(set) var metadata: Node?
+    public private(set) var receiptEmail: String?
+    public private(set) var shippingLabel: ShippingLabel?
+    public private(set) var transferGroup: String?
+    
+    public init() {}
     
     public init(node: Node) throws {
         self.id = try node.get("id")
@@ -64,23 +75,30 @@ public final class Charge: StripeModelProtocol {
         self.customerId = try node.get("customer")
         self.description = try node.get("description")
         self.destination = try node.get("destination")
+        self.dispute = try node.get("dispute")
         self.failureCode = try node.get("failure_code")
         self.failureMessage = try node.get("failure_message")
         self.invoiceId = try node.get("invoice")
         self.isLiveMode = try node.get("livemode")
+        self.onBehalfOf = try node.get("on_behalf_of")
         self.isPaid = try node.get("paid")
+        self.recieptNumber = try node.get("receipt_number")
         self.isRefunded = try node.get("refunded")
         self.review = try node.get("review")
         self.sourceTransfer = try node.get("source_transfer")
         self.statementDescriptor = try node.get("statement_descriptor")
         self.transferGroup = try node.get("transfer_group")
-
-        self.currency = try StripeCurrency(rawValue: node.get("currency"))
+        if let currency = node["currency"]?.string {
+            self.currency = StripeCurrency(rawValue: currency)
+        }
         self.fraud = try node.get("fraud_details")
         self.outcome = try node.get("outcome")
         self.refunds = try node.get("refunds")
-        self.status = try StripeStatus(rawValue: node.get("status"))
-        
+        if let status  = node["status"]?.string {
+            self.status = StripeStatus(rawValue: status)
+        }
+        self.transfer = try node.get("transfer")
+        self.receiptEmail = try node.get("receipt_email")
         if let _ = node["shipping"]?.object {
             self.shippingLabel = try node.get("shipping")
         }
@@ -112,14 +130,17 @@ public final class Charge: StripeModelProtocol {
             "customer": self.customerId,
             "description": self.description,
             "destination": self.destination,
+            "dispute": self.dispute,
             "failure_code": self.failureCode,
             "failure_message": self.failureMessage,
             "fraud_details": self.fraud,
             "invoice": self.invoiceId,
             "livemode": self.isLiveMode,
+            "on_behalf_of": self.onBehalfOf,
             "metadata": self.metadata,
             "outcome": self.outcome,
             "paid": self.isPaid,
+            "receipt_number": self.recieptNumber,
             "refunded": self.isRefunded,
             "refunds": self.refunds,
             "review": self.review,
@@ -127,6 +148,8 @@ public final class Charge: StripeModelProtocol {
             "source_transfer": self.sourceTransfer,
             "statement_descriptor": self.statementDescriptor,
             "status": self.status?.rawValue,
+            "transfer": self.transfer,
+            "receipt_email": self.receiptEmail,
             "transfer_group": self.transferGroup
         ]
         
@@ -137,5 +160,4 @@ public final class Charge: StripeModelProtocol {
         }
         return try Node(node: object)
     }
-    
 }
