@@ -11,17 +11,21 @@ import Vapor
 import Helpers
 
 public final class Owner: StripeModelProtocol {
-    
-    public let address: String?
-    public let email: String?
-    public let name: String?
-    public let phone: String?
+    public private(set) var address: ShippingAddress?
+    public private(set) var email: String?
+    public private(set) var name: String?
+    public private(set) var phone: String?
+    public private(set) var verifiedAddress: ShippingAddress?
+    public private(set) var verifiedEmail: String?
+    public private(set) var verifiedName: String?
+    public private(set) var verifiedPhone: String?
     
     public init(node: Node) throws {
         self.address = try node.get("address")
         self.email = try node.get("email")
         self.name = try node.get("name")
         self.phone = try node.get("phone")
+        self.verifiedAddress = try node.get("verified_address")
     }
     
     public func makeNode(in context: Context?) throws -> Node {
@@ -33,5 +37,4 @@ public final class Owner: StripeModelProtocol {
         ]
         return try Node(node: object)
     }
-    
 }
