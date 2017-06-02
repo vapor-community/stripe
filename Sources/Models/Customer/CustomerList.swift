@@ -11,10 +11,9 @@ import Vapor
 import Helpers
 
 public final class CustomerList: StripeModelProtocol {
-    
-    public let object: String
-    public let url: String
-    public let hasMore: Bool
+    public private(set) var object: String?
+    public private(set) var url: String?
+    public private(set) var hasMore: Bool?
     public let items: [Customer]?
     
     public init(node: Node) throws {
