@@ -14,13 +14,13 @@ import Vapor
  */
 public final class Token: StripeModelProtocol {
     
-    public let id: String
-    public let object: String
-    public let type: String
-    public let clientIp: String?
-    public let created: Date
-    public let isLive: Bool
-    public let isUsed: Bool
+    public private(set) var id: String?
+    public private(set) var object: String?
+    public private(set) var type: String?
+    public private(set) var clientIp: String?
+    public private(set) var created: Date?
+    public private(set) var isLive: Bool?
+    public private(set) var isUsed: Bool?
     
     public private(set) var card: Card?
     public private(set) var bankAccount: BankAccount?

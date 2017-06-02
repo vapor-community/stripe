@@ -12,9 +12,9 @@ import Helpers
 
 public final class SubscriptionList: StripeModelProtocol {
     
-    public let object: String
-    public let hasMore: Bool
-    public let items: [Any?]?
+    public private(set) var object: String?
+    public private(set) var hasMore: Bool?
+    public private(set) var items: [Any?]?
     
     public init(node: Node) throws {
         self.object = try node.get("object")
