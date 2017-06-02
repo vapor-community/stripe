@@ -141,7 +141,7 @@ public final class StripeFilter {
         }
         
         if let value = self.source {
-            node["source"] = value.rawType.makeNode(in: nil)
+            node["source"] = value.rawValue.makeNode(in: nil)
         }
         
         if let value = self.startingAfter {
