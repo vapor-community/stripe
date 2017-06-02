@@ -16,27 +16,30 @@ import Helpers
  */
 public final class Customer: StripeModelProtocol {
     
-    public private(set) var id: String
+    public private(set) var id: String?
     public private(set) var object: String?
-    public var accountBalance: Int?
     public private(set) var created: Date?
-    public var email: String?
-    public var bussinessVATId: String?
-    public var defaultSourceId: String?
-    public var description: String?
     public private(set) var delinquent: Bool?
     public private(set) var isLive: Bool?
-    
-    public var metadata: Node?
-    
-    public var currency: StripeCurrency?
-    public private(set) var shipping: ShippingLabel?
+    public private(set) var currency: StripeCurrency?
     public private(set) var sources: SourceList?
     public private(set) var subscriptions: SubscriptionList?
     
-    public init() {
-        self.id = ""
-    }
+    /**
+     Only these values are mutable/updatable.
+     https://stripe.com/docs/api/curl#update_customer
+     */
+    
+    public private(set) var accountBalance: Int?
+    public private(set) var bussinessVATId: String?
+    public private(set) var coupon: String?
+    public private(set) var defaultSourceId: String?
+    public private(set) var description: String?
+    public private(set) var email: String?
+    public private(set) var metadata: Node?
+    public private(set) var shipping: ShippingLabel?
+    
+    public init() {}
     
     public init(node: Node) throws {
         self.id = try node.get("id")
@@ -49,7 +52,7 @@ public final class Customer: StripeModelProtocol {
         self.description = try node.get("description")
         self.delinquent = try node.get("delinquent")
         self.isLive = try node.get("livemode")
-        
+        self.coupon = try node.get("coupon")
         self.metadata = try node.get("metadata")
         
         if let currency = node["currency"]?.string {
@@ -75,9 +78,8 @@ public final class Customer: StripeModelProtocol {
             "description": self.description,
             "delinquent": self.delinquent,
             "livemode": self.isLive,
-            
+            "coupon": self.coupon,
             "metadata": self.metadata,
-            
             "currency": self.currency?.rawValue,
             "shipping": self.shipping,
             "sources": self.sources,
@@ -85,5 +87,4 @@ public final class Customer: StripeModelProtocol {
         ]
         return try Node(node: object)
     }
-    
 }
