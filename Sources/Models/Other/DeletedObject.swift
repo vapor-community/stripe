@@ -11,7 +11,6 @@ import Vapor
 import Helpers
 
 public final class DeletedObject: StripeModelProtocol {
-    
     public private(set) var deleted: Bool?
     public private(set) var id: String?
     
