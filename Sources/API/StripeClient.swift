@@ -18,6 +18,8 @@ public class StripeClient {
     public private(set) var tokens: TokenRoutes!
     public private(set) var refunds: RefundRoutes!
     public private(set) var coupons: CouponRoutes!
+    public private(set) var plans: PlanRoutes!
+    public private(set) var sources: SourceRoutes!
 
     public init(apiKey: String) throws {
         self.apiKey = apiKey
@@ -30,6 +32,7 @@ public class StripeClient {
         self.tokens = TokenRoutes(client: self)
         self.refunds = RefundRoutes(client: self)
         self.coupons = CouponRoutes(client: self)
+        self.plans = PlanRoutes(client: self)
+        self.sources = SourceRoutes(client: self)
     }
-
 }

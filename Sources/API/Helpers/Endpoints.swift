@@ -84,6 +84,20 @@ internal enum API {
     case coupons
     case coupon(String)
     
+    /**
+     PLANS
+     A subscription plan contains the pricing information for different products and feature levels on your site.
+     */
+    case plans
+    case plan(String)
+    
+    /**
+     SOURCES
+     Source objects allow you to accept a variety of payment methods. They represent a customer's payment instrument and can be used with the Stripe API just like a card object: once chargeable, they can be charged, or attached to customers.
+     */
+    case sources
+    case source(String)
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -106,7 +120,12 @@ internal enum API {
             
         case .coupons: return APIBase + APIVersion + "coupons"
         case .coupon(let id): return APIBase + APIVersion + "coupons/\(id)"
+            
+        case .plans: return APIBase + APIVersion + "plans"
+        case .plan(let id): return APIBase + APIVersion + "plans/\(id)"
+            
+        case .sources: return APIBase + APIVersion + "sources"
+        case .source(let id): return APIBase + APIVersion + "sources/\(id)"
         }
     }
-    
 }
