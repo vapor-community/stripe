@@ -10,27 +10,18 @@ import Foundation
 import Vapor
 import Helpers
 
-/*
+/**
  Refunds
  https://stripe.com/docs/api/curl#charge_object-refunds
  */
 
 public final class Refund: StripeModelProtocol {
     
-    public let object: String
-    public let hasMore: Bool
-    public let totalCount: Int?
-    public let url: String
+    public private(set) var object: String?
+    public private(set) var hasMore: Bool
+    public private(set) var totalCount: Int?
+    public private(set) var url: String?
     public private(set) var items: [RefundItem]?
-    
-    public var id: String? {
-        get {
-            // /v1/charges/:id/refunds
-            let components = self.url.components(separatedBy: "/")
-            guard components.count > 2 else { return nil }
-            return components[components.count - 2] // Do a little math here
-        }
-    }
     
     public init(node: Node) throws {
         self.object = try node.get("object")
