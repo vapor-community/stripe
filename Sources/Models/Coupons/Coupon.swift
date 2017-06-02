@@ -15,14 +15,14 @@ import Helpers
  https://stripe.com/docs/api/curl#coupon_object
  */
 public final class Coupon: StripeModelProtocol {
-    public var id: String?
-    public var amountOff: Int?
-    public var currency: StripeCurrency?
-    public var duration: StripeDuration = .never
-    public var durationInMonths: Int?
-    public var maxRedemptions: Int?
-    public var percentOff: Int?
-    public var redeemBy: Date?
+    public private(set) var id: String?
+    public private(set) var amountOff: Int?
+    public private(set) var currency: StripeCurrency?
+    public private(set) var duration: StripeDuration?
+    public private(set) var durationInMonths: Int?
+    public private(set) var maxRedemptions: Int?
+    public private(set) var percentOff: Int?
+    public private(set) var redeemBy: Date?
     public private(set) var object: String?
     public private(set) var created: Date?
     public private(set) var timesRedeemed: Int?
@@ -33,26 +33,21 @@ public final class Coupon: StripeModelProtocol {
      Only metadata is mutable/updatable.
      https://stripe.com/docs/api/curl#update_coupon
      */
-    public var metadata: Node?
+    public private(set) var metadata: Node?
     
-    
-    required public init(duration: StripeDuration) {
-        self.duration = duration
-    }
+    public init() {}
     
     public init(node: Node) throws {
         self.id = try node.get("id")
         self.amountOff = try node.get("amount_off")
         self.created = try node.get("created")
         
-        if let currency = node["currency"]?.string
-        {
+        if let currency = node["currency"]?.string {
             self.currency = StripeCurrency(rawValue: currency)
         }
         
-        if let duration = node["duration"]?.string
-        {
-            self.duration = StripeDuration(rawValue: duration) ?? StripeDuration.never
+        if let duration = node["duration"]?.string {
+            self.duration = StripeDuration(rawValue: duration)
         }
         self.object = try node.get("object")
         self.durationInMonths = try node.get("duration_in_months")
