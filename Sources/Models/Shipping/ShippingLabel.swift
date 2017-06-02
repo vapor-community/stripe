@@ -10,7 +10,7 @@ import Foundation
 import Vapor
 import Helpers
 
-/*
+/**
  Shipping
  https://stripe.com/docs/api/curl#charge_object-shipping
  */
@@ -42,5 +42,4 @@ public final class ShippingLabel: StripeModelProtocol {
         ]
         return try Node(node: object)
     }
-    
 }
