@@ -12,26 +12,30 @@ import Helpers
 
 public final class Fee: StripeModelProtocol {
     
-    public let amount: Int
-    public let currency: StripeCurrency
-    public let description: String
-    public let type: ActionType
+    public private(set) var amount: Int?
+    public private(set) var currency: StripeCurrency?
+    public private(set) var description: String?
+    public private(set) var type: ActionType?
     
     public init(node: Node) throws {
         self.amount = try node.get("amount")
-        self.currency = try StripeCurrency(rawValue: node.get("currency"))!
+        if let currency = node["currency"]?.string {
+            self.currency = StripeCurrency(rawValue: currency)
+        }
         self.description = try node.get("description")
-        self.type = try ActionType(rawValue: node.get("type"))!
+        if let type = node["type"]?.string {
+            self.type = ActionType(rawValue: type)
+        }
     }
     
     public func makeNode(in context: Context?) throws -> Node {
-        return try Node(node: [
+        
+        let object: [String : Any?] = [
             "amount": self.amount,
             "currency": self.currency,
             "description": self.description,
-            "type": self.type.rawValue
-        ])
+            "type": self.type?.rawValue
+        ]
+        return try Node(node: object)
     }
-    
 }
-
