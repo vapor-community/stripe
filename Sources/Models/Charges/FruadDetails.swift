@@ -10,7 +10,7 @@ import Foundation
 import Vapor
 import Helpers
 
-/*
+/**
  Fraud Details
  https://stripe.com/docs/api/curl#charge_object-fraud_details
  */
@@ -21,8 +21,8 @@ public enum FraudReport: String {
 
 public final class FraudDetails: StripeModelProtocol {
 
-    public var userReport: FraudReport?
-    public var stripeReport: FraudReport?
+    public private(set) var userReport: FraudReport?
+    public private(set) var stripeReport: FraudReport?
     
     public init(node: Node) throws {
         if let value: String? = try node.get("user_report") {
@@ -39,10 +39,10 @@ public final class FraudDetails: StripeModelProtocol {
     }
     
     public func makeNode(in context: Context?) throws -> Node {
-        return try Node(node: [
+        let object: [String : Any?] = [
             "user_report": self.userReport?.rawValue,
             "stripe_report": self.stripeReport?.rawValue
-        ])
+        ]
+        return try Node(node: object)
     }
-    
 }
