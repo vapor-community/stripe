@@ -57,8 +57,9 @@ public final class TokenRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
-    public func createCard(withCardNumber cardNumber: String, expirationMonth: Int, expirationYear: Int, cvc: Int, name: String?, customer: String? = nil, currency: StripeCurrency? = nil) throws -> StripeRequest<Token> {
+    public func createCardToken(withCardNumber cardNumber: String, expirationMonth: Int, expirationYear: Int, cvc: Int, name: String?, customer: String?, currency: StripeCurrency?) throws -> StripeRequest<Token> {
         var body = Node([:])
+        var headers: [HeaderKey: String]?
         
         body["card[number]"] = Node(self.cleanNumber(cardNumber))
         body["card[exp_month]"] = Node(expirationMonth)
@@ -69,90 +70,56 @@ public final class TokenRoutes {
             body["card[name]"] = Node(name)
         }
         
-        if let customer = customer {
-            body["card[customer]"] = Node(customer)
-        }
-        
         if let currency = currency {
             body["card[currency]"] = Node(currency.rawValue)
         }
         
-        return try StripeRequest(client: self.client, method: .post, route: .tokens, body: Body.data(body.formURLEncoded()), headers: nil)
+        // Check if we have an account to set it to
+        if let customer = customer {
+            headers = [StripeHeader.Account: customer]
+        }
+        
+        return try StripeRequest(client: self.client, method: .post, route: .tokens, body: Body.data(body.formURLEncoded()), headers: headers)
     }
     
-    /**
-     Create a payment token from a customer
-     
-     - parameter customer: The customer to generate the token with
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-    */
-    public func createToken(withCustomer customer: Customer) throws -> StripeRequest<Token> {
-        let body = try Node(node: ["customer": customer.id])
-        return try StripeRequest(client: self.client, method: .post, route: .tokens, body: Body.data(body.formURLEncoded()))
-    }
-    
-    /**
-     Create a payment token from a customer
-     
-     - parameter customerId: The customer ID to generate the token with
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func createToken(withCustomer customerId: String) throws -> StripeRequest<Token> {
-        let body = try Node(node: ["customer": customerId])
-        return try StripeRequest(client: self.client, method: .post, route: .tokens, body: Body.data(body.formURLEncoded()))
-    }
-    
-    /**
-     Retrieve a token
-     Retrieves the token with the given ID.
-     
-     - parameter token: The ID of the desired token.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-    */
-    public func retrieve(_ token: String) throws -> StripeRequest<Token> {
-        return try StripeRequest(client: self.client, route: .token(token))
-    }
-
     /**
      Create a bank account token
-     Creates a single use token that wraps the details of a bank account. This token can be used in place of 
-     a bank account dictionary with any API method. These tokens can only be used once: by attaching them to a 
+     Creates a single use token that wraps the details of a bank account. This token can be used in place of
+     a bank account dictionary with any API method. These tokens can only be used once: by attaching them to a
      recipient or managed account.
-     
-     - parameter country:           The country the bank account is in.
-     
-     - parameter currency:          The currency the bank account is in. This must be a country/currency pairing 
-                                    that Stripe supports. (Re StripeCurrency enum)
      
      - parameter accountNumber:     The account number for the bank account in string form. Must be a checking account.
      
-     - parameter routingNumber:     The routing number, sort code, or other country-appropriate institution number for the 
+     - parameter country:           The country the bank account is in.
+     
+     - parameter currency:          The currency the bank account is in. This must be a country/currency pairing
+                                    that Stripe supports. (Re StripeCurrency enum)
+     
+     - parameter routingNumber:     The routing number, sort code, or other country-appropriate institution number for the
                                     bank account. For US bank accounts, this is required and should be the ACH routing number,
-                                    not the wire routing number. If you are providing an IBAN for account_number, this field 
+                                    not the wire routing number. If you are providing an IBAN for account_number, this field
                                     is not required.
      
-     - parameter accountHolderName: The name of the person or business that owns the bank account. This field is required 
+     - parameter accountHolderName: The name of the person or business that owns the bank account. This field is required
                                     when attaching the bank account to a customer object.
      
-     - parameter accountHolderType: The type of entity that holds the account. This can be either "individual" or "company". 
+     - parameter accountHolderType: The type of entity that holds the account. This can be either "individual" or "company".
                                     This field is required when attaching the bank account to a customer object.
      
-     - parameter customer:          The customer (owned by the application's account) to create a token for.
-                                    For use with Stripe Connect only; this can only be used with an OAuth access token
-                                    or Stripe-Account header. For more details, see the shared customers documentation.
+     - parameter customer:          The customer (owned by the application's account) to create a token for. For use with Stripe 
+                                    Connect only; this can only be used with an OAuth access token or Stripe-Account header. For 
+                                    more details, see the shared customers documentation.
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-    */
+     */
     
-    public func createBank(country: String, currency: StripeCurrency, accountNumber: String, routingNumber: String? = nil, accountHolderName: String? = nil, accountHolderType: String? = nil, customer: String? = nil) throws -> StripeRequest<Token> {
+    public func createBankAccountToken(withAccountNumber accountNumber: String, country: String, currency: StripeCurrency, routingNumber:String?, accountHolderName: String?, accountHolderType: String?, customer: String?) throws -> StripeRequest<Token> {
         var body = Node([:])
+        var headers: [HeaderKey: String]?
         
+        body["bank_account[account_number]"] = Node(self.cleanNumber(accountNumber))
         body["bank_account[country]"] = Node(country)
         body["bank_account[currency]"] = Node(currency.rawValue)
-        body["bank_account[account_number]"] = Node(accountNumber)
         
         if let routingNumber = routingNumber {
             body["bank_account[routing_number]"] = Node(routingNumber)
@@ -166,10 +133,31 @@ public final class TokenRoutes {
             body["bank_account[account_holder_type]"] = Node(accountHolderType)
         }
         
+        // Check if we have an account to set it to
         if let customer = customer {
-            body["card[customer]"] = Node(customer)
+            headers = [StripeHeader.Account: customer]
         }
         
+        return try StripeRequest(client: self.client, method: .post, route: .tokens, body: Body.data(body.formURLEncoded()), headers: headers)
+    }
+    
+    public func createPIIToken(piiNumber: String) throws -> StripeRequest<Token> {
+        var body = Node([:])
+        
+        body["pii[personal_id_number]"] = Node(piiNumber)
+        
         return try StripeRequest(client: self.client, method: .post, route: .tokens, body: Body.data(body.formURLEncoded()), headers: nil)
+    }
+    
+    /**
+     Retrieve a token
+     Retrieves the token with the given ID.
+     
+     - parameter token: The ID of the desired token.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+    */
+    public func retrieve(_ token: String) throws -> StripeRequest<Token> {
+        return try StripeRequest(client: self.client, route: .token(token))
     }
 }

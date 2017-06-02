@@ -37,7 +37,12 @@ public final class RefundRoutes {
      - parameter amount:               A positive integer in cents representing how much of this charge to refund. 
                                        Can only refund up to the unrefunded amount remaining of the charge.
      
-     - parameter reason:               String indicating the reason for the refund. If set, possible values 
+     - parameter metadata:             A set of key/value pairs that you can attach to a refund object. It can be
+                                       useful for storing additional information about the refund in a structured format.
+                                       You can unset individual keys if you POST an empty value for that key. You can clear
+                                       all keys if you POST an empty value for metadata.
+     
+     - parameter reason:               String indicating the reason for the refund. If set, possible values
                                        are duplicate, fraudulent, and requestedByCustomer. Specifying fraudulent 
                                        as the reason when you believe the charge to be fraudulent will help us 
                                        improve our fraud detection algorithms.
@@ -54,20 +59,21 @@ public final class RefundRoutes {
                                        (either the entire or partial amount).
                                        A transfer can only be reversed by the application that created the charge.
      
-     - parameter metadata:             A set of key/value pairs that you can attach to a refund object. It can be 
-                                       useful for storing additional information about the refund in a structured format. 
-                                       You can unset individual keys if you POST an empty value for that key. You can clear 
-                                       all keys if you POST an empty value for metadata.
-     
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
-    public func refund(charge: String, amount: Int? = nil, reason: RefundReason? = nil, refundApplicationFee: Bool? = nil, reverseTransfer: Bool? = nil, metadata: [String : String]? = nil) throws -> StripeRequest<RefundItem> {
+    public func createRefund(charge: String, amount: Int?, metadata: Node?, reason: RefundReason?, refundApplicationFee: Bool?, reverseTransfer: Bool?) throws -> StripeRequest<RefundItem> {
         var body = Node([:])
         
         body["charge"] = Node(charge)
         
         if let amount = amount {
             body["amount"] = Node(amount)
+        }
+        
+        if let metadata = metadata?.object {
+            for (key, value) in metadata {
+                body["metadata[\(key)]"] = value
+            }
         }
         
         if let reason = reason {
@@ -82,15 +88,8 @@ public final class RefundRoutes {
             body["reverse_transfer"] = Node(reverseTransfer)
         }
         
-        if let metadata = metadata {
-            for (key, value) in metadata {
-                body["metadata[\(key)]"] = try Node(node: value)
-            }
-        }
-        
         return try StripeRequest(client: self.client, method: .post, route: .refunds, body: Body.data(body.formURLEncoded()))
     }
-
     
     /**
      Retrieve a refund
@@ -109,20 +108,20 @@ public final class RefundRoutes {
      Updates the specified refund by setting the values of the parameters passed. Any parameters not provided will 
      be left unchanged.
      
-     - parameter refund:   The ID of the refund to update.
-     
      - parameter metadata: A set of key/value pairs that you can attach to a refund object. It can be useful for 
                            storing additional information about the refund in a structured format. You can unset 
                            individual keys if you POST an empty value for that key. You can clear all keys if you 
                            POST an empty value for metadata.
      
+     - parameter refund:   The ID of the refund to update.
+     
       - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
-    public func update(refund refundId: String, metadata: [String : String]? = nil) throws -> StripeRequest<RefundItem> {
+    public func update(metadata: Node?, refund refundId: String) throws -> StripeRequest<RefundItem> {
         var body = Node([:])
-        if let metadata = metadata {
+        if let metadata = metadata?.object {
             for (key, value) in metadata {
-                body["metadata[\(key)]"] = try Node(node: value)
+                body["metadata[\(key)]"] = value
             }
         }
         return try StripeRequest(client: self.client, method: .post, route: .refund(refundId), body: Body.data(body.formURLEncoded()))
@@ -133,15 +132,23 @@ public final class RefundRoutes {
      recent refunds appearing first. For convenience, the 10 most recent refunds are always available by default on 
      the charge object.
      
-     - parameter filter: A Filter item to pass query parameters when fetching results
+     - parameter byChargeId:    Only return refunds for the charge specified by this charge ID.
+     
+     - parameter filter:        A Filter item to pass query parameters when fetching results
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func listAll(by charge: String? = nil, filter: StripeFilter?=nil) throws -> StripeRequest<Refund> {
+    public func listAll(byChargeId charge: String?, filter: StripeFilter?) throws -> StripeRequest<Refund> {
         var query = [String : NodeRepresentable]()
+        
         if let data = try filter?.createQuery() {
             query = data
         }
+        
+        if let charge = charge {
+            query["charge"] = Node(charge)
+        }
+        
         return try StripeRequest(client: self.client, method: .get, route: .refunds, query: query)
     }
 }
