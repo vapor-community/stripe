@@ -10,7 +10,7 @@ import Foundation
 import Vapor
 import Helpers
 
-/*
+/**
  Shipping Address
  https://stripe.com/docs/api/curl#charge_object-shipping-address
  */
@@ -46,5 +46,4 @@ public final class ShippingAddress: StripeModelProtocol {
         ]
         return try Node(node: object)
     }
-    
 }
