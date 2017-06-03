@@ -33,6 +33,7 @@ public final class Source: StripeModelProtocol {
     public private(set) var type: SourceType?
     public private(set) var usage: String?
     public private(set) var reciever: Receiver?
+    public private(set) var returnedSource: [String:[String: Node]]?
     
     /**
      Only these values are mutable/updatable.
@@ -67,8 +68,16 @@ public final class Source: StripeModelProtocol {
         if let status = node["status"]?.string {
         self.status = StripeStatus(rawValue: status)
         }
+        /// if we have a type we should have a body to parse
         if let type = node["type"]?.string {
         self.type = SourceType(rawValue: type)
+            if let sourceTypeBody = node["\(type)"]?.object {
+                var sourceBody: [String: Node] = [:]
+                for (key,val) in sourceTypeBody {
+                    sourceBody["\(key)"] = val
+                }
+                self.returnedSource = ["\(type)": sourceBody]
+            }
         }
         self.usage = try node.get("usage")
         self.metadata = try node.get("metadata")

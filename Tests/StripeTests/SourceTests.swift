@@ -46,6 +46,8 @@ class SourceTests: XCTestCase {
         XCTAssertNotNil(retrievedSource)
         
         XCTAssertEqual(retrievedSource?.type, SourceType.card)
+        
+        XCTAssertNotNil(retrievedSource?.returnedSource)
     }
     
     func testUpdateSource() throws {
