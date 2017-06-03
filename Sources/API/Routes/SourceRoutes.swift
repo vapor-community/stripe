@@ -24,8 +24,8 @@ public final class SourceRoutes {
     /**
      Create a Source
      Creates a new customer object.
-     // TODO: - check source type stuff
-     - parameter type: The type of the source to create.
+     
+     - parameter type:              The type of the source to create.
      
      - parameter amount:            Amount associated with the source. This is the amount for which the source 
                                     will be chargeable once ready.
@@ -39,21 +39,77 @@ public final class SourceRoutes {
      - parameter owner:             Information about the owner of the payment instrument that may be used or 
                                     required by particular source types.
      
-     - parameter redirectReturnUrl: The URL you provide to redirect the customer back to you after they authenticated their payment.
+     - parameter redirectReturnUrl: The URL you provide to redirect the customer back to you after they
+                                    authenticated their payment.
      
-     - parameter token:             An optional token used to create the source. When passed, token properties will override source
-                                    parameters.
+     - parameter token:             An optional token used to create the source. When passed, token properties 
+                                    will override source parameters.
      
      - parameter usage:             Either reusable or single_use.
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func createNewSource(sourceType: String, amount: Int?, currency: StripeCurrency?, flow: String?, metadata: Node?, owner: Owner?, redirectReturnUrl: String?, token: String?, usage: String?) throws -> StripeRequest<Source> {
+    public func createNewSource(sourceType: SourceType, source: [String:Node]?, amount: Int?, currency: StripeCurrency?, flow: String?, metadata: Node?, owner: Owner?, redirectReturnUrl: String?, token: String?, usage: String?) throws -> StripeRequest<Source> {
         
         var body = Node([:])
         
-        body["type"] = Node(sourceType)
+        body["type"] = Node(sourceType.rawValue)
+        
+        switch sourceType{
+            
+        case .card:
+            if let source = source {
+                for (key,val) in source {
+                    body["card[\(key)]"] = val
+                }
+            }
+        case .bitcoin:
+            if let source = source {
+                for (key,val) in source {
+                    body["bitcoin[\(key)]"] = val
+                }
+            }
+        case .threeDSecure:
+            if let source = source {
+                for (key,val) in source {
+                    body["three_d_secure[\(key)]"] = val
+                }
+            }
+            
+        case .bancontact:
+            if let source = source {
+                for (key,val) in source {
+                    body["bancontact[\(key)]"] = val
+                }
+            }
+        case .giropay:
+            if let source = source {
+                for (key,val) in source {
+                    body["giropay[\(key)]"] = val
+                }
+            }
+        case .ideal:
+            if let source = source {
+                for (key,val) in source {
+                    body["ideal[\(key)]"] = val
+                }
+            }
+        case .sepaDebit:
+            if let source = source {
+                for (key,val) in source {
+                    body["sepa_debit[\(key)]"] = val
+                }
+            }
+        case .sofort:
+            if let source = source {
+                for (key,val) in source {
+                    body["sofort[\(key)]"] = val
+                }
+            }
+        default:
+            body[""] = ""
+        }
         
         if let amount = amount {
             
