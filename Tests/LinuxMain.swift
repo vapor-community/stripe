@@ -40,9 +40,21 @@ static var allTests = [
   ("testCreateCustomer", testCreateCustomer),
   ("testRetrieveCustomer", testRetrieveCustomer),
   ("testUpdateCustomer", testUpdateCustomer),
+  ("testAddNewSourceForCustomer", testAddNewSourceForCustomer),
   ("testDeleteCustomer", testDeleteCustomer),
   ("testRetrieveAllCustomers", testRetrieveAllCustomers),
   ("testFilterCustomers", testFilterCustomers),
+]
+}
+
+extension PlanTests {
+static var allTests = [
+  ("testCreatePlan", testCreatePlan),
+  ("testRetrievePlan", testRetrievePlan),
+  ("testUpdatePlan", testUpdatePlan),
+  ("testDeletePlan", testDeletePlan),
+  ("testListAllPlans", testListAllPlans),
+  ("testFilterPlans", testFilterPlans),
 ]
 }
 
@@ -61,11 +73,18 @@ static var allTests = [
 ]
 }
 
+extension SourceTests {
+static var allTests = [
+  ("testRetrieveSource", testRetrieveSource),
+  ("testUpdateSource", testUpdateSource),
+]
+}
+
 extension TokenTests {
 static var allTests = [
-  ("testTokenCreation", testTokenCreation),
+  ("testCardTokenCreation", testCardTokenCreation),
   ("testTokenRetrieval", testTokenRetrieval),
-  ("testBankAccountCreation", testBankAccountCreation),
+  ("testBankAccountTokenCreation", testBankAccountTokenCreation),
 ]
 }
 
@@ -75,7 +94,9 @@ XCTMain([
   testCase(ChargeTests.allTests),
   testCase(CouponTests.allTests),
   testCase(CustomerTests.allTests),
+  testCase(PlanTests.allTests),
   testCase(ProviderTests.allTests),
   testCase(RefundTests.allTests),
+  testCase(SourceTests.allTests),
   testCase(TokenTests.allTests),
 ])
