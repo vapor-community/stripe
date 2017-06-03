@@ -30,7 +30,7 @@ public final class Source: StripeModelProtocol {
     public private(set) var redirectStatus: String?
     public private(set) var redirectUrl: String?
     public private(set) var status: StripeStatus?
-    public private(set) var type: ActionType?
+    public private(set) var type: SourceType?
     public private(set) var usage: String?
     public private(set) var reciever: Receiver?
     
@@ -68,7 +68,7 @@ public final class Source: StripeModelProtocol {
         self.status = StripeStatus(rawValue: status)
         }
         if let type = node["type"]?.string {
-        self.type = ActionType(rawValue: type)
+        self.type = SourceType(rawValue: type)
         }
         self.usage = try node.get("usage")
         self.metadata = try node.get("metadata")
