@@ -83,6 +83,12 @@ XCTMain([
     * [x] Deleting
     * [x] Fetching by Coupon ID
     * [x] Listing All Coupons (With filters)
+* [x] Plans
+    * [x] Creating
+    * [x] Updating
+    * [x] Deleting
+    * [x] Fetching by Plan ID
+    * [x] Listing All Plans (With filters)
 * [ ] Disputes
 * [x] Refunds
 	* [x] Creating a Refund
@@ -93,6 +99,10 @@ XCTMain([
 	* [x] Card Creation
 	* [x] Bank Creation
 	* [x] Token Retrieval
+* [x] Sources
+    * [x] Creating
+    * [x] Updating
+    * [x] Fetching by Source ID
 * [ ] Cards
 * [ ] Orders
 * [ ] Order Items
