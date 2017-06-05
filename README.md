@@ -89,7 +89,6 @@ XCTMain([
     * [x] Deleting
     * [x] Fetching by Plan ID
     * [x] Listing All Plans (With filters)
-* [ ] Disputes
 * [x] Refunds
 	* [x] Creating a Refund
 	* [x] Retrieval
@@ -103,6 +102,8 @@ XCTMain([
     * [x] Creating
     * [x] Updating
     * [x] Fetching by Source ID
+* [ ] Subscriptions    
+* [ ] Disputes    
 * [ ] Cards
 * [ ] Orders
 * [ ] Order Items
