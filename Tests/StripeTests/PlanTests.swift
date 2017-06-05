@@ -28,9 +28,9 @@ class PlanTests: XCTestCase {
                                                     interval: .week,
                                                     name: "Test Plan",
                                                     intervalCount: 5,
-                                                    metadata: nil,
                                                     statementDescriptor: "Test Plan",
-                                                    trialPeriodDays: nil)
+                                                    trialPeriodDays: nil,
+                                                    metadata: nil)
                                                     .serializedResponse().id ?? ""
         } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
@@ -44,9 +44,9 @@ class PlanTests: XCTestCase {
                                                              interval: .week,
                                                              name: "Test Plan",
                                                              intervalCount: 5,
-                                                             metadata: nil,
                                                              statementDescriptor: "Test Plan",
-                                                             trialPeriodDays: nil)
+                                                             trialPeriodDays: nil,
+                                                             metadata: nil)
                                                              .serializedResponse().id ?? ""
         XCTAssertNotNil(plan)
     }
@@ -64,11 +64,12 @@ class PlanTests: XCTestCase {
         let newStatementDescriptor = "Super descriptor"
         let trialDays = 30
         
-        let updatedPlan = try drop?.stripe?.plans.update(metadata: metadata,
-                                                                name: newName,
-                                                                statementDescriptor: newStatementDescriptor,
-                                                                trialPeriodDays: trialDays, forPlanId: planId)
-                                                                .serializedResponse()
+        let updatedPlan = try drop?.stripe?.plans.update(name: newName,
+                                                        statementDescriptor: newStatementDescriptor,
+                                                        trialPeriodDays: trialDays,
+                                                        metadata: metadata,
+                                                        forPlanId: planId)
+                                                        .serializedResponse()
         
         XCTAssertNotNil(updatedPlan)
         

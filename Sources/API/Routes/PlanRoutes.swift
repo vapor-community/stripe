@@ -37,17 +37,17 @@ public final class PlanRoutes {
      
      - parameter intervalCount:         The number of intervals between each subscription billing.
      
-     - parameter metaData:              A set of key/value pairs that you can attach to a plan object.
-     
      - parameter statementDescriptor:   An arbitrary string to be displayed on your customer’s credit card statement.
                                         This may be up to 22 characters.
      
      - parameter trialPeriodDays:       Specifies a trial period in (an integer number of) days.
      
+     - parameter metaData:              A set of key/value pairs that you can attach to a plan object.
+     
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node.
      */
     
-    public func create(id: String, amount: Int, currency: StripeCurrency, interval: StripeInterval, name: String, intervalCount: Int?, metadata: Node?, statementDescriptor: String?, trialPeriodDays: Int?) throws -> StripeRequest<Coupon> {
+    public func create(id: String, amount: Int, currency: StripeCurrency, interval: StripeInterval, name: String, intervalCount: Int?, statementDescriptor: String?, trialPeriodDays: Int?, metadata: Node? = nil) throws -> StripeRequest<Coupon> {
         var body = Node([:])
         
         body["id"] = Node(id)
@@ -98,20 +98,20 @@ public final class PlanRoutes {
      Update a plan
      Updates the name or other attributes of a plan. Other plan details (price, interval, etc.) are, by design, not editable.
      
-     - parameter metaData:              A set of key/value pairs that you can attach to a plan object.
-     
      - parameter name:                  Name of the plan, to be displayed on invoices and in the web interface.
      
      - parameter statementDescriptor:   An arbitrary string to be displayed on your customer’s credit card statement.
      
      - parameter trialPeriodDays:       Specifies a trial period in (an integer number of) days.
      
+     - parameter metaData:              A set of key/value pairs that you can attach to a plan object.
+     
      - parameter planId:                The identifier of the plan to be updated.
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func update(metadata: Node?, name: String?, statementDescriptor: String?, trialPeriodDays: Int?, forPlanId planId: String) throws -> StripeRequest<Plan> {
+    public func update(name: String?, statementDescriptor: String?, trialPeriodDays: Int?, metadata: Node? = nil, forPlanId planId: String) throws -> StripeRequest<Plan> {
         var body = Node([:])
         
         if let metadata = metadata?.object {

@@ -41,20 +41,20 @@ class RefundTests: XCTestCase {
                                                            destinationAmount: nil,
                                                            transferGroup: nil,
                                                            onBehalfOf: nil,
-                                                           metadata: nil,
                                                            receiptEmail: nil,
                                                            shippingLabel: nil,
                                                            customer: nil,
                                                            statementDescriptor: nil,
-                                                           source: cardToken)
+                                                           source: cardToken,
+                                                           metadata: nil)
                                                            .serializedResponse().id ?? ""
             
             refundId = try drop?.stripe?.refunds.createRefund(charge: chargeId,
                                                               amount: 5_00,
-                                                              metadata: nil,
                                                               reason: .requestedByCustomer,
                                                               refundApplicationFee: nil,
-                                                              reverseTransfer: nil)
+                                                              reverseTransfer: nil,
+                                                              metadata: nil)
                                                               .serializedResponse().id ?? ""
         } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
@@ -82,22 +82,22 @@ class RefundTests: XCTestCase {
                                                      destinationAmount: nil,
                                                      transferGroup: nil,
                                                      onBehalfOf: nil,
-                                                     metadata: nil,
                                                      receiptEmail: nil,
                                                      shippingLabel: nil,
                                                      customer: nil,
                                                      statementDescriptor: nil,
-                                                     source: cardToken)
+                                                     source: cardToken,
+                                                     metadata: nil)
                                                      .serializedResponse().id ?? ""
         
         let metadata = Node(["hello":"world"])
         
         let refund = try drop?.stripe?.refunds.createRefund(charge: charge,
                                                             amount: 5_00,
-                                                            metadata: metadata,
                                                             reason: .requestedByCustomer,
                                                             refundApplicationFee: false,
-                                                            reverseTransfer: false)
+                                                            reverseTransfer: false,
+                                                            metadata: metadata)
                                                             .serializedResponse()
         XCTAssertNotNil(refund)
         

@@ -49,7 +49,7 @@ public final class BalanceRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func history(forFilter filter: StripeFilter?) throws -> StripeRequest<BalanceHistoryList> {
+    public func history(forFilter filter: StripeFilter? = nil) throws -> StripeRequest<BalanceHistoryList> {
         var query = [String : NodeRepresentable]()
         if let data = try filter?.createQuery() {
             query = data

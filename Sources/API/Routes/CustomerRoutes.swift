@@ -42,18 +42,18 @@ public final class CustomerRoutes {
      - parameter email:       The Customer’s email address. It’s displayed alongside the customer in your
                               dashboard and can be useful for searching and tracking.
      
-     - parameter metadata:    A set of key/value pairs that you can attach to a customer object. It can be 
-                              useful for storing additional information about the customer in a structured 
-                              format. You can unset individual keys if you POST an empty value for that key. 
-                              You can clear all keys if you POST an empty value for metadata.
-     
      - parameter shippingLabel: Shipping label.
      
      - parameter source: A one time token ID created from a source.
      
+     - parameter metadata:    A set of key/value pairs that you can attach to a customer object. It can be
+     useful for storing additional information about the customer in a structured
+     format. You can unset individual keys if you POST an empty value for that key.
+     You can clear all keys if you POST an empty value for metadata.
+     
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
-    public func create(accountBalance: Int?, businessVATId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, metadata: Node?, shipping: ShippingLabel?, source: String?) throws -> StripeRequest<Customer> {
+    public func create(accountBalance: Int?, businessVATId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, shipping: ShippingLabel?, source: String?, metadata: Node? = nil) throws -> StripeRequest<Customer> {
         var body = Node([:])
         
         if let accountBalance = accountBalance {
@@ -204,21 +204,22 @@ public final class CustomerRoutes {
      - parameter email:             The Customer’s email address. It’s displayed alongside the customer in your
                                     dashboard and can be useful for searching and tracking.
      
-     - parameter metadata:          A set of key/value pairs that you can attach to a customer object. It can be
-                                    useful for storing additional information about the customer in a structured
-                                    format. You can unset individual keys if you POST an empty value for that key.
-                                    You can clear all keys if you POST an empty value for metadata.
      
      - parameter shippingLabel:     Shipping label.
      
      - parameter newSource:         A one time token ID created from a source.
+     
+     - parameter metadata:          A set of key/value pairs that you can attach to a customer object. It can be
+                                    useful for storing additional information about the customer in a structured
+                                    format. You can unset individual keys if you POST an empty value for that key.
+                                    You can clear all keys if you POST an empty value for metadata.
      
      - parameter customerId:        A customer class created with appropiate values set. Any unset parameters (nil)
                                     will unset the value on stripe
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func update(accountBalance: Int?, businessVATId: String?, coupon: String?, defaultSourceId: String?, description:String?, email: String?, metadata: Node?, shipping:ShippingLabel?, newSource: String?, forCustomerId customerId: String) throws -> StripeRequest<Customer> {
+    public func update(accountBalance: Int?, businessVATId: String?, coupon: String?, defaultSourceId: String?, description:String?, email: String?, shipping:ShippingLabel?, newSource: String?, metadata: Node? = nil, forCustomerId customerId: String) throws -> StripeRequest<Customer> {
         var body = Node([:])
         
         if let accountBalance = accountBalance {

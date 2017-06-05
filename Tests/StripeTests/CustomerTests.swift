@@ -30,9 +30,9 @@ class CustomerTests: XCTestCase {
                                                            defaultSource: nil,
                                                            description: "Vapor test Account",
                                                            email: "vapor@stripetest.com",
-                                                           metadata: nil,
                                                            shipping: nil,
-                                                           source: nil).serializedResponse().id ?? ""
+                                                           source: nil,
+                                                           metadata: nil).serializedResponse().id ?? ""
         } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
@@ -46,9 +46,9 @@ class CustomerTests: XCTestCase {
                                                            defaultSource: nil,
                                                            description: "Vapor test Account",
                                                            email: "vapor@stripetest.com",
-                                                           metadata: nil,
                                                            shipping: nil,
-                                                           source: nil).serializedResponse()
+                                                           source: nil,
+                                                           metadata: nil).serializedResponse()
         XCTAssertNotNil(object)
     }
     
@@ -71,9 +71,9 @@ class CustomerTests: XCTestCase {
                                                        defaultSourceId: nil,
                                                        description: updatedDescription,
                                                        email: nil,
-                                                       metadata: metadata,
                                                        shipping: nil,
                                                        newSource: nil,
+                                                       metadata: metadata,
                                                        forCustomerId: customerId).serializedResponse()
         XCTAssertNotNil(updatedCustomer)
         

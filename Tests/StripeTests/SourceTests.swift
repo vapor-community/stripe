@@ -29,11 +29,11 @@ class SourceTests: XCTestCase {
                                                                 amount: nil,
                                                                 currency: nil,
                                                                 flow: nil,
-                                                                metadata: nil,
                                                                 owner: nil,
                                                                 redirectReturnUrl: nil,
                                                                 token: nil,
-                                                                usage: nil).serializedResponse().id ?? ""
+                                                                usage: nil,
+                                                                metadata: nil).serializedResponse().id ?? ""
 
         } catch {
             fatalError("Setup failed: \(error.localizedDescription)")

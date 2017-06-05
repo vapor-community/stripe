@@ -51,7 +51,7 @@ public final class CouponRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node.
      */
     
-    public func create(id: String?, duration: StripeDuration, amountOff: Int?, currency: StripeCurrency?, durationInMonths: Int?, maxRedemptions: Int?, percentOff: Int?, redeemBy: Date?, metadata: Node?) throws -> StripeRequest<Coupon> {
+    public func create(id: String?, duration: StripeDuration, amountOff: Int?, currency: StripeCurrency?, durationInMonths: Int?, maxRedemptions: Int?, percentOff: Int?, redeemBy: Date?, metadata: Node? = nil) throws -> StripeRequest<Coupon> {
         var body = Node([:])
         
         body["duration"] = Node(duration.rawValue)

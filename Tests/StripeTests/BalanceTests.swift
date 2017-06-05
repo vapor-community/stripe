@@ -40,12 +40,12 @@ class BalanceTests: XCTestCase {
                                                            destinationAmount: nil,
                                                            transferGroup: nil,
                                                            onBehalfOf: nil,
-                                                           metadata: nil,
                                                            receiptEmail: nil,
                                                            shippingLabel: nil,
                                                            customer: nil,
                                                            statementDescriptor: nil,
-                                                           source: paymentToken)
+                                                           source: paymentToken,
+                                                           metadata: nil)
                                                            .serializedResponse().balanceTransactionId ?? ""
         } catch {
             fatalError("Setup failed: \(error.localizedDescription)")

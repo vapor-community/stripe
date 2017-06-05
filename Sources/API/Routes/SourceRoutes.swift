@@ -34,8 +34,6 @@ public final class SourceRoutes {
      
      - parameter flow:              The authentication flow of the source to create.
      
-     - parameter metadata:          A set of key/value pairs that you can attach to a customer object.
-     
      - parameter owner:             Information about the owner of the payment instrument that may be used or 
                                     required by particular source types.
      
@@ -47,10 +45,12 @@ public final class SourceRoutes {
      
      - parameter usage:             Either reusable or single_use.
      
+     - parameter metadata:          A set of key/value pairs that you can attach to a customer object.
+     
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func createNewSource(sourceType: SourceType, source: [String:Node]?, amount: Int?, currency: StripeCurrency?, flow: String?, metadata: Node?, owner: Owner?, redirectReturnUrl: String?, token: String?, usage: String?) throws -> StripeRequest<Source> {
+    public func createNewSource(sourceType: SourceType, source: [String:Node]?, amount: Int?, currency: StripeCurrency?, flow: String?, owner: Owner?, redirectReturnUrl: String?, token: String?, usage: String?, metadata: Node? = nil) throws -> StripeRequest<Source> {
         
         var body = Node([:])
         
@@ -213,7 +213,7 @@ public final class SourceRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node.
      */
     
-    public func update(owner: Owner?, metadata: Node?, forSourceId sourceId: String) throws -> StripeRequest<Source> {
+    public func update(owner: Owner?, metadata: Node? = nil, forSourceId sourceId: String) throws -> StripeRequest<Source> {
         var body = Node([:])
         
         if let owner = owner {

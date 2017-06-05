@@ -61,8 +61,6 @@ public final class ChargeRoutes {
      
      - parameter onBehalfOf:            The Stripe account ID that these funds are intended for.
      
-     - parameter metadata:              Set of key/value pairs that you can attach to an object.
-     
      - parameter receiptEmail:          The email address to send this charge's receipt to.
      
      - parameter shippingLabel:         Shipping information for the charge.
@@ -73,9 +71,11 @@ public final class ChargeRoutes {
      
      - parameter statementDescriptor:   An arbitrary string to be displayed on your customer's credit card statement.
      
+     - parameter metadata:              Set of key/value pairs that you can attach to an object.
+     
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func create(amount: Int, in currency: StripeCurrency, withFee fee: Int?, toAccount account: String?, capture: Bool?, description: String?, destinationAccountId: String?, destinationAmount: Int?, transferGroup: String?, onBehalfOf: String?, metadata: Node?, receiptEmail: String?, shippingLabel: ShippingLabel?, customer: String?, statementDescriptor: String?, source: String?) throws -> StripeRequest<Charge> {
+    public func create(amount: Int, in currency: StripeCurrency, withFee fee: Int?, toAccount account: String?, capture: Bool?, description: String?, destinationAccountId: String?, destinationAmount: Int?, transferGroup: String?, onBehalfOf: String?,  receiptEmail: String?, shippingLabel: ShippingLabel?, customer: String?, statementDescriptor: String?, source: String?, metadata: Node? = nil) throws -> StripeRequest<Charge> {
         // Setup our params
         var body: [String : Any] = [
             "amount": amount,
@@ -210,19 +210,19 @@ public final class ChargeRoutes {
      
      - parameter fraud:         A set of key/value pairs you can attach to a charge giving information about its riskiness.
      
-     - parameter metadata:      Set of key/value pairs that you can attach to an object.
-     
      - parameter receiptEmail:  This is the email address that the receipt for this charge will be sent to.
      
      - parameter shippingLabel: Shipping information for the charge. Helps prevent fraud on charges for physical goods.
      
      - parameter transferGroup: A string that identifies this transaction as part of a group.
      
+     - parameter metadata:      Set of key/value pairs that you can attach to an object.
+     
      - parameter chargeId:      A charges ID to update
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
-    public func update(description: String?, fraud: FraudDetails?, metadata: Node?, receiptEmail: String?, shippingLabel: ShippingLabel?, transferGroup: String?, charge chargeId: String) throws -> StripeRequest<Charge> {
+    public func update(description: String?, fraud: FraudDetails?, receiptEmail: String?, shippingLabel: ShippingLabel?, transferGroup: String?, metadata: Node? = nil, charge chargeId: String) throws -> StripeRequest<Charge> {
         var body = Node([:])
         
         if let description = description {

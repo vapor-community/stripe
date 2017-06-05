@@ -41,12 +41,12 @@ class ChargeTests: XCTestCase {
                                                          destinationAmount: nil,
                                                          transferGroup: nil,
                                                          onBehalfOf: nil,
-                                                         metadata: nil,
                                                          receiptEmail: nil,
                                                          shippingLabel: nil,
                                                          customer: nil,
                                                          statementDescriptor: nil,
-                                                         source: tokenId)
+                                                         source: tokenId,
+                                                         metadata: nil)
                                                          .serializedResponse().id ?? ""
         } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
@@ -73,12 +73,12 @@ class ChargeTests: XCTestCase {
                                                      destinationAmount: nil,
                                                      transferGroup: nil,
                                                      onBehalfOf: nil,
-                                                     metadata: nil,
                                                      receiptEmail: nil,
                                                      shippingLabel: nil,
                                                      customer: nil,
                                                      statementDescriptor: nil,
-                                                     source: paymentToken)
+                                                     source: paymentToken,
+                                                     metadata: nil)
                                                      .serializedResponse()
         XCTAssertNotNil(object)
     }
@@ -129,10 +129,10 @@ class ChargeTests: XCTestCase {
         
         let updatedCharge = try drop?.stripe?.charge.update(description: description,
                                                             fraud: fraudDetails,
-                                                            metadata: metadata,
                                                             receiptEmail: receiptEmail,
                                                             shippingLabel: shippingLabel,
                                                             transferGroup: transferGroup,
+                                                            metadata: metadata,
                                                             charge: chargeId).serializedResponse()
 
         XCTAssertNotNil(updatedCharge)
@@ -188,12 +188,12 @@ class ChargeTests: XCTestCase {
                                                                destinationAmount: nil,
                                                                transferGroup: nil,
                                                                onBehalfOf: nil,
-                                                               metadata: nil,
                                                                receiptEmail: nil,
                                                                shippingLabel: nil,
                                                                customer: nil,
                                                                statementDescriptor: nil,
-                                                               source: paymentToken)
+                                                               source: paymentToken,
+                                                               metadata: nil)
                                                                .serializedResponse().id ?? ""
         
         let object = try drop?.stripe?.charge.capture(charge: uncapturedCharge,
