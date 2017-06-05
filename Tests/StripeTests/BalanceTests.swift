@@ -58,7 +58,7 @@ class BalanceTests: XCTestCase {
     }
     
     func testBalanceTransactionItem() throws {
-        let object = try drop?.stripe?.balance.retrieveBalanceTransaction(transactionId: transactionId).serializedResponse()
+        let object = try drop?.stripe?.balance.retrieveBalanceTransaction(transactionId).serializedResponse()
         XCTAssertNotNil(object)
     }
     
