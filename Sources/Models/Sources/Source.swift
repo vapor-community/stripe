@@ -66,11 +66,11 @@ public final class Source: StripeModelProtocol {
         self.flow = try node.get("flow")
         self.isLive = try node.get("livemode")
         if let status = node["status"]?.string {
-        self.status = StripeStatus(rawValue: status)
+            self.status = StripeStatus(rawValue: status)
         }
         /// if we have a type we should have a body to parse
         if let type = node["type"]?.string {
-        self.type = SourceType(rawValue: type)
+            self.type = SourceType(rawValue: type)
             if let sourceTypeBody = node["\(type)"]?.object {
                 var sourceBody: [String: Node] = [:]
                 for (key,val) in sourceTypeBody {
