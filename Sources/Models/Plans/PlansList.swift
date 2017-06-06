@@ -1,8 +1,8 @@
 //
-//  CouponList.swift
+//  PlansList.swift
 //  Stripe
 //
-//  Created by Andrew Edwards on 5/28/17.
+//  Created by Andrew Edwards on 5/29/17.
 //
 //
 
@@ -10,11 +10,11 @@ import Foundation
 import Vapor
 import Helpers
 
-public final class CouponList: StripeModelProtocol {
-    public let object: String
-    public let url: String
-    public let hasMore: Bool
-    public let items: [Coupon]?
+public final class PlansList: StripeModelProtocol {
+    public private(set) var object: String?
+    public private(set) var url: String?
+    public private(set) var hasMore: Bool?
+    public private(set) var items: [Plan]?
     
     public init(node: Node) throws {
         self.object = try node.get("object")

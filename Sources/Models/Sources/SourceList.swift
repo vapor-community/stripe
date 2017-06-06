@@ -12,12 +12,14 @@ import Helpers
 
 public final class SourceList: StripeModelProtocol {
     
-    public let object: String
-    public let hasMore: Bool
-    public let items: [Any?]?
+    public private(set) var object: String?
+    public private(set) var url: String?
+    public private(set) var hasMore: Bool?
+    public private(set) var items: [Source]?
     
     public init(node: Node) throws {
         self.object = try node.get("object")
+        self.url = try node.get("url")
         self.hasMore = try node.get("has_more")
         self.items = try node.get("data")
     }
@@ -25,10 +27,10 @@ public final class SourceList: StripeModelProtocol {
     public func makeNode(in context: Context?) throws -> Node {
         let object: [String : Any?] = [
             "object": self.object,
+            "url": self.url,
             "has_more": self.hasMore,
             "data": self.items
         ]
         return try Node(node: object)
     }
-    
 }

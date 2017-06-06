@@ -21,19 +21,32 @@ class BalanceTests: XCTestCase {
         do {
             drop = try self.makeDroplet()
             
-            let paymentToken = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
+            let paymentToken = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
                                                              expirationMonth: 10,
                                                              expirationYear: 2018,
                                                              cvc: 123,
-                                                             name: "Test Card")
+                                                             name: "Test Card",
+                                                             customer: nil,
+                                                             currency: nil)
                                                             .serializedResponse().id ?? ""
             
             transactionId = try drop?.stripe?.charge.create(amount: 10_00,
-                                                         in: .usd,
-                                                         for: .source(paymentToken),
-                                                         description: "Vapor Stripe: Test Description")
-                                                        .serializedResponse()
-                                                        .balanceTransactionId ?? ""
+                                                            in: .usd,
+                                                            withFee: nil,
+                                                            toAccount: nil,
+                                                           capture: nil,
+                                                           description: "Vapor Stripe: Test Description",
+                                                           destinationAccountId: nil,
+                                                           destinationAmount: nil,
+                                                           transferGroup: nil,
+                                                           onBehalfOf: nil,
+                                                           receiptEmail: nil,
+                                                           shippingLabel: nil,
+                                                           customer: nil,
+                                                           statementDescriptor: nil,
+                                                           source: paymentToken,
+                                                           metadata: nil)
+                                                           .serializedResponse().balanceTransactionId ?? ""
         } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
@@ -45,13 +58,13 @@ class BalanceTests: XCTestCase {
     }
     
     func testBalanceTransactionItem() throws {
-        let object = try drop?.stripe?.balance.retrieveBalance(forTransaction: transactionId).serializedResponse()
+        let object = try drop?.stripe?.balance.retrieveBalanceTransaction(transactionId).serializedResponse()
         XCTAssertNotNil(object)
     }
     
     func testBalanceHistory() throws {
         let drop = try self.makeDroplet()
-        let object = try drop.stripe?.balance.history().serializedResponse()
+        let object = try drop.stripe?.balance.history(forFilter: nil).serializedResponse()
         XCTAssertNotNil(object)
     }
     
@@ -59,7 +72,12 @@ class BalanceTests: XCTestCase {
         let drop = try self.makeDroplet()
         let filter = StripeFilter()
         filter.limit = 1
-        let object = try drop.stripe?.balance.history(forFilter: filter).serializedResponse()
-        XCTAssertEqual(object?.items.count, 1)
+        let balance = try drop.stripe?.balance.history(forFilter: filter).serializedResponse()
+        
+        if let balances = balance?.items {
+            XCTAssertEqual(balances.count, 1)
+        } else {
+            XCTFail("Balances are not present")
+        }
     }
 }

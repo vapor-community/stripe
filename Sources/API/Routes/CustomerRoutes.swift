@@ -25,157 +25,139 @@ public final class CustomerRoutes {
      Create a customer
      Creates a new customer object.
      
+     - parameter accountBalance: An integer amount in cents that is the starting account balance for your customer. 
+                                 A negative amount represents a credit that will be used before attempting any charges 
+                                 to the customer’s card; a positive amount will be added to the next invoice.
+     
+     - parameter businessVATId: The customer’s VAT identification number.
+     
+     - parameter coupon:  If you provide a coupon code, the customer will have a discount applied on all recurring charges.
+     
+     - parameter defaultSource: Either a card 
+     
+     - parameter description: An arbitrary string that you can attach to a customer object. It is displayed
+     alongside the customer in the dashboard. This will be unset if you POST an
+     empty value.
+     
      - parameter email:       The Customer’s email address. It’s displayed alongside the customer in your
                               dashboard and can be useful for searching and tracking.
      
-     - parameter description: An arbitrary string that you can attach to a customer object. It is displayed 
-                              alongside the customer in the dashboard. This will be unset if you POST an 
-                              empty value.
+     - parameter shippingLabel: Shipping label.
      
-     - parameter metadata:    A set of key/value pairs that you can attach to a customer object. It can be 
-                              useful for storing additional information about the customer in a structured 
-                              format. You can unset individual keys if you POST an empty value for that key. 
-                              You can clear all keys if you POST an empty value for metadata.
+     - parameter source: A one time token ID created from a source.
+     
+     - parameter metadata:    A set of key/value pairs that you can attach to a customer object. It can be
+     useful for storing additional information about the customer in a structured
+     format. You can unset individual keys if you POST an empty value for that key.
+     You can clear all keys if you POST an empty value for metadata.
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
-    public func create(email: String, currency: StripeCurrency? = nil, description: String? = nil, metadata: [String : String]? = nil) throws -> StripeRequest<Customer> {
+    public func create(accountBalance: Int?, businessVATId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, shipping: ShippingLabel?, source: String?, metadata: Node? = nil) throws -> StripeRequest<Customer> {
         var body = Node([:])
         
-        body["email"] = Node(email)
+        if let accountBalance = accountBalance {
+            body["account_balance"] = Node(accountBalance)
+        }
         
-        if let currency = currency {
-            body["currency"] = Node(currency.rawValue)
+        if let businessVATId = businessVATId {
+            body["business_vat_id"] = Node(businessVATId)
+        }
+        
+        if let coupon = coupon {
+            body["coupon"] = Node(coupon)
+        }
+        
+        if let defaultSource = defaultSource {
+            body["default_source"] = Node(defaultSource)
         }
         
         if let description = description {
             body["description"] = Node(description)
         }
         
-        if let metadata = metadata {
-            for (key, value) in metadata {
-                body["metadata[\(key)]"] = try Node(node: value)
-            }
-        }
-        
-        return try StripeRequest(client: self.client, method: .post, route: .customers, query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
-    }
-    
-    /**
-     Create a customer
-     Creates a new customer object.
-     
-     - parameter customer: A customer class created with appropiate values set. Any unset parameters (nil) 
-                           will unset the value on stripe
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func create(customer: Customer) throws -> StripeRequest<Customer> {
-        var body = Node([:])
-        
-        if let email = customer.email {
+        if let email = email {
             body["email"] = Node(email)
         }
         
-        if let description = customer.description {
-            body["description"] = Node(description)
-        }
-        
-        if let bussinessVATId = customer.bussinessVATId {
-            body["business_vat_id"] = Node(bussinessVATId)
-        }
-        
-        if let defaultSourceId = customer.defaultSourceId {
-            body["source"] = Node(defaultSourceId)
-        }
-        
-        if let currency = customer.currency {
-            body["currency"] = Node(currency.rawValue)
-        }
-        
-        if let metadata = customer.metadata?.object {
+        if let metadata = metadata?.object {
             for (key, value) in metadata {
                 body["metadata[\(key)]"] = value
             }
         }
         
-        return try StripeRequest(client: self.client, method: .post, route: .customers, query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
-    }
-    
-    /**
-     Creats a source for the customer
-     
-     - parameter customer: The customer object to add the source to
-     - parameter account:  A connect account to add the customer to
-     - parameter source:   The source token to add to the customer.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-    */
-    
-    public func createSource(for customer: Customer, inAccount account: String?=nil, source: String) throws -> StripeRequest<Customer> {
-        let body = try Node(node: ["source": source])
-        
-        var headers: [HeaderKey: String]?
-        
-        // Check if we have an account to set it to
-        if let account = account {
-            headers = ["Stripe-Account": account]
+        if let shippingLabel = shipping {
+            if let name = shippingLabel.name {
+                body["shipping[name]"] = Node(name)
+            }
+            
+            if let carrier = shippingLabel.carrier {
+                body["shipping[carrier]"] = Node(carrier)
+            }
+            
+            if let phone = shippingLabel.phone {
+                body["shipping[phone]"] = Node(phone)
+            }
+            
+            if let trackingNumber = shippingLabel.trackingNumber {
+                body["shipping[tracking_number]"] = Node(trackingNumber)
+            }
+            
+            if let address = shippingLabel.address {
+                if let line1 = address.addressLine1 {
+                    body["shipping[address][line1]"] = Node(line1)
+                }
+                
+                if let city = address.city {
+                    body["shipping[address][city]"] = Node(city)
+                }
+                
+                if let country = address.country {
+                    body["shipping[address][country]"] = Node(country)
+                }
+                
+                if let postalCode = address.postalCode {
+                    body["shipping[address][postal_code]"] = Node(postalCode)
+                }
+                
+                if let state = address.state {
+                    body["shipping[address][state]"] = Node(state)
+                }
+                
+                if let line2 = address.addressLine2 {
+                    body["shipping[address][line2]"] = Node(line2)
+                }
+            }
         }
         
-        return try StripeRequest(client: self.client, method: .post, route: .customerSources(customer.id), query: [:], body: Body.data(body.formURLEncoded()), headers: headers)
+        if let source = source {
+            body["source"] = Node(source)
+        }
+        
+        return try StripeRequest(client: self.client, method: .post, route: .customers, query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
     }
-    
+        
     /**
-     Creats a source for the customer
+     Adds a new source for the customer. Either a bank account token or a card token.
      
      - parameter customerId: The customer object to add the source to
      - parameter account:    A connect account to add the customer to
-     - parameter source:     The source token to add to the customer.
+     - parameter source:     The source token to add to the customer (Bank account or Card).
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func createSource(for customerId: String, inAccount account: String?=nil, source: String) throws -> StripeRequest<Customer> {
+    public func addNewSource(for customerId: String, inConnectAccount account: String?, source: String) throws -> StripeRequest<Card> {
         let body = try Node(node: ["source": source])
         
         var headers: [HeaderKey: String]?
         
         // Check if we have an account to set it to
         if let account = account {
-            headers = ["Stripe-Account": account]
+            headers = [StripeHeader.Account : account]
         }
         
         return try StripeRequest(client: self.client, method: .post, route: .customerSources(customerId), query: [:], body: Body.data(body.formURLEncoded()), headers: headers)
-    }
-    
-    /**
-     Updates or sets the default source for the customer
-     
-     - parameter customer: The customer object to add the source to
-     - parameter account:  A connect account to add the customer to
-     - parameter source:   The source token to add to the customer.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    
-    public func updateDefaultSource(for customer: Customer, source: String) throws -> StripeRequest<Customer> {
-        let body = try Node(node: ["default_source": source])
-        return try StripeRequest(client: self.client, method: .post, route: .customer(customer.id), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
-    }
-    
-    /**
-     Updates or sets the default source for the customer
-     
-     - parameter customerId: The customer object to add the source to
-     - parameter account:    A connect account to add the customer to
-     - parameter source:     The source token to add to the customer.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    
-    public func updateDefaultSource(for customerId: String, source: String) throws -> StripeRequest<Customer> {
-        let body = try Node(node: ["default_source": source])
-        return try StripeRequest(client: self.client, method: .post, route: .customer(customerId), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
     }
     
     /**
@@ -205,34 +187,117 @@ public final class CustomerRoutes {
      
      This request accepts mostly the same arguments as the customer creation call.
      
-     - parameter customer: A customer class created with appropiate values set. Any unset parameters (nil)
-     will unset the value on stripe
+     - parameter accountBalance:    An integer amount in cents that is the starting account balance for your customer.
+                                    A negative amount represents a credit that will be used before attempting any charges
+                                    to the customer’s card; a positive amount will be added to the next invoice.
+     
+     - parameter businessVATId:     The customer’s VAT identification number.
+     
+     - parameter coupon:            If you provide a coupon code, the customer will have a discount applied on all recurring charges.
+     
+     - parameter defaultSourceId:   Either a card
+     
+     - parameter description:       An arbitrary string that you can attach to a customer object. It is displayed
+                                    alongside the customer in the dashboard. This will be unset if you POST an
+                                    empty value.
+     
+     - parameter email:             The Customer’s email address. It’s displayed alongside the customer in your
+                                    dashboard and can be useful for searching and tracking.
+     
+     
+     - parameter shippingLabel:     Shipping label.
+     
+     - parameter newSource:         A one time token ID created from a source.
+     
+     - parameter metadata:          A set of key/value pairs that you can attach to a customer object. It can be
+                                    useful for storing additional information about the customer in a structured
+                                    format. You can unset individual keys if you POST an empty value for that key.
+                                    You can clear all keys if you POST an empty value for metadata.
+     
+     - parameter customerId:        A customer class created with appropiate values set. Any unset parameters (nil)
+                                    will unset the value on stripe
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func update(customer: Customer, forCustomerId customerId: String) throws -> StripeRequest<Customer> {
+    public func update(accountBalance: Int?, businessVATId: String?, coupon: String?, defaultSourceId: String?, description:String?, email: String?, shipping:ShippingLabel?, newSource: String?, metadata: Node? = nil, forCustomerId customerId: String) throws -> StripeRequest<Customer> {
         var body = Node([:])
         
-        if let email = customer.email {
-            body["email"] = Node(email)
+        if let accountBalance = accountBalance {
+            body["account_balance"] = Node(accountBalance)
         }
         
-        if let description = customer.description {
+        if let businessVATId = businessVATId {
+            body["business_vat_id"] = Node(businessVATId)
+        }
+        
+        if let coupon = coupon {
+            body["coupon"] = Node(coupon)
+        }
+        
+        if let defaultSourceId = defaultSourceId {
+            body["default_source"] = Node(defaultSourceId)
+        }
+        
+        if let description = description {
             body["description"] = Node(description)
         }
         
-        if let bussinessVATId = customer.bussinessVATId {
-            body["business_vat_id"] = Node(bussinessVATId)
+        if let email = email {
+            body["email"] = Node(email)
         }
         
-        if let defaultSourceId = customer.defaultSourceId {
-            body["source"] = Node(defaultSourceId)
-        }
-        
-        if let metadata = customer.metadata?.object {
+        if let metadata = metadata?.object {
             for (key, value) in metadata {
-                body["metadata[\(key)]"] = try Node(node: "\(String(describing: value))")
+                body["metadata[\(key)]"] = value
             }
+        }
+
+        if let shippingLabel = shipping {
+            if let name = shippingLabel.name {
+                body["shipping[name]"] = Node(name)
+            }
+            
+            if let carrier = shippingLabel.carrier {
+                body["shipping[carrier]"] = Node(carrier)
+            }
+            
+            if let phone = shippingLabel.phone {
+                body["shipping[phone]"] = Node(phone)
+            }
+            
+            if let trackingNumber = shippingLabel.trackingNumber {
+                body["shipping[tracking_number]"] = Node(trackingNumber)
+            }
+            
+            if let address = shippingLabel.address {
+                if let line1 = address.addressLine1 {
+                    body["shipping[address][line1]"] = Node(line1)
+                }
+                
+                if let city = address.city {
+                    body["shipping[address][city]"] = Node(city)
+                }
+                
+                if let country = address.country {
+                    body["shipping[address][country]"] = Node(country)
+                }
+                
+                if let postalCode = address.postalCode {
+                    body["shipping[address][postal_code]"] = Node(postalCode)
+                }
+                
+                if let state = address.state {
+                    body["shipping[address][state]"] = Node(state)
+                }
+                
+                if let line2 = address.addressLine2 {
+                    body["shipping[address][line2]"] = Node(line2)
+                }
+            }
+        }
+        
+        if let newSource = newSource {
+            body["source"] = Node(newSource)
         }
         
         return try StripeRequest(client: self.client, method: .post, route: .customer(customerId), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
@@ -259,7 +324,7 @@ public final class CustomerRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func listAll(filter: StripeFilter?=nil) throws -> StripeRequest<CustomerList> {
+    public func listAll(filter: StripeFilter?) throws -> StripeRequest<CustomerList> {
         var query = [String : NodeRepresentable]()
         if let data = try filter?.createQuery() {
             query = data

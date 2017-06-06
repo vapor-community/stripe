@@ -11,7 +11,7 @@ import Node
 public enum StripeError: Error {
 
     public struct ErrorInfo: NodeInitializable {
-        public let message: String
+        public private(set) var message: String?
         
         public init(node: Node) throws {
             self.message = try node.get("message")

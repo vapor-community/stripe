@@ -12,18 +12,18 @@ import Helpers
 
 public final class RefundItem: StripeModelProtocol {
     
-    public let id: String
-    public let object: String
-    public let amount: Int
-    public let balanceTransactionId: String?
-    public let charge: String?
-    public let created: Date
-    public let currency: StripeCurrency?
-    public let description: String?
-    public let metadata: Node?
-    public let reason: RefundReason?
-    public let receiptNumber: String?
-    public let status: StripeStatus?
+    public private(set) var id: String?
+    public private(set) var object: String?
+    public private(set) var amount: Int?
+    public private(set) var balanceTransactionId: String?
+    public private(set) var charge: String?
+    public private(set) var created: Date?
+    public private(set) var currency: StripeCurrency?
+    public private(set) var description: String?
+    public private(set) var metadata: Node?
+    public private(set) var reason: RefundReason?
+    public private(set) var receiptNumber: String?
+    public private(set) var status: StripeStatus?
     
     public init(node: Node) throws {
         self.id = try node.get("id")
@@ -32,12 +32,18 @@ public final class RefundItem: StripeModelProtocol {
         self.balanceTransactionId = try node.get("balance_transaction")
         self.charge = try node.get("charge")
         self.created = try node.get("created")
-        self.currency = try StripeCurrency(rawValue: node.get("currency"))
+        if let currency = node["currency"]?.string {
+            self.currency = StripeCurrency(rawValue: currency)
+        }
         self.description = try node.get("description")
         self.metadata = try node.get("metadata")
-        self.reason = try RefundReason(optionalRawValue: node.get("reason"))
+        if let reason = node["reason"]?.string {
+            self.reason = RefundReason(rawValue: reason)
+        }
         self.receiptNumber = try node.get("receipt_number")
-        self.status = try StripeStatus(rawValue: node.get("status"))
+        if let status = node["status"]?.string {
+            self.status = StripeStatus(rawValue: status)
+        }
     }
     
     public func makeNode(in context: Context?) throws -> Node {
@@ -57,5 +63,4 @@ public final class RefundItem: StripeModelProtocol {
         ]
         return try Node(node: object)
     }
-    
 }

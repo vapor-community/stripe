@@ -24,34 +24,34 @@ public final class CouponRoutes {
      Create a coupon
      Creates a new coupon object.
      
-     - parameter id: Unique string of your choice that will be used to identify this coupon when applying it to a customer.
-                     This is often a specific code you’ll give to your customer to use when signing up (e.g. FALL25OFF). If
-                     you don’t want to specify a particular code, you can leave the ID blank and Stripe will generate a 
-                     random code for you.
+     - parameter id:                Unique string of your choice that will be used to identify this coupon when applying it to a customer.
+                                    This is often a specific code you’ll give to your customer to use when signing up (e.g. FALL25OFF). If
+                                    you don’t want to specify a particular code, you can leave the ID blank and Stripe will generate a
+                                    random code for you.
      
-     - parameter duration: Specifies how long the discount will be in effect.
+     - parameter duration:          Specifies how long the discount will be in effect.
      
-     - parameter amountOff: Amount to subtract from an invoice total (required if percent_off is not passed).
+     - parameter amountOff:         Amount to subtract from an invoice total (required if percent_off is not passed).
      
-     - parameter currency: The currency in which the charge will be under. (required if amount_off passed).
+     - parameter currency:          The currency in which the charge will be under. (required if amount_off passed).
      
-     - parameter durationInMonths: Required only if duration is `repeating`, in which case it must be a positive
-                 integer that specifies the number of months the discount will be in effect.
+     - parameter durationInMonths:  Required only if duration is `repeating`, in which case it must be a positive
+                                    integer that specifies the number of months the discount will be in effect.
      
-     - parameter maxRedemptions: A positive integer specifying the number of times the coupon can be redeemed before it’s
-                 no longer valid.
+     - parameter maxRedemptions:    A positive integer specifying the number of times the coupon can be redeemed before it’s
+                                    no longer valid.
      
-     - parameter percentOff: A positive integer between 1 and 100 that represents the discount the coupon will apply
-                 (required if amount_off is not passed).
+     - parameter percentOff:        A positive integer between 1 and 100 that represents the discount the coupon will apply
+                                    (required if amount_off is not passed).
      
-     - parameter redeemBy: Unix timestamp specifying the last time at which the coupon can be redeemed.
+     - parameter redeemBy:          Unix timestamp specifying the last time at which the coupon can be redeemed.
      
-     - parameter metaData: A set of key/value pairs that you can attach to a coupon object.
+     - parameter metaData:          A set of key/value pairs that you can attach to a coupon object.
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node.
      */
     
-    public func create(id: String?, duration: StripeDuration, amountOff: Int?, currency: StripeCurrency?, durationInMonths: Int?, maxRedemptions: Int?, percentOff: Int?, redeemBy: Date?, metadata: [String: String]?) throws -> StripeRequest<Coupon> {
+    public func create(id: String?, duration: StripeDuration, amountOff: Int?, currency: StripeCurrency?, durationInMonths: Int?, maxRedemptions: Int?, percentOff: Int?, redeemBy: Date?, metadata: Node? = nil) throws -> StripeRequest<Coupon> {
         var body = Node([:])
         
         body["duration"] = Node(duration.rawValue)
@@ -80,55 +80,7 @@ public final class CouponRoutes {
             body["redeem_by"] = Node(Int(redeemBy.timeIntervalSince1970))
         }
         
-        if let metadata = metadata {
-            for (key, value) in metadata {
-                body["metadata[\(key)]"] = try Node(node: value)
-            }
-        }
-        
-        return try StripeRequest(client: self.client, method: .post, route: .coupons, query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
-    }
-    
-    /**
-    Create a coupon
-    Creates a new coupon object.
-     
-     - parameter coupon: A coupon object created with appropriate values set. Any unset parameters (nil)
-                         will unset the value on stripe.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node.
-    */
- 
-    public func create(coupon: Coupon) throws -> StripeRequest<Coupon> {
-        var body = Node([:])
-        
-        body["duration"] = Node(coupon.duration.rawValue)
-        
-        if let amountOff = coupon.amountOff {
-            body["amount_off"] = Node(amountOff)
-        }
-        
-        if let currency = coupon.currency {
-            body["currency"] = Node(currency.rawValue)
-        }
-        
-        if let durationInMonths = coupon.durationInMonths {
-            body["duration_in_months"] = Node(durationInMonths)
-        }
-        
-        if let maxRedemptions = coupon.maxRedemptions {
-            body["max_redemptions"] = Node(maxRedemptions)
-        }
-        
-        if let percentOff = coupon.percentOff {
-            body["percent_off"] = Node(percentOff)
-        }
-        
-        if let redeemBy = coupon.redeemBy {
-            body["redeem_by"] = Node(redeemBy.timeIntervalSince1970)
-        }
-        
-        if let metadata = coupon.metadata?.object {
+        if let metadata = metadata?.object {
             for (key, value) in metadata {
                 body["metadata[\(key)]"] = value
             }
@@ -157,19 +109,19 @@ public final class CouponRoutes {
      - parameter couponId: The identifier of the coupon to be updated.
      
      - parameter metaData: A set of key/value pairs that you can attach to a coupon object. It can be useful for storing additional 
-                           information about the coupon in a structured format.
+                           information about the coupon in a structured format (Non optional since it's the only mutable property)
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func update(metadata: [String:String], forCouponId couponId: String) throws -> StripeRequest<Coupon> {
+    public func update(metadata: Node, forCouponId couponId: String) throws -> StripeRequest<Coupon> {
         var body = Node([:])
         
-        for (key, value) in metadata
-        {
-            body["metadata[\(key)]"] = try Node(node: "\(String(describing: value))")
+        if let metadata = metadata.object {
+            for (key, value) in metadata {
+                body["metadata[\(key)]"] = value
+            }
         }
-        
         return try StripeRequest(client: self.client, method: .post, route: .coupon(couponId), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
     }
     
@@ -196,7 +148,7 @@ public final class CouponRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func listAll(filter: StripeFilter?=nil) throws -> StripeRequest<CouponList> {
+    public func listAll(filter: StripeFilter?) throws -> StripeRequest<CouponList> {
         var query = [String : NodeRepresentable]()
         
         if let data = try filter?.createQuery()

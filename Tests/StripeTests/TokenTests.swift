@@ -21,22 +21,28 @@ class TokenTests: XCTestCase {
         do {
             drop = try self.makeDroplet()
             
-            tokenId = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
-                                                             expirationMonth: 10,
-                                                             expirationYear: 2018,
-                                                             cvc: 123,
-                                                             name: "Test Card").serializedResponse().id ?? ""
+            tokenId = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
+                                                               expirationMonth: 10,
+                                                               expirationYear: 2018,
+                                                               cvc: 123,
+                                                               name: "Test Card",
+                                                               customer: nil,
+                                                               currency: nil)
+                                                               .serializedResponse().id ?? ""
         } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
     }
     
-    func testTokenCreation() throws {
-        let object = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
-                                                         expirationMonth: 10,
-                                                         expirationYear: 2018,
-                                                         cvc: 123,
-                                                         name: "Test Card").serializedResponse()
+    func testCardTokenCreation() throws {
+        let object = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
+                                                              expirationMonth: 10,
+                                                              expirationYear: 2018,
+                                                              cvc: 123,
+                                                              name: "Test Card",
+                                                              customer: nil,
+                                                              currency: nil)
+                                                              .serializedResponse()
         XCTAssertNotNil(object?.card)
     }
     
@@ -45,13 +51,14 @@ class TokenTests: XCTestCase {
         XCTAssertNotNil(object)
     }
     
-    func testBankAccountCreation() throws {
-        let object = try drop?.stripe?.tokens.createBank(country: "US",
-                                                         currency: .usd,
-                                                         accountNumber: "000123456789",
-                                                         routingNumber: "110000000",
-                                                         accountHolderName: "Test Person",
-                                                         accountHolderType: "Individual").serializedResponse()
+    func testBankAccountTokenCreation() throws {
+        let object = try drop?.stripe?.tokens.createBankAccountToken(withAccountNumber: "000123456789",
+                                                                     country: "US",
+                                                                     currency: .usd,
+                                                                     routingNumber: "110000000",
+                                                                     accountHolderName: "Test Person",
+                                                                     accountHolderType: "Individual",
+                                                                     customer: nil).serializedResponse()
         XCTAssertNotNil(object?.bankAccount)
     }
 }

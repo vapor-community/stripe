@@ -1,8 +1,8 @@
 //
-//  SubscriptionList.swift
+//  CouponList.swift
 //  Stripe
 //
-//  Created by Anthony Castelli on 4/20/17.
+//  Created by Andrew Edwards on 5/28/17.
 //
 //
 
@@ -10,14 +10,15 @@ import Foundation
 import Vapor
 import Helpers
 
-public final class SubscriptionList: StripeModelProtocol {
-    
+public final class CouponList: StripeModelProtocol {
     public private(set) var object: String?
+    public private(set) var url: String?
     public private(set) var hasMore: Bool?
-    public private(set) var items: [Any?]?
+    public private(set) var items: [Coupon]?
     
     public init(node: Node) throws {
         self.object = try node.get("object")
+        self.url = try node.get("url")
         self.hasMore = try node.get("has_more")
         self.items = try node.get("data")
     }
@@ -25,10 +26,10 @@ public final class SubscriptionList: StripeModelProtocol {
     public func makeNode(in context: Context?) throws -> Node {
         let object: [String : Any?] = [
             "object": self.object,
+            "url": self.url,
             "has_more": self.hasMore,
             "data": self.items
         ]
         return try Node(node: object)
     }
-    
 }

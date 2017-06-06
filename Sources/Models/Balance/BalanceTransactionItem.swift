@@ -12,17 +12,17 @@ import Helpers
 
 public final class BalanceTransactionItem: StripeModelProtocol {
     
-    public let id: String
-    public let object: String
-    public let amount: Int
-    public let availableOn: Date
-    public let created: Date
-    public let description: String
-    public let fees: [Fee]
-    public let net: Int
-    public let source: String
-    public let status: StripeStatus
-    public let type: ActionType
+    public private(set) var id: String?
+    public private(set) var object: String?
+    public private(set) var amount: Int?
+    public private(set) var availableOn: Date?
+    public private(set) var created: Date?
+    public private(set) var description: String?
+    public private(set) var fees: [Fee]?
+    public private(set) var net: Int?
+    public private(set) var source: String?
+    public private(set) var status: StripeStatus?
+    public private(set) var type: ActionType?
     
     public init(node: Node) throws {
         self.id = try node.get("id")
@@ -34,12 +34,16 @@ public final class BalanceTransactionItem: StripeModelProtocol {
         self.fees = try node.get("fee_details")
         self.net = try node.get("net")
         self.source = try node.get("source")
-        self.status = try StripeStatus(rawValue: node.get("status")) ?? StripeStatus.failed
-        self.type = try ActionType(rawValue: node.get("type")) ?? ActionType.none
+        if let status = node["status"]?.string {
+            self.status =  StripeStatus(rawValue: status)
+        }
+        if let type = node["type"]?.string {
+            self.type = ActionType(rawValue: type)
+        }
     }
     
     public func makeNode(in context: Context?) throws -> Node {
-        return try Node(node: [
+        let object: [String : Any?] = [
             "id": self.id,
             "object": self.object,
             "amount": self.amount,
@@ -49,10 +53,9 @@ public final class BalanceTransactionItem: StripeModelProtocol {
             "fee_details": self.fees,
             "net": self.net,
             "source": self.source,
-            "status": self.status.rawValue,
-            "type": self.type.rawValue
-        ])
+            "status": self.status?.rawValue,
+            "type": self.type?.rawValue
+        ]
+        return try Node(node: object)
     }
-    
 }
-

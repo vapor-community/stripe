@@ -11,9 +11,9 @@ import Vapor
 
 public final class ChargeList: StripeModelProtocol {
     
-    public let object: String
-    public let hasMore: Bool
-    public let items: [Charge]
+    public private(set) var object: String?
+    public private(set) var hasMore: Bool?
+    public private(set) var items: [Charge]?
     
     public init(node: Node) throws {
         self.object = try node.get("object")
@@ -22,12 +22,12 @@ public final class ChargeList: StripeModelProtocol {
     }
     
     public func makeNode(in context: Context?) throws -> Node {
-        return try Node(node: [
+        let object: [String : Any?] = [
             "object": self.object,
             "has_more": self.hasMore,
             "data": self.items
-        ])
+        ]
+        return try Node(node: object)
     }
-    
 }
 

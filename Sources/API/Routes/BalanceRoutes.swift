@@ -32,9 +32,11 @@ public final class BalanceRoutes {
      Retrieve a balance transaction
      Retrieves the balance transaction with the given ID.
      
+     - parameter transactionId: The ID of the desired balance transaction (as found on any API object that affects the balance, e.g. a charge or transfer).
+     
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func retrieveBalance(forTransaction transactionId: String) throws -> StripeRequest<BalanceTransactionItem> {
+    public func retrieveBalanceTransaction(_ transactionId: String) throws -> StripeRequest<BalanceTransactionItem> {
         return try StripeRequest(client: self.client, method: .get, route: .balanceHistoryTransaction(transactionId), query: [:], body: nil, headers: nil)
     }
     
@@ -47,12 +49,11 @@ public final class BalanceRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func history(forFilter filter: StripeFilter?=nil) throws -> StripeRequest<BalanceHistoryList> {
+    public func history(forFilter filter: StripeFilter? = nil) throws -> StripeRequest<BalanceHistoryList> {
         var query = [String : NodeRepresentable]()
         if let data = try filter?.createQuery() {
             query = data
         }
         return try StripeRequest(client: self.client, method: .get, route: .balanceHistory, query: query, body: nil, headers: nil)
     }
-    
 }

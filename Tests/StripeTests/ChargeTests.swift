@@ -22,17 +22,31 @@ class ChargeTests: XCTestCase {
         do {
             drop = try self.makeDroplet()
             
-            let tokenId = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
+            let tokenId = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
                                                                    expirationMonth: 10,
                                                                    expirationYear: 2018,
                                                                    cvc: 123,
-                                                                   name: "Test Card")
+                                                                   name: "Test Card",
+                                                                   customer: nil,
+                                                                   currency: nil)
                                                                    .serializedResponse().id ?? ""
             
             chargeId = try drop?.stripe?.charge.create(amount: 10_00,
                                                          in: .usd,
-                                                         for: .source(tokenId),
-                                                         description: "Vapor Stripe: Test Description")
+                                                         withFee: nil,
+                                                         toAccount: nil,
+                                                         capture: true,
+                                                         description: "Vapor Stripe: Test Description",
+                                                         destinationAccountId: nil,
+                                                         destinationAmount: nil,
+                                                         transferGroup: nil,
+                                                         onBehalfOf: nil,
+                                                         receiptEmail: nil,
+                                                         shippingLabel: nil,
+                                                         customer: nil,
+                                                         statementDescriptor: nil,
+                                                         source: tokenId,
+                                                         metadata: nil)
                                                          .serializedResponse().id ?? ""
         } catch {
             fatalError("Setup failed: \(error.localizedDescription)")
@@ -40,17 +54,31 @@ class ChargeTests: XCTestCase {
     }
     
     func testCharge() throws {
-        let paymentToken = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
-                                                              expirationMonth: 10,
-                                                              expirationYear: 2018,
-                                                              cvc: 123,
-                                                              name: "Test Card")
-                                                              .serializedResponse()
+        let paymentToken = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
+                                                                    expirationMonth: 10,
+                                                                    expirationYear: 2018,
+                                                                    cvc: 123,
+                                                                    name: "Test Card",
+                                                                    customer: nil,
+                                                                    currency: nil)
+                                                                    .serializedResponse().id ?? ""
         
         let object = try drop?.stripe?.charge.create(amount: 10_00,
                                                      in: .usd,
-                                                     for: .source(paymentToken?.id ?? ""),
-                                                     description: "Vapor Stripe: Test Description")
+                                                     withFee: nil,
+                                                     toAccount: nil,
+                                                     capture: true,
+                                                     description: "Vapor Stripe: Test Description",
+                                                     destinationAccountId: nil,
+                                                     destinationAmount: nil,
+                                                     transferGroup: nil,
+                                                     onBehalfOf: nil,
+                                                     receiptEmail: nil,
+                                                     shippingLabel: nil,
+                                                     customer: nil,
+                                                     statementDescriptor: nil,
+                                                     source: paymentToken,
+                                                     metadata: nil)
                                                      .serializedResponse()
         XCTAssertNotNil(object)
     }
@@ -61,7 +89,7 @@ class ChargeTests: XCTestCase {
     }
     
     func testListAllCharges() throws {
-        let object = try drop?.stripe?.charge.listAll().serializedResponse()
+        let object = try drop?.stripe?.charge.listAll(filter: nil).serializedResponse()
         XCTAssertNotNil(object)
     }
     
@@ -69,10 +97,19 @@ class ChargeTests: XCTestCase {
         let filter = StripeFilter()
         filter.limit = 1
         let object = try drop?.stripe?.charge.listAll(filter: filter).serializedResponse()
-        XCTAssertEqual(object?.items.count, 1)
+        XCTAssertEqual(object?.items?.count, 1)
     }
     
     func testChargeUpdate() throws {
+        
+        let description = "Vapor description"
+        
+        let fraudReport = try Node(node: ["user_report":FraudReport.safe.rawValue])
+        let fraudDetails = try FraudDetails(node: fraudReport)
+        
+        let metadata = try Node(node:["hello": "world"])
+        let receiptEmail = "vapor@stripetest.com"
+        
         let shippingAddress = ShippingAddress()
         shippingAddress.addressLine1 = "123 Test St"
         shippingAddress.addressLine2 = "456 Apt"
@@ -88,31 +125,86 @@ class ChargeTests: XCTestCase {
         shippingLabel.trackingNumber = "1234567890"
         shippingLabel.address = shippingAddress
         
-        let metadata = ["test": "metadata"]
-        let object = try drop?.stripe?.charge.update(charge: chargeId,
-                                                     metadata: metadata,
-                                                     receiptEmail: "test-email@test.com",
-                                                     shippingLabel: shippingLabel)
-                                                     .serializedResponse()
-        XCTAssertNotNil(object)
+        let transferGroup = "Vapor group"
+        
+        let updatedCharge = try drop?.stripe?.charge.update(description: description,
+                                                            fraud: fraudDetails,
+                                                            receiptEmail: receiptEmail,
+                                                            shippingLabel: shippingLabel,
+                                                            transferGroup: transferGroup,
+                                                            metadata: metadata,
+                                                            charge: chargeId).serializedResponse()
+
+        XCTAssertNotNil(updatedCharge)
+        
+        XCTAssertEqual(updatedCharge?.description, description)
+        
+        XCTAssertEqual(updatedCharge?.fraud?.userReport?.rawValue, fraudDetails.userReport?.rawValue)
+        
+        XCTAssertEqual(updatedCharge?.metadata?["hello"], metadata["hello"])
+        
+        XCTAssertEqual(updatedCharge?.receiptEmail, receiptEmail)
+        
+        XCTAssertEqual(updatedCharge?.shippingLabel?.name, shippingLabel.name)
+        
+        XCTAssertEqual(updatedCharge?.shippingLabel?.phone, shippingLabel.phone)
+        
+        XCTAssertEqual(updatedCharge?.shippingLabel?.carrier, shippingLabel.carrier)
+        
+        XCTAssertEqual(updatedCharge?.shippingLabel?.trackingNumber, shippingLabel.trackingNumber)
+        
+        // Verify address values
+        
+        XCTAssertEqual(updatedCharge?.shippingLabel?.address?.addressLine1, shippingAddress.addressLine1)
+        
+        XCTAssertEqual(updatedCharge?.shippingLabel?.address?.addressLine2, shippingAddress.addressLine2)
+        
+        XCTAssertEqual(updatedCharge?.shippingLabel?.address?.city, shippingAddress.city)
+        
+        XCTAssertEqual(updatedCharge?.shippingLabel?.address?.state, shippingAddress.state)
+        
+        XCTAssertEqual(updatedCharge?.shippingLabel?.address?.postalCode, shippingAddress.postalCode)
+        
+        XCTAssertEqual(updatedCharge?.shippingLabel?.address?.country, shippingAddress.country)
     }
     
     func testChargeCapture() throws {
-        let paymentToken = try drop?.stripe?.tokens.createCard(withCardNumber: "4242 4242 4242 4242",
-                                                               expirationMonth: 10,
-                                                               expirationYear: 2018,
-                                                               cvc: 123,
-                                                               name: "Test Card")
-                                                               .serializedResponse().id ?? ""
+        let paymentToken = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
+                                                                    expirationMonth: 10,
+                                                                    expirationYear: 2018,
+                                                                    cvc: 123,
+                                                                    name: "Test Card",
+                                                                    customer: nil,
+                                                                    currency: nil)
+                                                                    .serializedResponse().id ?? ""
         
         let uncapturedCharge = try drop?.stripe?.charge.create(amount: 10_00,
                                                                in: .usd,
-                                                               for: .source(paymentToken),
-                                                               description: "Vapor Stripe: test Description",
-                                                               capture: false)
+                                                               withFee: nil,
+                                                               toAccount: nil,
+                                                               capture: false,
+                                                               description: "Vapor Stripe: Test Description",
+                                                               destinationAccountId: nil,
+                                                               destinationAmount: nil,
+                                                               transferGroup: nil,
+                                                               onBehalfOf: nil,
+                                                               receiptEmail: nil,
+                                                               shippingLabel: nil,
+                                                               customer: nil,
+                                                               statementDescriptor: nil,
+                                                               source: paymentToken,
+                                                               metadata: nil)
                                                                .serializedResponse().id ?? ""
         
-        let object = try drop?.stripe?.charge.capture(charge: uncapturedCharge).serializedResponse()
+        let object = try drop?.stripe?.charge.capture(charge: uncapturedCharge,
+                                                      amount: nil,
+                                                      applicationFee: nil,
+                                                      destinationAmount: nil,
+                                                      receiptEmail: nil,
+                                                      statementDescriptor: "Hello govna").serializedResponse()
+        
         XCTAssertNotNil(object)
+        
+        XCTAssert(object?.isCaptured ?? false)
     }
 }

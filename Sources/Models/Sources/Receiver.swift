@@ -12,12 +12,12 @@ import Helpers
 
 public final class Receiver: StripeModelProtocol {
     
-    public let address: String?
-    public let amountCharged: Int
-    public let amountReceived: Int
-    public let amountReturned: Int
-    public let refundMethod: String?
-    public let refundStatus: String?
+    public private(set) var address: String?
+    public private(set) var amountCharged: Int?
+    public private(set) var amountReceived: Int?
+    public private(set) var amountReturned: Int?
+    public private(set) var refundMethod: String?
+    public private(set) var refundStatus: String?
     
     public init(node: Node) throws {
         self.address = try node.get("address")
@@ -39,5 +39,4 @@ public final class Receiver: StripeModelProtocol {
         ]
         return try Node(node: object)
     }
-    
 }

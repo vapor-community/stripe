@@ -12,6 +12,7 @@ import XCTest
 @testable import Vapor
 @testable import Helpers
 @testable import API
+@testable import Models
 
 class CouponTests: XCTestCase {
     var drop: Droplet?
@@ -55,12 +56,13 @@ class CouponTests: XCTestCase {
     }
     
     func testUpdateCoupon() throws {
-        let metadata = ["hello":"world"]
+        
+        let metadata = try Node(node:["hello":"world"])
         let updatedCoupon = try drop?.stripe?.coupons.update(metadata: metadata, forCouponId: couponId).serializedResponse()
         
         XCTAssertNotNil(updatedCoupon)
         
-        XCTAssert(updatedCoupon?.metadata?["hello"] == "world")
+        XCTAssertEqual(updatedCoupon?.metadata?["hello"], metadata["hello"])
     }
     
     func testDeleteCoupon() throws {
@@ -72,7 +74,7 @@ class CouponTests: XCTestCase {
     }
     
     func testListAllCoupons() throws {
-        let coupons = try drop?.stripe?.coupons.listAll().serializedResponse()
+        let coupons = try drop?.stripe?.coupons.listAll(filter: nil).serializedResponse()
         
         XCTAssertNotNil(coupons)
         

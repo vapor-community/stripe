@@ -10,10 +10,10 @@ import Node
 
 public final class Balance: StripeModelProtocol {
 
-    public let object: String
-    public let isLiveMode: Bool
-    public let available: [Transfer]
-    public let pending: [Transfer]
+    public private(set) var object: String?
+    public private(set) var isLiveMode: Bool?
+    public private(set) var available: [BalanceTransfer]?
+    public private(set) var pending: [BalanceTransfer]?
 
     public init(node: Node) throws {
         self.object = try node.get("object")
@@ -23,12 +23,12 @@ public final class Balance: StripeModelProtocol {
     }
 
     public func makeNode(in context: Context?) throws -> Node {
-        return try Node(node: [
+        let object: [String : Any?] = [
             "object": self.object,
             "livemode": self.isLiveMode,
             "available": self.available,
             "pending": self.pending
-        ])
+        ]
+       return try Node(node: object)
     }
-
 }

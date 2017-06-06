@@ -13,14 +13,3 @@ public enum RefundReason: String {
     case fraudulent = "fraudulent"
     case requestedByCustomer = "requested_by_customer"
 }
-
-extension RefundReason {
-    public init?(optionalRawValue: String?) {
-        if let rawValue = optionalRawValue {
-            if let value = RefundReason(rawValue: rawValue) {
-                self = value
-            }
-        }
-        return nil
-    }
-}
