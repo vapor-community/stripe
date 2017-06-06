@@ -150,6 +150,18 @@ public final class TokenRoutes {
     }
     
     /**
+     Create a payment token from a customer
+     
+     - parameter withCustomerId: The customer ID to generate the token with
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
+    public func createToken(withCustomerId customerId: String) throws -> StripeRequest<Token> {
+        let body = try Node(node: ["customer": customerId])
+        return try StripeRequest(client: self.client, method: .post, route: .tokens, body: Body.data(body.formURLEncoded()))
+    }
+    
+    /**
      Retrieve a token
      Retrieves the token with the given ID.
      
