@@ -147,7 +147,7 @@ public final class CustomerRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func addNewSource(for customerId: String, inConnectAccount account: String?, source: String) throws -> StripeRequest<Card> {
+    public func addNewSource(forCustomer customerId: String, inConnectAccount account: String?, source: String) throws -> StripeRequest<Card> {
         let body = try Node(node: ["source": source])
         
         var headers: [HeaderKey: String]?
