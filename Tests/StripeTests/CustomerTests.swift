@@ -95,7 +95,7 @@ class CustomerTests: XCTestCase {
                                                                      currency: nil)
                                                                      .serializedResponse().id ?? ""
         
-        let newCardToken = try drop?.stripe?.customer.addNewSource(for: customerId,
+        let newCardToken = try drop?.stripe?.customer.addNewSource(forCustomer: customerId,
                                                                       inConnectAccount: nil,
                                                                       source: paymentTokenSource)
                                                                       .serializedResponse()
