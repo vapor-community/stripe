@@ -156,9 +156,15 @@ public final class TokenRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func createToken(withCustomerId customerId: String) throws -> StripeRequest<Token> {
+    public func createToken(withCustomerId customerId: String, onAccount account: String? = nil) throws -> StripeRequest<Token> {
         let body = try Node(node: ["customer": customerId])
-        return try StripeRequest(client: self.client, method: .post, route: .tokens, body: Body.data(body.formURLEncoded()))
+        var headers: [HeaderKey : String]?
+        if let account = account {
+            headers = [
+                StripeHeader.Account: account
+            ]
+        }
+        return try StripeRequest(client: self.client, method: .post, route: .tokens, body: Body.data(body.formURLEncoded()), headers: headers)
     }
     
     /**
