@@ -84,11 +84,14 @@ public final class ChargeRoutes {
         
         // Create the headers
         var headers: [HeaderKey : String]?
-        if let fee = fee, let account = account {
-            body["application_fee"] = fee
+        if let account = account {
             headers = [
                 StripeHeader.Account: account
             ]
+            
+            if let fee = fee {
+                body["application_fee"] = fee
+            }
         }
         
         if let capture = capture {
