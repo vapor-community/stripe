@@ -55,6 +55,7 @@ internal enum API {
     case customers
     case customer(String)
     case customerSources(String)
+    case customerDiscount(String)
     
     /**
      TOKENS
@@ -98,6 +99,21 @@ internal enum API {
     case sources
     case source(String)
     
+    /**
+     SUBSCRIPTION ITEMS
+     Subscription items allow you to create customer subscriptions with more than one plan, making it easy to represent complex billing relationships.
+     */
+    case subscriptionItem
+    case subscriptionItems(String)
+    
+    /**
+     SUBSCRIPTIONS
+     Subscriptions allow you to charge a customer's card on a recurring basis. A subscription ties a customer to a particular plan you've created.
+     */
+    case subscription
+    case subscriptions(String)
+    case subscriptionDiscount(String)
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -111,6 +127,7 @@ internal enum API {
         case .customers: return APIBase + APIVersion + "customers"
         case .customer(let id): return APIBase + APIVersion + "customers/\(id)"
         case .customerSources(let id): return APIBase + APIVersion + "customers/\(id)/sources"
+        case .customerDiscount(let id): return APIBase + APIVersion + "customers/\(id)/discount"
             
         case .tokens: return APIBase + APIVersion + "tokens"
         case .token(let token): return APIBase + APIVersion + "tokens/\(token)"
@@ -126,6 +143,13 @@ internal enum API {
             
         case .sources: return APIBase + APIVersion + "sources"
         case .source(let id): return APIBase + APIVersion + "sources/\(id)"
+            
+        case .subscriptionItem: return APIBase + APIVersion + "subscription_items"
+        case .subscriptionItems(let id): return APIBase + APIVersion + "subscription_items/\(id)"
+            
+        case .subscription: return APIBase + APIVersion + "subscriptions"
+        case .subscriptions(let id): return APIBase + APIVersion + "subscriptions/\(id)"
+        case .subscriptionDiscount(let id): return APIBase + APIVersion + "subscriptions/\(id)/discount"
         }
     }
 }
