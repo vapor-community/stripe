@@ -13,6 +13,14 @@ public enum StripeStatus: String {
     case succeeded = "succeeded"
     case failed = "failed"
     case pending = "pending"
-    case cancelled = "cancelled"
+    case canceled = "canceled"
     case chargeable = "chargeable"
+}
+
+public enum StripeSubscriptionStatus: String {
+    case trailing = "trailing"
+    case active = "active"
+    case pastdue = "past_due"
+    case canceled = "canceled"
+    case unpaid = "unpaid"
 }
