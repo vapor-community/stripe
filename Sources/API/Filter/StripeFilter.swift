@@ -101,6 +101,16 @@ public final class StripeFilter {
     public var balanceType: BalanceType?
     
     
+    /**
+     The status of the subscriptions to retrieve.
+     */
+    public var subscriptionStatus: StripeSubscriptionStatus?
+    
+    /**
+     The ID of the plan whose subscriptions will be retrieved.
+     */
+    public var plan: Node?
+    
     internal func createBody() throws -> Node {
         var node = Node([:])
         if let value = self.created {
@@ -158,6 +168,14 @@ public final class StripeFilter {
         
         if let value = self.balanceType {
             node["type"] = value.rawValue.makeNode(in: nil)
+        }
+        
+        if let value = self.subscriptionStatus {
+            node["status"] = value.rawValue.makeNode(in: nil)
+        }
+        
+        if let value = self.plan {
+            node["plan"] = value
         }
         
         return node
