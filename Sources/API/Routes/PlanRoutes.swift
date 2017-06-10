@@ -47,7 +47,7 @@ public final class PlanRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node.
      */
     
-    public func create(id: String, amount: Int, currency: StripeCurrency, interval: StripeInterval, name: String, intervalCount: Int?, statementDescriptor: String?, trialPeriodDays: Int?, metadata: Node? = nil) throws -> StripeRequest<Coupon> {
+    public func create(id: String, amount: Int, currency: StripeCurrency, interval: StripeInterval, name: String, intervalCount: Int?, statementDescriptor: String?, trialPeriodDays: Int?, metadata: Node? = nil) throws -> StripeRequest<Plan> {
         var body = Node([:])
         
         body["id"] = Node(id)
