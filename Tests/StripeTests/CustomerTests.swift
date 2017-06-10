@@ -22,8 +22,6 @@ class CustomerTests: XCTestCase {
         do {
             drop = try self.makeDroplet()
             
-            
-            
             customerId = try drop?.stripe?.customer.create(accountBalance: nil,
                                                            businessVATId: nil,
                                                            coupon: nil,
@@ -95,7 +93,7 @@ class CustomerTests: XCTestCase {
                                                                      currency: nil)
                                                                      .serializedResponse().id ?? ""
         
-        let newCardToken = try drop?.stripe?.customer.addNewSource(for: customerId,
+        let newCardToken = try drop?.stripe?.customer.addNewSource(forCustomer: customerId,
                                                                       inConnectAccount: nil,
                                                                       source: paymentTokenSource)
                                                                       .serializedResponse()
@@ -113,7 +111,34 @@ class CustomerTests: XCTestCase {
         XCTAssertEqual(newCardToken?.id, customerCardSource?.id)
     }
     
-    
+    func testDeleteDiscount() throws {
+        
+        let couponId = try drop?.stripe?.coupons.create(id: nil,
+                                                        duration: .once,
+                                                        amountOff: nil,
+                                                        currency: nil,
+                                                        durationInMonths: nil,
+                                                        maxRedemptions: nil,
+                                                        percentOff: 5,
+                                                        redeemBy: nil)
+                                                        .serializedResponse().id ?? ""
+        
+        let updatedCustomer = try drop?.stripe?.customer.update(accountBalance: nil,
+                                          businessVATId: nil,
+                                          coupon: couponId,
+                                          defaultSourceId: nil,
+                                          description: nil,
+                                          email: nil,
+                                          shipping: nil,
+                                          newSource: nil,
+                                          forCustomerId: customerId).serializedResponse()
+        
+        XCTAssertNotNil(updatedCustomer?.discount)
+        
+        let deletedDiscount = try drop?.stripe?.customer.deleteDiscount(onCustomer: updatedCustomer?.id ?? "").serializedResponse()
+        
+        XCTAssertTrue(deletedDiscount?.deleted ?? false)
+    }
     
     func testDeleteCustomer() throws {
         let object = try drop?.stripe?.customer.delete(customer: customerId).serializedResponse()
@@ -127,8 +152,17 @@ class CustomerTests: XCTestCase {
     
     func testFilterCustomers() throws {
         let filter = StripeFilter()
+        
         filter.limit = 1
-        let object = try drop?.stripe?.customer.listAll(filter: filter).serializedResponse()
-        XCTAssertEqual(object?.items?.count, 1)
+        
+        let customers = try drop?.stripe?.customer.listAll(filter: filter).serializedResponse()
+        
+        if let customerItems = customers?.items {
+            XCTAssertEqual(customerItems.count, 1)
+            XCTAssertNotNil(customerItems.first)
+        }
+        else {
+            XCTFail("Customers are not present")
+        }
     }
 }
