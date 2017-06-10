@@ -41,6 +41,7 @@ static var allTests = [
   ("testRetrieveCustomer", testRetrieveCustomer),
   ("testUpdateCustomer", testUpdateCustomer),
   ("testAddNewSourceForCustomer", testAddNewSourceForCustomer),
+  ("testDeleteDiscount", testDeleteDiscount),
   ("testDeleteCustomer", testDeleteCustomer),
   ("testRetrieveAllCustomers", testRetrieveAllCustomers),
   ("testFilterCustomers", testFilterCustomers),
@@ -80,6 +81,25 @@ static var allTests = [
 ]
 }
 
+extension SubscriptionItemTests {
+static var allTests = [
+  ("testRetrieveSubscriptionItem", testRetrieveSubscriptionItem),
+  ("testUpdateSubscriptionItem", testUpdateSubscriptionItem),
+  ("testDeleteSubscriptionItem", testDeleteSubscriptionItem),
+  ("testFilterSubscriptionItems", testFilterSubscriptionItems),
+]
+}
+
+extension SubscriptionTests {
+static var allTests = [
+  ("testRetrieveSubscription", testRetrieveSubscription),
+  ("testUpdateSubscription", testUpdateSubscription),
+  ("testDeleteDiscount", testDeleteDiscount),
+  ("testCancelSubscription", testCancelSubscription),
+  ("testFilterSubscriptionItems", testFilterSubscriptionItems),
+]
+}
+
 extension TokenTests {
 static var allTests = [
   ("testCardTokenCreation", testCardTokenCreation),
@@ -98,5 +118,7 @@ XCTMain([
   testCase(ProviderTests.allTests),
   testCase(RefundTests.allTests),
   testCase(SourceTests.allTests),
+  testCase(SubscriptionItemTests.allTests),
+  testCase(SubscriptionTests.allTests),
   testCase(TokenTests.allTests),
 ])
