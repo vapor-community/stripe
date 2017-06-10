@@ -304,8 +304,20 @@ public final class CustomerRoutes {
     }
     
     /**
-     Delete a customer
+     Delete a customer discount
      Permanently deletes a customer. It cannot be undone. Also immediately cancels any active subscriptions on the customer.
+     
+     - parameter customerId: The Customer's ID
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
+    public func deleteDiscount(onCustomer customerId: String) throws -> StripeRequest<DeletedObject> {
+        return try StripeRequest(client: self.client, method: .delete, route: .customerDiscount(customerId), query: [:], body: nil, headers: nil)
+    }
+    
+    /**
+     Delete a customer discount
+     Removes the currently applied discount on a customer.
      
      - parameter customerId: The Customer's ID
      
