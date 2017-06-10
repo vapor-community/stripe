@@ -102,7 +102,12 @@ XCTMain([
     * [x] Creating
     * [x] Updating
     * [x] Fetching by Source ID
-* [ ] Subscriptions    
+* [x] Subscriptions    
+    * [x] Creating
+    * [x] Updating
+    * [x] Deleting
+    * [x] Fetching by subscription ID
+    * [x] Listing All Subscriptions (With filters)
 * [ ] Disputes    
 * [ ] Cards
 * [ ] Orders
