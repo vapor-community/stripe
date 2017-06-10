@@ -24,7 +24,7 @@ public final class Customer: StripeModelProtocol {
     public private(set) var currency: StripeCurrency?
     public private(set) var sources: SourceList?
     public private(set) var subscriptions: SubscriptionList?
-    
+    public private(set) var discount: Discount?
     /**
      Only these values are mutable/updatable.
      https://stripe.com/docs/api/curl#update_customer
@@ -54,7 +54,7 @@ public final class Customer: StripeModelProtocol {
         self.isLive = try node.get("livemode")
         self.coupon = try node.get("coupon")
         self.metadata = try node.get("metadata")
-        
+        self.discount = try node.get("discount")
         if let currency = node["currency"]?.string {
             self.currency = StripeCurrency(rawValue: currency)
         }
@@ -83,7 +83,8 @@ public final class Customer: StripeModelProtocol {
             "currency": self.currency?.rawValue,
             "shipping": self.shipping,
             "sources": self.sources,
-            "subscriptions": self.subscriptions
+            "subscriptions": self.subscriptions,
+            "discount": self.discount
         ]
         return try Node(node: object)
     }
