@@ -14,7 +14,7 @@ internal let APIVersion = "v1/"
 
 internal let DefaultHeaders = [
     HeaderKey.contentType: "application/x-www-form-urlencoded",
-    StripeHeader.Version: "2017-05-25"
+    StripeHeader.Version: "2017-06-05"
 ]
 
 internal struct StripeHeader {
