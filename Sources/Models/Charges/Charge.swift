@@ -21,7 +21,7 @@ public final class Charge: StripeModelProtocol {
     public private(set) var amount: Int?
     public private(set) var amountRefunded: Int?
     public private(set) var application: String?
-    public private(set) var applicationFee: Int?
+    public private(set) var applicationFee: String?
     public private(set) var balanceTransactionId: String?
     public private(set) var isCaptured: Bool?
     public private(set) var created: Date?
