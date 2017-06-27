@@ -11,7 +11,7 @@ public enum StripeCurrency: String {
     case cad = "cad"
     case dkk = "dkk"
     case eur = "eur"
-    case gpd = "gpd"
+    case gbp = "gbp"
     case jpy = "jpy"
     case nok = "nok"
     case usd = "usd"
