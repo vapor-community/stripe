@@ -114,6 +114,17 @@ internal enum API {
     case subscriptions(String)
     case subscriptionDiscount(String)
     
+    /**
+     ACCOUNTS
+     This is an object representing your Stripe account. You can retrieve it to see properties on the account like its current e-mail address or if the account is enabled yet to make live charges.
+     */
+    case account
+    case accounts(String)
+    case accountsReject(String)
+    case accountsLoginLink(String)
+    
+    
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -150,6 +161,11 @@ internal enum API {
         case .subscription: return APIBase + APIVersion + "subscriptions"
         case .subscriptions(let id): return APIBase + APIVersion + "subscriptions/\(id)"
         case .subscriptionDiscount(let id): return APIBase + APIVersion + "subscriptions/\(id)/discount"
+            
+        case .account: return APIBase + APIVersion + "accounts"
+        case .accounts(let id): return APIBase + APIVersion + "accounts/\(id)"
+        case .accountsReject(let id): return APIBase + APIVersion + "accounts/\(id)/reject"
+        case .accountsLoginLink(let id): return APIBase + APIVersion + "accounts/\(id)/login_links"
         }
     }
 }

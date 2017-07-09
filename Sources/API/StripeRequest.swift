@@ -52,13 +52,13 @@ public class StripeRequest<T : StripeModelProtocol> {
             guard let error = self.response.json?["error"]?.object else { throw self.response.status }
             guard let type = error["type"]?.string else { throw self.response.status }
             switch type {
-            case "api_connection_error":  throw StripeError.apiConnectionError
-            case "api_error":             throw StripeError.apiError
-            case "authentication_error":  throw StripeError.authenticationError
-            case "card_error":            throw StripeError.cardError
-            case "invalid_request_error": throw StripeError.invalidRequestError(try self.response.json?.get("error"))
-            case "rate_limit_error":      throw StripeError.rateLimitError
-            case "validation_error":      throw StripeError.validationError
+            case "api_connection_error":  throw StripeError.apiConnectionError(error["message"]?.string ?? "unknown error")
+            case "api_error":             throw StripeError.apiError(error["message"]?.string ?? "unknown error")
+            case "authentication_error":  throw StripeError.authenticationError(error["message"]?.string ?? "unknown error")
+            case "card_error":            throw StripeError.cardError(error["message"]?.string ?? "unknown error")
+            case "invalid_request_error": throw StripeError.invalidRequestError(error["message"]?.string ?? "unknown error")
+            case "rate_limit_error":      throw StripeError.rateLimitError(error["message"]?.string ?? "unknown error")
+            case "validation_error":      throw StripeError.validationError(error["message"]?.string ?? "unknown error")
             default:                      throw self.response.status
             }
         }
@@ -72,13 +72,13 @@ public class StripeRequest<T : StripeModelProtocol> {
             guard let error = self.response.json?["error"]?.object else { throw self.response.status }
             guard let type = error["type"]?.string else { throw self.response.status }
             switch type {
-            case "api_connection_error":  throw StripeError.apiConnectionError
-            case "api_error":             throw StripeError.apiError
-            case "authentication_error":  throw StripeError.authenticationError
-            case "card_error":            throw StripeError.cardError
-            case "invalid_request_error": throw StripeError.invalidRequestError(try self.response.json?.get("error"))
-            case "rate_limit_error":      throw StripeError.rateLimitError
-            case "validation_error":      throw StripeError.validationError
+            case "api_connection_error":  throw StripeError.apiConnectionError(error["message"]?.string ?? "unknown error")
+            case "api_error":             throw StripeError.apiError(error["message"]?.string ?? "unknown error")
+            case "authentication_error":  throw StripeError.authenticationError(error["message"]?.string ?? "unknown error")
+            case "card_error":            throw StripeError.cardError(error["message"]?.string ?? "unknown error")
+            case "invalid_request_error": throw StripeError.invalidRequestError(error["message"]?.string ?? "unknown error")
+            case "rate_limit_error":      throw StripeError.rateLimitError(error["message"]?.string ?? "unknown error")
+            case "validation_error":      throw StripeError.validationError(error["message"]?.string ?? "unknown error")
             default:                      throw self.response.status
             }
         }

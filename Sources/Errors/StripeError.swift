@@ -10,14 +10,6 @@ import Node
 
 public enum StripeError: Error {
 
-    public struct ErrorInfo: NodeInitializable {
-        public private(set) var message: String?
-        
-        public init(node: Node) throws {
-            self.message = try node.get("message")
-        }
-    }
-    
     // Provider Errors
     case missingConfig
     case missingAPIKey
@@ -26,15 +18,37 @@ public enum StripeError: Error {
     case serializationError
 
     // API Error's
-    case apiConnectionError
-    case apiError
-    case authenticationError
-    case cardError
-    case invalidRequestError(ErrorInfo?)
-    case rateLimitError
-    case validationError
+    case apiConnectionError(String)
+    case apiError(String)
+    case authenticationError(String)
+    case cardError(String)
+    case invalidRequestError(String)
+    case rateLimitError(String)
+    case validationError(String)
 
     // Other
     case invalidSourceType
     case missingParamater(String)
+    
+    public var localizedDescription: String {
+        
+        switch self {
+        case .apiConnectionError(let err):
+            return err
+        case .apiError(let err):
+            return err
+        case .authenticationError(let err):
+            return err
+        case .cardError(let err):
+            return err
+        case .invalidRequestError(let err):
+            return err
+        case .rateLimitError(let err):
+            return err
+        case .validationError(let err):
+            return err
+        default:
+            return "unknown error"
+        }
+    }
 }
