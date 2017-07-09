@@ -108,6 +108,14 @@ XCTMain([
     * [x] Deleting
     * [x] Fetching by subscription ID
     * [x] Listing All Subscriptions (With filters)
+* [x] Connect account
+    * [x] Creating
+    * [x] Updating
+    * [x] Deleting
+    * [x] Fetching by account ID
+    * [x] Listing All Accounts (With filters)
+    * [x] Rejecting accounts
+    * [x] Creating dashboard login link for express accounts
 * [ ] Disputes    
 * [ ] Cards
 * [ ] Orders
