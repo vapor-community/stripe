@@ -22,3 +22,19 @@ extension XCTestCase {
         return try Droplet(config: config)
     }
 }
+
+extension Data {
+    var base64UrlEncodedString: String {
+        return base64EncodedString()
+            .replacingOccurrences(of: "=", with: "")
+            .replacingOccurrences(of: "+", with: "")
+            .replacingOccurrences(of: "/", with: "")
+    }
+    
+    var base64String: String {
+        return self.makeBytes().base64Encoded.makeString()
+            .replacingOccurrences(of: "=", with: "")
+            .replacingOccurrences(of: "+", with: "")
+            .replacingOccurrences(of: "/", with: "")
+    }
+}

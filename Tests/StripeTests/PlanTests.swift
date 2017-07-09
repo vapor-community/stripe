@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Foundation
 
 @testable import Stripe
 @testable import Vapor
@@ -14,6 +15,7 @@ import XCTest
 @testable import API
 @testable import Models
 @testable import Errors
+@testable import Random
 
 class PlanTests: XCTestCase {
     var drop: Droplet?
@@ -23,7 +25,7 @@ class PlanTests: XCTestCase {
         do {
             drop = try self.makeDroplet()
             
-            planId = try drop?.stripe?.plans.create(id: TestUtil.randomString(8),
+            planId = try drop?.stripe?.plans.create(id: Data(bytes: URandom.bytes(count: 16)).base64String,
                                                     amount: 10_00,
                                                     currency: .usd,
                                                     interval: .week,
@@ -69,7 +71,7 @@ class PlanTests: XCTestCase {
     
     func testCreatePlan() throws {
         do {
-            let plan = try drop?.stripe?.plans.create(id: TestUtil.randomString(8),
+            let plan = try drop?.stripe?.plans.create(id: Data(bytes: URandom.bytes(count: 16)).base64String,
                                                                  amount: 10_00,
                                                                  currency: .usd,
                                                                  interval: .week,

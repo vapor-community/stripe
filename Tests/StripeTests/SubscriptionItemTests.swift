@@ -14,6 +14,7 @@ import XCTest
 @testable import API
 @testable import Models
 @testable import Errors
+@testable import Random
 
 class SubscriptionItemTests: XCTestCase {
     var drop: Droplet?
@@ -24,7 +25,7 @@ class SubscriptionItemTests: XCTestCase {
         do {
             drop = try self.makeDroplet()
             
-            let planId = try drop?.stripe?.plans.create(id: TestUtil.randomString(8),
+            let planId = try drop?.stripe?.plans.create(id: Data(bytes: URandom.bytes(count: 16)).base64String,
                                                         amount: 10_00,
                                                         currency: .usd,
                                                         interval: .week,
@@ -65,7 +66,7 @@ class SubscriptionItemTests: XCTestCase {
                                                                     trialPeriodDays: nil)
                                                                     .serializedResponse().id ?? ""
             
-            let planId2 = try drop?.stripe?.plans.create(id: TestUtil.randomString(8),
+            let planId2 = try drop?.stripe?.plans.create(id: Data(bytes: URandom.bytes(count: 16)).base64String,
                                                         amount: 10_00,
                                                         currency: .usd,
                                                         interval: .week,
