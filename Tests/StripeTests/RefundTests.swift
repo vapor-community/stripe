@@ -12,6 +12,7 @@ import XCTest
 @testable import Models
 @testable import API
 @testable import Helpers
+@testable import Errors
 
 class RefundTests: XCTestCase {
         
@@ -56,84 +57,223 @@ class RefundTests: XCTestCase {
                                                               reverseTransfer: nil,
                                                               metadata: nil)
                                                               .serializedResponse().id ?? ""
-        } catch {
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
     }
     
+    override func tearDown() {
+        drop = nil
+        refundId = ""
+    }
+    
     func testRefunding() throws {
-        
-        let cardToken = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
-                                                                    expirationMonth: 10,
-                                                                    expirationYear: 2018,
-                                                                    cvc: 123,
-                                                                    name: "Test Card",
-                                                                    customer: nil,
-                                                                    currency: nil)
-                                                                    .serializedResponse().id ?? ""
-        
-        let charge = try drop?.stripe?.charge.create(amount: 10_00,
-                                                     in: .usd,
-                                                     withFee: nil,
-                                                     toAccount: nil,
-                                                     capture: true,
-                                                     description: "Vapor Stripe: Test Description",
-                                                     destinationAccountId: nil,
-                                                     destinationAmount: nil,
-                                                     transferGroup: nil,
-                                                     onBehalfOf: nil,
-                                                     receiptEmail: nil,
-                                                     shippingLabel: nil,
-                                                     customer: nil,
-                                                     statementDescriptor: nil,
-                                                     source: cardToken,
-                                                     metadata: nil)
-                                                     .serializedResponse().id ?? ""
-        
-        let metadata = Node(["hello":"world"])
-        
-        let refund = try drop?.stripe?.refunds.createRefund(charge: charge,
-                                                            amount: 5_00,
-                                                            reason: .requestedByCustomer,
-                                                            refundApplicationFee: false,
-                                                            reverseTransfer: false,
-                                                            metadata: metadata)
-                                                            .serializedResponse()
-        XCTAssertNotNil(refund)
-        
-        XCTAssertEqual(refund?.metadata?.object?["hello"], metadata["hello"])
-        
-        XCTAssertEqual(refund?.amount, 5_00)
-        
-        XCTAssertEqual(refund?.reason, .requestedByCustomer)
+        do {
+            let cardToken = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
+                                                                        expirationMonth: 10,
+                                                                        expirationYear: 2018,
+                                                                        cvc: 123,
+                                                                        name: "Test Card",
+                                                                        customer: nil,
+                                                                        currency: nil)
+                                                                        .serializedResponse().id ?? ""
+            
+            let charge = try drop?.stripe?.charge.create(amount: 10_00,
+                                                         in: .usd,
+                                                         withFee: nil,
+                                                         toAccount: nil,
+                                                         capture: true,
+                                                         description: "Vapor Stripe: Test Description",
+                                                         destinationAccountId: nil,
+                                                         destinationAmount: nil,
+                                                         transferGroup: nil,
+                                                         onBehalfOf: nil,
+                                                         receiptEmail: nil,
+                                                         shippingLabel: nil,
+                                                         customer: nil,
+                                                         statementDescriptor: nil,
+                                                         source: cardToken,
+                                                         metadata: nil)
+                                                         .serializedResponse().id ?? ""
+            
+            let metadata = Node(["hello":"world"])
+            
+            let refund = try drop?.stripe?.refunds.createRefund(charge: charge,
+                                                                amount: 5_00,
+                                                                reason: .requestedByCustomer,
+                                                                refundApplicationFee: false,
+                                                                reverseTransfer: false,
+                                                                metadata: metadata)
+                                                                .serializedResponse()
+            XCTAssertNotNil(refund)
+            
+            XCTAssertEqual(refund?.metadata?.object?["hello"], metadata["hello"])
+            
+            XCTAssertEqual(refund?.amount, 5_00)
+            
+            XCTAssertEqual(refund?.reason, .requestedByCustomer)
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testUpdatingRefund() throws {
-        
-        let metadata = Node(["hello":"world"])
-        
-        let updatedRefund = try drop?.stripe?.refunds.update(metadata: metadata,
-                                                             refund: refundId)
-                                                             .serializedResponse()
-        XCTAssertNotNil(updatedRefund)
-        
-        XCTAssertEqual(updatedRefund?.metadata?.object?["hello"], metadata["hello"])
-        
-        XCTAssertEqual(updatedRefund?.amount, 5_00)
+        do {
+            let metadata = Node(["hello":"world"])
+            
+            let updatedRefund = try drop?.stripe?.refunds.update(metadata: metadata,
+                                                                 refund: refundId)
+                                                                 .serializedResponse()
+            XCTAssertNotNil(updatedRefund)
+            
+            XCTAssertEqual(updatedRefund?.metadata?.object?["hello"], metadata["hello"])
+            
+            XCTAssertEqual(updatedRefund?.amount, 5_00)
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testRetrievingRefund() throws {
-        let refund = try drop?.stripe?.refunds.retrieve(refund: refundId).serializedResponse()
-        XCTAssertNotNil(refund)
+        do {
+            let refund = try drop?.stripe?.refunds.retrieve(refund: refundId).serializedResponse()
+            XCTAssertNotNil(refund)
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testListingAllRefunds() throws {
-        let refunds = try drop?.stripe?.refunds.listAll(byChargeId: nil, filter: nil).serializedResponse()
-        
-        if let refundItems = refunds?.items {
-            XCTAssertGreaterThanOrEqual(refundItems.count, 1)
-        } else {
-            XCTFail("Refunds are not present")
+        do {
+            let refunds = try drop?.stripe?.refunds.listAll(byChargeId: nil, filter: nil).serializedResponse()
+            
+            if let refundItems = refunds?.items {
+                XCTAssertGreaterThanOrEqual(refundItems.count, 1)
+            } else {
+                XCTFail("Refunds are not present")
+            }
         }
-    }    
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
 }

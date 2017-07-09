@@ -15,10 +15,26 @@ extension XCTestCase {
     func makeDroplet() throws -> Droplet {
         let config = Config([
             "stripe": [
-                "apiKey": "" // Add your own API Key for tests
+                "apiKey": "sk_test_O4dmN96uthPP7tvR8dNkPWZg" // Add your own API Key for tests
             ],
         ])
         try config.addProvider(Stripe.Provider.self)
         return try Droplet(config: config)
+    }
+}
+
+extension Data {
+    var base64UrlEncodedString: String {
+        return base64EncodedString()
+            .replacingOccurrences(of: "=", with: "")
+            .replacingOccurrences(of: "+", with: "")
+            .replacingOccurrences(of: "/", with: "")
+    }
+    
+    var base64String: String {
+        return self.makeBytes().base64Encoded.makeString()
+            .replacingOccurrences(of: "=", with: "")
+            .replacingOccurrences(of: "+", with: "")
+            .replacingOccurrences(of: "/", with: "")
     }
 }

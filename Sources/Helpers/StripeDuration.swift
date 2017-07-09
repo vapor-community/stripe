@@ -16,3 +16,20 @@ public enum StripeDuration: String {
         return self.rawValue.uppercased()
     }
 }
+
+public enum StripePayoutInterval: String {
+    case manual = "manual"
+    case daily = "daily"
+    case weekly = "weekly"
+    case monthly = "monthly"
+}
+
+public enum StripeWeeklyAnchor: String {
+    case sunday = "sunday"
+    case monday = "monday"
+    case tuesday = "tuesday"
+    case wednesday = "wednesday"
+    case thursday = "thursday"
+    case friday = "friday"
+    case saturday = "saturday"
+}

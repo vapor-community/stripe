@@ -22,6 +22,7 @@ public class StripeClient {
     public private(set) var sources: SourceRoutes!
     public private(set) var subscriptionItems: SubscriptionItemRoutes!
     public private(set) var subscriptions: SubscriptionRoutes!
+    public private(set) var account: AccountRoutes!
 
     public init(apiKey: String) throws {
         self.apiKey = apiKey
@@ -38,5 +39,6 @@ public class StripeClient {
         self.sources = SourceRoutes(client: self)
         self.subscriptionItems = SubscriptionItemRoutes(client: self)
         self.subscriptions = SubscriptionRoutes(client: self)
+        self.account = AccountRoutes(client: self)
     }
 }

@@ -13,6 +13,8 @@ import XCTest
 @testable import Helpers
 @testable import API
 @testable import Models
+@testable import Errors
+@testable import Random
 
 class SubscriptionItemTests: XCTestCase {
     var drop: Droplet?
@@ -23,7 +25,7 @@ class SubscriptionItemTests: XCTestCase {
         do {
             drop = try self.makeDroplet()
             
-            let planId = try drop?.stripe?.plans.create(id: TestUtil.randomString(8),
+            let planId = try drop?.stripe?.plans.create(id: Data(bytes: URandom.bytes(count: 16)).base64String,
                                                         amount: 10_00,
                                                         currency: .usd,
                                                         interval: .week,
@@ -64,7 +66,7 @@ class SubscriptionItemTests: XCTestCase {
                                                                     trialPeriodDays: nil)
                                                                     .serializedResponse().id ?? ""
             
-            let planId2 = try drop?.stripe?.plans.create(id: TestUtil.randomString(8),
+            let planId2 = try drop?.stripe?.plans.create(id: Data(bytes: URandom.bytes(count: 16)).base64String,
                                                         amount: 10_00,
                                                         currency: .usd,
                                                         interval: .week,
@@ -81,59 +83,198 @@ class SubscriptionItemTests: XCTestCase {
                                                                             quantity: 1,
                                                                             subscriptionId: subscriptionId)
                                                                             .serializedResponse().id ?? ""
-        } catch {
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
     }
     
+    override func tearDown() {
+        drop = nil
+        subscriptionId = ""
+        subscriptionItemId = ""
+    }
+    
     func testRetrieveSubscriptionItem() throws {
-        
-        let subscriptionItem = try drop?.stripe?.subscriptionItems.retrieve(subscriptionItem: subscriptionItemId).serializedResponse()
-        
-        XCTAssertNotNil(subscriptionItem)
+        do {
+            let subscriptionItem = try drop?.stripe?.subscriptionItems.retrieve(subscriptionItem: subscriptionItemId).serializedResponse()
+            
+            XCTAssertNotNil(subscriptionItem)
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testUpdateSubscriptionItem() throws {
-        
-        let newQuantity = 2
-        
-        let updatedSubscriptionItem = try drop?.stripe?.subscriptionItems.update(plan: nil,
-                                                                                 prorate: nil,
-                                                                                 prorationDate: nil,
-                                                                                 quantity: newQuantity,
-                                                                                 subscriptionItemId: subscriptionItemId)
-                                                                                 .serializedResponse()
-        
-        XCTAssertNotNil(updatedSubscriptionItem)
-        
-        XCTAssertEqual(updatedSubscriptionItem?.quantity, newQuantity)
+        do {
+            let newQuantity = 2
+            
+            let updatedSubscriptionItem = try drop?.stripe?.subscriptionItems.update(plan: nil,
+                                                                                     prorate: nil,
+                                                                                     prorationDate: nil,
+                                                                                     quantity: newQuantity,
+                                                                                     subscriptionItemId: subscriptionItemId)
+                                                                                     .serializedResponse()
+            
+            XCTAssertNotNil(updatedSubscriptionItem)
+            
+            XCTAssertEqual(updatedSubscriptionItem?.quantity, newQuantity)
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testDeleteSubscriptionItem() throws {
-        let deletedSubscriptionItem = try drop?.stripe?.subscriptionItems.delete(subscriptionItem: subscriptionItemId,
-                                                                                 prorate: nil,
-                                                                                 proprationDate: nil).serializedResponse()
-        
-        XCTAssertNotNil(deletedSubscriptionItem)
-        
-        XCTAssertTrue(deletedSubscriptionItem?.deleted ?? false)
+        do {
+            let deletedSubscriptionItem = try drop?.stripe?.subscriptionItems.delete(subscriptionItem: subscriptionItemId,
+                                                                                     prorate: nil,
+                                                                                     proprationDate: nil).serializedResponse()
+            
+            XCTAssertNotNil(deletedSubscriptionItem)
+            
+            XCTAssertTrue(deletedSubscriptionItem?.deleted ?? false)
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testFilterSubscriptionItems() throws {
-        
-        let filter = StripeFilter()
-        
-        filter.limit = 1
+        do {
+            let filter = StripeFilter()
+            
+            filter.limit = 1
 
-        let subscriptionItems = try drop?.stripe?.subscriptionItems.listAll(subscriptionId: subscriptionId, filter: filter).serializedResponse()
-        
-        XCTAssertNotNil(subscriptionItems)
-        
-        if let subscriptionItems = subscriptionItems?.items {
-            XCTAssertEqual(subscriptionItems.count, 1)
-            XCTAssertNotNil(subscriptionItems.first)
-        } else {
-            XCTFail("SubscriptionItems are not present")
+            let subscriptionItems = try drop?.stripe?.subscriptionItems.listAll(subscriptionId: subscriptionId, filter: filter).serializedResponse()
+            
+            XCTAssertNotNil(subscriptionItems)
+            
+            if let subscriptionItems = subscriptionItems?.items {
+                XCTAssertEqual(subscriptionItems.count, 1)
+                XCTAssertNotNil(subscriptionItems.first)
+            } else {
+                XCTFail("SubscriptionItems are not present")
+            }
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
         }
     }
 }
