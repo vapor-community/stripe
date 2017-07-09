@@ -1,8 +1,8 @@
 //
-//  CustomerTests.swift
+//  AccountTests.swift
 //  Stripe
 //
-//  Created by Anthony Castelli on 4/20/17.
+//  Created by Andrew Edwards on 7/9/17.
 //
 //
 
@@ -13,25 +13,20 @@ import XCTest
 @testable import Models
 @testable import API
 @testable import Errors
+@testable import Helpers
 
-class CustomerTests: XCTestCase {
-        
+class AccountTests: XCTestCase {
+    
     var drop: Droplet?
-    var customerId: String = ""
+    var accountId: String = ""
     
     override func setUp() {
         do {
             drop = try self.makeDroplet()
+            accountId = try drop?.stripe?.account.create(type: .custom,
+                                                           email: "testwithvapor@gmail.com",
+                                                           country: "US").serializedResponse().id ?? ""
             
-            customerId = try drop?.stripe?.customer.create(accountBalance: nil,
-                                                           businessVATId: nil,
-                                                           coupon: nil,
-                                                           defaultSource: nil,
-                                                           description: "Vapor test Account",
-                                                           email: "vapor@stripetest.com",
-                                                           shipping: nil,
-                                                           source: nil,
-                                                           metadata: nil).serializedResponse().id ?? ""
         }
         catch let error as StripeError {
             
@@ -63,21 +58,18 @@ class CustomerTests: XCTestCase {
     
     override func tearDown() {
         drop = nil
-        customerId = ""
+        accountId = ""
     }
     
-    func testCreateCustomer() throws {
+    func testCreateAccount() throws {
+        
+        // Only test with custom accounts because standard cannot reuse same email and test will fail. 
         do {
-            let object = try drop?.stripe?.customer.create(accountBalance: nil,
-                                                               businessVATId: nil,
-                                                               coupon: nil,
-                                                               defaultSource: nil,
-                                                               description: "Vapor test Account",
-                                                               email: "vapor@stripetest.com",
-                                                               shipping: nil,
-                                                               source: nil,
-                                                               metadata: nil).serializedResponse()
-            XCTAssertNotNil(object)
+            let account = try drop?.stripe?.account.create(type: .custom,
+                                                           email: "testwithvapor@gmail.com",
+                                                           country: "US").serializedResponse()
+            
+            XCTAssertNotNil(account)
         }
         catch let error as StripeError {
             
@@ -107,10 +99,11 @@ class CustomerTests: XCTestCase {
         }
     }
     
-    func testRetrieveCustomer() throws {
+    func testRetrieveAccount() throws {
         do {
-            let object = try drop?.stripe?.customer.retrieve(customer: customerId).serializedResponse()
-            XCTAssertNotNil(object)
+            let retrievedAccount = try drop?.stripe?.account.retrieve(account: accountId).serializedResponse()
+            
+            XCTAssertNotNil(retrievedAccount)
         }
         catch let error as StripeError {
             
@@ -140,31 +133,84 @@ class CustomerTests: XCTestCase {
         }
     }
     
-    func testUpdateCustomer() throws {
+    func testUpdateAccount() throws {
+        
         do {
-            let updatedDescription = "Updated Vapor test Account"
+            let businessname = "Vapor Meals"
             
-            let updatedAccountBalance = 20_00
+            let declineChargeOn = Node([
+                    "avs_failure": true,
+                    "cvc_failure": false
+                ])
             
-            let metadata = try Node(node:["hello":"world"])
+            let externalAccount = Node([
+                    "object": "bank_account",
+                    "account_number": "000123456789",
+                    "country": "US",
+                    "currency": "usd",
+                    "account_holder_name": "Mr. Vapor",
+                    "account_holder_type": "individual",
+                    "routing_number": "110000000"
+                ])
             
-            let updatedCustomer = try drop?.stripe?.customer.update(accountBalance: updatedAccountBalance,
-                                                           businessVATId: nil,
-                                                           coupon: nil,
-                                                           defaultSourceId: nil,
-                                                           description: updatedDescription,
-                                                           email: nil,
-                                                           shipping: nil,
-                                                           newSource: nil,
-                                                           metadata: metadata,
-                                                           forCustomerId: customerId).serializedResponse()
-            XCTAssertNotNil(updatedCustomer)
+            let payoutSchedule = Node([
+                    "delay_days": 4,
+                    "interval": "weekly",
+                    "weekly_anchor": "friday"
+                ])
             
-            XCTAssertEqual(updatedCustomer?.description, updatedDescription)
+            let tosAcceptance = Node([
+                    "date": 1499627823,
+                    "ip": "0.0.0.0",
+                    "user_agent": "Safari"
+                ])
             
-            XCTAssertEqual(updatedCustomer?.accountBalance, updatedAccountBalance)
+            let metadata = Node(["hello":"world"])
             
-            XCTAssertEqual(updatedCustomer?.metadata?["hello"], metadata["hello"])
+            let updatedAccount = try drop?.stripe?.account.update(account: accountId,
+                                                                  businessName: businessname,
+                                                                  businessPrimaryColor: nil,
+                                                                  businessUrl: nil,
+                                                                  debitNegativeBalances: false,
+                                                                  declineChargeOn: declineChargeOn,
+                                                                  defaultCurrency: .usd,
+                                                                  email: nil,
+                                                                  externalAccount: externalAccount,
+                                                                  legalEntity: nil,
+                                                                  payoutSchedule: payoutSchedule,
+                                                                  payoutStatementDescriptor: nil,
+                                                                  productDescription: nil,
+                                                                  statementDescriptor: nil,
+                                                                  supportEmail: nil,
+                                                                  supportPhone: nil,
+                                                                  supportUrl: nil,
+                                                                  tosAcceptance: tosAcceptance,
+                                                                  metadata: metadata).serializedResponse()
+            // TODO - Add test for legal entity
+            
+            XCTAssertNotNil(updatedAccount)
+            
+            XCTAssertEqual(updatedAccount?.businessName, businessname)
+            
+            XCTAssertEqual(updatedAccount?.declineChargeOn?["avs_failure"], true)
+            
+            XCTAssertEqual(updatedAccount?.declineChargeOn?["cvc_failure"], false)
+            
+            XCTAssertEqual(updatedAccount?.externalAccounts?.bankAccounts[0].accountHolderName,  "Mr. Vapor")
+            
+            XCTAssertEqual(updatedAccount?.externalAccounts?.bankAccounts[0].currency,  StripeCurrency.usd)
+            
+            XCTAssertEqual(updatedAccount?.externalAccounts?.bankAccounts[0].accountHolderType,  "individual")
+            
+            XCTAssertEqual(updatedAccount?.payoutSchedule?.interval, .weekly)
+            
+            XCTAssertEqual(updatedAccount?.payoutSchedule?.weeklyAnchor, .friday)
+            
+            XCTAssertEqual(updatedAccount?.payoutSchedule?.delayDays, 4)
+
+            XCTAssertEqual(updatedAccount?.tosAcceptance?.ip, "0.0.0.0")
+            
+            XCTAssertEqual(updatedAccount?.tosAcceptance?.userAgent, "Safari")
         }
         catch let error as StripeError {
             
@@ -194,33 +240,13 @@ class CustomerTests: XCTestCase {
         }
     }
     
-    func testAddNewSourceForCustomer() throws {
+    func testDeleteAccount() throws {
         do {
-            let paymentTokenSource = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
-                                                                         expirationMonth: 10,
-                                                                         expirationYear: 2018,
-                                                                         cvc: 123,
-                                                                         name: "Test Card",
-                                                                         customer: nil,
-                                                                         currency: nil)
-                                                                         .serializedResponse().id ?? ""
+            let deletedAccount = try drop?.stripe?.account.delete(account: accountId).serializedResponse()
             
-            let newCardToken = try drop?.stripe?.customer.addNewSource(forCustomer: customerId,
-                                                                          inConnectAccount: nil,
-                                                                          source: paymentTokenSource)
-                                                                          .serializedResponse()
+            XCTAssertNotNil(deletedAccount)
             
-            XCTAssertNotNil(newCardToken)
-            
-            let updatedCustomer = try drop?.stripe?.customer.retrieve(customer: customerId).serializedResponse()
-            
-            XCTAssertNotNil(updatedCustomer)
-            
-            let customerCardSource = updatedCustomer?.sources?.items?.filter { $0.id == newCardToken?.id}.first
-            
-            XCTAssertNotNil(customerCardSource)
-            
-            XCTAssertEqual(newCardToken?.id, customerCardSource?.id)
+            XCTAssertEqual(deletedAccount?.deleted, true)
         }
         catch let error as StripeError {
             
@@ -250,33 +276,14 @@ class CustomerTests: XCTestCase {
         }
     }
     
-    func testDeleteDiscount() throws {
+    func testRejectAccount() throws {
+        
         do {
-            let couponId = try drop?.stripe?.coupons.create(id: nil,
-                                                            duration: .once,
-                                                            amountOff: nil,
-                                                            currency: nil,
-                                                            durationInMonths: nil,
-                                                            maxRedemptions: nil,
-                                                            percentOff: 5,
-                                                            redeemBy: nil)
-                                                            .serializedResponse().id ?? ""
+            let rejectedAccount = try drop?.stripe?.account.reject(account: accountId, for: .fraud).serializedResponse()
             
-            let updatedCustomer = try drop?.stripe?.customer.update(accountBalance: nil,
-                                              businessVATId: nil,
-                                              coupon: couponId,
-                                              defaultSourceId: nil,
-                                              description: nil,
-                                              email: nil,
-                                              shipping: nil,
-                                              newSource: nil,
-                                              forCustomerId: customerId).serializedResponse()
+            XCTAssertNotNil(rejectedAccount)
             
-            XCTAssertNotNil(updatedCustomer?.discount)
-            
-            let deletedDiscount = try drop?.stripe?.customer.deleteDiscount(onCustomer: updatedCustomer?.id ?? "").serializedResponse()
-            
-            XCTAssertTrue(deletedDiscount?.deleted ?? false)
+            XCTAssertEqual(rejectedAccount?.chargesEnabled, false)
         }
         catch let error as StripeError {
             
@@ -306,10 +313,13 @@ class CustomerTests: XCTestCase {
         }
     }
     
-    func testDeleteCustomer() throws {
+    func testCreateLoginLink() throws {
         do {
-            let object = try drop?.stripe?.customer.delete(customer: customerId).serializedResponse()
-            XCTAssertEqual(object?.deleted, true)
+            let loginLink = try drop?.stripe?.account.createLoginLink(forAccount: accountId).serializedResponse()
+            
+            XCTAssertNotNil(loginLink)
+            
+            XCTAssertNotNil(loginLink?.url)
         }
         catch let error as StripeError {
             
@@ -339,10 +349,17 @@ class CustomerTests: XCTestCase {
         }
     }
     
-    func testRetrieveAllCustomers() throws {
+    func testListAllAccounts() throws {
         do {
-            let object = try drop?.stripe?.customer.listAll(filter: nil).serializedResponse()
-            XCTAssertGreaterThanOrEqual(object!.items!.count, 1)
+            let accounts = try drop?.stripe?.account.listAll().serializedResponse()
+            
+            XCTAssertNotNil(accounts)
+            
+            if let accountItems = accounts?.items {
+                XCTAssertGreaterThanOrEqual(accountItems.count, 1)
+            } else {
+                XCTFail("Accounts are not present")
+            }
         }
         catch let error as StripeError {
             
@@ -372,20 +389,20 @@ class CustomerTests: XCTestCase {
         }
     }
     
-    func testFilterCustomers() throws {
+    func testFilterAccounts() throws {
         do {
             let filter = StripeFilter()
             
             filter.limit = 1
             
-            let customers = try drop?.stripe?.customer.listAll(filter: filter).serializedResponse()
+            let accounts = try drop?.stripe?.account.listAll(filter: filter).serializedResponse()
             
-            if let customerItems = customers?.items {
-                XCTAssertEqual(customerItems.count, 1)
-                XCTAssertNotNil(customerItems.first)
-            }
-            else {
-                XCTFail("Customers are not present")
+            XCTAssertNotNil(accounts)
+            
+            if let accountItems = accounts?.items {
+                XCTAssertEqual(accountItems.count, 1)
+            } else {
+                XCTFail("Accounts are not present")
             }
         }
         catch let error as StripeError {

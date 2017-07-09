@@ -1,8 +1,21 @@
-// Generated using Sourcery 0.6.0 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 0.7.2 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 import XCTest
 @testable import StripeTests
+
+extension AccountTests {
+static var allTests = [
+  ("testCreateAccount", testCreateAccount),
+  ("testRetrieveAccount", testRetrieveAccount),
+  ("testUpdateAccount", testUpdateAccount),
+  ("testDeleteAccount", testDeleteAccount),
+  ("testRejectAccount", testRejectAccount),
+  ("testCreateLoginLink", testCreateLoginLink),
+  ("testListAllAccounts", testListAllAccounts),
+  ("testFilterAccounts", testFilterAccounts),
+]
+}
 
 extension BalanceTests {
 static var allTests = [
@@ -110,6 +123,7 @@ static var allTests = [
 
 
 XCTMain([
+  testCase(AccountTests.allTests),
   testCase(BalanceTests.allTests),
   testCase(ChargeTests.allTests),
   testCase(CouponTests.allTests),

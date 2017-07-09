@@ -11,6 +11,7 @@ import XCTest
 @testable import Stripe
 @testable import Vapor
 @testable import API
+@testable import Errors
 
 class BalanceTests: XCTestCase {
 
@@ -47,37 +48,177 @@ class BalanceTests: XCTestCase {
                                                            source: paymentToken,
                                                            metadata: nil)
                                                            .serializedResponse().balanceTransactionId ?? ""
-        } catch {
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
     }
+    override func tearDown() {
+        drop = nil
+        transactionId = ""
+    }
     
     func testBalance() throws {
-        let object = try drop?.stripe?.balance.retrieveBalance().serializedResponse()
-        XCTAssertNotNil(object)
+        
+        do {
+            let object = try drop?.stripe?.balance.retrieveBalance().serializedResponse()
+            XCTAssertNotNil(object)
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testBalanceTransactionItem() throws {
-        let object = try drop?.stripe?.balance.retrieveBalanceTransaction(transactionId).serializedResponse()
-        XCTAssertNotNil(object)
+        do {
+            let object = try drop?.stripe?.balance.retrieveBalanceTransaction(transactionId).serializedResponse()
+            XCTAssertNotNil(object)
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testBalanceHistory() throws {
-        let drop = try self.makeDroplet()
-        let object = try drop.stripe?.balance.history(forFilter: nil).serializedResponse()
-        XCTAssertNotNil(object)
+        do {
+            let object = try drop?.stripe?.balance.history(forFilter: nil).serializedResponse()
+            XCTAssertNotNil(object)
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testFilterBalanceHistory() throws {
-        let drop = try self.makeDroplet()
-        let filter = StripeFilter()
-        filter.limit = 1
-        let balance = try drop.stripe?.balance.history(forFilter: filter).serializedResponse()
         
-        if let balances = balance?.items {
-            XCTAssertEqual(balances.count, 1)
-        } else {
-            XCTFail("Balances are not present")
+        do {
+            let filter = StripeFilter()
+            filter.limit = 1
+            let balance = try drop?.stripe?.balance.history(forFilter: filter).serializedResponse()
+            
+            if let balances = balance?.items {
+                XCTAssertEqual(balances.count, 1)
+            } else {
+                XCTFail("Balances are not present")
+            }
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
         }
     }
 }

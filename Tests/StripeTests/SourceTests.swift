@@ -13,6 +13,7 @@ import XCTest
 @testable import Models
 @testable import API
 @testable import Helpers
+@testable import Errors
 
 class SourceTests: XCTestCase {
     
@@ -35,33 +36,117 @@ class SourceTests: XCTestCase {
                                                                 usage: nil,
                                                                 metadata: nil).serializedResponse().id ?? ""
 
-        } catch {
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
             fatalError("Setup failed: \(error.localizedDescription)")
         }
     }
     
+    override func tearDown() {
+        drop = nil
+        sourceId = ""
+    }
+    
     func testRetrieveSource() throws {
-        let retrievedSource = try drop?.stripe?.sources.retrieveSource(withId: sourceId).serializedResponse()
-        
-        XCTAssertNotNil(retrievedSource)
-        
-        XCTAssertEqual(retrievedSource?.type, SourceType.card)
-        
-        XCTAssertNotNil(retrievedSource?.returnedSource)
+        do {
+            let retrievedSource = try drop?.stripe?.sources.retrieveSource(withId: sourceId).serializedResponse()
+            
+            XCTAssertNotNil(retrievedSource)
+            
+            XCTAssertEqual(retrievedSource?.type, SourceType.card)
+            
+            XCTAssertNotNil(retrievedSource?.returnedSource)
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testUpdateSource() throws {
-        
-        let metadata = try Node(node:["hello": "world"])
-        
-        let updatedSource = try drop?.stripe?.sources.update(owner: nil,
-                                                             metadata: metadata,
-                                                             forSourceId: sourceId).serializedResponse()
-        
-        XCTAssertNotNil(updatedSource)
-        
-        XCTAssertEqual(updatedSource?.metadata?["hello"], metadata["hello"])
-        
-        XCTAssertEqual(updatedSource?.type, SourceType.card)
+        do {
+            let metadata = try Node(node:["hello": "world"])
+            
+            let updatedSource = try drop?.stripe?.sources.update(owner: nil,
+                                                                 metadata: metadata,
+                                                                 forSourceId: sourceId).serializedResponse()
+            
+            XCTAssertNotNil(updatedSource)
+            
+            XCTAssertEqual(updatedSource?.metadata?["hello"], metadata["hello"])
+            
+            XCTAssertEqual(updatedSource?.type, SourceType.card)
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 }
