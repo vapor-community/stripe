@@ -18,6 +18,7 @@ public final class BalanceTransactionItem: StripeModelProtocol {
     public private(set) var availableOn: Date?
     public private(set) var created: Date?
     public private(set) var description: String?
+    // AETODO add fee
     public private(set) var fees: [Fee]?
     public private(set) var net: Int?
     public private(set) var source: String?
