@@ -62,7 +62,7 @@ public final class RefundRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
-    public func createRefund(charge: String, amount: Int?, reason: RefundReason?, refundApplicationFee: Bool?, reverseTransfer: Bool?, metadata: Node? = nil) throws -> StripeRequest<RefundItem> {
+    public func createRefund(charge: String, amount: Int?, reason: RefundReason?, refundApplicationFee: Bool?, reverseTransfer: Bool?, metadata: Node? = nil, inConnectAccount account: String?) throws -> StripeRequest<RefundItem> {
         var body = Node([:])
         
         body["charge"] = Node(charge)
@@ -89,7 +89,14 @@ public final class RefundRoutes {
             body["reverse_transfer"] = Node(reverseTransfer)
         }
         
-        return try StripeRequest(client: self.client, method: .post, route: .refunds, body: Body.data(body.formURLEncoded()))
+        var headers: [HeaderKey: String]?
+        
+        // Check if we have an account to set it to
+        if let account = account {
+            headers = [StripeHeader.Account : account]
+        }
+        
+        return try StripeRequest(client: self.client, method: .post, route: .refunds, body: Body.data(body.formURLEncoded()), headers: headers)
     }
     
     /**
