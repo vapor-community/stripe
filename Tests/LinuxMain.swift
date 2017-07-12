@@ -61,6 +61,16 @@ static var allTests = [
 ]
 }
 
+extension DisputeTests {
+static var allTests = [
+  ("testRetrieveDispute", testRetrieveDispute),
+  ("testUpdateDispute", testUpdateDispute),
+  ("testCloseDispute", testCloseDispute),
+  ("testListAllDisputes", testListAllDisputes),
+  ("testFilterDisputes", testFilterDisputes),
+]
+}
+
 extension PlanTests {
 static var allTests = [
   ("testCreatePlan", testCreatePlan),
@@ -128,6 +138,7 @@ XCTMain([
   testCase(ChargeTests.allTests),
   testCase(CouponTests.allTests),
   testCase(CustomerTests.allTests),
+  testCase(DisputeTests.allTests),
   testCase(PlanTests.allTests),
   testCase(ProviderTests.allTests),
   testCase(RefundTests.allTests),
