@@ -50,7 +50,7 @@ public final class SourceRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func createNewSource(sourceType: SourceType, source: [String:Node]?, amount: Int?, currency: StripeCurrency?, flow: String?, owner: Owner?, redirectReturnUrl: String?, token: String?, usage: String?, metadata: Node? = nil) throws -> StripeRequest<Source> {
+    public func createNewSource(sourceType: SourceType, source: Node, amount: Int?, currency: StripeCurrency?, flow: String?, owner: Owner?, redirectReturnUrl: String?, token: String?, usage: String?, metadata: Node? = nil) throws -> StripeRequest<Source> {
         
         var body = Node([:])
         
@@ -59,50 +59,50 @@ public final class SourceRoutes {
         switch sourceType{
             
         case .card:
-            if let source = source {
+            if let source = source.object {
                 for (key,val) in source {
                     body["card[\(key)]"] = val
                 }
             }
         case .bitcoin:
-            if let source = source {
+            if let source = source.object {
                 for (key,val) in source {
                     body["bitcoin[\(key)]"] = val
                 }
             }
         case .threeDSecure:
-            if let source = source {
+            if let source = source.object {
                 for (key,val) in source {
                     body["three_d_secure[\(key)]"] = val
                 }
             }
             
         case .bancontact:
-            if let source = source {
+            if let source = source.object {
                 for (key,val) in source {
                     body["bancontact[\(key)]"] = val
                 }
             }
         case .giropay:
-            if let source = source {
+            if let source = source.object {
                 for (key,val) in source {
                     body["giropay[\(key)]"] = val
                 }
             }
         case .ideal:
-            if let source = source {
+            if let source = source.object {
                 for (key,val) in source {
                     body["ideal[\(key)]"] = val
                 }
             }
         case .sepaDebit:
-            if let source = source {
+            if let source = source.object {
                 for (key,val) in source {
                     body["sepa_debit[\(key)]"] = val
                 }
             }
         case .sofort:
-            if let source = source {
+            if let source = source.object {
                 for (key,val) in source {
                     body["sofort[\(key)]"] = val
                 }

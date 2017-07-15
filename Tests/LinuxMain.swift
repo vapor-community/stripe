@@ -11,7 +11,6 @@ static var allTests = [
   ("testUpdateAccount", testUpdateAccount),
   ("testDeleteAccount", testDeleteAccount),
   ("testRejectAccount", testRejectAccount),
-  ("testCreateLoginLink", testCreateLoginLink),
   ("testListAllAccounts", testListAllAccounts),
   ("testFilterAccounts", testFilterAccounts),
 ]
@@ -54,6 +53,8 @@ static var allTests = [
   ("testRetrieveCustomer", testRetrieveCustomer),
   ("testUpdateCustomer", testUpdateCustomer),
   ("testAddNewSourceForCustomer", testAddNewSourceForCustomer),
+  ("testAddNewCardSourceForCustomer", testAddNewCardSourceForCustomer),
+  ("testAddNewBankAccountSourceForCustomer", testAddNewBankAccountSourceForCustomer),
   ("testDeleteDiscount", testDeleteDiscount),
   ("testDeleteCustomer", testDeleteCustomer),
   ("testRetrieveAllCustomers", testRetrieveAllCustomers),

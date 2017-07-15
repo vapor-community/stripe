@@ -34,7 +34,7 @@ class DisputeTests: XCTestCase {
                                                            source: nil,
                                                            metadata: nil).serializedResponse()
             
-            let card: [String: Node] = ["number":"4000 0000 0000 0259", "cvc":123,"exp_month":10, "exp_year":2020]
+            let card = Node(["number":"4000 0000 0000 0259", "cvc":123,"exp_month":10, "exp_year":2020])
             
             let sourceId = try drop?.stripe?.sources.createNewSource(sourceType: .card,
                                                                  source: card,

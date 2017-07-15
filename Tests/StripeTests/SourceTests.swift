@@ -23,7 +23,7 @@ class SourceTests: XCTestCase {
         do {
             drop = try self.makeDroplet()
             
-            let card: [String: Node] = ["number":"4242 4242 4242 4242", "cvc":123,"exp_month":10, "exp_year":2018]
+            let card = Node(["number":"4242 4242 4242 4242", "cvc":123,"exp_month":10, "exp_year":2018])
             
             sourceId = try drop?.stripe?.sources.createNewSource(sourceType: .card,
                                                                 source: card,
