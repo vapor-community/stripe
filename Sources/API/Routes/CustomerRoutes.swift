@@ -147,8 +147,87 @@ public final class CustomerRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func addNewSource(forCustomer customerId: String, inConnectAccount account: String?, source: String) throws -> StripeRequest<Card> {
+    public func addNewSource(forCustomer customerId: String, inConnectAccount account: String?, source: String) throws -> StripeRequest<Source> {
         let body = try Node(node: ["source": source])
+        
+        var headers: [HeaderKey: String]?
+        
+        // Check if we have an account to set it to
+        if let account = account {
+            headers = [StripeHeader.Account : account]
+        }
+        
+        return try StripeRequest(client: self.client, method: .post, route: .customerSources(customerId), query: [:], body: Body.data(body.formURLEncoded()), headers: headers)
+    }
+    
+    /**
+     Adds a new bank account source for the customer.
+     
+     - parameter customerId: The customer object to add the source to
+     - parameter account:    A connect account to add the customer to
+     - parameter source:     The bank account token or source token or a dictionary with bank account details.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
+    
+    public func addNewBankAccountSource(forCustomer customerId: String, inConnectAccount account: String?, source: Node, metadata: Node? = nil) throws -> StripeRequest<BankAccount> {
+        
+        var body = Node([:])
+        
+        if let sourceString = source.string {
+            body["source"] = Node(sourceString)
+        }
+        
+        if let bankDetails = source.object {
+            for (key,value) in bankDetails {
+                body["source[\(key)]"] = value
+            }
+        }
+        
+        if let metadata = metadata?.object {
+            for (key, value) in metadata {
+                body["metadata[\(key)]"] = value
+            }
+        }
+        
+        var headers: [HeaderKey: String]?
+        
+        // Check if we have an account to set it to
+        if let account = account {
+            headers = [StripeHeader.Account : account]
+        }
+        
+        return try StripeRequest(client: self.client, method: .post, route: .customerSources(customerId), query: [:], body: Body.data(body.formURLEncoded()), headers: headers)
+    }
+    
+    /**
+     Adds a new card source for the customer.
+     
+     - parameter customerId: The customer object to add the source to
+     - parameter account:    A connect account to add the customer to
+     - parameter source:     The card token or source token or a dictionary with card details.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
+    
+    public func addNewCardSource(forCustomer customerId: String, inConnectAccount account: String?, source: Node, metadata: Node? = nil) throws -> StripeRequest<Card> {
+        var body = Node([:])
+        
+        if let sourceString = source.string {
+            body["source"] = Node(sourceString)
+        }
+        
+        if let cardDetails = source.object {
+            for (key,value) in cardDetails {
+                body["source[\(key)]"] = value
+            }
+        }
+        
+        if let metadata = metadata?.object {
+            for (key, value) in metadata {
+                body["metadata[\(key)]"] = value
+            }
+        }
         
         var headers: [HeaderKey: String]?
         

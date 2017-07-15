@@ -13,6 +13,7 @@ import XCTest
 @testable import Models
 @testable import API
 @testable import Errors
+@testable import Helpers
 
 class CustomerTests: XCTestCase {
         
@@ -196,31 +197,153 @@ class CustomerTests: XCTestCase {
     
     func testAddNewSourceForCustomer() throws {
         do {
-            let paymentTokenSource = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
-                                                                         expirationMonth: 10,
-                                                                         expirationYear: 2018,
-                                                                         cvc: 123,
-                                                                         name: "Test Card",
-                                                                         customer: nil,
-                                                                         currency: nil)
-                                                                         .serializedResponse().id ?? ""
+            let card = Node(["number":"4242 4242 4242 4242", "cvc":123,"exp_month":10, "exp_year":2018])
             
-            let newCardToken = try drop?.stripe?.customer.addNewSource(forCustomer: customerId,
-                                                                          inConnectAccount: nil,
-                                                                          source: paymentTokenSource)
-                                                                          .serializedResponse()
+            let cardSourceToken = try drop?.stripe?.sources.createNewSource(sourceType: .card,
+                                                                            source: card,
+                                                                            amount: nil,
+                                                                            currency: .usd,
+                                                                            flow: nil,
+                                                                            owner: nil,
+                                                                            redirectReturnUrl: nil,
+                                                                            token: nil,
+                                                                            usage: nil).serializedResponse().id ?? ""
             
-            XCTAssertNotNil(newCardToken)
+            let newSource = try drop?.stripe?.customer.addNewSource(forCustomer: customerId,
+                                                                  inConnectAccount: nil,
+                                                                  source: cardSourceToken).serializedResponse()
+            
+            XCTAssertNotNil(newSource)
             
             let updatedCustomer = try drop?.stripe?.customer.retrieve(customer: customerId).serializedResponse()
             
             XCTAssertNotNil(updatedCustomer)
             
-            let customerCardSource = updatedCustomer?.sources?.items?.filter { $0.id == newCardToken?.id}.first
+            let customerCardSource = updatedCustomer?.sources?.items?.filter { $0["id"]?.string == newSource?.id}.first
             
             XCTAssertNotNil(customerCardSource)
             
-            XCTAssertEqual(newCardToken?.id, customerCardSource?.id)
+            XCTAssertEqual(newSource?.id, customerCardSource?["id"]?.string)
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+    
+    func testAddNewCardSourceForCustomer() throws {
+        do {
+            let card = Node( [
+                "object":"card",
+                "exp_month":10,
+                "exp_year": 2020,
+                "number": "4242 4242 4242 4242",
+                "address_city": "anytown",
+                "address_country": "US",
+                "address_line1": "123 main street",
+                "address_line2": "apt. 0",
+                "address_state": "NY",
+                "address_zip": "12345",
+                "currency": "usd",
+                "cvc": 123,
+                "default_for_currency": true,
+                "name": "Mr. Vapor Codes"
+                ])
+            
+            let newCard = try drop?.stripe?.customer.addNewCardSource(forCustomer: customerId,
+                                                                          inConnectAccount: nil,
+                                                                          source: card)
+                                                                          .serializedResponse()
+            
+            XCTAssertNotNil(newCard)
+            
+            let updatedCustomer = try drop?.stripe?.customer.retrieve(customer: customerId).serializedResponse()
+            
+            XCTAssertNotNil(updatedCustomer)
+            
+            let customerCardSource = updatedCustomer?.sources?.cardSources.filter { $0.id == newCard?.id}.first
+            
+            XCTAssertNotNil(customerCardSource)
+            
+            XCTAssertEqual(newCard?.id, customerCardSource?.id)
+        }
+        catch let error as StripeError {
+            
+            switch error {
+            case .apiConnectionError:
+                XCTFail(error.localizedDescription)
+            case .apiError:
+                XCTFail(error.localizedDescription)
+            case .authenticationError:
+                XCTFail(error.localizedDescription)
+            case .cardError:
+                XCTFail(error.localizedDescription)
+            case .invalidRequestError:
+                XCTFail(error.localizedDescription)
+            case .rateLimitError:
+                XCTFail(error.localizedDescription)
+            case .validationError:
+                XCTFail(error.localizedDescription)
+            case .invalidSourceType:
+                XCTFail(error.localizedDescription)
+            default:
+                XCTFail(error.localizedDescription)
+            }
+        }
+        catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+    
+    func testAddNewBankAccountSourceForCustomer() throws {
+        do {
+            let bankDetails: Node = Node([
+                "object":"bank_account",
+                "account_number": "000123456789",
+                "country": "US",
+                "currency": "usd",
+                "account_holder_name": "Mr. Vapor",
+                "account_holder_type": "individual",
+                "routing_number": "110000000"
+            ])
+            
+            let newBankToken = try drop?.stripe?.customer.addNewBankAccountSource(forCustomer: customerId,
+                                                                           inConnectAccount: nil,
+                                                                           source: bankDetails).serializedResponse()
+            
+            XCTAssertNotNil(newBankToken)
+            
+            let updatedCustomer = try drop?.stripe?.customer.retrieve(customer: customerId).serializedResponse()
+            
+            XCTAssertNotNil(updatedCustomer)
+            
+            let customerBankAccountSource = updatedCustomer?.sources?.bankSources.filter { $0.id == newBankToken?.id}.first
+            
+            XCTAssertNotNil(customerBankAccountSource)
+            
+            XCTAssertEqual(newBankToken?.id, customerBankAccountSource?.id)
         }
         catch let error as StripeError {
             
