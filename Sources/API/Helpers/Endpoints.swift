@@ -123,6 +123,13 @@ internal enum API {
     case accountsReject(String)
     case accountsLoginLink(String)
     
+    /**
+     DISPUTES
+     A dispute occurs when a customer questions your charge with their bank or credit card company.
+     */
+    case dispute
+    case disputes(String)
+    case closeDispute(String)
     
     
     var endpoint: String {
@@ -166,6 +173,10 @@ internal enum API {
         case .accounts(let id): return APIBase + APIVersion + "accounts/\(id)"
         case .accountsReject(let id): return APIBase + APIVersion + "accounts/\(id)/reject"
         case .accountsLoginLink(let id): return APIBase + APIVersion + "accounts/\(id)/login_links"
+            
+        case .dispute: return APIBase + APIVersion + "disputes"
+        case .disputes(let id): return APIBase + APIVersion + "disputes/\(id)"
+        case .closeDispute(let id): return APIBase + APIVersion + "disputes/\(id)/close"
         }
     }
 }

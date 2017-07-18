@@ -11,7 +11,6 @@ static var allTests = [
   ("testUpdateAccount", testUpdateAccount),
   ("testDeleteAccount", testDeleteAccount),
   ("testRejectAccount", testRejectAccount),
-  ("testCreateLoginLink", testCreateLoginLink),
   ("testListAllAccounts", testListAllAccounts),
   ("testFilterAccounts", testFilterAccounts),
 ]
@@ -54,10 +53,22 @@ static var allTests = [
   ("testRetrieveCustomer", testRetrieveCustomer),
   ("testUpdateCustomer", testUpdateCustomer),
   ("testAddNewSourceForCustomer", testAddNewSourceForCustomer),
+  ("testAddNewCardSourceForCustomer", testAddNewCardSourceForCustomer),
+  ("testAddNewBankAccountSourceForCustomer", testAddNewBankAccountSourceForCustomer),
   ("testDeleteDiscount", testDeleteDiscount),
   ("testDeleteCustomer", testDeleteCustomer),
   ("testRetrieveAllCustomers", testRetrieveAllCustomers),
   ("testFilterCustomers", testFilterCustomers),
+]
+}
+
+extension DisputeTests {
+static var allTests = [
+  ("testRetrieveDispute", testRetrieveDispute),
+  ("testUpdateDispute", testUpdateDispute),
+  ("testCloseDispute", testCloseDispute),
+  ("testListAllDisputes", testListAllDisputes),
+  ("testFilterDisputes", testFilterDisputes),
 ]
 }
 
@@ -128,6 +139,7 @@ XCTMain([
   testCase(ChargeTests.allTests),
   testCase(CouponTests.allTests),
   testCase(CustomerTests.allTests),
+  testCase(DisputeTests.allTests),
   testCase(PlanTests.allTests),
   testCase(ProviderTests.allTests),
   testCase(RefundTests.allTests),
