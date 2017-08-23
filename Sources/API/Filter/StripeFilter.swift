@@ -100,7 +100,6 @@ public final class StripeFilter {
     */
     public var balanceType: BalanceType?
     
-    
     /**
      The status of the subscriptions to retrieve.
      */
@@ -110,6 +109,37 @@ public final class StripeFilter {
      The ID of the plan whose subscriptions will be retrieved.
      */
     public var plan: Node?
+    
+    /**
+     Only return SKUs that have the specified key/value pairs in this partially constructed dictionary.
+     */
+    public var attributes: Node?
+    
+    /**
+     Only return SKUs that are active or inactive
+     Also used for products.
+     */
+    public var active: Node?
+    
+    /**
+     Only return SKUs that are either in stock or out of stock
+     */
+    public var inStock: Node?
+    
+    /**
+     The ID of the product whose SKUs will be retrieved.
+     */
+    public var product: Node?
+    
+    /**
+     Only return products that can be shipped (i.e., physical, not digital products).
+     */
+    public var shippable: Node?
+    
+    /**
+     Only return products with the given url.
+     */
+    public var url: Node?
     
     internal func createBody() throws -> Node {
         var node = Node([:])
@@ -123,7 +153,7 @@ public final class StripeFilter {
             }
         }
         
-        if let value = self.created {
+        if let value = self.availableOn {
             if let value = value.object {
                 for (key, value) in value {
                     node["available_on[\(key)]"] = value
@@ -176,6 +206,20 @@ public final class StripeFilter {
         
         if let value = self.plan {
             node["plan"] = value
+        }
+        
+        if let value = attributes?.object {
+            for (key, value) in value {
+                node["attributes[\(key)]"] = value
+            }
+        }
+        
+        if let shippable = self.shippable {
+            node["shippable"] = shippable
+        }
+        
+        if let url = self.url {
+            node["url"] = url
         }
         
         return node
