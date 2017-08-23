@@ -15,7 +15,7 @@ extension XCTestCase {
     func makeDroplet() throws -> Droplet {
         let config = Config([
             "stripe": [
-                "apiKey": "sk_test_O4dmN96uthPP7tvR8dNkPWZg" // Add your own API Key for tests
+                "apiKey": "sk_test_Wxn8UzIs9dkIR4qJYAtHhvY8" // Add your own API Key for tests
             ],
         ])
         try config.addProvider(Stripe.Provider.self)
