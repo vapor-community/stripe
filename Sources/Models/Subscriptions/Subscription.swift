@@ -34,7 +34,7 @@ public final class Subscription: StripeModelProtocol {
     public private(set) var trialStart: Date?
     
     /**
-     Only these values ore mutable/updatable
+     Only these values are mutable/updatable
      https://stripe.com/docs/api/curl#update_subscription
      */
     public private(set) var applicationFeePercent: Double?
