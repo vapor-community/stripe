@@ -98,6 +98,16 @@ static var allTests = [
 ]
 }
 
+extension SKUTests {
+static var allTests = [
+  ("testRetrieveSKU", testRetrieveSKU),
+  ("testUpdateSKU", testUpdateSKU),
+  ("testDeleteSKU", testDeleteSKU),
+  ("testListAllSKUs", testListAllSKUs),
+  ("testFilterSKUs", testFilterSKUs),
+]
+}
+
 extension SourceTests {
 static var allTests = [
   ("testRetrieveSource", testRetrieveSource),
@@ -143,6 +153,7 @@ XCTMain([
   testCase(PlanTests.allTests),
   testCase(ProviderTests.allTests),
   testCase(RefundTests.allTests),
+  testCase(SKUTests.allTests),
   testCase(SourceTests.allTests),
   testCase(SubscriptionItemTests.allTests),
   testCase(SubscriptionTests.allTests),
