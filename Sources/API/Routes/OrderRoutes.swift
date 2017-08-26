@@ -39,8 +39,8 @@ public final class OrderRoutes {
         
         if let items = items?.array {
             
-            for x in 0..<items.count {
-                body["items[\(x)]"] = Node(items[x])
+            for(index, item) in items.enumerated() {
+                body["items[\(index)]"] = Node(item)
             }
         }
         
@@ -221,8 +221,8 @@ public final class OrderRoutes {
         
         if let items = items?.array {
             
-            for x in 0..<items.count {
-                body["items[\(x)]"] = Node(items[x])
+            for(index, item) in items.enumerated() {
+                body["items[\(index)]"] = Node(item)
             }
         }
         
