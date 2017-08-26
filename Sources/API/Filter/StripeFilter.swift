@@ -141,6 +141,11 @@ public final class StripeFilter {
      */
     public var url: Node?
     
+    /**
+     Only return SKUs with the given IDs.
+     */
+    public var skuIds: Node?
+    
     internal func createBody() throws -> Node {
         var node = Node([:])
         if let value = self.created {
@@ -220,6 +225,10 @@ public final class StripeFilter {
         
         if let url = self.url {
             node["url"] = url
+        }
+        
+        if let skuids = skuIds?.array {
+            node["id"] = Node(skuids)
         }
         
         return node
