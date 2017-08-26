@@ -124,3 +124,7 @@ XCTMain([
 [stripe_home]: http://stripe.com "Stripe"
 [stripe_api]: https://stripe.com/docs/api "Stripe API Endpoints"
 [sourcery]: https://github.com/krzysztofzablocki/Sourcery "Sourcery"
+
+## License
+
+Vapor Stripe Provider is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
