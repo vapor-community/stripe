@@ -60,17 +60,22 @@ public final class SubscriptionRoutes {
         if let plan = plan {
             body["plan"] = Node(plan)
         }
+        
         if let appFeePercent = applicationFeePercent {
             body["application_fee_percent"] = Node(appFeePercent)
         }
+        
         if let couponId = couponId {
             body["coupon"] = Node(couponId)
         }
-        if let items = items?.object {
-            for (key,value) in items {
-                body["items[\(key)"] = value
+        
+        if let items = items?.array {
+            
+            for x in 0..<items.count {
+                body["items[\(x)]"] = Node(items[x])
             }
         }
+        
         if let quantity = quantity {
             body["quantity"] = Node(quantity)
         }
@@ -154,20 +159,26 @@ public final class SubscriptionRoutes {
         if let plan = plan {
             body["plan"] = Node(plan)
         }
+        
         if let appFeePercent = applicationFeePercent {
             body["application_fee_percent"] = Node(appFeePercent)
         }
+        
         if let couponId = couponId {
             body["coupon"] = Node(couponId)
         }
-        if let items = items?.object {
-            for (key,value) in items {
-                body["items[\(key)"] = value
+        
+        if let items = items?.array {
+            
+            for x in 0..<items.count {
+                body["items[\(x)]"] = Node(items[x])
             }
         }
+        
         if let prorate = prorate {
             body["prorate"] = Node(prorate)
         }
+        
         if let quantity = quantity {
             body["quantity"] = Node(quantity)
         }
