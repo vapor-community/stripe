@@ -60,17 +60,22 @@ public final class SubscriptionRoutes {
         if let plan = plan {
             body["plan"] = Node(plan)
         }
+        
         if let appFeePercent = applicationFeePercent {
             body["application_fee_percent"] = Node(appFeePercent)
         }
+        
         if let couponId = couponId {
             body["coupon"] = Node(couponId)
         }
-        if let items = items?.object {
-            for (key,value) in items {
-                body["items[\(key)"] = value
+        
+        if let items = items?.array {
+            
+            for(index, item) in items.enumerated() {
+                body["items[\(index)]"] = Node(item)
             }
         }
+        
         if let quantity = quantity {
             body["quantity"] = Node(quantity)
         }
@@ -154,20 +159,26 @@ public final class SubscriptionRoutes {
         if let plan = plan {
             body["plan"] = Node(plan)
         }
+        
         if let appFeePercent = applicationFeePercent {
             body["application_fee_percent"] = Node(appFeePercent)
         }
+        
         if let couponId = couponId {
             body["coupon"] = Node(couponId)
         }
-        if let items = items?.object {
-            for (key,value) in items {
-                body["items[\(key)"] = value
+        
+        if let items = items?.array {
+            
+            for(index, item) in items.enumerated() {
+                body["items[\(index)]"] = Node(item)
             }
         }
+        
         if let prorate = prorate {
             body["prorate"] = Node(prorate)
         }
+        
         if let quantity = quantity {
             body["quantity"] = Node(quantity)
         }

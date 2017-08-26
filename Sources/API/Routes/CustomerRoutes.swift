@@ -384,7 +384,8 @@ public final class CustomerRoutes {
     
     /**
      Delete a customer discount
-     Permanently deletes a customer. It cannot be undone. Also immediately cancels any active subscriptions on the customer.
+     Removes the currently applied discount on a customer.
+     
      
      - parameter customerId: The Customer's ID
      
@@ -395,8 +396,8 @@ public final class CustomerRoutes {
     }
     
     /**
-     Delete a customer discount
-     Removes the currently applied discount on a customer.
+     Delete a customer
+     Permanently deletes a customer. It cannot be undone. Also immediately cancels any active subscriptions on the customer.
      
      - parameter customerId: The Customer's ID
      

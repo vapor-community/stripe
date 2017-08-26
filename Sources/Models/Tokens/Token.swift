@@ -33,35 +33,22 @@ public final class Token: StripeModelProtocol {
         self.created = try node.get("created")
         self.isLive = try node.get("livemode")
         self.isUsed = try node.get("used")
-        
-        if let _ = node["card"] {
-            self.card = try node.get("card")
-        }
-        
-        if let _ = node["bank_account"] {
-            self.bankAccount = try node.get("bank_account")
-        }
+        self.card = try node.get("card")
+        self.bankAccount = try node.get("bank_account")
     }
     
     public func makeNode(in context: Context?) throws -> Node {
-        var object: [String: Any?] = [
+        let object: [String: Any?] = [
             "id": self.id,
             "object": self.object,
             "type": self.type,
             "client_ip": self.clientIp,
             "created": self.created,
             "livemode": self.isLive,
-            "used": self.isUsed
+            "used": self.isUsed,
+            "card": self.card,
+            "banl_account": self.bankAccount
         ]
-        
-        if let value = self.card {
-            object["card"] = value
-        }
-        
-        if let value = self.bankAccount {
-            object["bank_account"] = value
-        }
-        
         return try Node(node: object)
     }
     

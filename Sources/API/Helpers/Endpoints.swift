@@ -14,7 +14,7 @@ internal let APIVersion = "v1/"
 
 internal let DefaultHeaders = [
     HeaderKey.contentType: "application/x-www-form-urlencoded",
-    StripeHeader.Version: "2017-06-05"
+    StripeHeader.Version: "2017-08-15"
 ]
 
 internal struct StripeHeader {
@@ -131,6 +131,35 @@ internal enum API {
     case disputes(String)
     case closeDispute(String)
     
+    /**
+     SKUS
+     Stores representations of stock keeping units. SKUs describe specific product variations.
+     */
+    case sku
+    case skus(String)
+    
+    /**
+     PRODUCTS
+     Store representations of products you sell in product objects, used in conjunction with SKUs.
+     */
+    case product
+    case products(String)
+    
+    /**
+     ORDERS
+     The purchase of previously defined products
+     */
+    case order
+    case orders(String)
+    case ordersPay(String)
+    case ordersReturn(String)
+    
+    /**
+     RETURNS
+     A return represents the full or partial return of a number of order items.
+     */
+    case orderReturn
+    case orderReturns(String)
     
     var endpoint: String {
         switch self {
@@ -177,6 +206,20 @@ internal enum API {
         case .dispute: return APIBase + APIVersion + "disputes"
         case .disputes(let id): return APIBase + APIVersion + "disputes/\(id)"
         case .closeDispute(let id): return APIBase + APIVersion + "disputes/\(id)/close"
+            
+        case .sku: return APIBase + APIVersion + "skus"
+        case .skus(let id): return APIBase + APIVersion + "skus/\(id)"
+            
+        case .product: return APIBase + APIVersion + "products"
+        case .products(let id): return APIBase + APIVersion + "products/\(id)"
+            
+        case .order: return APIBase + APIVersion + "orders"
+        case .orders(let id): return APIBase + APIVersion + "orders/\(id)"
+        case .ordersPay(let id): return APIBase + APIVersion + "orders/\(id)/pay"
+        case .ordersReturn(let id): return APIBase + APIVersion + "orders/\(id)/returns"
+            
+        case .orderReturn: return APIBase + APIVersion + "order_returns"
+        case .orderReturns(let id): return APIBase + APIVersion + "order_returns/\(id)"
         }
     }
 }

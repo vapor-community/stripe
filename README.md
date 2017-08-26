@@ -116,10 +116,11 @@ XCTMain([
     * [x] Listing All Accounts (With filters)
     * [x] Rejecting accounts
     * [x] Creating dashboard login link for express accounts
+* [x] Orders
+* [x] Order Items
+* [x] Products
 * [ ] Disputes    
 * [ ] Cards
-* [ ] Orders
-* [ ] Order Items
 
 [stripe_home]: http://stripe.com "Stripe"
 [stripe_api]: https://stripe.com/docs/api "Stripe API Endpoints"

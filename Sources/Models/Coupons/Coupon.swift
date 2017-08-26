@@ -35,8 +35,6 @@ public final class Coupon: StripeModelProtocol {
      */
     public private(set) var metadata: Node?
     
-    public init() {}
-    
     public init(node: Node) throws {
         self.id = try node.get("id")
         self.amountOff = try node.get("amount_off")
