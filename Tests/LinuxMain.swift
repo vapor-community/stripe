@@ -72,6 +72,25 @@ static var allTests = [
 ]
 }
 
+extension OrderReturnTests {
+static var allTests = [
+  ("testRetrieveOrderReturn", testRetrieveOrderReturn),
+  ("testListAllOrderReturns", testListAllOrderReturns),
+  ("testFilterOrderReturns", testFilterOrderReturns),
+]
+}
+
+extension OrderTests {
+static var allTests = [
+  ("testRetrieveOrder", testRetrieveOrder),
+  ("testUpdateOrder", testUpdateOrder),
+  ("testPayOrder", testPayOrder),
+  ("testListAllOrders", testListAllOrders),
+  ("testFilterOrders", testFilterOrders),
+  ("testReturnOrder", testReturnOrder),
+]
+}
+
 extension PlanTests {
 static var allTests = [
   ("testCreatePlan", testCreatePlan),
@@ -80,6 +99,16 @@ static var allTests = [
   ("testDeletePlan", testDeletePlan),
   ("testListAllPlans", testListAllPlans),
   ("testFilterPlans", testFilterPlans),
+]
+}
+
+extension ProductTests {
+static var allTests = [
+  ("testRetrieveProduct", testRetrieveProduct),
+  ("testUpdateProduct", testUpdateProduct),
+  ("testDeleteProduct", testDeleteProduct),
+  ("testListAllProducts", testListAllProducts),
+  ("testFilterProducts", testFilterProducts),
 ]
 }
 
@@ -150,7 +179,10 @@ XCTMain([
   testCase(CouponTests.allTests),
   testCase(CustomerTests.allTests),
   testCase(DisputeTests.allTests),
+  testCase(OrderReturnTests.allTests),
+  testCase(OrderTests.allTests),
   testCase(PlanTests.allTests),
+  testCase(ProductTests.allTests),
   testCase(ProviderTests.allTests),
   testCase(RefundTests.allTests),
   testCase(SKUTests.allTests),
