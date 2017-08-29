@@ -10,9 +10,9 @@ import XCTest
 
 @testable import Stripe
 @testable import Vapor
-@testable import Models
-@testable import API
-@testable import Errors
+
+
+
 
 class ChargeTests: XCTestCase {
     
