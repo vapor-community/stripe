@@ -11,10 +11,10 @@ import Foundation
 
 @testable import Stripe
 @testable import Vapor
-@testable import Helpers
-@testable import API
-@testable import Models
-@testable import Errors
+
+
+
+
 @testable import Random
 
 class PlanTests: XCTestCase {

@@ -10,10 +10,10 @@ import XCTest
 
 @testable import Stripe
 @testable import Vapor
-@testable import Helpers
-@testable import API
-@testable import Models
-@testable import Errors
+
+
+
+
 
 class CouponTests: XCTestCase {
     var drop: Droplet?

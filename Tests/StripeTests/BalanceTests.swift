@@ -10,8 +10,8 @@ import XCTest
 
 @testable import Stripe
 @testable import Vapor
-@testable import API
-@testable import Errors
+
+
 
 class BalanceTests: XCTestCase {
 
