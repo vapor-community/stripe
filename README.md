@@ -119,7 +119,7 @@ XCTMain([
 * [x] Orders
 * [x] Order Items
 * [x] Products
-* [ ] Disputes    
+* [x] Disputes    
 * [ ] Cards
 
 [stripe_home]: http://stripe.com "Stripe"
