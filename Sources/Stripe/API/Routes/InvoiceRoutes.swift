@@ -91,4 +91,38 @@ public final class InvoiceRoutes {
         return try StripeRequest(client: self.client, method: .post, route: .invoice(invoiceId), body: nil, headers: nil)
     }
     
+    /**
+     When retrieving an invoice, you’ll get a lines property containing the total count of line items and the first handful 
+     of those items. There is also a URL where you can retrieve the full (paginated) list of line items.
+     
+     - parameter invoiceId: The Invoice ID to fetch
+     - parameter customer:  In the case of upcoming invoices, the customer of the upcoming invoice is required. In other 
+                            cases it is ignored.
+     - parameter coupon:    For upcoming invoices, preview applying this coupon to the invoice. If a subscription or 
+                            subscription_items is provided, the invoice returned will preview updating or creating a 
+                            subscription with that coupon. Otherwise, it will preview applying that coupon to the customer 
+                            for the next upcoming invoice from among the customer’s subscriptions. Otherwise this parameter 
+                            is ignored. This will be unset if you POST an empty value.
+     - parameter filter:    Parameters used to filter the results
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+    */
+    
+    public func listItems(forInvoice invoiceId: String, customer: String? = nil, coupon: String? = nil, filter: StripeFilter? = nil) throws -> StripeRequest<InvoiceLineGroup> {
+        var query = [String : NodeRepresentable]()
+        if let data = try filter?.createQuery() {
+            query = data
+        }
+        
+        if let customer = customer {
+            query["customer"] = customer
+        }
+        
+        if let coupon = coupon {
+            query["coupon"] = coupon
+        }
+        
+        return try StripeRequest(client: self.client, method: .get, route: .invoiceLines(invoiceId), query: query, body: nil, headers: nil)
+    }
+    
 }
