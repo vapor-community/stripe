@@ -35,6 +35,8 @@ public final class InvoiceRoutes {
      - parameter metadata:            Aditional metadata info
      - parameter taxPercent:          The percent tax rate applied to the invoice, represented as a decimal number.
      - parameter statementDescriptor: Extra information about a charge for the customer’s credit card statement.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
     public func create(forCustomer customer: String, subscription: String? = nil, withFee fee: Int? = nil, toAccount account: String? = nil, description: String? = nil, metadata: Node? = nil, taxPercent: Double? = nil, statementDescriptor: String? = nil) throws -> StripeRequest<Invoice> {
@@ -75,9 +77,18 @@ public final class InvoiceRoutes {
             }
         }
         
-        return try StripeRequest(client: self.client, method: .post, route: .tokens, body: Body.data(body.formURLEncoded()), headers: headers)
+        return try StripeRequest(client: self.client, method: .post, route: .invoices, body: Body.data(body.formURLEncoded()), headers: headers)
     }
     
-    
+    /**
+     Retrieves the invoice with the given ID.
+     
+     - parameter invoice: The Invoice ID to fetch
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+    */
+    public func fetch(invoice invoiceId: String) throws -> StripeRequest<Invoice> {
+        return try StripeRequest(client: self.client, method: .post, route: .invoice(invoiceId), body: nil, headers: nil)
+    }
     
 }
