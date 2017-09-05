@@ -246,4 +246,24 @@ public final class InvoiceRoutes {
         
         return try StripeRequest(client: self.client, method: .post, route: .payInvoice(invoiceId), body: Body.data(body.formURLEncoded()), headers: nil)
     }
+    
+    /**
+     List all Invoices
+     You can list all invoices, or list the invoices for a specific customer. The invoices are returned sorted by creation date, 
+     with the most recently created invoices appearing first.
+     
+     - parameter filter: A Filter item to pass query parameters when fetching results
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
+    public func listAll(customer: String? = nil, filter: StripeFilter?) throws -> StripeRequest<InvoiceList> {
+        var query = [String : NodeRepresentable]()
+        if let customer = customer {
+            query["customer"] = customer
+        }
+        if let data = try filter?.createQuery() {
+            query = data
+        }
+        return try StripeRequest(client: self.client, method: .get, route: .invoices, query: query, body: nil, headers: nil)
+    }
 }
