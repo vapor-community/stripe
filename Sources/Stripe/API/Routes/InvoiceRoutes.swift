@@ -140,6 +140,8 @@ public final class InvoiceRoutes {
                                 subscription nor subscription_items is provided, you will retrieve the next upcoming invoice from among the 
                                 customer’s subscriptions.
      - parameter filter:        Parameters used to filter the result
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
     public func upcomingInvoice(forCustomer customerId: String, coupon: String? = nil, subscription: String? = nil, filter: StripeFilter? = nil) throws -> StripeRequest<Invoice> {
         var query = [String : NodeRepresentable]()
@@ -160,5 +162,67 @@ public final class InvoiceRoutes {
         return try StripeRequest(client: self.client, method: .get, route: .upcomingInvoices, query: query, body: nil, headers: nil)
     }
     
-    
+    /**
+     Until an invoice is paid, it is marked as open (closed=false). If you’d like to stop Stripe from attempting to collect payment on an 
+     invoice or would simply like to close the invoice out as no longer owed by the customer, you can update the closed parameter.
+     
+     - parameter invoiceId:           The ID of the Invoice to update
+     - parameter closed:              Boolean representing whether an invoice is closed or not. To close an invoice, pass true.
+     - parameter forgiven:            Boolean representing whether an invoice is forgiven or not. To forgive an invoice, pass true. 
+                                      Forgiving an invoice instructs us to update the subscription status as if the invoice were successfully paid. 
+                                      Once an invoice has been forgiven, it cannot be unforgiven or reopened.
+     - parameter applicationFee:      A fee in cents that will be applied to the invoice and transferred to the application owner’s Stripe account. 
+                                      The request must be made with an OAuth key or the Stripe-Account header in order to take an application fee. 
+                                      For more information, see the application fees documentation.
+     - parameter account:             The account to transfer the fee to
+     - parameter description:         A description for the invoice
+     - parameter metadata:            Aditional metadata info
+     - parameter taxPercent:          The percent tax rate applied to the invoice, represented as a decimal number. The tax rate of an attempted, 
+                                      paid or forgiven invoice cannot be changed.
+     - parameter statementDescriptor: Extra information about a charge for the customer’s credit card statement.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+    */
+    public func update(invoice invoiceId: String, closed: Bool? = nil, forgiven: Bool? = nil, applicationFee: Int? = nil, toAccount account: String? = nil, description: String? = nil, metadata: Node? = nil, taxPercent: Double? = nil, statementDescriptor: String? = nil) throws -> StripeRequest<Invoice> {
+        var body = Node([:])
+        // Create the headers
+        var headers: [HeaderKey : String]?
+        if let account = account {
+            headers = [
+                StripeHeader.Account: account
+            ]
+            
+            if let fee = applicationFee {
+                body["application_fee"] = Node(fee)
+            }
+        }
+        
+        if let closed = closed {
+            body["closed"] = Node(closed)
+        }
+        
+        if let forgiven = forgiven {
+            body["forgiven"] = Node(forgiven)
+        }
+        
+        if let description = description {
+            body["description"] = Node(description)
+        }
+        
+        if let taxPercent = taxPercent {
+            body["tax_percent"] = Node(taxPercent)
+        }
+        
+        if let statementDescriptor = statementDescriptor {
+            body["statement_descriptor"] = Node(statementDescriptor)
+        }
+        
+        if let metadata = metadata?.object {
+            for (key, value) in metadata {
+                body["metadata[\(key)]"] = value
+            }
+        }
+        
+        return try StripeRequest(client: self.client, method: .post, route: .invoice(invoiceId), body: Body.data(body.formURLEncoded()), headers: headers)
+    }
 }
