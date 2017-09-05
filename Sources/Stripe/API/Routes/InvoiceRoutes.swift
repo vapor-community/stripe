@@ -125,4 +125,40 @@ public final class InvoiceRoutes {
         return try StripeRequest(client: self.client, method: .get, route: .invoiceLines(invoiceId), query: query, body: nil, headers: nil)
     }
     
+    /**
+     At any time, you can preview the upcoming invoice for a customer. This will show you all the charges that are pending, 
+     including subscription renewal charges, invoice item charges, etc. It will also show you any discount that is applicable 
+     to the customer.
+     
+     - parameter customerId:    The identifier of the customer whose upcoming invoice you’d like to retrieve.
+     - parameter coupon:        The code of the coupon to apply. If subscription or subscription_items is provided, the invoice 
+                                returned will preview updating or creating a subscription with that coupon. Otherwise, it will 
+                                preview applying that coupon to the customer for the next upcoming invoice from among the customer’s 
+                                subscriptions. The invoice can be previewed without a coupon by passing this value as an empty string.
+     - parameter subscription:  The identifier of the subscription for which you’d like to retrieve the upcoming invoice. If not provided, 
+                                but a subscription_items is provided, you will preview creating a subscription with those items. If neither 
+                                subscription nor subscription_items is provided, you will retrieve the next upcoming invoice from among the 
+                                customer’s subscriptions.
+     - parameter filter:        Parameters used to filter the result
+    */
+    public func upcomingInvoice(forCustomer customerId: String, coupon: String? = nil, subscription: String? = nil, filter: StripeFilter? = nil) throws -> StripeRequest<Invoice> {
+        var query = [String : NodeRepresentable]()
+        query["customer"] = customerId
+        
+        if let data = try filter?.createQuery() {
+            query = data
+        }
+        
+        if let coupon = coupon {
+            query["coupon"] = coupon
+        }
+        
+        if let subscription = subscription {
+            query["subscription"] = subscription
+        }
+        
+        return try StripeRequest(client: self.client, method: .get, route: .upcomingInvoices, query: query, body: nil, headers: nil)
+    }
+    
+    
 }
