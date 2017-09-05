@@ -19,6 +19,7 @@ public final class InvoiceRoutes {
     }
     
     /**
+     Create invoice
      If you need to invoice your customer outside the regular billing cycle, you can create an invoice that pulls in all 
      pending invoice items, including prorations. The customer’s billing cycle and regular subscription won’t be affected.
      
@@ -81,6 +82,7 @@ public final class InvoiceRoutes {
     }
     
     /**
+     Fetch an invoice
      Retrieves the invoice with the given ID.
      
      - parameter invoice: The Invoice ID to fetch
@@ -92,6 +94,7 @@ public final class InvoiceRoutes {
     }
     
     /**
+     List items for invoice
      When retrieving an invoice, you’ll get a lines property containing the total count of line items and the first handful 
      of those items. There is also a URL where you can retrieve the full (paginated) list of line items.
      
@@ -126,6 +129,7 @@ public final class InvoiceRoutes {
     }
     
     /**
+     List Upcoming invoice for Customer
      At any time, you can preview the upcoming invoice for a customer. This will show you all the charges that are pending, 
      including subscription renewal charges, invoice item charges, etc. It will also show you any discount that is applicable 
      to the customer.
@@ -163,6 +167,7 @@ public final class InvoiceRoutes {
     }
     
     /**
+     Update Invoice
      Until an invoice is paid, it is marked as open (closed=false). If you’d like to stop Stripe from attempting to collect payment on an 
      invoice or would simply like to close the invoice out as no longer owed by the customer, you can update the closed parameter.
      
@@ -227,6 +232,7 @@ public final class InvoiceRoutes {
     }
     
     /**
+     Pay Invoice
      Stripe automatically creates and then attempts to collect payment on invoices for customers on subscriptions according to your 
      subscriptions settings. However, if you’d like to attempt payment on an invoice out of the normal collection schedule or for some 
      other reason, you can do so.
