@@ -52,7 +52,7 @@ public final class Invoice: StripeModelProtocol {
     
     public private(set) var metadata: Node?
     
-    public private(set) var lines: [InvoiceItem]?
+    public private(set) var lines: [InvoiceLineItem]?
     public private(set) var currency: StripeCurrency?
     
     public init(node: Node) throws {
@@ -93,7 +93,7 @@ public final class Invoice: StripeModelProtocol {
         }
         
         if let lines = node["lines"]?.object, let data = lines["data"]?.array {
-            self.lines = try data.map({ try InvoiceItem(node: $0) })
+            self.lines = try data.map({ try InvoiceLineItem(node: $0) })
         }
         
     }

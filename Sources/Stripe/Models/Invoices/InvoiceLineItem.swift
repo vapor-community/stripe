@@ -1,5 +1,5 @@
 //
-//  InvoiceItem.swift
+//  InvoiceLineItem.swift
 //  Stripe
 //
 //  Created by Anthony Castelli on 9/5/17.
@@ -9,7 +9,7 @@
 import Foundation
 import Vapor
 
-public final class InvoiceItem: StripeModelProtocol {
+public final class InvoiceLineItem: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?

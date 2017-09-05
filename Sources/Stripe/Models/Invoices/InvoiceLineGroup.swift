@@ -13,7 +13,7 @@ public final class InvoiceLineGroup: StripeModelProtocol {
     
     public private(set) var object: String?
     public private(set) var hasMore: Bool?
-    public private(set) var items: [InvoiceItem]?
+    public private(set) var items: [InvoiceLineItem]?
     
     public init(node: Node) throws {
         self.object = try node.get("object")
