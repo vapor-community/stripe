@@ -64,7 +64,7 @@ public final class InvoiceRoutes {
         }
         
         if let taxPercent = taxPercent {
-            body["description"] = Node(taxPercent)
+            body["tax_percent"] = Node(taxPercent)
         }
         
         if let statementDescriptor = statementDescriptor {
