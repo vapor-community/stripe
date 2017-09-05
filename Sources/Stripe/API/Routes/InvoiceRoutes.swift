@@ -225,4 +225,25 @@ public final class InvoiceRoutes {
         
         return try StripeRequest(client: self.client, method: .post, route: .invoice(invoiceId), body: Body.data(body.formURLEncoded()), headers: headers)
     }
+    
+    /**
+     Stripe automatically creates and then attempts to collect payment on invoices for customers on subscriptions according to your 
+     subscriptions settings. However, if you’d like to attempt payment on an invoice out of the normal collection schedule or for some 
+     other reason, you can do so.
+     
+     - parameter invoiceId: The ID of the invoice to pay.
+     - parameter source:    A payment source to be charged. The source must be the ID of a source belonging to the customer associated 
+                            with the invoice being paid.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+    */
+    public func pay(invoice invoiceId: String, source: String? = nil) throws -> StripeRequest<Invoice> {
+        var body = Node([:])
+        
+        if let source = source {
+            body["source"] = Node(source)
+        }
+        
+        return try StripeRequest(client: self.client, method: .post, route: .payInvoice(invoiceId), body: Body.data(body.formURLEncoded()), headers: nil)
+    }
 }
