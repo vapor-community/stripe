@@ -130,4 +130,17 @@ public final class InvoiceItemRoutes {
         return try StripeRequest(client: self.client, method: .post, route: .invoiceItem(invoiceItemId), body: Body.data(body.formURLEncoded()), headers: nil)
     }
     
+    /**
+     Delete an invoice item
+     Removes an invoice item from the upcoming invoice. Removing an invoice item is only possible before the 
+     invoice it’s attached to is closed.
+     
+     - parameter invoice: The ID of the desired invoice item.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
+    public func delete(invoiceItem invoiceItemId: String) throws -> StripeRequest<DeletedObject> {
+        return try StripeRequest(client: self.client, method: .delete, route: .invoiceItem(invoiceItemId), body: nil, headers: nil)
+    }
+    
 }
