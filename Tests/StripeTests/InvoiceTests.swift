@@ -118,7 +118,7 @@ class InvoiceTests: XCTestCase {
     
     func testCreatingInvoice() throws {
         do {
-            let object = try drop?.stripe?.invoices.create(
+            let object = try self.drop?.stripe?.invoices.create(
                 forCustomer: self.customerId,
                 subscription: self.subscriptionId
             ).serializedResponse()
@@ -151,8 +151,7 @@ class InvoiceTests: XCTestCase {
     
     func testFetchingInvoice() throws {
         do {
-            print(self.invoiceId)
-            let object = try drop?.stripe?.invoices.fetch(invoice: self.invoiceId).serializedResponse()
+            let object = try self.drop?.stripe?.invoices.fetch(invoice: self.invoiceId).serializedResponse()
             XCTAssertNotNil(object)
         } catch let error as StripeError {
             switch error {
@@ -182,7 +181,7 @@ class InvoiceTests: XCTestCase {
     
     func testFetchingInvoiceItems() throws {
         do {
-            let object = try drop?.stripe?.invoices.listItems(forInvoice: self.invoiceId)
+            let object = try self.drop?.stripe?.invoices.listItems(forInvoice: self.invoiceId)
             XCTAssertNotNil(object)
         } catch let error as StripeError {
             switch error {
@@ -212,7 +211,7 @@ class InvoiceTests: XCTestCase {
     
     func testFetchUpcomingInvoice() throws {
         do {
-            let object = try drop?.stripe?.invoices.upcomingInvoice(forCustomer: self.customerId).serializedResponse()
+            let object = try self.drop?.stripe?.invoices.upcomingInvoice(forCustomer: self.customerId).serializedResponse()
             XCTAssertNotNil(object)
         } catch let error as StripeError {
             switch error {
@@ -242,7 +241,7 @@ class InvoiceTests: XCTestCase {
     
     func testUpdateInvoice() throws {
         do {
-            let object = try drop?.stripe?.invoices.update(
+            let object = try self.drop?.stripe?.invoices.update(
                 invoice: self.invoiceId,
                 description: "Update Invoice"
             ).serializedResponse()
@@ -277,7 +276,7 @@ class InvoiceTests: XCTestCase {
     
     func testListAllInvoices() throws {
         do {
-            let object = try drop?.stripe?.invoices.listAll().serializedResponse()
+            let object = try self.drop?.stripe?.invoices.listAll().serializedResponse()
             XCTAssertNotNil(object)
         } catch let error as StripeError {
             switch error {
