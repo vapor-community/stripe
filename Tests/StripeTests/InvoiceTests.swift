@@ -118,6 +118,12 @@ class InvoiceTests: XCTestCase {
     
     func testCreatingInvoice() throws {
         do {
+            let invoiceItem = try self.drop?.stripe?.invoiceItems.createItem(
+                forCustomer: self.customerId,
+                amount: 10_000, inCurrency: .usd
+            ).serializedResponse().id ?? ""
+            XCTAssertNotNil(invoiceItem)
+            
             let object = try self.drop?.stripe?.invoices.create(
                 forCustomer: self.customerId,
                 subscription: self.subscriptionId
