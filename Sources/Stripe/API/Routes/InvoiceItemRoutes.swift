@@ -143,4 +143,24 @@ public final class InvoiceItemRoutes {
         return try StripeRequest(client: self.client, method: .delete, route: .invoiceItem(invoiceItemId), body: nil, headers: nil)
     }
     
+    /**
+     List all invoice items
+     Returns a list of your invoice items. Invoice items are returned sorted by creation date, with the most 
+     recently created invoice items appearing first.
+     
+     - parameter filter: A Filter item to pass query parameters when fetching results
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
+    public func listAll(customer: String? = nil, filter: StripeFilter?) throws -> StripeRequest<InvoiceItemList> {
+        var query = [String : NodeRepresentable]()
+        if let customer = customer {
+            query["customer"] = customer
+        }
+        if let data = try filter?.createQuery() {
+            query = data
+        }
+        return try StripeRequest(client: self.client, method: .get, route: .invoiceItems, query: query, body: nil, headers: nil)
+    }
+    
 }
