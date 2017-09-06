@@ -262,7 +262,7 @@ public final class InvoiceRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func listAll(customer: String? = nil, filter: StripeFilter?) throws -> StripeRequest<InvoiceList> {
+    public func listAll(customer: String? = nil, filter: StripeFilter? = nil) throws -> StripeRequest<InvoiceList> {
         var query = [String : NodeRepresentable]()
         if let customer = customer {
             query["customer"] = customer
