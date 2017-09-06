@@ -1,4 +1,4 @@
-// Generated using Sourcery 0.7.2 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 0.8.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 import XCTest
@@ -69,6 +69,27 @@ static var allTests = [
   ("testCloseDispute", testCloseDispute),
   ("testListAllDisputes", testListAllDisputes),
   ("testFilterDisputes", testFilterDisputes),
+]
+}
+
+extension InvoiceItemTests {
+static var allTests = [
+  ("testCreatingItem", testCreatingItem),
+  ("testFetchingItem", testFetchingItem),
+  ("testDeletingItem", testDeletingItem),
+  ("testUpdateItem", testUpdateItem),
+  ("testListAllItems", testListAllItems),
+]
+}
+
+extension InvoiceTests {
+static var allTests = [
+  ("testCreatingInvoice", testCreatingInvoice),
+  ("testFetchingInvoice", testFetchingInvoice),
+  ("testFetchingInvoiceItems", testFetchingInvoiceItems),
+  ("testFetchUpcomingInvoice", testFetchUpcomingInvoice),
+  ("testUpdateInvoice", testUpdateInvoice),
+  ("testListAllInvoices", testListAllInvoices),
 ]
 }
 
@@ -179,6 +200,8 @@ XCTMain([
   testCase(CouponTests.allTests),
   testCase(CustomerTests.allTests),
   testCase(DisputeTests.allTests),
+  testCase(InvoiceItemTests.allTests),
+  testCase(InvoiceTests.allTests),
   testCase(OrderReturnTests.allTests),
   testCase(OrderTests.allTests),
   testCase(PlanTests.allTests),
