@@ -94,7 +94,7 @@ public final class InvoiceItemList: StripeModelProtocol {
     
     public private(set) var object: String?
     public private(set) var hasMore: Bool?
-    public private(set) var items: [Invoice]?
+    public private(set) var items: [InvoiceItem]?
     
     public init(node: Node) throws {
         self.object = try node.get("object")
