@@ -78,4 +78,16 @@ public final class InvoiceItemRoutes {
         return try StripeRequest(client: self.client, method: .post, route: .invoiceItems, body: Body.data(body.formURLEncoded()), headers: nil)
     }
 
+    /**
+     Fetch an invoice
+     Retrieves the invoice with the given ID.
+     
+     - parameter invoice: The ID of the desired invoice item.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
+    public func fetch(invoiceItem invoiceItemId: String) throws -> StripeRequest<InvoiceItem> {
+        return try StripeRequest(client: self.client, method: .post, route: .invoiceItem(invoiceItemId), body: nil, headers: nil)
+    }
+    
 }
