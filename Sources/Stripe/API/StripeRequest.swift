@@ -34,7 +34,7 @@ public class StripeRequest<T : StripeModelProtocol> {
                 allHeaders[$0.key] = $0.value
             }
         }
-
+        
         switch method {
         case .get: self.response = try self.httpClient.get(route.endpoint, query: query, allHeaders, body, through: [])
         case .post: self.response = try self.httpClient.post(route.endpoint, query: query, allHeaders, body, through: [])
