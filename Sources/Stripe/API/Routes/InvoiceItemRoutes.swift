@@ -90,4 +90,44 @@ public final class InvoiceItemRoutes {
         return try StripeRequest(client: self.client, method: .post, route: .invoiceItem(invoiceItemId), body: nil, headers: nil)
     }
     
+    /**
+     Update an invoice item
+     Updates the amount or description of an invoice item on an upcoming invoice. Updating an invoice item 
+     is only possible before the invoice it’s attached to is closed.
+     
+     - parameter amount:       The integer amount in cents of the charge to be applied to the upcoming invoice. 
+                               To apply a credit to the customer’s account, pass a negative amount.
+     - parameter description:  An arbitrary string which you can attach to the invoice item. The description is displayed 
+                               in the invoice for easy tracking. This will be unset if you POST an empty value.
+     - parameter discountable: Controls whether discounts apply to this invoice item. Defaults to false for prorations or 
+                               negative invoice items, and true for all other invoice items.
+     - parameter metadata:     A set of key/value pairs that you can attach to an invoice item object. It can be useful for 
+                               storing additional information about the invoice item in a structured format. You can unset 
+                               individual keys if you POST an empty value for that key. You can clear all keys if you POST 
+                               an empty value for metadata.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+    */
+    public func update(invoiceItem invoiceItemId: String, amount: Int, description: String? = nil, discountable: Bool? = nil, metadata: Node? = nil) throws -> StripeRequest<InvoiceItem> {
+        var body = Node([:])
+        
+        body["amount"] = Node(amount)
+        
+        if let description = description {
+            body["description"] = Node(description)
+        }
+        
+        if let discountable = discountable {
+            body["discountable"] = Node(discountable)
+        }
+        
+        if let metadata = metadata?.object {
+            for (key, value) in metadata {
+                body["metadata[\(key)]"] = value
+            }
+        }
+        
+        return try StripeRequest(client: self.client, method: .post, route: .invoiceItem(invoiceItemId), body: Body.data(body.formURLEncoded()), headers: nil)
+    }
+    
 }
