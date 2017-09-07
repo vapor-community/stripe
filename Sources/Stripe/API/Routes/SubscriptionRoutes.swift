@@ -29,7 +29,7 @@ public final class SubscriptionRoutes {
      
      - parameter plan: The identifier of the plan to subscribe the customer to.
      
-     - parameter applicationFeePercent: This represents the percentage of the subscription invoice subtotal that will be transferred to the application owner’s Stripe account.
+     - parameter applicationFeePercent: This represents the percentage of the subscription invoice subtotal that will be transferred to the application owner’s Stripe account. Must be a possitive integer betwee 0 and 100
      
      - parameter coupon: The code of the coupon to apply to this subscription.
      
@@ -51,10 +51,16 @@ public final class SubscriptionRoutes {
      
     */
     
-    public func create(forCustomer customerId: String, plan: String? = nil, applicationFeePercent: Double? = nil, couponId: String? = nil, items: Node? = nil, quantity: Int? = nil, source: Node? = nil, taxPercent: Double? = nil, trialEnd: Date? = nil, trialPeriodDays: Int? = nil, metadata: Node? = nil) throws -> StripeRequest<Subscription> {
+    public func create(forCustomer customerId: String, plan: String? = nil, applicationFeePercent: Int? = nil, ownerAccount: String? = nil, couponId: String? = nil, items: Node? = nil, quantity: Int? = nil, source: Node? = nil, taxPercent: Double? = nil, trialEnd: Date? = nil, trialPeriodDays: Int? = nil, metadata: Node? = nil) throws -> StripeRequest<Subscription> {
+        
+        var headers: [HeaderKey : String]?
+        if let account = ownerAccount {
+            headers = [
+                StripeHeader.Account: account
+            ]
+        }
         
         var body = Node([:])
-        
         body["customer"] = Node(customerId)
         
         if let plan = plan {
@@ -108,7 +114,7 @@ public final class SubscriptionRoutes {
             }
         }
         
-        return try StripeRequest(client: self.client, method: .post, route: .subscription, query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
+        return try StripeRequest(client: self.client, method: .post, route: .subscription, query: [:], body: Body.data(body.formURLEncoded()), headers: headers)
     }
     
     /**
