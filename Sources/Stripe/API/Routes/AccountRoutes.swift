@@ -17,7 +17,7 @@ public final class AccountRoutes {
         self.client = client
     }
     
-    public func create(type: ConnectedAccountType, email: String?, country: String?, metadata: Node? = nil) throws -> StripeRequest<ConnectAccount> {
+    public func create(type: ConnectedAccountType, email: String? = nil, country: String? = nil, metadata: Node? = nil) throws -> StripeRequest<ConnectAccount> {
         var body = Node([:])
         
         body["type"] = Node(type.rawValue)
@@ -43,7 +43,7 @@ public final class AccountRoutes {
         return try StripeRequest(client: self.client, method: .get, route: .accounts(accountId), query: [:], body: nil, headers: nil)
     }
     
-    public func update(account accountId: String, businessName: String?, businessPrimaryColor: String?, businessUrl: String?, debitNegativeBalances: Bool?, declineChargeOn: Node?, defaultCurrency: StripeCurrency?, email: String?, externalAccount: Node?, legalEntity: Node?, payoutSchedule: Node?, payoutStatementDescriptor: String?, productDescription: String?, statementDescriptor: String?, supportEmail: String?, supportPhone: String?, supportUrl: String?, tosAcceptance: Node?, metadata: Node? = nil) throws -> StripeRequest<ConnectAccount> {
+    public func update(account accountId: String, businessName: String? = nil, businessPrimaryColor: String? = nil, businessUrl: String? = nil, debitNegativeBalances: Bool? = nil, declineChargeOn: Node? = nil, defaultCurrency: StripeCurrency? = nil, email: String? = nil, externalAccount: Node? = nil, legalEntity: Node? = nil, payoutSchedule: Node? = nil, payoutStatementDescriptor: String? = nil, productDescription: String? = nil, statementDescriptor: String? = nil, supportEmail: String? = nil, supportPhone: String? = nil, supportUrl: String? = nil, tosAcceptance: Node? = nil, metadata: Node? = nil) throws -> StripeRequest<ConnectAccount> {
         var body = Node([:])
         
         if let businessname = businessName {

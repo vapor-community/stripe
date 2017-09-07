@@ -21,7 +21,7 @@ public final class DisputeRoutes {
         return try StripeRequest(client: self.client, method: .get, route: .disputes(disputeId), query: [:], body: nil, headers: nil)
     }
     
-    public func update(dispute disputeId: String, evidence: Node?, submit: Bool?, metadata: Node? = nil) throws -> StripeRequest<Dispute> {
+    public func update(dispute disputeId: String, evidence: Node? = nil, submit: Bool? = nil, metadata: Node? = nil) throws -> StripeRequest<Dispute> {
         var body = Node([:])
         
         if let evidence = evidence?.object {
@@ -47,7 +47,7 @@ public final class DisputeRoutes {
         return try StripeRequest(client: self.client, method: .post, route: .closeDispute(disputeId), query: [:], body: nil, headers: nil)
     }
     
-    public func listAll(filter: StripeFilter?) throws -> StripeRequest<DisputeList> {
+    public func listAll(filter: StripeFilter? = nil) throws -> StripeRequest<DisputeList> {
         var query = [String : NodeRepresentable]()
         if let data = try filter?.createQuery() {
             query = data

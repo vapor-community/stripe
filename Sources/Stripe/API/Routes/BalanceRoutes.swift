@@ -35,7 +35,7 @@ public final class BalanceRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func retrieveBalanceTransaction(_ transactionId: String) throws -> StripeRequest<BalanceTransactionItem> {
+    public func retrieveBalance(forTransaction transactionId: String) throws -> StripeRequest<BalanceTransactionItem> {
         return try StripeRequest(client: self.client, method: .get, route: .balanceHistoryTransaction(transactionId), query: [:], body: nil, headers: nil)
     }
     

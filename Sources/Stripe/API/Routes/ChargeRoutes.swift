@@ -73,7 +73,7 @@ public final class ChargeRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func create(amount: Int, in currency: StripeCurrency, withFee fee: Int?, toAccount account: String?, capture: Bool?, description: String?, destinationAccountId: String?, destinationAmount: Int?, transferGroup: String?, onBehalfOf: String?,  receiptEmail: String?, shippingLabel: ShippingLabel?, customer: String?, statementDescriptor: String?, source: String?, metadata: Node? = nil) throws -> StripeRequest<Charge> {
+    public func create(amount: Int, in currency: StripeCurrency, withFee fee: Int? = nil, toAccount account: String? = nil, capture: Bool? = nil, description: String? = nil, destinationAccountId: String? = nil, destinationAmount: Int? = nil, transferGroup: String? = nil, onBehalfOf: String? = nil,  receiptEmail: String? = nil, shippingLabel: ShippingLabel? = nil, customer: String? = nil, statementDescriptor: String? = nil, source: String? = nil, metadata: Node? = nil) throws -> StripeRequest<Charge> {
         // Setup our params
         var body: [String : Any] = [
             "amount": amount,
@@ -223,7 +223,7 @@ public final class ChargeRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
-    public func update(description: String?, fraud: FraudDetails?, receiptEmail: String?, shippingLabel: ShippingLabel?, transferGroup: String?, metadata: Node? = nil, charge chargeId: String) throws -> StripeRequest<Charge> {
+    public func update(charge chargeId: String, description: String? = nil, fraud: FraudDetails? = nil, receiptEmail: String? = nil, shippingLabel: ShippingLabel? = nil, transferGroup: String? = nil, metadata: Node? = nil) throws -> StripeRequest<Charge> {
         var body = Node([:])
         
         if let description = description {
@@ -328,7 +328,7 @@ public final class ChargeRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func capture(charge chargeId: String, amount: Int?, applicationFee: Int?, destinationAmount: Int?, receiptEmail: String?, statementDescriptor: String?) throws -> StripeRequest<Charge> {
+    public func capture(charge chargeId: String, amount: Int? = nil, applicationFee: Int? = nil, destinationAmount: Int? = nil, receiptEmail: String? = nil, statementDescriptor: String? = nil) throws -> StripeRequest<Charge> {
         var body = Node([:])
         
         if let amount = amount {
@@ -363,7 +363,7 @@ public final class ChargeRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func listAll(filter: StripeFilter?) throws -> StripeRequest<ChargeList> {
+    public func listAll(filter: StripeFilter? = nil) throws -> StripeRequest<ChargeList> {
         var query = [String : NodeRepresentable]()
         if let data = try filter?.createQuery() {
             query = data

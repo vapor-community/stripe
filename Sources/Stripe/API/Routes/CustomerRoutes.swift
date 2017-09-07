@@ -50,7 +50,7 @@ public final class CustomerRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
-    public func create(accountBalance: Int?, businessVATId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, shipping: ShippingLabel?, source: String?, metadata: Node? = nil) throws -> StripeRequest<Customer> {
+    public func create(accountBalance: Int? = nil, businessVATId: String? = nil, coupon: String? = nil, defaultSource: String? = nil, description: String? = nil, email: String? = nil, shipping: ShippingLabel? = nil, source: String? = nil, metadata: Node? = nil) throws -> StripeRequest<Customer> {
         var body = Node([:])
         
         if let accountBalance = accountBalance {
@@ -144,7 +144,7 @@ public final class CustomerRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func addNewSource(forCustomer customerId: String, inConnectAccount account: String?, source: String) throws -> StripeRequest<Source> {
+    public func addNewSource(forCustomer customerId: String, inConnectAccount account: String? = nil, source: String) throws -> StripeRequest<Source> {
         let body = try Node(node: ["source": source])
         
         var headers: [HeaderKey: String]?
@@ -167,7 +167,7 @@ public final class CustomerRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func addNewBankAccountSource(forCustomer customerId: String, inConnectAccount account: String?, source: Node, metadata: Node? = nil) throws -> StripeRequest<BankAccount> {
+    public func addNewBankAccountSource(forCustomer customerId: String, inConnectAccount account: String? = nil, source: Node, metadata: Node? = nil) throws -> StripeRequest<BankAccount> {
         
         var body = Node([:])
         
@@ -207,7 +207,7 @@ public final class CustomerRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func addNewCardSource(forCustomer customerId: String, inConnectAccount account: String?, source: Node, metadata: Node? = nil) throws -> StripeRequest<Card> {
+    public func addNewCardSource(forCustomer customerId: String, inConnectAccount account: String? = nil, source: Node, metadata: Node? = nil) throws -> StripeRequest<Card> {
         var body = Node([:])
         
         if let sourceString = source.string {
@@ -295,7 +295,7 @@ public final class CustomerRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func update(accountBalance: Int?, businessVATId: String?, coupon: String?, defaultSourceId: String?, description:String?, email: String?, shipping:ShippingLabel?, newSource: String?, metadata: Node? = nil, forCustomerId customerId: String) throws -> StripeRequest<Customer> {
+    public func update(accountBalance: Int? = nil, businessVATId: String? = nil, coupon: String? = nil, defaultSourceId: String? = nil, description:String? = nil, email: String? = nil, shipping: ShippingLabel? = nil, newSource: String? = nil, metadata: Node? = nil, forCustomerId customerId: String) throws -> StripeRequest<Customer> {
         var body = Node([:])
         
         if let accountBalance = accountBalance {
@@ -413,7 +413,7 @@ public final class CustomerRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func listAll(filter: StripeFilter?) throws -> StripeRequest<CustomerList> {
+    public func listAll(filter: StripeFilter? = nil) throws -> StripeRequest<CustomerList> {
         var query = [String : NodeRepresentable]()
         if let data = try filter?.createQuery() {
             query = data

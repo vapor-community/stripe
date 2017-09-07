@@ -19,7 +19,7 @@ public final class ProductRoutes {
         self.client = client
     }
     
-    public func create(name: String, id: String?, active: Bool?, attributes: Node?, caption: String?, deactivateOn: Node?, description: String?, images: Node?, packageDimensions: Node?, shippable: Bool?, url: String?, metadata: Node? = nil) throws -> StripeRequest<Product> {
+    public func create(name: String, id: String?, active: Bool? = nil, attributes: Node? = nil, caption: String? = nil, deactivateOn: Node? = nil, description: String? = nil, images: Node? = nil, packageDimensions: Node? = nil, shippable: Bool? = nil, url: String? = nil, metadata: Node? = nil) throws -> StripeRequest<Product> {
     
         var body = Node([:])
         
@@ -80,7 +80,7 @@ public final class ProductRoutes {
         return try StripeRequest(client: self.client, method: .get, route: .products(productId), query: [:], body: nil, headers: nil)
     }
     
-    public func update(product productId: String, active: Bool?, attributes: Node?, caption: String?, deactivateOn: Node?, description: String?, images: Node?, name: String?, packageDimensions: Node?, shippable: Bool?, url: String?, metadata: Node? = nil) throws -> StripeRequest<Product> {
+    public func update(product productId: String, active: Bool? = nil, attributes: Node? = nil, caption: String? = nil, deactivateOn: Node? = nil, description: String? = nil, images: Node? = nil, name: String? = nil, packageDimensions: Node? = nil, shippable: Bool? = nil, url: String? = nil, metadata: Node? = nil) throws -> StripeRequest<Product> {
         
         var body = Node([:])
 

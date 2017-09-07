@@ -19,7 +19,7 @@ public final class SKURoutes {
         self.client = client
     }
     
-    public func create(currency: StripeCurrency, inventory: Node, price: Int, product: String, id: String?, active: Bool?, attributes: Node?, image: String?, packageDimensions: Node?, metadata: Node? = nil) throws -> StripeRequest<SKU> {
+    public func create(currency: StripeCurrency, inventory: Node, price: Int, product: String, id: String? = nil, active: Bool? = nil, attributes: Node? = nil, image: String? = nil, packageDimensions: Node? = nil, metadata: Node? = nil) throws -> StripeRequest<SKU> {
         var body = Node([:])
         
         body["currency"] = Node(currency.rawValue)
@@ -67,7 +67,7 @@ public final class SKURoutes {
         return try StripeRequest(client: self.client, method: .get, route: .skus(skuId), query: [:], body: nil, headers: nil)
     }
     
-    public func update(sku skuId: String, active: Bool?, attributes: Node?, currency: StripeCurrency?, image: String?, inventory: Node?, packageDimensions: Node?, price: Int?, product: String?, metadata: Node? = nil) throws -> StripeRequest<SKU> {
+    public func update(sku skuId: String, active: Bool? = nil, attributes: Node? = nil, currency: StripeCurrency? = nil, image: String? = nil, inventory: Node? = nil, packageDimensions: Node? = nil, price: Int? = nil, product: String? = nil, metadata: Node? = nil) throws -> StripeRequest<SKU> {
         var body = Node([:])
         
         
