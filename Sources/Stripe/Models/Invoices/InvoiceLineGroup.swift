@@ -29,5 +29,4 @@ public final class InvoiceLineGroup: StripeModelProtocol {
         ]
         return try Node(node: object)
     }
-    
 }

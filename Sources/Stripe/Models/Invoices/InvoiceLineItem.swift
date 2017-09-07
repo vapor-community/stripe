@@ -79,5 +79,4 @@ public final class InvoiceLineItem: StripeModelProtocol {
         
         return try Node(node: object)
     }
-    
 }

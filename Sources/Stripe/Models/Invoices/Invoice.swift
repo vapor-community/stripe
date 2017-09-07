@@ -95,7 +95,6 @@ public final class Invoice: StripeModelProtocol {
         if let lines = node["lines"]?.object, let data = lines["data"]?.array {
             self.lines = try data.map({ try InvoiceLineItem(node: $0) })
         }
-        
     }
     
     public func makeNode(in context: Context?) throws -> Node {
@@ -158,5 +157,4 @@ public final class InvoiceList: StripeModelProtocol {
         ]
         return try Node(node: object)
     }
-    
 }

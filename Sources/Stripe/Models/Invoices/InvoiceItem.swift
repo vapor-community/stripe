@@ -74,14 +74,11 @@ public final class InvoiceItem: StripeModelProtocol {
             "proration": self.isProration,
             "quantity": self.quantity,
             "subscription": self.subscription,
-            
             "period": [
                 "start": self.periodStart,
                 "end": self.periodEnd
             ],
-            
             "metadata": self.metadata,
-            
             "plan": self.plan,
             "currency": self.currency?.rawValue
         ]

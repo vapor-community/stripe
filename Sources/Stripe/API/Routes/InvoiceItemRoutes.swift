@@ -162,5 +162,4 @@ public final class InvoiceItemRoutes {
         }
         return try StripeRequest(client: self.client, method: .get, route: .invoiceItems, query: query, body: nil, headers: nil)
     }
-    
 }

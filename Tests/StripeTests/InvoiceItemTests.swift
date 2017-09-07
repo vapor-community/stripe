@@ -240,5 +240,4 @@ class InvoiceItemTests: XCTestCase {
             XCTFail(error.localizedDescription)
         }
     }
-    
 }
