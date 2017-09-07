@@ -94,21 +94,25 @@ internal enum API {
     
     /**
      SOURCES
-     Source objects allow you to accept a variety of payment methods. They represent a customer's payment instrument and can be used with the Stripe API just like a card object: once chargeable, they can be charged, or attached to customers.
+     Source objects allow you to accept a variety of payment methods. They represent a customer's payment instrument 
+     and can be used with the Stripe API just like a card object: once chargeable, they can be charged, or attached 
+     to customers.
      */
     case sources
     case source(String)
     
     /**
      SUBSCRIPTION ITEMS
-     Subscription items allow you to create customer subscriptions with more than one plan, making it easy to represent complex billing relationships.
+     Subscription items allow you to create customer subscriptions with more than one plan, making it easy to represent 
+     complex billing relationships.
      */
     case subscriptionItem
     case subscriptionItems(String)
     
     /**
      SUBSCRIPTIONS
-     Subscriptions allow you to charge a customer's card on a recurring basis. A subscription ties a customer to a particular plan you've created.
+     Subscriptions allow you to charge a customer's card on a recurring basis. A subscription ties a customer to a 
+     particular plan you've created.
      */
     case subscription
     case subscriptions(String)
@@ -116,7 +120,8 @@ internal enum API {
     
     /**
      ACCOUNTS
-     This is an object representing your Stripe account. You can retrieve it to see properties on the account like its current e-mail address or if the account is enabled yet to make live charges.
+     This is an object representing your Stripe account. You can retrieve it to see properties on the account like its 
+     current e-mail address or if the account is enabled yet to make live charges.
      */
     case account
     case accounts(String)
@@ -160,6 +165,27 @@ internal enum API {
      */
     case orderReturn
     case orderReturns(String)
+    
+    /**
+    INVOICES
+    Invoices are statements of what a customer owes for a particular billing period, including subscriptions, 
+    invoice items, and any automatic proration adjustments if necessary.
+    */
+    case invoices
+    case invoice(String)
+    case payInvoice(String)
+    case invoiceLines(String)
+    case upcomingInvoices
+    
+    /**
+     INVOICE ITEMS
+     Sometimes you want to add a charge or credit to a customer but only actually charge the customer's card at 
+     the end of a regular billing cycle. This is useful for combining several charges to minimize per-transaction 
+     fees or having Stripe tabulate your usage-based billing totals.
+    */
+    case invoiceItems
+    case invoiceItem(String)
+    
     
     var endpoint: String {
         switch self {
@@ -220,6 +246,15 @@ internal enum API {
             
         case .orderReturn: return APIBase + APIVersion + "order_returns"
         case .orderReturns(let id): return APIBase + APIVersion + "order_returns/\(id)"
+            
+        case .invoices: return APIBase + APIVersion + "invoices"
+        case .invoice(let id): return APIBase + APIVersion + "invoices/\(id)"
+        case .payInvoice(let id): return APIBase + APIVersion + "invoices/\(id)/pay"
+        case .invoiceLines(let id): return APIBase + APIVersion + "invoices/\(id)/lines"
+        case .upcomingInvoices: return APIBase + APIVersion + "invoices/upcoming"
+            
+        case .invoiceItems:return APIBase + APIVersion + "invoiceitems"
+        case .invoiceItem(let id): return APIBase + APIVersion + "invoiceitems/\(id)"
         }
     }
 }

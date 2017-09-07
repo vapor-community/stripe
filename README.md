@@ -63,64 +63,21 @@ XCTMain([
 
 ## Whats Implemented
 * [x] Balance Fetching
-    * [x] History
-    * [x] Balance by ID
 * [x] Charges
-    * [x] Creating Charges
-    * [x] Retrieving a charge by id
-    * [x] Listing all charges
-    * [x] Updating a charge
-    * [x] Capturing a charge
 * [x] Customers
-    * [x] Creating
-    * [x] Updating
-    * [x] Deleting
-    * [x] Fetching by Customer ID
-    * [x] Listing All Customers (With filters)
 * [x] Coupons
-    * [x] Creating
-    * [x] Updating
-    * [x] Deleting
-    * [x] Fetching by Coupon ID
-    * [x] Listing All Coupons (With filters)
 * [x] Plans
-    * [x] Creating
-    * [x] Updating
-    * [x] Deleting
-    * [x] Fetching by Plan ID
-    * [x] Listing All Plans (With filters)
 * [x] Refunds
-	* [x] Creating a Refund
-	* [x] Retrieval
-	* [x] Updating
-	* [x] Listing all
 * [x] Tokens
-	* [x] Card Creation
-	* [x] Bank Creation
-	* [x] Token Retrieval
 * [x] Sources
-    * [x] Creating
-    * [x] Updating
-    * [x] Fetching by Source ID
-* [x] Subscriptions    
-    * [x] Creating
-    * [x] Updating
-    * [x] Deleting
-    * [x] Fetching by subscription ID
-    * [x] Listing All Subscriptions (With filters)
+* [x] Subscriptions
 * [x] Connect account
-    * [x] Creating
-    * [x] Updating
-    * [x] Deleting
-    * [x] Fetching by account ID
-    * [x] Listing All Accounts (With filters)
-    * [x] Rejecting accounts
-    * [x] Creating dashboard login link for express accounts
 * [x] Orders
 * [x] Order Items
 * [x] Products
-* [x] Disputes    
-* [ ] Cards
+* [x] Disputes  
+* [x] Invoices
+* [x] Invoice Items
 
 [stripe_home]: http://stripe.com "Stripe"
 [stripe_api]: https://stripe.com/docs/api "Stripe API Endpoints"
@@ -129,3 +86,6 @@ XCTMain([
 ## License
 
 Vapor Stripe Provider is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
+
+## Want to help?
+Feel free to submit a pull request whether it's a clean up, a new approach to handling things, adding a new part of the API, or even if it's just a typo. All help is welcomed! 😀

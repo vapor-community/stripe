@@ -28,6 +28,8 @@ public class StripeClient {
     public private(set) var products: ProductRoutes!
     public private(set) var orders: OrderRoutes!
     public private(set) var orderReturns: OrderReturnRoutes!
+    public private(set) var invoices: InvoiceRoutes!
+    public private(set) var invoiceItems: InvoiceItemRoutes!
 
     public init(apiKey: String) throws {
         self.apiKey = apiKey
@@ -50,5 +52,7 @@ public class StripeClient {
         self.products = ProductRoutes(client: self)
         self.orders = OrderRoutes(client: self)
         self.orderReturns = OrderReturnRoutes(client: self)
+        self.invoices = InvoiceRoutes(client: self)
+        self.invoiceItems = InvoiceItemRoutes(client: self)
     }
 }
