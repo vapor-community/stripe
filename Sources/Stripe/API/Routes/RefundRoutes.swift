@@ -62,7 +62,7 @@ public final class RefundRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
-    public func createRefund(charge: String, amount: Int?, reason: RefundReason?, refundApplicationFee: Bool?, reverseTransfer: Bool?, metadata: Node? = nil, inConnectAccount account: String? = nil) throws -> StripeRequest<RefundItem> {
+    public func createRefund(charge: String, amount: Int? = nil, reason: RefundReason? = nil, refundApplicationFee: Bool? = nil, reverseTransfer: Bool? = nil, metadata: Node? = nil, inConnectAccount account: String? = nil) throws -> StripeRequest<RefundItem> {
         var body = Node([:])
         
         body["charge"] = Node(charge)
@@ -146,7 +146,7 @@ public final class RefundRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func listAll(byChargeId charge: String?, filter: StripeFilter?) throws -> StripeRequest<Refund> {
+    public func listAll(byChargeId charge: String? = nil, filter: StripeFilter? = nil) throws -> StripeRequest<Refund> {
         var query = [String : NodeRepresentable]()
         
         if let data = try filter?.createQuery() {

@@ -29,7 +29,7 @@ public final class SubscriptionRoutes {
      
      - parameter plan: The identifier of the plan to subscribe the customer to.
      
-     - parameter applicationFeePercent: This represents the percentage of the subscription invoice subtotal that will be transferred to the application owner’s Stripe account.
+     - parameter applicationFeePercent: This represents the percentage of the subscription invoice subtotal that will be transferred to the application owner’s Stripe account. Must be a possitive integer betwee 0 and 100
      
      - parameter coupon: The code of the coupon to apply to this subscription.
      
@@ -51,10 +51,16 @@ public final class SubscriptionRoutes {
      
     */
     
-    public func create(forCustomer customerId: String, plan: String?, applicationFeePercent: Double?, couponId: String?, items: Node?, quantity: Int?, source: Node?, taxPercent: Double?, trialEnd: Date?, trialPeriodDays: Int?, metadata: Node? = nil) throws -> StripeRequest<Subscription> {
+    public func create(forCustomer customerId: String, plan: String? = nil, applicationFeePercent: Int? = nil, onAccount account: String? = nil, couponId: String? = nil, items: Node? = nil, quantity: Int? = nil, source: Node? = nil, taxPercent: Double? = nil, trialEnd: Date? = nil, trialPeriodDays: Int? = nil, metadata: Node? = nil) throws -> StripeRequest<Subscription> {
+        
+        var headers: [HeaderKey : String]?
+        if let account = account {
+            headers = [
+                StripeHeader.Account: account
+            ]
+        }
         
         var body = Node([:])
-        
         body["customer"] = Node(customerId)
         
         if let plan = plan {
@@ -108,7 +114,7 @@ public final class SubscriptionRoutes {
             }
         }
         
-        return try StripeRequest(client: self.client, method: .post, route: .subscription, query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
+        return try StripeRequest(client: self.client, method: .post, route: .subscription, query: [:], body: Body.data(body.formURLEncoded()), headers: headers)
     }
     
     /**
@@ -118,7 +124,7 @@ public final class SubscriptionRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func retrieve(subscription subscriptionId: String) throws -> StripeRequest<Subscription> {
+    public func retrieve(subscription subscriptionId: String, onAccount account: String? = nil) throws -> StripeRequest<Subscription> {
         return try StripeRequest(client: self.client, method: .get, route: .subscriptions(subscriptionId), query: [:], body: nil, headers: nil)
     }
     
@@ -153,7 +159,7 @@ public final class SubscriptionRoutes {
      
      */
     
-    public func update(subscription subscriptionId: String, applicationFeePercent: Double?, couponId: String?, items: Node?, plan: String?, prorate: Bool?, quantity: Int?, source: Node?, taxPercent: Double?, trialEnd: Date?, metadata: Node? = nil) throws -> StripeRequest<Subscription> {
+    public func update(subscription subscriptionId: String, applicationFeePercent: Double? = nil, couponId: String? = nil, items: Node? = nil, plan: String? = nil, prorate: Bool? = nil, quantity: Int? = nil, source: Node? = nil, taxPercent: Double? = nil, trialEnd: Date? = nil, onAccount account: String? = nil, metadata: Node? = nil) throws -> StripeRequest<Subscription> {
         var body = Node([:])
         
         if let plan = plan {
@@ -217,7 +223,7 @@ public final class SubscriptionRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func deleteDiscount(onSubscription subscriptionId: String) throws -> StripeRequest<DeletedObject> {
+    public func deleteDiscount(onSubscription subscriptionId: String, onAccount account: String? = nil) throws -> StripeRequest<DeletedObject> {
         return try StripeRequest(client: self.client, method: .delete, route: .subscriptionDiscount(subscriptionId), query: [:], body: nil, headers: nil)
     }
     
@@ -231,7 +237,7 @@ public final class SubscriptionRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func cancel(subscription subscriptionId: String, atPeriodEnd: Bool?) throws -> StripeRequest<Subscription> {
+    public func cancel(subscription subscriptionId: String, atPeriodEnd: Bool? = nil, onAccount account: String? = nil) throws -> StripeRequest<Subscription> {
         
         var body = Node([:])
         
@@ -250,7 +256,7 @@ public final class SubscriptionRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    public func listAll(filter: StripeFilter?) throws -> StripeRequest<SubscriptionList> {
+    public func listAll(filter: StripeFilter? = nil) throws -> StripeRequest<SubscriptionList> {
         var query = [String : NodeRepresentable]()
         if let data = try filter?.createQuery() {
             query = data

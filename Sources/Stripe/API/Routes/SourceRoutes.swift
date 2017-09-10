@@ -50,7 +50,7 @@ public final class SourceRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func createNewSource(sourceType: SourceType, source: Node, amount: Int?, currency: StripeCurrency?, flow: String?, owner: Owner?, redirectReturnUrl: String?, token: String?, usage: String?, metadata: Node? = nil) throws -> StripeRequest<Source> {
+    public func createNewSource(sourceType: SourceType, source: Node, amount: Int? = nil, currency: StripeCurrency? = nil, flow: String? = nil, owner: Owner? = nil, redirectReturnUrl: String? = nil, token: String? = nil, usage: String? = nil, metadata: Node? = nil) throws -> StripeRequest<Source> {
         
         var body = Node([:])
         
@@ -213,7 +213,7 @@ public final class SourceRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node.
      */
     
-    public func update(owner: Owner?, metadata: Node? = nil, forSourceId sourceId: String) throws -> StripeRequest<Source> {
+    public func update(owner: Owner? = nil, metadata: Node? = nil, forSourceId sourceId: String) throws -> StripeRequest<Source> {
         var body = Node([:])
         
         if let owner = owner {

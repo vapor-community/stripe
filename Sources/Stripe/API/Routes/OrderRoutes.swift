@@ -19,7 +19,28 @@ public final class OrderRoutes {
         self.client = client
     }
     
-    public func create(currency: StripeCurrency, coupon: String?, customer: String?, email: String?, items: Node?, shipping: Node?, metadata: Node? = nil) throws -> StripeRequest<Order> {
+    /**
+     Creating a new order
+     Creates a new order object.
+     
+     - parameter currency: Three-letter ISO currency code, in lowercase.
+     - parameter coupon:   A coupon code that represents a discount to be applied to this order. 
+                           Must be one-time duration and in same currency as the order.
+     - parameter customer: The ID of an existing customer to use for this order. If provided, 
+                           the customer email and shipping address will be used to create the order. 
+                           Subsequently, the customer will also be charged to pay the order. If email 
+                           or shipping are also provided, they will override the values retrieved from 
+                           the customer object.
+     - parameter email:    The email address of the customer placing the order.
+     - parameter items:    List of items constituting the order.
+     - parameter shipping: Shipping address for the order. Required if any of the SKUs are for products 
+                           that have shippable set to true.
+     - parameter metadata: A set of key/value pairs that you can attach to an order object. It can be 
+                           useful for storing additional information about the order in a structured format.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
+    public func create(currency: StripeCurrency, coupon: String? = nil, customer: String? = nil, email: String? = nil, items: Node? = nil, shipping: Node? = nil, metadata: Node? = nil) throws -> StripeRequest<Order> {
         
         var body = Node([:])
         
@@ -89,11 +110,41 @@ public final class OrderRoutes {
         return try StripeRequest(client: self.client, method: .post, route: .order, query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
     }
     
+    /**
+     Retrieve an order
+     Retrieves the details of an existing order. Supply the unique order ID from either an order 
+     creation request or the order list, and Stripe will return the corresponding order information.
+     
+     - parameter orderId: The ID of the order to retrieve.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
     public func retrieve(order orderId: String) throws -> StripeRequest<Order> {
         return try StripeRequest(client: self.client, method: .get, route: .orders(orderId), query: [:], body: nil, headers: nil)
     }
     
-    public func update(order orderId: String, coupon: String?, selectedShippingMethod: String?, shippingInformation: Node?, status: OrderStatus?, metadata: Node? = nil) throws -> StripeRequest<Order> {
+    /**
+     Update an order
+     Updates the specific order by setting the values of the parameters passed. Any parameters not 
+     provided will be left unchanged. This request accepts only the metadata, and status as arguments.
+     
+     - parameter orderId:                The ID of the order to update.
+     - parameter coupon:                 A coupon code that represents a discount to be applied to this 
+                                         order. Must be one-time duration and in same currency as the order.
+     - parameter selectedShippingMethod: The shipping method to select for fulfilling this order. 
+                                         If specified, must be one of the ids of a shipping method in the 
+                                         shipping_methods array. If specified, will overwrite the existing 
+                                         selected shipping method, updating items as necessary.
+     - parameter shippingInformation:    Tracking information once the order has been fulfilled.
+     - parameter status:                 Current order status. One of created, paid, canceled, fulfilled, 
+                                         or returned.
+     - parameter metadata:               A set of key/value pairs that you can attach to an order object. 
+                                         It can be useful for storing additional information about the 
+                                         order in a structured format.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
+    public func update(order orderId: String, coupon: String? = nil, selectedShippingMethod: String? = nil, shippingInformation: Node? = nil, status: OrderStatus? = nil, metadata: Node? = nil) throws -> StripeRequest<Order> {
         
         var body = Node([:])
         
@@ -128,7 +179,30 @@ public final class OrderRoutes {
         return try StripeRequest(client: self.client, method: .post, route: .orders(orderId), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
     }
     
-    public func pay(order orderId: String, customer: String?, source: Node?, applicationFee: Int?, email: String?, metadata: Node? = nil) throws -> StripeRequest<Order> {
+    /**
+     Pay an order
+     Pay an order by providing a source to create a payment.
+     
+     - parameter orderId:        The ID of the order to pay.
+     - parameter customer:       The ID of an existing customer that will be charged in this request.
+     - parameter source:         A payment source to be charged, such as a credit card. If you also pass a 
+                                 customer ID, the source must be the ID of a source belonging to the customer 
+                                 (e.g., a saved card). Otherwise, if you do not pass a customer ID, the source 
+                                 you provide must either be a token, like the ones returned by Stripe.js, or a 
+                                 dictionary containing a user's credit card details, with the options described 
+                                 below. Although not all information is required, the extra info helps prevent fraud.
+     - parameter applicationFee: A fee in cents that will be applied to the order and transferred to the 
+                                 application owner's Stripe account. To use an application fee, the request 
+                                 must be made on behalf of another account, using the Stripe-Account header 
+                                 or OAuth key. For more information, see the application fees documentation.
+     - parameter email:          The email address of the customer placing the order. If a customer is specified, 
+                                 that customer's email address will be used.
+     - parameter metadata:       A set of key/value pairs that you can attach to an order object. It can be useful 
+                                 for storing additional information about the order in a structured format.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
+    public func pay(order orderId: String, customer: String? = nil, source: Node? = nil, applicationFee: Int? = nil, email: String? = nil, metadata: Node? = nil) throws -> StripeRequest<Order> {
         var body = Node([:])
         
         if let customer = customer {
@@ -207,6 +281,15 @@ public final class OrderRoutes {
         return try StripeRequest(client: self.client, method: .post, route: .ordersPay(orderId), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
     }
     
+    /**
+     List all orders
+     Returns a list of your orders. The orders are returned sorted by creation date, with the most 
+     recently created orders appearing first.
+     
+     - parameter filter: A Filter item to pass query parameters when fetching results
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
     public func listAll(filter: StripeFilter? = nil) throws -> StripeRequest<OrderList> {
         var query = [String : NodeRepresentable]()
         if let data = try filter?.createQuery() {
@@ -215,7 +298,18 @@ public final class OrderRoutes {
         return try StripeRequest(client: self.client, method: .get, route: .order, query: query, body: nil, headers: nil)
     }
     
-    public func `return`(order orderId: String, items: Node?) throws -> StripeRequest<OrderReturn> {
+    /**
+     Return an order
+     Return all or part of an order. The order must have a status of paid or fulfilled before it can 
+     be returned. Once all items have been returned, the order will become canceled or returned depending 
+     on which status the order started in.
+     
+     - parameter orderId: The ID of the order to return
+     - parameter items:   List of items to return.
+     
+     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
+     */
+    public func `return`(order orderId: String, items: Node? = nil) throws -> StripeRequest<OrderReturn> {
         
         var body = Node([:])
         

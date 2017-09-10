@@ -46,8 +46,7 @@ public final class PlanRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node.
      */
-    
-    public func create(id: String, amount: Int, currency: StripeCurrency, interval: StripeInterval, name: String, intervalCount: Int?, statementDescriptor: String?, trialPeriodDays: Int?, metadata: Node? = nil) throws -> StripeRequest<Plan> {
+    public func create(id: String, amount: Int, currency: StripeCurrency, interval: StripeInterval, name: String, intervalCount: Int? = nil, statementDescriptor: String? = nil, trialPeriodDays: Int? = nil, metadata: Node? = nil) throws -> StripeRequest<Plan> {
         var body = Node([:])
         
         body["id"] = Node(id)
@@ -89,7 +88,6 @@ public final class PlanRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    
     public func retrieve(plan planId: String) throws -> StripeRequest<Plan> {
         return try StripeRequest(client: self.client, method: .get, route: .plan(planId), query: [:], body: nil, headers: nil)
     }
@@ -110,8 +108,7 @@ public final class PlanRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    
-    public func update(name: String?, statementDescriptor: String?, trialPeriodDays: Int?, metadata: Node? = nil, forPlanId planId: String) throws -> StripeRequest<Plan> {
+    public func update(name: String? = nil, statementDescriptor: String? = nil, trialPeriodDays: Int? = nil, metadata: Node? = nil, forPlanId planId: String) throws -> StripeRequest<Plan> {
         var body = Node([:])
         
         if let metadata = metadata?.object {
@@ -143,7 +140,6 @@ public final class PlanRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    
     public func delete(plan planId: String) throws -> StripeRequest<DeletedObject> {
         return try StripeRequest(client: self.client, method: .delete, route: .plan(planId), query: [:], body: nil, headers: nil)
     }
@@ -157,8 +153,7 @@ public final class PlanRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
-    
-    public func listAll(filter: StripeFilter?) throws -> StripeRequest<PlansList> {
+    public func listAll(filter: StripeFilter? = nil) throws -> StripeRequest<PlansList> {
         var query = [String : NodeRepresentable]()
         
         if let data = try filter?.createQuery() {

@@ -57,7 +57,7 @@ public final class TokenRoutes {
      
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
     */
-    public func createCardToken(withCardNumber cardNumber: String, expirationMonth: Int, expirationYear: Int, cvc: Int, name: String?, customer: String?, currency: StripeCurrency?) throws -> StripeRequest<Token> {
+    public func createCardToken(withCardNumber cardNumber: String, expirationMonth: Int, expirationYear: Int, cvc: Int, name: String? = nil, customer: String? = nil, currency: StripeCurrency? = nil) throws -> StripeRequest<Token> {
         var body = Node([:])
         var headers: [HeaderKey: String]?
         
@@ -113,7 +113,7 @@ public final class TokenRoutes {
      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
      */
     
-    public func createBankAccountToken(withAccountNumber accountNumber: String, country: String, currency: StripeCurrency, routingNumber:String?, accountHolderName: String?, accountHolderType: String?, customer: String?) throws -> StripeRequest<Token> {
+    public func createBankAccountToken(withAccountNumber accountNumber: String, country: String, currency: StripeCurrency, routingNumber: String? = nil, accountHolderName: String? = nil, accountHolderType: String? = nil, customer: String? = nil) throws -> StripeRequest<Token> {
         var body = Node([:])
         var headers: [HeaderKey: String]?
         
