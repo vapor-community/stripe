@@ -117,7 +117,7 @@ class BalanceTests: XCTestCase {
     
     func testBalanceTransactionItem() throws {
         do {
-            let object = try drop?.stripe?.balance.retrieveBalanceTransaction(transactionId).serializedResponse()
+            let object = try drop?.stripe?.balance.retrieveBalance(forTransaction: transactionId).serializedResponse()
             XCTAssertNotNil(object)
         }
         catch let error as StripeError {

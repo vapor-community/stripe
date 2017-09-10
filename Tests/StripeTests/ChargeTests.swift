@@ -271,13 +271,13 @@ class ChargeTests: XCTestCase {
             
             let transferGroup = "Vapor group"
             
-            let updatedCharge = try drop?.stripe?.charge.update(description: description,
+            let updatedCharge = try drop?.stripe?.charge.update(charge: chargeId,
+                                                                description: description,
                                                                 fraud: fraudDetails,
                                                                 receiptEmail: receiptEmail,
                                                                 shippingLabel: shippingLabel,
                                                                 transferGroup: transferGroup,
-                                                                metadata: metadata,
-                                                                charge: chargeId).serializedResponse()
+                                                                metadata: metadata).serializedResponse()
 
             XCTAssertNotNil(updatedCharge)
             
