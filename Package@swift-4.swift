@@ -11,7 +11,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/random.git", from: "1.0.0"),
     ],
     targets: [
-        .target(name: "Stripe", dependencies: ["Vapor", "Random]),
+        .target(name: "Stripe", dependencies: ["Vapor", "Random"]),
         .testTarget(name: "StripeTests", dependencies: ["Stripe"]),
     ]
 )
