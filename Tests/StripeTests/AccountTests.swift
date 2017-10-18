@@ -192,9 +192,9 @@ class AccountTests: XCTestCase {
             
             XCTAssertEqual(updatedAccount?.businessName, businessname)
             
-            XCTAssertEqual(updatedAccount?.declineChargeOn?["avs_failure"], true)
+            XCTAssertEqual(updatedAccount?.declineChargeOn?["avs_failure"]?.bool, true)
             
-            XCTAssertEqual(updatedAccount?.declineChargeOn?["cvc_failure"], false)
+            XCTAssertEqual(updatedAccount?.declineChargeOn?["cvc_failure"]?.bool, false)
             
             XCTAssertEqual(updatedAccount?.externalAccounts?.bankAccounts[0].accountHolderName,  "Mr. Vapor")
             

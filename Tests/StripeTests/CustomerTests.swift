@@ -24,15 +24,8 @@ class CustomerTests: XCTestCase {
         do {
             drop = try self.makeDroplet()
             
-            customerId = try drop?.stripe?.customer.create(accountBalance: nil,
-                                                           businessVATId: nil,
-                                                           coupon: nil,
-                                                           defaultSource: nil,
-                                                           description: "Vapor test Account",
-                                                           email: "vapor@stripetest.com",
-                                                           shipping: nil,
-                                                           source: nil,
-                                                           metadata: nil).serializedResponse().id ?? ""
+            customerId = try drop?.stripe?.customer.create(description: "Vapor test Account",
+                                                           email: "vapor@stripetest.com").serializedResponse().id ?? ""
         }
         catch let error as StripeError {
             

@@ -187,6 +187,13 @@ internal enum API {
     case invoiceItem(String)
     
     
+    /**
+     EPHEMERAL KEYS
+     
+     */
+    case ephemeralKeys
+    case ephemeralKey(String)
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -253,8 +260,11 @@ internal enum API {
         case .invoiceLines(let id): return APIBase + APIVersion + "invoices/\(id)/lines"
         case .upcomingInvoices: return APIBase + APIVersion + "invoices/upcoming"
             
-        case .invoiceItems:return APIBase + APIVersion + "invoiceitems"
+        case .invoiceItems: return APIBase + APIVersion + "invoiceitems"
         case .invoiceItem(let id): return APIBase + APIVersion + "invoiceitems/\(id)"
+        
+        case .ephemeralKeys: return APIBase + APIVersion + "ephemeral_keys"
+        case .ephemeralKey(let id): return APIBase + APIVersion + "ephemeral_keys/\(id)"
         }
     }
 }
