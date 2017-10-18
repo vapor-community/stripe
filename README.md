@@ -18,7 +18,7 @@ For Swift 3
 ~~~~
 For Swift 4
 ~~~~swift
-.package(url: "https://github.com/vapor-community/stripe.git", .exact(Version(1,0,0, prereleaseIdentifiers: ["beta","18"])))
+.package(url: "https://github.com/vapor-community/stripe.git", .exact(Version(1,0,0, prereleaseIdentifiers: ["beta","19"])))
 ~~~~
 
 You'll need a config file as well. Place a `stripe.json` file in your `Config` folder
@@ -83,6 +83,7 @@ XCTMain([
 * [x] Disputes  
 * [x] Invoices
 * [x] Invoice Items
+* [x] Ephemeral Keys
 
 [stripe_home]: http://stripe.com "Stripe"
 [stripe_api]: https://stripe.com/docs/api "Stripe API Endpoints"
