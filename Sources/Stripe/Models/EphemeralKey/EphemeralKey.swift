@@ -36,7 +36,7 @@ public final class EphemeralKey: StripeModelProtocol {
             "created": self.created,
             "expires": self.expires,
             "livemode": self.isLive,
-            "secret": self.isLive
+            "secret": self.secret
         ]
         
         return try Node(node: object)
