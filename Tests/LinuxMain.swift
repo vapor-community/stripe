@@ -1,4 +1,4 @@
-// Generated using Sourcery 0.8.0 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 0.7.2 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 import XCTest
@@ -69,6 +69,13 @@ static var allTests = [
   ("testCloseDispute", testCloseDispute),
   ("testListAllDisputes", testListAllDisputes),
   ("testFilterDisputes", testFilterDisputes),
+]
+}
+
+extension EphemeralKeyTests {
+static var allTests = [
+  ("testCreateEphemeralKey", testCreateEphemeralKey),
+  ("testDeleteEphemeralKey", testDeleteEphemeralKey),
 ]
 }
 
@@ -200,6 +207,7 @@ XCTMain([
   testCase(CouponTests.allTests),
   testCase(CustomerTests.allTests),
   testCase(DisputeTests.allTests),
+  testCase(EphemeralKeyTests.allTests),
   testCase(InvoiceItemTests.allTests),
   testCase(InvoiceTests.allTests),
   testCase(OrderReturnTests.allTests),
