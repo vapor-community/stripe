@@ -9,14 +9,14 @@
 import Foundation
 import Vapor
 
-public final class Fee: StripeModelProtocol {
+open class Fee: StripeModelProtocol {
     
     public private(set) var amount: Int?
     public private(set) var currency: StripeCurrency?
     public private(set) var description: String?
     public private(set) var type: ActionType?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.amount = try node.get("amount")
         if let currency = node["currency"]?.string {
             self.currency = StripeCurrency(rawValue: currency)

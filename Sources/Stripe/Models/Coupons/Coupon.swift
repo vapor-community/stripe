@@ -9,12 +9,11 @@
 import Foundation
 import Vapor
 
-
 /**
  Coupon Model
  https://stripe.com/docs/api/curl#coupon_object
  */
-public final class Coupon: StripeModelProtocol {
+open class Coupon: StripeModelProtocol {
     public private(set) var id: String?
     public private(set) var amountOff: Int?
     public private(set) var currency: StripeCurrency?
@@ -35,7 +34,7 @@ public final class Coupon: StripeModelProtocol {
      */
     public private(set) var metadata: Node?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.amountOff = try node.get("amount_off")
         self.created = try node.get("created")

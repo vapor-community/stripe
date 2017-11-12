@@ -9,14 +9,13 @@
 import Foundation
 import Vapor
 
-
-public final class CouponList: StripeModelProtocol {
+open class CouponList: StripeModelProtocol {
     public private(set) var object: String?
     public private(set) var url: String?
     public private(set) var hasMore: Bool?
     public private(set) var items: [Coupon]?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.object = try node.get("object")
         self.url = try node.get("url")
         self.hasMore = try node.get("has_more")

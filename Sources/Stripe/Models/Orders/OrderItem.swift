@@ -15,7 +15,7 @@ import Vapor
  https://stripe.com/docs/api#order_item_object-object
  */
 
-public final class OrderItem: StripeModelProtocol {
+open class OrderItem: StripeModelProtocol {
     
     public private(set) var object: String?
     public private(set) var amount: Int?
@@ -25,7 +25,7 @@ public final class OrderItem: StripeModelProtocol {
     public private(set) var quantity: Int?
     public private(set) var type: OrderItemType?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.object = try node.get("object")
         self.amount = try node.get("amount")
         if let currency = node["currency"]?.string {

@@ -9,14 +9,14 @@
 import Foundation
 import Vapor
 
-public final class PackageDimensions: StripeModelProtocol {
+open class PackageDimensions: StripeModelProtocol {
     
     public private(set) var height: Decimal?
     public private(set) var length: Decimal?
     public private(set) var weight: Decimal?
     public private(set) var width: Decimal?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         
         self.height = try Decimal(node.get("height") as Int)
         self.length = try Decimal(node.get("length") as Int)

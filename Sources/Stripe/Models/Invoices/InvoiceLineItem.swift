@@ -9,7 +9,7 @@
 import Foundation
 import Vapor
 
-public final class InvoiceLineItem: StripeModelProtocol {
+open class InvoiceLineItem: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -30,7 +30,7 @@ public final class InvoiceLineItem: StripeModelProtocol {
     
     public private(set) var currency: StripeCurrency?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.amount = try node.get("amount")

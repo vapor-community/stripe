@@ -9,12 +9,11 @@
 import Foundation
 import Vapor
 
-
 /**
  Plan Model
  https://stripe.com/docs/api/curl#plan_object
  */
-public final class Plan: StripeModelProtocol {
+open class Plan: StripeModelProtocol {
     public private(set) var id: String?
     public private(set) var object: String?
     public private(set) var amount: Int?
@@ -36,7 +35,7 @@ public final class Plan: StripeModelProtocol {
     
     public init() {}
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.amount = try node.get("amount")

@@ -9,8 +9,7 @@
 import Foundation
 import Vapor
 
-
-public final class Dispute: StripeModelProtocol {
+open class Dispute: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -27,7 +26,7 @@ public final class Dispute: StripeModelProtocol {
     public private(set) var disputeReason: DisputeReason?
     public private(set) var disputeStatus: DisputeStatus?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.amount = try node.get("amount")

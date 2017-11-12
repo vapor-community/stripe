@@ -13,7 +13,7 @@ import Vapor
  Invoice Model
  https://stripe.com/docs/api#invoice_object
  */
-public final class Invoice: StripeModelProtocol {
+open class Invoice: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -55,7 +55,7 @@ public final class Invoice: StripeModelProtocol {
     public private(set) var lines: [InvoiceLineItem]?
     public private(set) var currency: StripeCurrency?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.amountDue = try node.get("amount_due")

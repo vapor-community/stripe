@@ -9,12 +9,11 @@
 import Foundation
 import Vapor
 
-
-public final class DeletedObject: StripeModelProtocol {
+open class DeletedObject: StripeModelProtocol {
     public private(set) var deleted: Bool?
     public private(set) var id: String?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.deleted = try node.get("deleted")
         self.id = try node.get("id")
     }

@@ -37,7 +37,7 @@ public enum OutcomeType: String {
     case invalid = "invalid"
 }
 
-public final class Outcome: StripeModelProtocol {
+open class Outcome: StripeModelProtocol {
     
     public private(set) var networkStatus: NetworkStatus?
     public private(set) var reason: String?
@@ -46,7 +46,7 @@ public final class Outcome: StripeModelProtocol {
     public private(set) var sellerMessage: String?
     public private(set) var type: OutcomeType?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         if let networkStatus = node["network_status"]?.string {
             self.networkStatus = NetworkStatus(rawValue: networkStatus)
         }

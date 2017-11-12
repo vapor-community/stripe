@@ -9,12 +9,11 @@
 import Foundation
 import Vapor
 
-
 /**
  Source Model
  https://stripe.com/docs/api/curl#source_object
  */
-public final class Source: StripeModelProtocol {
+open class Source: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -43,7 +42,7 @@ public final class Source: StripeModelProtocol {
     public private(set) var metadata: Node?
     public private(set) var owner: Owner?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.amount = try node.get("amount")

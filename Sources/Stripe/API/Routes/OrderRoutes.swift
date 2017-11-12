@@ -9,7 +9,7 @@
 import Node
 import HTTP
 
-public final class OrderRoutes {
+open class OrderRoutes {
     let client: StripeClient
     
     init(client: StripeClient) {

@@ -12,7 +12,7 @@ import Vapor
  SubscriptionItem Model
  https://stripe.com/docs/api/curl#subscription_items
  */
-public final class SubscriptionItem: StripeModelProtocol {
+open class SubscriptionItem: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -26,7 +26,7 @@ public final class SubscriptionItem: StripeModelProtocol {
      */
     public private(set) var deleted: Bool?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.created = try node.get("created")

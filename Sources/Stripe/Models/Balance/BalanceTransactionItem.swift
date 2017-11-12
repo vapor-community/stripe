@@ -9,8 +9,7 @@
 import Foundation
 import Vapor
 
-
-public final class BalanceTransactionItem: StripeModelProtocol {
+open class BalanceTransactionItem: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -25,7 +24,7 @@ public final class BalanceTransactionItem: StripeModelProtocol {
     public private(set) var status: StripeStatus?
     public private(set) var type: ActionType?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.amount = try node.get("amount")

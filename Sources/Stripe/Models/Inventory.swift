@@ -9,13 +9,13 @@
 import Foundation
 import Vapor
 
-public final class Inventory: StripeModelProtocol {
+open class Inventory: StripeModelProtocol {
     
     public private(set) var quantity: Int?
     public private(set) var type: InventoryType?
     public private(set) var value: InventoryTypeValue?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.quantity = try node.get("quantity")
         if let type = node["type"]?.string {
             self.type = InventoryType(rawValue: type)

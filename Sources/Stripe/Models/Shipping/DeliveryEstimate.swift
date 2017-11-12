@@ -9,15 +9,14 @@
 import Foundation
 import Vapor
 
-
-public final class DeliveryEstimate: StripeModelProtocol {
+open class DeliveryEstimate: StripeModelProtocol {
     
     public private(set) var date: String?
     public private(set) var earliest: String?
     public private(set) var latest: String?
     public private(set) var type: DeliveryEstimateType?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.date = try node.get("date")
         self.earliest = try node.get("earliest")
         self.latest = try node.get("latest")

@@ -9,12 +9,11 @@
 import Foundation
 import Vapor
 
-
 /**
  Card Model
  https://stripe.com/docs/api/curl#card_object
  */
-public final class Card: StripeModelProtocol {
+open class Card: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -50,7 +49,7 @@ public final class Card: StripeModelProtocol {
     public private(set) var metadata: Node?
     public private(set) var name: String?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.account = try node.get("account")

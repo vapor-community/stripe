@@ -9,12 +9,11 @@
 import Foundation
 import Vapor
 
-
 /**
  Legal Entity
  */
 
-public final class LegalEntity: StripeModelProtocol {
+open class LegalEntity: StripeModelProtocol {
     
     public private(set) var additionalOwners: [AdditionalOwner]?
     public private(set) var address: ShippingAddress?
@@ -33,7 +32,7 @@ public final class LegalEntity: StripeModelProtocol {
     public private(set) var type: String?
     public private(set) var verification: Verification?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.additionalOwners = try node.get("additional_owners")
         self.address = try node.get("address")
         self.businessName = try node.get("business_name")

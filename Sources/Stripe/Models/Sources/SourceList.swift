@@ -9,8 +9,7 @@
 import Foundation
 import Vapor
 
-
-public final class SourceList: StripeModelProtocol {
+open class SourceList: StripeModelProtocol {
     
     public private(set) var object: String?
     public private(set) var url: String?
@@ -19,7 +18,7 @@ public final class SourceList: StripeModelProtocol {
     public private(set) var cardSources: [Card] = []
     public private(set) var bankSources: [BankAccount] = []
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.object = try node.get("object")
         self.url = try node.get("url")
         self.hasMore = try node.get("has_more")

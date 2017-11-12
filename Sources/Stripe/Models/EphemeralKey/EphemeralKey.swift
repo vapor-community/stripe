@@ -8,7 +8,7 @@
 import Foundation
 import Vapor
 
-public final class EphemeralKey: StripeModelProtocol {
+open class EphemeralKey: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -18,7 +18,7 @@ public final class EphemeralKey: StripeModelProtocol {
     public private(set) var isLive: Bool?
     public private(set) var secret: String?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.associatedObjects = try node.get("associated_objects")

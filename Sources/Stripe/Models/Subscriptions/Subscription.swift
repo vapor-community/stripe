@@ -9,12 +9,11 @@
 import Foundation
 import Vapor
 
-
 /**
  Subscription Model
  https://stripe.com/docs/api/curl#subscription_object
  */
-public final class Subscription: StripeModelProtocol {
+open class Subscription: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -43,7 +42,7 @@ public final class Subscription: StripeModelProtocol {
     public private(set) var taxPercent: Double?
     public private(set) var trialEnd: Date?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.applicationFeePercent = try node.get("application_fee_percent")

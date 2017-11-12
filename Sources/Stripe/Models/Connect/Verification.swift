@@ -9,14 +9,13 @@
 import Foundation
 import Vapor
 
-
-public final class Verification: StripeModelProtocol {
+open class Verification: StripeModelProtocol {
     public private(set) var details: String?
     public private(set) var detailsCode: ConnectLegalEntityVerificationState?
     public private(set) var document: String?
     public private(set) var status: ConnectLegalEntityVerificationStatus?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.details = try node.get("details")
         if let detailsCode = node["details_code"]?.string {
             self.detailsCode = ConnectLegalEntityVerificationState(rawValue: detailsCode)

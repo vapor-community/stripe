@@ -9,15 +9,14 @@
 import Foundation
 import Vapor
 
-
-public final class StatusTransitions: StripeModelProtocol {
+open class StatusTransitions: StripeModelProtocol {
     
     public private(set) var canceled: Date?
     public private(set) var fufilled: Date?
     public private(set) var paid: Date?
     public private(set) var returned: Date?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.canceled = try node.get("canceled")
         self.fufilled = try node.get("fufilled")
         self.paid = try node.get("paid")

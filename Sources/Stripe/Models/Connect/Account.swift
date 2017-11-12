@@ -15,7 +15,7 @@ import Vapor
  https://stripe.com/docs/api#account_object
  */
 
-public final class ConnectAccount: StripeModelProtocol {
+open class ConnectAccount: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -46,7 +46,7 @@ public final class ConnectAccount: StripeModelProtocol {
     public private(set) var verification: Verification?
     public private(set) var keys: Node?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.businessName = try node.get("business_name")

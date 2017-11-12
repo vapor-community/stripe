@@ -12,7 +12,7 @@ import Vapor
  Token Model
  https://stripe.com/docs/api/curl#token_object
  */
-public final class Token: StripeModelProtocol {
+open class Token: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -25,7 +25,7 @@ public final class Token: StripeModelProtocol {
     public private(set) var card: Card?
     public private(set) var bankAccount: BankAccount?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.type = try node.get("type")

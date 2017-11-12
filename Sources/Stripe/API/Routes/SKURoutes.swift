@@ -9,7 +9,7 @@
 import Node
 import HTTP
 
-public final class SKURoutes {
+open class SKURoutes {
     let client: StripeClient
     
     init(client: StripeClient) {

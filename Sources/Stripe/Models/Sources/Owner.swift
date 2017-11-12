@@ -9,8 +9,7 @@
 import Foundation
 import Vapor
 
-
-public final class Owner: StripeModelProtocol {
+open class Owner: StripeModelProtocol {
     public private(set) var address: ShippingAddress?
     public private(set) var email: String?
     public private(set) var name: String?
@@ -20,7 +19,7 @@ public final class Owner: StripeModelProtocol {
     public private(set) var verifiedName: String?
     public private(set) var verifiedPhone: String?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.address = try node.get("address")
         self.email = try node.get("email")
         self.name = try node.get("name")
