@@ -9,13 +9,13 @@
 import Foundation
 import Vapor
 
-public final class InvoiceLineGroup: StripeModelProtocol {
+open class InvoiceLineGroup: StripeModelProtocol {
     
     public private(set) var object: String?
     public private(set) var hasMore: Bool?
     public private(set) var items: [InvoiceLineItem]?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.object = try node.get("object")
         self.hasMore = try node.get("has_more")
         self.items = try node.get("data")

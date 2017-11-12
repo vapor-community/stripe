@@ -15,7 +15,7 @@ import Vapor
  https://stripe.com/docs/api#order_return_object
  */
 
-public final class OrderReturn: StripeModelProtocol {
+open class OrderReturn: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -27,7 +27,7 @@ public final class OrderReturn: StripeModelProtocol {
     public private(set) var order: String?
     public private(set) var refund: String?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.amount = try node.get("amount")

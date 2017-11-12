@@ -9,8 +9,7 @@
 import Foundation
 import Vapor
 
-
-public final class ShippingMethod: StripeModelProtocol {
+open class ShippingMethod: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var amount: Int?
@@ -18,7 +17,7 @@ public final class ShippingMethod: StripeModelProtocol {
     public private(set) var deliveryEstimate: DeliveryEstimate?
     public private(set) var description: String?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.amount = try node.get("amount")
         if let currency = node["currency"]?.string {

@@ -9,12 +9,11 @@
 import Foundation
 import Vapor
 
-
 /**
  Shipping
  https://stripe.com/docs/api/curl#charge_object-shipping
  */
-public final class ShippingLabel: StripeModelProtocol {
+open class ShippingLabel: StripeModelProtocol {
     
     public var address: ShippingAddress?
     public var carrier: String?
@@ -24,7 +23,7 @@ public final class ShippingLabel: StripeModelProtocol {
     
     public init() { }
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.address = try node.get("address")
         self.carrier = try node.get("carrier")
         self.name = try node.get("name")

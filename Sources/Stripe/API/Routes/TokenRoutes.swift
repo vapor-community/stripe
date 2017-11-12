@@ -9,7 +9,7 @@
 import Node
 import HTTP
 
-public final class TokenRoutes {
+open class TokenRoutes {
     
     let client: StripeClient
     

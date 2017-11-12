@@ -19,12 +19,12 @@ public enum FraudReport: String {
     case fraudulent = "fraudulent"
 }
 
-public final class FraudDetails: StripeModelProtocol {
+open class FraudDetails: StripeModelProtocol {
 
     public private(set) var userReport: FraudReport?
     public private(set) var stripeReport: FraudReport?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         if let value: String? = try node.get("user_report") {
             if let value = value {
                 self.userReport = FraudReport(rawValue: value)

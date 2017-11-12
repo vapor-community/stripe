@@ -9,13 +9,12 @@
 import Foundation
 import Vapor
 
-
 /**
  Order object
  https://stripe.com/docs/api#order_object
  */
 
-public final class Order: StripeModelProtocol {
+open class Order: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -41,7 +40,7 @@ public final class Order: StripeModelProtocol {
     public private(set) var updated: Date?
     public private(set) var upstreamId: String?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.amount = try node.get("amount")

@@ -8,13 +8,11 @@
 
 import Node
 
-
-
 /**
  Balance transfer is the body object of available array.
  https://stripe.com/docs/api/curl#balance_object
  */
-public class BalanceTransfer: StripeModelProtocol {
+open class BalanceTransfer: StripeModelProtocol {
     
     public private(set) var currency: StripeCurrency?
     public private(set) var amount: Int?

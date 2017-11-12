@@ -9,8 +9,7 @@
 import Foundation
 import Vapor
 
-
-public final class AdditionalOwner: StripeModelProtocol {
+open class AdditionalOwner: StripeModelProtocol {
     
     public private(set) var firstName: String?
     public private(set) var lastName: String?
@@ -18,7 +17,7 @@ public final class AdditionalOwner: StripeModelProtocol {
     public private(set) var address: ShippingAddress?
     public private(set) var verification: Verification?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.firstName = try node.get("first_name")
         self.lastName = try node.get("last_name")
         self.dateOfBirth = try node.get("dob")

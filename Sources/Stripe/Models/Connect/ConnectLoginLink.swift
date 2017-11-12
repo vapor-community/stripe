@@ -9,13 +9,13 @@
 import Foundation
 import Vapor
 
-public final class ConnectLoginLink: StripeModelProtocol {
+open class ConnectLoginLink: StripeModelProtocol {
     
     public private(set) var object: String?
     public private(set) var created: Date?
     public private(set) var url: String?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.object = try node.get("object")
         self.created = try node.get("created")
         self.url = try node.get("url")

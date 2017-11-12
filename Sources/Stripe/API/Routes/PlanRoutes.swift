@@ -9,7 +9,7 @@
 import Node
 import HTTP
 
-public final class PlanRoutes {
+open class PlanRoutes {
     let client: StripeClient
     
     init(client: StripeClient) {

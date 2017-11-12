@@ -8,14 +8,14 @@
 
 import Node
 
-public final class Balance: StripeModelProtocol {
+open class Balance: StripeModelProtocol {
 
     public private(set) var object: String?
     public private(set) var isLiveMode: Bool?
     public private(set) var available: [BalanceTransfer]?
     public private(set) var pending: [BalanceTransfer]?
 
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.object = try node.get("object")
         self.isLiveMode = try node.get("livemode")
         self.available = try node.get("available")

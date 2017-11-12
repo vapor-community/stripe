@@ -9,12 +9,11 @@
 import Foundation
 import Vapor
 
-
 /**
  Bank Account Model
  https://stripe.com/docs/api/curl#customer_bank_account_object
 */
-public final class BankAccount: StripeModelProtocol {
+open class BankAccount: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -38,7 +37,7 @@ public final class BankAccount: StripeModelProtocol {
     public private(set) var accountHolderType: String?
     public private(set) var metadata: Node?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.account = try node.get("account")

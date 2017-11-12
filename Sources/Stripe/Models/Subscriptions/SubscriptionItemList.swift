@@ -9,8 +9,7 @@
 import Foundation
 import Vapor
 
-
-public final class SubscriptionItemList: StripeModelProtocol {
+open class SubscriptionItemList: StripeModelProtocol {
     
     public private(set) var object: String?
     public private(set) var hasMore: Bool?
@@ -18,7 +17,7 @@ public final class SubscriptionItemList: StripeModelProtocol {
     public private(set) var url: String?
     public private(set) var totalCount: Int?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.object = try node.get("object")
         self.hasMore = try node.get("has_more")
         self.items = try node.get("data")

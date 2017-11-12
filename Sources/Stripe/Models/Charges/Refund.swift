@@ -15,7 +15,7 @@ import Vapor
  https://stripe.com/docs/api/curl#charge_object-refunds
  */
 
-public final class Refund: StripeModelProtocol {
+open class Refund: StripeModelProtocol {
     
     public private(set) var object: String?
     public private(set) var hasMore: Bool
@@ -23,7 +23,7 @@ public final class Refund: StripeModelProtocol {
     public private(set) var url: String?
     public private(set) var items: [RefundItem]?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.object = try node.get("object")
         self.items = try node.get("data")
         self.hasMore = try node.get("has_more")

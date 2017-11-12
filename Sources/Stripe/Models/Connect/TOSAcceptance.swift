@@ -9,13 +9,13 @@
 import Foundation
 import Vapor
 
-public final class TOSAcceptance: StripeModelProtocol {
+open class TOSAcceptance: StripeModelProtocol {
     
     public private(set) var timestamp: Date?
     public private(set) var ip: String?
     public private(set) var userAgent: String?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.timestamp = try node.get("timestamp")
         self.ip = try node.get("ip")
         self.userAgent = try node.get("user_agent")

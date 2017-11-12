@@ -8,7 +8,7 @@
 import HTTP
 import Node
 
-public final class EphemeralKeyRoutes {
+open class EphemeralKeyRoutes {
     let client: StripeClient
     
     init(client: StripeClient) {

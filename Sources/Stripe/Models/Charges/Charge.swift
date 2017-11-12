@@ -14,7 +14,7 @@ import Vapor
  Charge Model
  https://stripe.com/docs/api/curl#charge_object
  */
-public final class Charge: StripeModelProtocol {
+open class Charge: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -60,9 +60,7 @@ public final class Charge: StripeModelProtocol {
     public private(set) var shippingLabel: ShippingLabel?
     public private(set) var transferGroup: String?
     
-    public init() {}
-    
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.amount = try node.get("amount")

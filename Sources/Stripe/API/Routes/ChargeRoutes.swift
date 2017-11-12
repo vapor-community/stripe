@@ -21,7 +21,7 @@ public enum ChargeType {
     case customer(String)
 }
 
-public final class ChargeRoutes {
+open class ChargeRoutes {
     
     let client: StripeClient
     

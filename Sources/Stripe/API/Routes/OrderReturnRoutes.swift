@@ -8,7 +8,7 @@
 
 import Node
 
-public final class OrderReturnRoutes {
+open class OrderReturnRoutes {
     let client: StripeClient
     
     init(client: StripeClient) {

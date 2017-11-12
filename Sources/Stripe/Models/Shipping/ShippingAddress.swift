@@ -9,13 +9,12 @@
 import Foundation
 import Vapor
 
-
 /**
  Shipping Address
  https://stripe.com/docs/api/curl#charge_object-shipping-address
  */
 
-public final class ShippingAddress: StripeModelProtocol {
+open class ShippingAddress: StripeModelProtocol {
     
     public var city: String?
     public var country: String?
@@ -26,7 +25,7 @@ public final class ShippingAddress: StripeModelProtocol {
     
     public init() { }
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.city = try node.get("city")
         self.country = try node.get("country")
         self.addressLine1 = try node.get("line1")

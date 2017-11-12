@@ -13,7 +13,7 @@ import Vapor
  Discount Model
  https://stripe.com/docs/api/curl#discount_object
  */
-public final class Discount: StripeModelProtocol {
+open class Discount: StripeModelProtocol {
     
     public private(set) var object: String?
     public private(set) var coupon: Coupon?
@@ -23,7 +23,7 @@ public final class Discount: StripeModelProtocol {
     public private(set) var subscription: String?
     
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         
         self.object = try node.get("object")
         self.coupon = try node.get("coupon")

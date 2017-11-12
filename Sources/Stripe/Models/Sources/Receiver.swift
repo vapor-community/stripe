@@ -9,8 +9,7 @@
 import Foundation
 import Vapor
 
-
-public final class Receiver: StripeModelProtocol {
+open class Receiver: StripeModelProtocol {
     
     public private(set) var address: String?
     public private(set) var amountCharged: Int?
@@ -19,7 +18,7 @@ public final class Receiver: StripeModelProtocol {
     public private(set) var refundMethod: String?
     public private(set) var refundStatus: String?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.address = try node.get("address")
         self.amountCharged = try node.get("amount_charged")
         self.amountReceived = try node.get("amount_received")

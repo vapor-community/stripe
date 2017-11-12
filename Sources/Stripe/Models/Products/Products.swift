@@ -9,13 +9,12 @@
 import Foundation
 import Vapor
 
-
 /**
  Product object
  https://stripe.com/docs/api#products
  */
 
-public final class Product: StripeModelProtocol {
+open class Product: StripeModelProtocol {
     
     public private(set) var id: String?
     public private(set) var object: String?
@@ -35,7 +34,7 @@ public final class Product: StripeModelProtocol {
     public private(set) var updated: Date?
     public private(set) var url: String?
     
-    public init(node: Node) throws {
+    public required init(node: Node) throws {
         self.id = try node.get("id")
         self.object = try node.get("object")
         self.active = try node.get("active")

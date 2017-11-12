@@ -8,7 +8,7 @@
 
 import Node
 
-public final class BalanceRoutes {
+open class BalanceRoutes {
     
     let client: StripeClient
     
