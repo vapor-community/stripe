@@ -33,6 +33,7 @@ class BalanceTests: XCTestCase {
             
             transactionId = try drop?.stripe?.charge.create(amount: 10_00,
                                                             in: .usd,
+                                                            withFee: nil,
                                                             toAccount: nil,
                                                             capture: nil,
                                                             description: "Vapor Stripe: Test Description",
