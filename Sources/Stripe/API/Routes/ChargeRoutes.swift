@@ -37,12 +37,15 @@ open class ChargeRoutes {
      
      NOTE: Accounts and Fees are only applicable to connected accounts
      
-     - parameter amount:                The payment amount in cents
+     - parameter amount:                The payment amount in cents.
      
-     - parameter currency:              The currency in which the charge will be under
-     
-     - parameter fee:                   A fee to charge if you are using connected accounts (Must be in cents)
-     
+     - parameter currency:              The currency in which the charge will be under.
+
+     - parameter fee:                   The platform's fee to collect, in cents.
+                                        Note that fee is capped at the total transaction amount minus any Stripe fees.
+                                        In case of creating destination charges please use both destinationAccountId
+                                        and destinationAmount parameters instead.
+
      - parameter account:               The account id which the payment would be sent to.
      
      - parameter capture:               Whether or not to immediately capture the charge.
@@ -52,7 +55,9 @@ open class ChargeRoutes {
      - parameter destinationAccountId:  If specified, the charge will be attributed to the destination account for tax reporting,
                                         and the funds from the charge will be transferred to the destination account.
      
-     - parameter destinationAmount:     The amount to transfer to the destination account without creating an Application Fee.
+     - parameter destinationAmount:     The amount to transfer to the destination account in cents. Calculate this value by subtracting
+                                        your platform’s fees from the total charge amount. Note that destination amount is capped
+                                        at the total charge amount.
      
      - parameter transferGroup:         A string that identifies this transaction as part of a group.
      
@@ -85,7 +90,7 @@ open class ChargeRoutes {
             headers = [
                 StripeHeader.Account: account
             ]
-            
+
             if let fee = fee {
                 body["application_fee"] = fee
             }
@@ -99,8 +104,11 @@ open class ChargeRoutes {
             body["description"] = description
         }
         
-        if let destinationAccountId = destinationAccountId, let destinationAmount = destinationAmount {
+        if let destinationAccountId = destinationAccountId {
             body["destination[account]"] = destinationAccountId
+        }
+
+        if let destinationAmount = destinationAmount {
             body["destination[amount]"] = destinationAmount
         }
         

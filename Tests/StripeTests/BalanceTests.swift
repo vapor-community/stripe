@@ -23,31 +23,31 @@ class BalanceTests: XCTestCase {
             drop = try self.makeDroplet()
             
             let paymentToken = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
-                                                             expirationMonth: 10,
-                                                             expirationYear: 2018,
-                                                             cvc: 123,
-                                                             name: "Test Card",
-                                                             customer: nil,
-                                                             currency: nil)
-                                                            .serializedResponse().id ?? ""
+                                                                        expirationMonth: 10,
+                                                                        expirationYear: 2018,
+                                                                        cvc: 123,
+                                                                        name: "Test Card",
+                                                                        customer: nil,
+                                                                        currency: nil)
+                                                                        .serializedResponse().id ?? ""
             
             transactionId = try drop?.stripe?.charge.create(amount: 10_00,
                                                             in: .usd,
                                                             withFee: nil,
                                                             toAccount: nil,
-                                                           capture: nil,
-                                                           description: "Vapor Stripe: Test Description",
-                                                           destinationAccountId: nil,
-                                                           destinationAmount: nil,
-                                                           transferGroup: nil,
-                                                           onBehalfOf: nil,
-                                                           receiptEmail: nil,
-                                                           shippingLabel: nil,
-                                                           customer: nil,
-                                                           statementDescriptor: nil,
-                                                           source: paymentToken,
-                                                           metadata: nil)
-                                                           .serializedResponse().balanceTransactionId ?? ""
+                                                            capture: nil,
+                                                            description: "Vapor Stripe: Test Description",
+                                                            destinationAccountId: nil,
+                                                            destinationAmount: nil,
+                                                            transferGroup: nil,
+                                                            onBehalfOf: nil,
+                                                            receiptEmail: nil,
+                                                            shippingLabel: nil,
+                                                            customer: nil,
+                                                            statementDescriptor: nil,
+                                                            source: paymentToken,
+                                                            metadata: nil)
+                                                            .serializedResponse().balanceTransactionId ?? ""
         }
         catch let error as StripeError {
             
