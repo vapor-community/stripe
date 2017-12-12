@@ -34,7 +34,6 @@ class RefundTests: XCTestCase {
             
             let chargeId = try drop?.stripe?.charge.create(amount: 10_00,
                                                            in: .usd,
-                                                           withFee: nil,
                                                            toAccount: nil,
                                                            capture: true,
                                                            description: "Vapor Stripe: Test Description",
@@ -104,7 +103,6 @@ class RefundTests: XCTestCase {
             
             let charge = try drop?.stripe?.charge.create(amount: 10_00,
                                                          in: .usd,
-                                                         withFee: nil,
                                                          toAccount: nil,
                                                          capture: true,
                                                          description: "Vapor Stripe: Test Description",
