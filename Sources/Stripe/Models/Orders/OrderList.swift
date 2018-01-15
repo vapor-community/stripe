@@ -1,22 +1,22 @@
 //
-//  OrderReturnList.swift
+//  OrderList.swift
 //  Stripe
 //
-//  Created by Andrew Edwards on 8/25/17.
+//  Created by Andrew Edwards on 8/23/17.
 //
 //
 
 /**
- Order return List
- https://stripe.com/docs/api#list_order_returns
+ Orders List
+ https://stripe.com/docs/api/curl#list_orders
  */
 
-public struct OrderReturnList: List, StripeModelProtocol {
+public struct OrdersList: List, StripeModelProtocol {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?
     public var url: String?
-    public var items: [StripeOrderReturn]?
+    public var items: [StripeOrder]?
     
     enum CodingKeys: String, CodingKey {
         case object
