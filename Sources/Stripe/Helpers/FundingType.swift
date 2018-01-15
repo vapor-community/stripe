@@ -6,22 +6,9 @@
 //
 //
 
-import Foundation
-
-public enum FundingType: String {
-    case credit = "credit"
-    case debit = "debit"
-    case prepaid = "prepaid"
-    case unknown = "unknown"
-}
-
-extension FundingType {
-    public init?(optionalRawValue: String?) {
-        if let rawValue = optionalRawValue {
-            if let value = FundingType(rawValue: rawValue) {
-                self = value
-            }
-        }
-        return nil
-    }
+public enum FundingType: String, Codable {
+    case credit
+    case debit
+    case prepaid
+    case unknown
 }

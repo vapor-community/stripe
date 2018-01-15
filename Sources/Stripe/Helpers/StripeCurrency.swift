@@ -6,19 +6,15 @@
 //
 //
 
-public enum StripeCurrency: String {
-    case aud = "aud"
-    case cad = "cad"
-    case dkk = "dkk"
-    case eur = "eur"
-    case gbp = "gbp"
-    case jpy = "jpy"
-    case nok = "nok"
-    case usd = "usd"
-    case sek = "sek"
-    case sgd = "sgd"
-    
-    var description: String {
-        return self.rawValue.uppercased()
-    }
+public enum StripeCurrency: String, Codable {
+    case aud
+    case cad
+    case dkk
+    case eur
+    case gbp
+    case jpy
+    case nok
+    case usd
+    case sek
+    case sgd
 }

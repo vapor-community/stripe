@@ -6,18 +6,23 @@
 //
 //
 
-import Foundation
-
-public enum InventoryType: String {
-    case finite = "finite"
-    case bucket = "bucket"
-    case infinite = "infinite"
-    case unknown = "unknown"
+public enum InventoryType: String, Codable {
+    case finite
+    case bucket
+    case infinite
+    case unknown
 }
 
-public enum InventoryTypeValue: String {
-    case inStock = "in_stock"
-    case limited = "limited"
-    case outOfStock = "out_of_stock"
-    case unknown = "unknown"
+public enum InventoryTypeValue: String, Codable {
+    case inStock
+    case limited
+    case outOfStock
+    case unknown
+    
+    enum Codingeys: String, CodingKey {
+        case inStock = "in_stock"
+        case limited
+        case outOfStock = "out_of_stock"
+        case unknown
+    }
 }
