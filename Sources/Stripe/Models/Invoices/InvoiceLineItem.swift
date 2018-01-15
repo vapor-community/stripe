@@ -7,76 +7,64 @@
 //
 
 import Foundation
-import Vapor
 
-open class InvoiceLineItem: StripeModelProtocol {
+/**
+ InvoiceItem object
+ https://stripe.com/docs/api#invoice_line_item_object
+ */
+
+public protocol InvoiceLineItem {
+    associatedtype P: Plan
     
-    public private(set) var id: String?
-    public private(set) var object: String?
-    public private(set) var amount: Int
-    public private(set) var description: String?
-    public private(set) var isDiscountable: Bool
-    public private(set) var isLiveMode: Bool
-    public private(set) var periodStart: Date?
-    public private(set) var periodEnd: Date?
-    public private(set) var isProration: Bool
-    public private(set) var quantity: Int?
-    public private(set) var subscription: String?
-    public private(set) var subscriptionItem: String?
+    var id: String? { get }
+    var object: String? { get }
+    var amount: Int? { get }
+    var currency: StripeCurrency? { get }
+    var description: String? { get }
+    var isDiscountable: Bool? { get }
+    var isLive: Bool? { get }
+    var metadata: [String: String]? { get }
+    var period: Period? { get }
+    var plan: P? { get }
+    var isProration: Bool? { get }
+    var quantity: Int? { get }
+    var subscription: String? { get }
+    var subscriptionItem: String? { get }
+    var type: String? { get }
+}
+
+public struct StripeInvoiceLineItem: InvoiceLineItem, StripeModelProtocol {
+    public var id: String?
+    public var object: String?
+    public var amount: Int?
+    public var currency: StripeCurrency?
+    public var description: String?
+    public var isDiscountable: Bool?
+    public var isLive: Bool?
+    public var metadata: [String : String]?
+    public var period: Period?
+    public var plan: StripePlan?
+    public var isProration: Bool?
+    public var quantity: Int?
+    public var subscription: String?
+    public var subscriptionItem: String?
+    public var type: String?
     
-    public private(set) var plan: Plan?
-    
-    public private(set) var metadata: Node?
-    
-    public private(set) var currency: StripeCurrency?
-    
-    public required init(node: Node) throws {
-        self.id = try node.get("id")
-        self.object = try node.get("object")
-        self.amount = try node.get("amount")
-        self.description = try node.get("description")
-        self.isDiscountable = try node.get("discountable")
-        self.isLiveMode = try node.get("livemode")
-        self.isProration = try node.get("proration")
-        self.quantity = try node.get("quantity")
-        self.subscription = try node.get("subscription")
-        self.subscriptionItem = try node.get("subscription_item")
-        
-        self.plan = try node.get("plan")
-        
-        self.metadata = try node.get("metadata")
-        
-        if let period = node["period"]?.object {
-            self.periodStart = period["start"]?.date
-            self.periodEnd = period["end"]?.date
-        }
-        
-        if let currency = node["currency"]?.string {
-            self.currency = StripeCurrency(rawValue: currency)
-        }
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String: Any?] = [
-            "id": self.id,
-            "object": self.object,
-            "amount": self.amount,
-            "description": self.description,
-            "discountable": self.isDiscountable,
-            "livemode": self.isLiveMode,
-            "proration": self.isProration,
-            "quantity": self.quantity,
-            "subscription": self.subscription,
-            "subscription_item": self.subscriptionItem,
-            "plan": self.plan,
-            "metadata": self.metadata,
-            "period": [
-                "start": self.periodStart,
-                "end": self.periodEnd
-            ],
-            "currency": self.currency?.rawValue
-        ]
-        
-        return try Node(node: object)
+    enum CodingKeys: String, CodingKey {
+        case id
+        case object
+        case amount
+        case currency
+        case description
+        case isDiscountable = "discountable"
+        case isLive = "livemode"
+        case metadata
+        case period
+        case plan
+        case isProration = "proration"
+        case quantity
+        case subscription
+        case subscriptionItem = "subscription_item"
+        case type
     }
 }

@@ -1,22 +1,21 @@
 //
-//  InvoiceLineGroup.swift
+//  InvoiceItemList.swift
 //  Stripe
 //
-//  Created by Anthony Castelli on 9/5/17.
-//
+//  Created by Andrew Edwards on 12/7/17.
 //
 
 /**
- InvoiceLines list
- https://stripe.com/docs/api#invoice_lines
+ InvoiceItems List
+ https://stripe.com/docs/api#list_invoiceitems
  */
 
-public struct InvoiceLineGroup: List, StripeModelProtocol {
+public struct InvoiceItemsList: List, StripeModelProtocol {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?
     public var url: String?
-    public var items: [StripeInvoiceLineItem]?
+    public var items: [StripeInvoiceItem]?
     
     enum CodingKeys: String, CodingKey {
         case object
@@ -26,3 +25,4 @@ public struct InvoiceLineGroup: List, StripeModelProtocol {
         case items = "data"
     }
 }
+
