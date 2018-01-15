@@ -6,50 +6,48 @@
 //
 //
 
-import Vapor
+import Foundation
 
 /**
- Token Model
+ Token object
  https://stripe.com/docs/api/curl#token_object
  */
-open class Token: StripeModelProtocol {
+
+public protocol Token {
+    associatedtype C: Card
+    associatedtype B: BankAccount
     
-    public private(set) var id: String?
-    public private(set) var object: String?
-    public private(set) var type: String?
-    public private(set) var clientIp: String?
-    public private(set) var created: Date?
-    public private(set) var isLive: Bool?
-    public private(set) var isUsed: Bool?
+    var id: String? { get }
+    var object: String? { get }
+    var type: String? { get }
+    var clientIp: String? { get }
+    var created: Date? { get }
+    var isLive: Bool? { get }
+    var isUsed: Bool? { get }
+    var card: C? { get }
+    var bankAccount: B? { get }
+}
+
+public struct StripeToken: Token, StripeModelProtocol {
+    public var id: String?
+    public var object: String?
+    public var type: String?
+    public var clientIp: String?
+    public var created: Date?
+    public var isLive: Bool?
+    public var isUsed: Bool?
+    public var card: StripeCard?
+    public var bankAccount: StripeBankAccount?
     
-    public private(set) var card: Card?
-    public private(set) var bankAccount: BankAccount?
-    
-    public required init(node: Node) throws {
-        self.id = try node.get("id")
-        self.object = try node.get("object")
-        self.type = try node.get("type")
-        self.clientIp = try node.get("client_ip")
-        self.created = try node.get("created")
-        self.isLive = try node.get("livemode")
-        self.isUsed = try node.get("used")
-        self.card = try node.get("card")
-        self.bankAccount = try node.get("bank_account")
+    enum CodingKeys: String, CodingKey {
+        case id
+        case object
+        case type
+        case clientIp = "client_ip"
+        case created
+        case isLive = "livemode"
+        case isUsed = "used"
+        case card
+        case bankAccount = "bank_account"
     }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String: Any?] = [
-            "id": self.id,
-            "object": self.object,
-            "type": self.type,
-            "client_ip": self.clientIp,
-            "created": self.created,
-            "livemode": self.isLive,
-            "used": self.isUsed,
-            "card": self.card,
-            "banl_account": self.bankAccount
-        ]
-        return try Node(node: object)
-    }
-    
 }
