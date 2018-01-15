@@ -9,7 +9,7 @@
 import Foundation
 
 /**
- Invoice Object
+ Invoice object
  https://stripe.com/docs/api#invoice_object
  */
 

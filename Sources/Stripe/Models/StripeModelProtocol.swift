@@ -6,6 +6,6 @@
 //
 //
 
-import Node
+import Vapor
 
-public protocol StripeModelProtocol: NodeInitializable, NodeRepresentable { }
+public protocol StripeModelProtocol: Content { }
