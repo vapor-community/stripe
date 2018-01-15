@@ -6,35 +6,28 @@
 //
 //
 
-import Foundation
-import Vapor
+/**
+ Payout Schedule object
+ https://stripe.com/docs/api/curl#account_object-payout_schedule
+ */
 
-open class PayoutSchedule: StripeModelProtocol {
+public protocol PayoutSchedule {
+    var delayDays: Int? { get }
+    var interval: StripePayoutInterval? { get }
+    var monthlyAnchor: Int? { get }
+    var weeklyAnchor: StripeWeeklyAnchor? { get }
+}
+
+public struct StripePayoutSchedule: PayoutSchedule, StripeModelProtocol {
+    public var delayDays: Int?
+    public var interval: StripePayoutInterval?
+    public var monthlyAnchor: Int?
+    public var weeklyAnchor: StripeWeeklyAnchor?
     
-    public private(set) var delayDays: Int?
-    public private(set) var interval: StripePayoutInterval?
-    public private(set) var monthlyAnchor: Int?
-    public private(set) var weeklyAnchor: StripeWeeklyAnchor?
-    
-    public required init(node: Node) throws {
-        
-        self.delayDays = try node.get("delay_days")
-        if let interval = node["interval"]?.string {
-            self.interval = StripePayoutInterval(rawValue: interval)
-        }
-        if let weeklyAnchor = node["weekly_anchor"]?.string {
-            self.weeklyAnchor = StripeWeeklyAnchor(rawValue: weeklyAnchor)
-        }
-        self.monthlyAnchor = try node.get("monthly_anchor")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String: Any?] = [
-            "delay_days": self.delayDays,
-            "interval": self.interval,
-            "weekly_anchor": self.weeklyAnchor,
-            "monthly_anchor": self.monthlyAnchor
-        ]
-        return try Node(node: object)
+    enum CodingKeys: String, CodingKey {
+        case delayDays = "delay_days"
+        case interval
+        case monthlyAnchor = "monthly_anchor"
+        case weeklyAnchor = "weekly_anchor"
     }
 }

@@ -7,27 +7,26 @@
 //
 
 import Foundation
-import Vapor
 
-open class TOSAcceptance: StripeModelProtocol {
+/**
+ Terms of acceptance objecr
+ https://stripe.com/docs/api/curl#account_object-tos_acceptance
+ */
+
+public protocol TOSAcceptance {
+    var timestamp: Date? { get }
+    var ip: String? { get }
+    var userAgent: String? { get }
+}
+
+public struct StripeTOSAcceptance: TOSAcceptance, StripeModelProtocol {
+    public var timestamp: Date?
+    public var ip: String?
+    public var userAgent: String?
     
-    public private(set) var timestamp: Date?
-    public private(set) var ip: String?
-    public private(set) var userAgent: String?
-    
-    public required init(node: Node) throws {
-        self.timestamp = try node.get("timestamp")
-        self.ip = try node.get("ip")
-        self.userAgent = try node.get("user_agent")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String: Any?] = [
-            "timestamp": self.timestamp,
-            "ip": self.ip,
-            "user_agent": self.userAgent
-        ]
-        
-        return try Node(node: object)
+    enum CodingKeys: String, CodingKey {
+        case timestamp
+        case ip
+        case userAgent =  "user_agent"
     }
 }

@@ -7,70 +7,69 @@
 //
 
 import Foundation
-import Vapor
 
 /**
- Legal Entity
+ Legal Entity object
+ https://stripe.com/docs/api/curl#account_object-legal_entity
  */
 
-open class LegalEntity: StripeModelProtocol {
+public protocol LegalEntity {
+    associatedtype AO: LegalEntityAdditionalOwner
+    associatedtype A: Address
+    associatedtype LEA: LegalEntityVerification
     
-    public private(set) var additionalOwners: [AdditionalOwner]?
-    public private(set) var address: ShippingAddress?
-    public private(set) var businessName: String?
-    public private(set) var businessTaxIdProvided: Bool?
-    public private(set) var businessVATIdProvided: Bool?
-    public private(set) var dateOfBirth: Node?
-    public private(set) var firstName: String?
-    public private(set) var lastName: String?
-    public private(set) var gender: String?
-    public private(set) var maidenName: String?
-    public private(set) var personalAddress: ShippingAddress?
-    public private(set) var phoneNumber: String?
-    public private(set) var ssnLast4Provided: Bool?
-    public private(set) var taxIdRegistrar: String?
-    public private(set) var type: String?
-    public private(set) var verification: Verification?
+    var additionalOwners: [AO]?  { get }
+    var address: A?  { get }
+    var businessName: String?  { get }
+    var businessTaxIdProvided: Bool?  { get }
+    var businessVATIdProvided: Bool?  { get }
+    var dateOfBirth: [String: Int]? { get }
+    var firstName: String? { get }
+    var lastName: String? { get }
+    var gender: String? { get }
+    var maidenName: String? { get }
+    var personalAddress: A? { get }
+    var phoneNumber: String? { get }
+    var ssnLast4Provided: Bool? { get }
+    var taxIdRegistrar: String? { get }
+    var type: String? { get }
+    var verification: LEA? { get }
+}
+
+public struct StripeConnectAccountLegalEntity: LegalEntity, StripeModelProtocol {
+    public var additionalOwners: [StripeLegalEntityAdditionalOwner]?
+    public var address: StripeAddress?
+    public var businessName: String?
+    public var businessTaxIdProvided: Bool?
+    public var businessVATIdProvided: Bool?
+    public var dateOfBirth: [String: Int]?
+    public var firstName: String?
+    public var lastName: String?
+    public var gender: String?
+    public var maidenName: String?
+    public var personalAddress: StripeAddress?
+    public var phoneNumber: String?
+    public var ssnLast4Provided: Bool?
+    public var taxIdRegistrar: String?
+    public var type: String?
+    public var verification: StripeLegalEntityVerification?
     
-    public required init(node: Node) throws {
-        self.additionalOwners = try node.get("additional_owners")
-        self.address = try node.get("address")
-        self.businessName = try node.get("business_name")
-        self.businessTaxIdProvided = try node.get("business_tax_id_provided")
-        self.businessVATIdProvided = try node.get("business_vat_id_provided")
-        self.dateOfBirth = try node.get("dob")
-        self.firstName = try node.get("first_name")
-        self.lastName = try node.get("last_name")
-        self.gender = try node.get("gender")
-        self.maidenName = try node.get("maiden_name")
-        self.personalAddress = try node.get("personal_address")
-        self.phoneNumber = try node.get("phone_number")
-        self.ssnLast4Provided = try node.get("ssn_last_4_provided")
-        self.taxIdRegistrar = try node.get("tax_id_registrar")
-        self.type = try node.get("type")
-        self.verification = try node.get("verification")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String: Any?] = [
-            "additional_owners": additionalOwners,
-            "address": self.address,
-            "business_name": self.businessName,
-            "business_tax_id_provided": self.businessTaxIdProvided,
-            "business_vat_id_provided": self.businessVATIdProvided,
-            "dob": self.dateOfBirth,
-            "first_name": self.firstName,
-            "last_name": self.lastName,
-            "gender": self.gender,
-            "maiden_name": self.maidenName,
-            "personal_address": self.personalAddress,
-            "phone_number": self.phoneNumber,
-            "ssn_last_4_provided": self.ssnLast4Provided,
-            "tax_id_registrar": self.taxIdRegistrar,
-            "type": self.type,
-            "verification": self.verification
-        ]
-        
-        return try Node(node: object)
+    enum CodingKeys: String, CodingKey {
+        case additionalOwners = "additional_owners"
+        case address
+        case businessName = "business_name"
+        case businessTaxIdProvided = "business_tax_id_provided"
+        case businessVATIdProvided = "business_vat_id_provided"
+        case dateOfBirth = "dob"
+        case firstName = "first_name"
+        case lastName = "last_name"
+        case gender
+        case maidenName = "maiden_name"
+        case personalAddress = "personal_address"
+        case phoneNumber = "phone_number"
+        case ssnLast4Provided = "ssn_last_4_provided"
+        case taxIdRegistrar = "tax_id_registrar"
+        case type
+        case verification
     }
 }

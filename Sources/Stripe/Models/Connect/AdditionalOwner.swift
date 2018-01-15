@@ -6,34 +6,34 @@
 //
 //
 
-import Foundation
-import Vapor
+/**
+ Additional Owner object
+ https://stripe.com/docs/api/curl#account_object-legal_entity-additional_owners
+ */
 
-open class AdditionalOwner: StripeModelProtocol {
+public protocol LegalEntityAdditionalOwner {
+    associatedtype SA: Address
+    associatedtype LEV: LegalEntityVerification
     
-    public private(set) var firstName: String?
-    public private(set) var lastName: String?
-    public private(set) var dateOfBirth: Node?
-    public private(set) var address: ShippingAddress?
-    public private(set) var verification: Verification?
+    var firstName: String? { get }
+    var lastName: String? { get }
+    var dateOfBirth: [String: Int]? { get }
+    var address: SA? { get }
+    var verification: LEV? { get }
+}
+
+public struct StripeLegalEntityAdditionalOwner: LegalEntityAdditionalOwner, StripeModelProtocol {
+    public var firstName: String?
+    public var lastName: String?
+    public var dateOfBirth: [String: Int]?
+    public var address: StripeAddress?
+    public var verification: StripeLegalEntityVerification?
     
-    public required init(node: Node) throws {
-        self.firstName = try node.get("first_name")
-        self.lastName = try node.get("last_name")
-        self.dateOfBirth = try node.get("dob")
-        self.address = try node.get("address")
-        self.verification = try node.get("verification")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String: Any?] = [
-            "first_name": self.firstName,
-            "last_name": self.lastName,
-            "dob": self.dateOfBirth,
-            "address": self.address,
-            "verification": self.verification
-        ]
-        
-        return try Node(node: object)
+    enum CodingKeys: String, CodingKey {
+        case firstName = "first_name"
+        case lastName = "last_name"
+        case dateOfBirth = "dob"
+        case address
+        case verification
     }
 }
