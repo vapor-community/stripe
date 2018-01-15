@@ -6,43 +6,40 @@
 //
 //
 
-import Node
-
 /**
  Balance transfer is the body object of available array.
  https://stripe.com/docs/api/curl#balance_object
  */
-open class BalanceTransfer: StripeModelProtocol {
+
+public protocol BalanceTransfer {
+    var currency: StripeCurrency? { get }
+    var amount: Int? { get }
+    var sourceTypes: [SourceType: Int] { get }
+}
+
+public struct StripeBalanceTransfer: BalanceTransfer, StripeModelProtocol {
+    public var currency: StripeCurrency?
+    public var amount: Int?
+    public var sourceTypes: [SourceType: Int] = [:]
     
-    public private(set) var currency: StripeCurrency?
-    public private(set) var amount: Int?
-    public private(set) var sourceTypes: [SourceType: Int] = [:]
-    
-    public required init(node: Node) throws {
-        if let currency = node["currency"]?.string {
-            self.currency = StripeCurrency(rawValue: currency)
-        }
-        self.amount = try node.get("amount")
-        
-        let items: [String : Int] = try node.get("source_types")
-        
-        for item in items {
-            sourceTypes[SourceType(rawValue: item.key) ?? .none] = item.value
-        }
+    enum CodingKeys: String, CodingKey {
+        case currency
+        case amount
+        case sourceTypes = "source_types"
     }
     
-    public func makeNode(in context: Context?) throws -> Node {
-        let types = self.sourceTypes.flatMap { $0 }.reduce([String : Int]()) { dictionary, item in
-            var dictionary = dictionary
-            dictionary.updateValue(item.value, forKey: item.key.rawValue)
-            return dictionary
-        }
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-       let object: [String : Any?] = [
-        "currency": self.currency?.rawValue,
-        "amount": self.amount,
-        "source_types": types
-        ]
-        return try Node(node: object)
+        currency = try container.decode(StripeCurrency.self, forKey: .currency)
+        amount = try container.decode(Int.self, forKey: .amount)
+    
+        let tempTypes = try container.decode([String: Int].self, forKey: .sourceTypes)
+        
+        tempTypes.forEach { (key, value) in
+            let newKey = SourceType(rawValue: key)
+            // TODO: Figure out a way around this force unwrap.
+            sourceTypes[newKey!] = value
+        }
     }
 }
