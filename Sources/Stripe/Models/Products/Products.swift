@@ -7,74 +7,71 @@
 //
 
 import Foundation
-import Vapor
 
 /**
  Product object
  https://stripe.com/docs/api#products
  */
 
-open class Product: StripeModelProtocol {
+public protocol Product {
+    associatedtype L: List
+    associatedtype PD: PackageDimensions
     
-    public private(set) var id: String?
-    public private(set) var object: String?
-    public private(set) var active: Bool?
-    public private(set) var attributes: Node?
-    public private(set) var caption: String?
-    public private(set) var created: Date?
-    public private(set) var deactivateOn: Node?
-    public private(set) var description: String?
-    public private(set) var images: Node?
-    public private(set) var isLive: Bool?
-    public private(set) var metadata: Node?
-    public private(set) var name: String?
-    public private(set) var packageDimensions: PackageDimensions?
-    public private(set) var shippable: Bool?
-    public private(set) var skus: SKUList?
-    public private(set) var updated: Date?
-    public private(set) var url: String?
+    var id: String? { get }
+    var object: String? { get }
+    var active: Bool? { get }
+    var attributes: [String: String]? { get }
+    var caption: String? { get }
+    var created: Date? { get }
+    var deactivateOn: [String]? { get }
+    var description: String? { get }
+    var images: [String]? { get }
+    var isLive: Bool? { get }
+    var metadata: [String: String]? { get }
+    var name: String? { get }
+    var packageDimensions: PD? { get }
+    var shippable: Bool? { get }
+    var skus: L? { get }
+    var updated: Date? { get }
+    var url: String? { get }
+}
+
+public struct StripeProduct: Product, StripeModelProtocol {
+    public var id: String?
+    public var object: String?
+    public var active: Bool?
+    public var attributes: [String : String]?
+    public var caption: String?
+    public var created: Date?
+    public var deactivateOn: [String]?
+    public var description: String?
+    public var images: [String]?
+    public var isLive: Bool?
+    public var metadata: [String : String]?
+    public var name: String?
+    public var packageDimensions: StripePackageDimensions?
+    public var shippable: Bool?
+    public var skus: SKUList?
+    public var updated: Date?
+    public var url: String?
     
-    public required init(node: Node) throws {
-        self.id = try node.get("id")
-        self.object = try node.get("object")
-        self.active = try node.get("active")
-        self.attributes = try node.get("attributes")
-        self.caption = try node.get("caption")
-        self.created = try node.get("created")
-        self.deactivateOn = try node.get("deactivate_on")
-        self.description = try node.get("description")
-        self.images = try node.get("images")
-        self.isLive = try node.get("livemode")
-        self.metadata = try node.get("metadata")
-        self.name = try node.get("name")
-        self.packageDimensions = try node.get("package_dimensions")
-        self.shippable = try node.get("shippable")
-        self.skus = try node.get("skus")
-        self.updated = try node.get("updated")
-        self.url = try node.get("url")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        
-        let object: [String: Any?] = [
-            "id": self.id,
-            "object": self.object,
-            "active": self.active,
-            "attributes": self.attributes,
-            "caption": self.caption,
-            "created": self.created,
-            "deactivate_on": self.deactivateOn,
-            "description": self.description,
-            "images": self.images,
-            "livemode": self.isLive,
-            "name": self.name,
-            "metadata": self.metadata,
-            "package_dimensions": self.packageDimensions,
-            "shippable": self.shippable,
-            "skus": self.skus,
-            "updated": self.updated,
-            "url": self.url
-        ]
-        return try Node(node: object)
+    enum CodingKeys: String, CodingKey {
+        case id
+        case object
+        case active
+        case attributes
+        case caption
+        case created
+        case deactivateOn = "deactivate_on"
+        case description
+        case images
+        case isLive = "livemode"
+        case metadata
+        case name
+        case packageDimensions = "package_dimensions"
+        case shippable
+        case skus
+        case updated
+        case url
     }
 }
