@@ -6,122 +6,104 @@
 //
 //
 
-import Foundation
-import Vapor
-
 /**
- Card Model
+ Card object
  https://stripe.com/docs/api/curl#card_object
+ https://stripe.com/docs/sources/cards
  */
-open class Card: StripeModelProtocol {
+
+public protocol Card {
+    var id: String? { get }
+    var object: String? { get }
+    var account: String? { get }
+    var addressCity: String? { get }
+    var addressCountry: String? { get }
+    var addressLine1: String? { get }
+    var addressLine1Check: CardValidationCheck? { get }
+    var addressLine2: String? { get }
+    var addressState: String? { get }
+    var addressZip: String? { get }
+    var addressZipCheck: CardValidationCheck? { get }
+    var availablePayoutMethods: [String]? { get }
+    var brand: String? { get }
+    var country: String? { get }
+    var currency: StripeCurrency? { get }
+    var customerId: String? { get }
+    var cvcCheck: CardValidationCheck? { get }
+    var defaultForCurrency: Bool? { get }
+    var dynamicLastFour: String? { get }
+    var expirationMonth: Int? { get}
+    var expirationyear: Int? { get}
+    var fingerprint: String? { get }
+    var fundingType: FundingType? { get }
+    var lastFour: String { get }
+    var metadata: [String: String]? { get }
+    var name: String? { get }
+    var recipient: String? { get }
+    var tokenizedMethod: TokenizedMethod? { get }
+    var threeDSecure: String? { get }
+}
+
+public struct StripeCard: Card, StripeModelProtocol {
+    public var id: String?
+    public var object: String?
+    public var account: String?
+    public var addressCity: String?
+    public var addressCountry: String?
+    public var addressLine1: String?
+    public var addressLine1Check: CardValidationCheck?
+    public var addressLine2: String?
+    public var addressState: String?
+    public var addressZip: String?
+    public var addressZipCheck: CardValidationCheck?
+    public var availablePayoutMethods: [String]?
+    public var brand: String?
+    public var country: String?
+    public var currency: StripeCurrency?
+    public var customerId: String?
+    public var cvcCheck: CardValidationCheck?
+    public var defaultForCurrency: Bool?
+    public var dynamicLastFour: String?
+    public var expirationMonth: Int?
+    public var expirationyear: Int?
+    public var fingerprint: String?
+    public var fundingType: FundingType?
+    public var lastFour: String
+    public var metadata: [String : String]?
+    public var name: String?
+    public var recipient: String?
+    public var tokenizedMethod: TokenizedMethod?
+    public var threeDSecure: String?
     
-    public private(set) var id: String?
-    public private(set) var object: String?
-    public private(set) var account: String?
-    public private(set) var addressLine1Check: ValidationCheck?
-    public private(set) var addressZipCheck: ValidationCheck?
-    public private(set) var country: String?
-    public private(set) var brand: String?
-    public private(set) var customerId: String?
-    public private(set) var cvcCheck: ValidationCheck?
-    public private(set) var dynamicLastFour: String?
-    public private(set) var fingerprint: String?
-    public private(set) var fundingType: FundingType?
-    public private(set) var lastFour: String
-    public private(set) var tokenizedMethod: TokenizedMethod?
-    public private(set) var currency: StripeCurrency?
-    public private(set) var defaultForCurrency: Bool?
-    public private(set) var recipient: String?
-    
-    /**
-     Only these values are mutable/updatable.
-     https://stripe.com/docs/api/curl#update_card
-     */
-    
-    public private(set) var addressCity: String?
-    public private(set) var addressCountry: String?
-    public private(set) var addressLine1: String?
-    public private(set) var addressLine2: String?
-    public private(set) var addressState: String?
-    public private(set) var addressZip: String?
-    public private(set) var expirationMonth: Int?
-    public private(set) var expirationYear: Int?
-    public private(set) var metadata: Node?
-    public private(set) var name: String?
-    
-    public required init(node: Node) throws {
-        self.id = try node.get("id")
-        self.object = try node.get("object")
-        self.account = try node.get("account")
-        self.addressCity = try node.get("address_city")
-        self.addressCountry = try node.get("address_country")
-        self.addressLine1 = try node.get("address_line1")
-        if let addressLine1Check = node["address_line1_check"]?.string {
-            self.addressLine1Check = ValidationCheck(optionalRawValue: addressLine1Check)
-        }
-        self.addressLine2 = try node.get("address_line2")
-        self.addressState = try node.get("address_state")
-        self.addressZip = try node.get("address_zip")
-        if let addressZipCheck = node["address_zip_check"]?.string {
-            self.addressZipCheck = ValidationCheck(optionalRawValue: addressZipCheck)
-        }
-        self.country = try node.get("country")
-        self.brand = try node.get("brand")
-        if let currency = node["currency"]?.string {
-            self.currency = StripeCurrency(rawValue: currency)
-        }
-        self.defaultForCurrency = try node.get("default_for_currency")
-        self.customerId = try node.get("customer")
-        if let cvcCheck = node["cvc_check"]?.string {
-            self.cvcCheck = ValidationCheck(optionalRawValue: cvcCheck)
-        }
-        self.dynamicLastFour = try node.get("dynamic_last4")
-        self.expirationMonth = try node.get("exp_month")
-        self.expirationYear = try node.get("exp_year")
-        self.fingerprint = try node.get("fingerprint")
-        if let fundingType = node["funding"]?.string {
-            self.fundingType = FundingType(optionalRawValue: fundingType)
-        }
-        self.lastFour = try node.get("last4")
-        self.name = try node.get("name")
-        if let tokenizedMethod = node["tokenization_method"]?.string {
-            self.tokenizedMethod = TokenizedMethod(optionalRawValue: tokenizedMethod)
-        }
-        self.recipient = try node.get("recipient")
-        
-        self.metadata = try node.get("metadata")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String : Any?] = [
-            "id": self.id,
-            "object": self.object,
-            "account": self.account,
-            "address_city": self.addressCity,
-            "address_country": self.addressCountry,
-            "address_line1": self.addressLine1,
-            "address_line1_check": self.addressLine1Check?.rawValue,
-            "address_line2": self.addressLine2,
-            "address_state": self.addressState,
-            "address_zip": self.addressZip,
-            "address_zip_check": self.addressZipCheck?.rawValue,
-            "country": self.country,
-            "brand": self.brand,
-            "customer": self.customerId,
-            "currency": self.currency?.rawValue,
-            "cvc_check": self.cvcCheck?.rawValue,
-            "default_for_currency": self.defaultForCurrency,
-            "dynamic_last4": self.dynamicLastFour,
-            "exp_month": self.expirationMonth,
-            "exp_year": self.expirationYear,
-            "fingerprint": self.fingerprint,
-            "funding": self.fundingType?.rawValue,
-            "last4": self.lastFour,
-            "name": self.name,
-            "recipient": self.recipient,
-            "tokenization_method": self.tokenizedMethod?.rawValue,
-            "metadata": self.metadata
-        ]
-        return try Node(node: object)
+    enum CodingKeys: String, CodingKey {
+        case id
+        case object
+        case account
+        case addressCity = "address_city"
+        case addressCountry = "address_country"
+        case addressLine1 = "address_line1"
+        case addressLine1Check = "address_line1_check"
+        case addressLine2 = "address_line2"
+        case addressState = "address_state"
+        case addressZip = "address_zip"
+        case addressZipCheck = "address_zip_check"
+        case availablePayoutMethods = "available_payout_methods"
+        case brand
+        case country
+        case currency
+        case customerId
+        case cvcCheck = "cvc_check"
+        case defaultForCurrency = "default_for_currency"
+        case dynamicLastFour = "dynamic_last4"
+        case expirationMonth = "exp_month"
+        case expirationyear = "exp_year"
+        case fingerprint
+        case fundingType
+        case lastFour
+        case metadata
+        case name
+        case recipient
+        case tokenizedMethod = "tokenization_method"
+        case threeDSecure = "three_d_secure"
     }
 }
