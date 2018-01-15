@@ -6,31 +6,23 @@
 //
 //
 
-import Foundation
-import Vapor
+/**
+ Subscriptions List
+ https://stripe.com/docs/api/curl#list_subscriptions
+ */
 
-open class SubscriptionList: StripeModelProtocol {
+public struct SubscriptionList: List, StripeModelProtocol {
+    public var object: String?
+    public var hasMore: Bool?
+    public var totalCount: Int?
+    public var url: String?
+    public var items: [StripeSubscription]?
     
-    public private(set) var object: String?
-    public private(set) var hasMore: Bool?
-    public private(set) var items: [Subscription]?
-    public private(set) var url: String?
-    
-    public required init(node: Node) throws {
-        self.object = try node.get("object")
-        self.url = try node.get("url")
-        self.hasMore = try node.get("has_more")
-        self.items = try node.get("data")
+    enum CodingKeys: String, CodingKey {
+        case object
+        case hasMore = "has_more"
+        case totalCount = "total_count"
+        case url
+        case items = "data"
     }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String : Any?] = [
-            "object": self.object,
-            "url": self.url,
-            "has_more": self.hasMore,
-            "data": self.items
-        ]
-        return try Node(node: object)
-    }
-    
 }

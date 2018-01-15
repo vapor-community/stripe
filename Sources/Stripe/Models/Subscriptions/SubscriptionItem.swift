@@ -7,43 +7,26 @@
 //
 
 import Foundation
-import Vapor
+
 /**
- SubscriptionItem Model
+ SubscriptionItem object
  https://stripe.com/docs/api/curl#subscription_items
  */
-open class SubscriptionItem: StripeModelProtocol {
+
+public protocol SubscriptionItem {
+    associatedtype P: Plan
     
-    public private(set) var id: String?
-    public private(set) var object: String?
-    public private(set) var created: Date?
-    public private(set) var plan: Plan?
-    public private(set) var quantity: Int?
-    
-    /**
-     Deleted property
-     https://stripe.com/docs/api/curl#delete_subscription_item
-     */
-    public private(set) var deleted: Bool?
-    
-    public required init(node: Node) throws {
-        self.id = try node.get("id")
-        self.object = try node.get("object")
-        self.created = try node.get("created")
-        self.plan = try node.get("plan")
-        self.quantity = try node.get("quantity")
-        self.deleted = try node.get("deleted")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String: Any?] = [
-            "id": self.id,
-            "object": self.object,
-            "created": self.created,
-            "plan": self.plan,
-            "quantity": self.quantity,
-            "deleted": self.deleted
-        ]
-        return try Node(node: object)
-    }
+    var id: String? { get }
+    var object: String? { get }
+    var created: Date? { get }
+    var plan: P? { get }
+    var quantity: Int? { get }
+}
+
+public struct StripeSubscriptionItem: SubscriptionItem, StripeModelProtocol {
+    public var id: String?
+    public var object: String?
+    public var created: Date?
+    public var plan: StripePlan?
+    public var quantity: Int?
 }
