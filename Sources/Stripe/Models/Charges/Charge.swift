@@ -7,155 +7,130 @@
 //
 
 import Foundation
-import Vapor
-
 
 /**
- Charge Model
+ Charge object
  https://stripe.com/docs/api/curl#charge_object
  */
-open class Charge: StripeModelProtocol {
+
+public protocol Charge {
+    associatedtype L: List
+    associatedtype S: Shipping
+    associatedtype F: FraudDetails
+    associatedtype SRC: Source
     
-    public private(set) var id: String?
-    public private(set) var object: String?
-    public private(set) var amount: Int?
-    public private(set) var amountRefunded: Int?
-    public private(set) var application: String?
-    public private(set) var applicationFee: String?
-    public private(set) var balanceTransactionId: String?
-    public private(set) var isCaptured: Bool?
-    public private(set) var created: Date?
-    public private(set) var currency: StripeCurrency?
-    public private(set) var customerId: String?
-    public private(set) var destination: String?
-    public private(set) var dispute: String?
-    public private(set) var failureCode: String?
-    public private(set) var failureMessage: String?
-    public private(set) var invoiceId: String?
-    public private(set) var isLiveMode: Bool?
-    public private(set) var onBehalfOf: String?
-    public private(set) var order: String?
-    public private(set) var outcome: Outcome?
-    public private(set) var isPaid: Bool?
-    public private(set) var recieptNumber: String?
-    public private(set) var isRefunded: Bool?
-    public private(set) var refunds: Refund?
-    public private(set) var review: String?
-    public private(set) var source: Source?
-    public private(set) var card: Card?
-    public private(set) var sourceTransfer: String?
-    public private(set) var statementDescriptor: String?
-    public private(set) var status: StripeStatus?
-    public private(set) var transfer: String?
+    var id: String? { get }
+    var object: String? { get }
+    var amount: Int? { get }
+    var amountRefunded: Int? { get }
+    var application: String? { get }
+    var applicationFee: String? { get }
+    var balanceTransactionId: String? { get }
+    var isCaptured: Bool? { get }
+    var created: Date? { get }
+    var currency: StripeCurrency? { get }
+    var customerId: String? { get }
+    var description: String? { get }
+    var destination: String? { get }
+    var dispute: String? { get }
+    var failureCode: String? { get }
+    var failureMessage: String? { get }
+    var fraudDetails: F? { get }
+    var invoiceId: String? { get }
+    var isLive: Bool? { get }
+    var metadata: [String: String]? { get }
+    var onBehalfOf: String? { get }
+    var orderId: String? { get }
+    var outcome: StripeOutcome? { get }
+    var isPaid: Bool? { get }
+    var receiptEmail: String? { get }
+    var receiptNumber: String? { get }
+    var isRefunded: Bool? { get }
+    var refunds: L? { get }
+    var review: String? { get }
+    var shipping: S? { get }
+    var source: SRC? { get }
+    var sourceTransfer: String? { get }
+    var statementDescriptor: String? { get }
+    var status: StripeStatus? { get }
+    var transfer: String? { get }
+    var transferGroup: String? { get }
+}
+
+public struct StripeCharge: Charge, StripeModelProtocol {
+    public var id: String?
+    public var object: String?
+    public var amount: Int?
+    public var amountRefunded: Int?
+    public var application: String?
+    public var applicationFee: String?
+    public var balanceTransactionId: String?
+    public var isCaptured: Bool?
+    public var created: Date?
+    public var currency: StripeCurrency?
+    public var customerId: String?
+    public var description: String?
+    public var destination: String?
+    public var dispute: String?
+    public var failureCode: String?
+    public var failureMessage: String?
+    public var fraudDetails: StripeFraudDetails?
+    public var invoiceId: String?
+    public var isLive: Bool?
+    public var metadata: [String: String]?
+    public var onBehalfOf: String?
+    public var orderId: String?
+    public var outcome: StripeOutcome?
+    public var isPaid: Bool?
+    public var receiptEmail: String?
+    public var receiptNumber: String?
+    public var isRefunded: Bool?
+    public var refunds: RefundsList?
+    public var review: String?
+    public var shipping: ShippingLabel?
+    public var source: StripeSource?
+    public var sourceTransfer: String?
+    public var statementDescriptor: String?
+    public var status: StripeStatus?
+    public var transfer: String?
+    public var transferGroup: String?
     
-    /**
-     Only these values are mutable/updatable.
-     https://stripe.com/docs/api/curl#update_charge
-     */
-    
-    public private(set) var description: String?
-    public private(set) var fraud: FraudDetails?
-    public private(set) var metadata: Node?
-    public private(set) var receiptEmail: String?
-    public private(set) var shippingLabel: ShippingLabel?
-    public private(set) var transferGroup: String?
-    
-    public required init(node: Node) throws {
-        self.id = try node.get("id")
-        self.object = try node.get("object")
-        self.amount = try node.get("amount")
-        self.amountRefunded = try node.get("amount_refunded")
-        self.application = try node.get("application")
-        self.applicationFee = try node.get("application_fee")
-        self.balanceTransactionId = try node.get("balance_transaction")
-        self.isCaptured = try node.get("captured")
-        self.created = try node.get("created")
-        self.customerId = try node.get("customer")
-        self.description = try node.get("description")
-        self.destination = try node.get("destination")
-        self.dispute = try node.get("dispute")
-        self.failureCode = try node.get("failure_code")
-        self.failureMessage = try node.get("failure_message")
-        self.invoiceId = try node.get("invoice")
-        self.isLiveMode = try node.get("livemode")
-        self.onBehalfOf = try node.get("on_behalf_of")
-        self.isPaid = try node.get("paid")
-        self.recieptNumber = try node.get("receipt_number")
-        self.isRefunded = try node.get("refunded")
-        self.review = try node.get("review")
-        self.sourceTransfer = try node.get("source_transfer")
-        self.statementDescriptor = try node.get("statement_descriptor")
-        self.transferGroup = try node.get("transfer_group")
-        if let currency = node["currency"]?.string {
-            self.currency = StripeCurrency(rawValue: currency)
-        }
-        self.fraud = try node.get("fraud_details")
-        self.outcome = try node.get("outcome")
-        self.refunds = try node.get("refunds")
-        if let status  = node["status"]?.string {
-            self.status = StripeStatus(rawValue: status)
-        }
-        self.transfer = try node.get("transfer")
-        self.receiptEmail = try node.get("receipt_email")
-        if let _ = node["shipping"]?.object {
-            self.shippingLabel = try node.get("shipping")
-        }
-        
-        self.metadata = try node.get("metadata")
-        
-        // We have to determine if it's a card or a source item
-        if let sourceNode: Node = try node.get("source") {
-            if let object = sourceNode["object"]?.string, object == "card" {
-                self.card = try node.get("source")
-            } else if let object = sourceNode["object"]?.string, object == "source" {
-                self.source = try node.get("source")
-            }
-        }
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        var object: [String : Any?] = [
-            "id": self.id,
-            "object": self.object,
-            "amount": self.amount,
-            "amount_refunded": self.amountRefunded,
-            "application": self.application,
-            "application_fee": self.applicationFee,
-            "balance_transaction": self.balanceTransactionId,
-            "captured": self.isCaptured,
-            "created": self.created,
-            "currency": self.currency,
-            "customer": self.customerId,
-            "description": self.description,
-            "destination": self.destination,
-            "dispute": self.dispute,
-            "failure_code": self.failureCode,
-            "failure_message": self.failureMessage,
-            "fraud_details": self.fraud,
-            "invoice": self.invoiceId,
-            "livemode": self.isLiveMode,
-            "on_behalf_of": self.onBehalfOf,
-            "metadata": self.metadata,
-            "outcome": self.outcome,
-            "paid": self.isPaid,
-            "receipt_number": self.recieptNumber,
-            "refunded": self.isRefunded,
-            "refunds": self.refunds,
-            "review": self.review,
-            "shipping": self.shippingLabel,
-            "source_transfer": self.sourceTransfer,
-            "statement_descriptor": self.statementDescriptor,
-            "status": self.status?.rawValue,
-            "transfer": self.transfer,
-            "receipt_email": self.receiptEmail,
-            "transfer_group": self.transferGroup
-        ]
-        
-        if let source = self.source {
-            object["source"] = source
-        } else if let card = self.card {
-            object["source"] = card
-        }
-        return try Node(node: object)
+    enum CodingKeys: String, CodingKey {
+        case id
+        case object
+        case amount
+        case amountRefunded = "amount_refunded"
+        case application
+        case applicationFee = "application_fee"
+        case balanceTransactionId = "balance_transaction"
+        case isCaptured
+        case created
+        case currency
+        case customerId
+        case description
+        case destination
+        case dispute
+        case failureCode = "failure_code"
+        case failureMessage = "failure_message"
+        case fraudDetails = "fraud_details"
+        case invoiceId = "invoice"
+        case isLive = "livemode"
+        case metadata
+        case onBehalfOf = "on_behalf_of"
+        case orderId = "order"
+        case outcome
+        case isPaid = "paid"
+        case receiptEmail = "receipt_email"
+        case receiptNumber = "receipt_number"
+        case isRefunded = "refunded"
+        case refunds
+        case review
+        case shipping
+        case source
+        case sourceTransfer = "source_transfer"
+        case statementDescriptor = "statement_descriptor"
+        case status
+        case transfer
+        case transferGroup = "transfer_group"
     }
 }
