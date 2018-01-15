@@ -6,36 +6,33 @@
 //
 //
 
-import Foundation
-import Vapor
+/**
+ Shipping Method
+ https://stripe.com/docs/api/curl#order_object-shipping_methods
+ */
 
-open class ShippingMethod: StripeModelProtocol {
+public protocol ShippingMethod {
+    associatedtype D: DeliveryEstimate
     
-    public private(set) var id: String?
-    public private(set) var amount: Int?
-    public private(set) var currency: StripeCurrency?
-    public private(set) var deliveryEstimate: DeliveryEstimate?
-    public private(set) var description: String?
+    var id: String? { get }
+    var amount: Int? { get }
+    var currency: StripeCurrency? { get }
+    var deliveryEstimate: D? { get }
+    var description: String? { get }
+}
+
+public struct StripeShippingMethod: ShippingMethod, StripeModelProtocol {
+    public var id: String?
+    public var amount: Int?
+    public var currency: StripeCurrency?
+    public var deliveryEstimate: StripeDeliveryEstimate?
+    public var description: String?
     
-    public required init(node: Node) throws {
-        self.id = try node.get("id")
-        self.amount = try node.get("amount")
-        if let currency = node["currency"]?.string {
-            self.currency = StripeCurrency(rawValue: currency)
-        }
-        self.deliveryEstimate = try node.get("delivery_estimate")
-        self.description = try node.get("description")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        
-        let object: [String: Any?] = [
-            "id": self.id,
-            "amount": self.amount,
-            "currency": self.currency?.rawValue,
-            "delivery_estimate": self.deliveryEstimate,
-            "description": self.description,
-        ]
-        return try Node(node: object)
+    enum CodingKeys: String, CodingKey {
+        case id
+        case amount
+        case currency
+        case deliveryEstimate = "delivery_estimate"
+        case description
     }
 }
