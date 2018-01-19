@@ -12,15 +12,11 @@ import HTTP
 internal let APIBase = "https://api.stripe.com/"
 internal let APIVersion = "v1/"
 
-internal let DefaultHeaders = [
-    HeaderKey.contentType: "application/x-www-form-urlencoded",
-    StripeHeader.Version: "2017-08-15"
-]
+internal let DefaultHeaders = HTTPHeaders(dictionaryLiteral: ("Stripe-Version", "2017-08-15"), (HTTPHeaders.Name.contentType, "application/x-www-form-urlencoded"))
 
 internal struct StripeHeader {
-    static let Version = HeaderKey("Stripe-Version")
-    static let Authorization = HeaderKey("Authorization")
-    static let Account = HeaderKey("Stripe-Account")
+    static let Authorization = HTTPHeaders.Name.authorization
+    static let Account = HTTPHeaders.Name("Stripe-Account")
 }
 
 internal enum API {
@@ -189,7 +185,6 @@ internal enum API {
     
     /**
      EPHEMERAL KEYS
-     
      */
     case ephemeralKeys
     case ephemeralKey(String)
