@@ -20,7 +20,7 @@ public protocol Receiver {
     var refundStatus: String? { get }
 }
 
-public struct StripeReceiver: Receiver, StripeModelProtocol {
+public struct StripeReceiver: Receiver, StripeModel {
     
     public var address: String?
     public var amountCharged: Int?

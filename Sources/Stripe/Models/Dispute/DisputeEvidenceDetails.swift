@@ -19,7 +19,7 @@ public protocol DisputeEvidenceDetails {
     var submissionCount: Int? { get }
 }
 
-public struct StripeDisputeEvidenceDetails: DisputeEvidenceDetails, StripeModelProtocol {
+public struct StripeDisputeEvidenceDetails: DisputeEvidenceDetails, StripeModel {
     public var dueBy: Date?
     public var hasEvidence: Bool?
     public var pastDue: Bool?

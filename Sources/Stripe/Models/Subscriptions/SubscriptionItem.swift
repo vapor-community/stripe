@@ -23,7 +23,7 @@ public protocol SubscriptionItem {
     var quantity: Int? { get }
 }
 
-public struct StripeSubscriptionItem: SubscriptionItem, StripeModelProtocol {
+public struct StripeSubscriptionItem: SubscriptionItem, StripeModel {
     public var id: String?
     public var object: String?
     public var created: Date?

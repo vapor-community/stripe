@@ -28,7 +28,7 @@ public protocol Refund {
     var status: StripeStatus? { get }
 }
 
-public struct StripeRefund: Refund, StripeModelProtocol {
+public struct StripeRefund: Refund, StripeModel {
     public var id: String?
     public var object: String?
     public var amount: Int?

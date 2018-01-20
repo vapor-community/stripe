@@ -17,7 +17,7 @@ public protocol BalanceTransfer {
     var sourceTypes: [SourceType: Int] { get }
 }
 
-public struct StripeBalanceTransfer: BalanceTransfer, StripeModelProtocol {
+public struct StripeBalanceTransfer: BalanceTransfer, StripeModel {
     public var currency: StripeCurrency?
     public var amount: Int?
     public var sourceTypes: [SourceType: Int] = [:]

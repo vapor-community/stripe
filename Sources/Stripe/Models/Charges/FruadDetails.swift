@@ -21,7 +21,7 @@ public protocol FraudDetails {
     var stripeReport: FraudReport? { get }
 }
 
-public struct StripeFraudDetails: FraudDetails, StripeModelProtocol {
+public struct StripeFraudDetails: FraudDetails, StripeModel {
     public var userReport: FraudReport?
     public var stripeReport: FraudReport?
     

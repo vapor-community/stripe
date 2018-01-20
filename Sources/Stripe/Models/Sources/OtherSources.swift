@@ -11,7 +11,7 @@
  */
 
 // MARK: - Bitcoin
-public struct Bitcoin: StripeModelProtocol {
+public struct Bitcoin: StripeModel {
     public var address: String?
     public var amount: Int?
     public var amountCharged: Int?
@@ -32,14 +32,14 @@ public struct Bitcoin: StripeModelProtocol {
 }
 
 // MARK: - ThreeDSecure
-public struct ThreeDSecure: StripeModelProtocol {
+public struct ThreeDSecure: StripeModel {
     public var card: String?
     public var customer: String?
     public var authenticated: Bool?
 }
 
 // MARK: - Giropay
-public struct Giropay: StripeModelProtocol {
+public struct Giropay: StripeModel {
     public var bankCode: String?
     public var bic: String?
     public var bankName: String?
@@ -54,7 +54,7 @@ public struct Giropay: StripeModelProtocol {
 }
 
 // MARK: - SepaDebit
-public struct SepaDebit: StripeModelProtocol {
+public struct SepaDebit: StripeModel {
     public var bankCode: String?
     public var country: String?
     public var fingerprint: String?
@@ -73,7 +73,7 @@ public struct SepaDebit: StripeModelProtocol {
 }
 
 // MARK: - iDEAL
-public struct iDEAL: StripeModelProtocol {
+public struct iDEAL: StripeModel {
     public var bank: String?
     public var bic: String?
     public var iBanLast4: String?
@@ -88,7 +88,7 @@ public struct iDEAL: StripeModelProtocol {
 }
 
 // MARK: - SOFORT
-public struct SOFORT: StripeModelProtocol {
+public struct SOFORT: StripeModel {
     public var country: String?
     public var bankCode: String?
     public var bic: String?
@@ -109,7 +109,7 @@ public struct SOFORT: StripeModelProtocol {
 }
 
 // MARK: - Bancontact
-public struct Bancontact: StripeModelProtocol {
+public struct Bancontact: StripeModel {
     public var bankCode: String?
     public var bic: String?
     public var bankName: String?
@@ -126,7 +126,7 @@ public struct Bancontact: StripeModelProtocol {
 }
 
 // MARK: - Alipay
-public struct Alipay: StripeModelProtocol {
+public struct Alipay: StripeModel {
     public var nativeUrl: String?
     public var statementDescriptor: String?
     
@@ -137,6 +137,6 @@ public struct Alipay: StripeModelProtocol {
 }
 
 // MARK: - P24
-public struct P24: StripeModelProtocol {
+public struct P24: StripeModel {
     public var reference: String?
 }

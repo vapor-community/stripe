@@ -19,7 +19,7 @@ public protocol ConnectLoginLink {
     var url: String? { get }
 }
 
-public struct StripeConnectLoginLink: ConnectLoginLink, StripeModelProtocol {
+public struct StripeConnectLoginLink: ConnectLoginLink, StripeModel {
     public var object: String?
     public var created: Date?
     public var url: String?

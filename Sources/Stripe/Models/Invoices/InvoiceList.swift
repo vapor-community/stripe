@@ -10,7 +10,7 @@
  https://stripe.com/docs/api#list_invoices
  */
 
-public struct InvoicesList: List, StripeModelProtocol {
+public struct InvoicesList: List, StripeModel {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?

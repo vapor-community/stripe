@@ -23,7 +23,7 @@ public protocol Owner {
     var verifiedPhone: String? { get }
 }
 
-public struct StripeOwner: Owner, StripeModelProtocol {
+public struct StripeOwner: Owner, StripeModel {
     public var address: StripeAddress?
     public var email: String?
     public var name: String?

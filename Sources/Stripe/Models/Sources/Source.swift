@@ -47,7 +47,7 @@ public protocol Source {
     var p24: P24? { get }
 }
 
-public struct StripeSource: Source, StripeModelProtocol {
+public struct StripeSource: Source, StripeModel {
     public var id: String?
     public var object: String?
     public var amount: Int?

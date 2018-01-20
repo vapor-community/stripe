@@ -11,7 +11,7 @@
  https://stripe.com/docs/api#customer_object-sources
  */
 
-public struct StripeSourcesList: List, StripeModelProtocol {
+public struct StripeSourcesList: List, StripeModel {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?

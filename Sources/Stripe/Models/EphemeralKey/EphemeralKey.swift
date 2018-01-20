@@ -17,7 +17,7 @@ public protocol EphemeralKey {
     var secret: String? { get }
 }
 
-public struct StripeEphemeralKey: EphemeralKey, StripeModelProtocol {
+public struct StripeEphemeralKey: EphemeralKey, StripeModel {
     public var id: String?
     public var object: String?
     public var associatedObjects: [String : String]?

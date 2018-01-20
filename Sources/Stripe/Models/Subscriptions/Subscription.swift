@@ -43,7 +43,7 @@ public protocol Subscription {
     var trialStart: Date? { get }
 }
 
-public struct StripeSubscription: Subscription, StripeModelProtocol {
+public struct StripeSubscription: Subscription, StripeModel {
     public var id: String?
     public var object: String?
     public var applicationFeePercent: Decimal?

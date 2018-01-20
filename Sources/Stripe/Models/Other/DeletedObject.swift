@@ -18,7 +18,7 @@ public protocol DeletedObject {
     var id: String? { get }
 }
 
-public struct StripeDeletedObject: DeletedObject, StripeModelProtocol {
+public struct StripeDeletedObject: DeletedObject, StripeModel {
     public var deleted: Bool?
     public var id: String?
 }

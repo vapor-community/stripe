@@ -29,7 +29,7 @@ public protocol BankAccount {
     var status: String? { get }
 }
 
-public struct StripeBankAccount: BankAccount, StripeModelProtocol {
+public struct StripeBankAccount: BankAccount, StripeModel {
     public var id: String?
     public var object: String?
     public var account: String?

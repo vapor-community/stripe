@@ -36,7 +36,7 @@ public protocol LegalEntity {
     var verification: LEA? { get }
 }
 
-public struct StripeConnectAccountLegalEntity: LegalEntity, StripeModelProtocol {
+public struct StripeConnectAccountLegalEntity: LegalEntity, StripeModel {
     public var additionalOwners: [StripeLegalEntityAdditionalOwner]?
     public var address: StripeAddress?
     public var businessName: String?

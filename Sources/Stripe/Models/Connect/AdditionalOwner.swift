@@ -22,7 +22,7 @@ public protocol LegalEntityAdditionalOwner {
     var verification: LEV? { get }
 }
 
-public struct StripeLegalEntityAdditionalOwner: LegalEntityAdditionalOwner, StripeModelProtocol {
+public struct StripeLegalEntityAdditionalOwner: LegalEntityAdditionalOwner, StripeModel {
     public var firstName: String?
     public var lastName: String?
     public var dateOfBirth: [String: Int]?

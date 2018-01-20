@@ -54,7 +54,7 @@ public protocol Invoice {
     var webhooksDeliveredAt: Date? { get }
 }
 
-public struct StripeInvoice: Invoice, StripeModelProtocol {
+public struct StripeInvoice: Invoice, StripeModel {
     public var id: String?
     public var object: String?
     public var amountDue: Int?

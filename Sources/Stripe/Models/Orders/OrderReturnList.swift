@@ -11,7 +11,7 @@
  https://stripe.com/docs/api#list_order_returns
  */
 
-public struct OrderReturnList: List, StripeModelProtocol {
+public struct OrderReturnList: List, StripeModel {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?

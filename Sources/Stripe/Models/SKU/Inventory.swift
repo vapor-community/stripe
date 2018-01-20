@@ -17,7 +17,7 @@ public protocol Inventory {
     var value: InventoryTypeValue? { get }
 }
 
-public struct StripeInventory: Inventory, StripeModelProtocol {
+public struct StripeInventory: Inventory, StripeModel {
     public var quantity: Int?
     public var type: InventoryType?
     public var value: InventoryTypeValue?

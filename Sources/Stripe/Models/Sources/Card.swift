@@ -44,7 +44,7 @@ public protocol Card {
     var threeDSecure: String? { get }
 }
 
-public struct StripeCard: Card, StripeModelProtocol {
+public struct StripeCard: Card, StripeModel {
     public var id: String?
     public var object: String?
     public var account: String?

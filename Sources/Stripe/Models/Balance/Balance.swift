@@ -21,7 +21,7 @@ public protocol Balance {
     var pending: [BT]? { get }
 }
 
-public struct StripeBalance: Balance, StripeModelProtocol {
+public struct StripeBalance: Balance, StripeModel {
     public var object: String?
     public var available: [StripeBalanceTransfer]?
     public var connectReserved: [StripeBalanceTransfer]?

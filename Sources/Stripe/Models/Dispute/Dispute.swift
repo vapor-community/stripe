@@ -34,7 +34,7 @@ public protocol Dispute {
     var disputeStatus: DisputeStatus? { get }
 }
 
-public struct StripeDispute: Dispute, StripeModelProtocol {
+public struct StripeDispute: Dispute, StripeModel {
     public var id: String?
     public var object: String?
     public var amount: Int?

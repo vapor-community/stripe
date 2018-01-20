@@ -19,7 +19,7 @@ public protocol TOSAcceptance {
     var userAgent: String? { get }
 }
 
-public struct StripeTOSAcceptance: TOSAcceptance, StripeModelProtocol {
+public struct StripeTOSAcceptance: TOSAcceptance, StripeModel {
     public var timestamp: Date?
     public var ip: String?
     public var userAgent: String?

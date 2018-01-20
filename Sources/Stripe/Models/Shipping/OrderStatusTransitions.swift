@@ -20,7 +20,7 @@ public protocol OrderStatusTransitions {
     var returned: Date? { get }
 }
 
-public struct StripeOrderStatusTransitions: OrderStatusTransitions, StripeModelProtocol {
+public struct StripeOrderStatusTransitions: OrderStatusTransitions, StripeModel {
     public var canceled: Date?
     public var fufilled: Date?
     public var paid: Date?

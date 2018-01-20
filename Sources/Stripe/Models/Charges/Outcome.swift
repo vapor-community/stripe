@@ -66,7 +66,7 @@ public protocol Outcome {
     var type: OutcomeType? { get }
 }
 
-public struct StripeOutcome: Outcome, StripeModelProtocol {
+public struct StripeOutcome: Outcome, StripeModel {
     public var networkStatus: NetworkStatus?
     public var reason: String?
     public var riskLevel: RiskLevel?

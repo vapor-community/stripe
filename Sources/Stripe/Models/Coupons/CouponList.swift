@@ -11,7 +11,7 @@
  https://stripe.com/docs/api#list_coupons
  */
 
-public struct CouponsList: List, StripeModelProtocol {
+public struct CouponsList: List, StripeModel {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?

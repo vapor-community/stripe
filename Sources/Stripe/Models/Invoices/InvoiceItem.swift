@@ -35,7 +35,7 @@ public protocol InvoiceItem {
     var subscriptionItem: String? { get }
 }
 
-public struct StripeInvoiceItem: InvoiceItem, StripeModelProtocol {
+public struct StripeInvoiceItem: InvoiceItem, StripeModel {
     public var id: String?
     public var object: String?
     public var amount: Int?

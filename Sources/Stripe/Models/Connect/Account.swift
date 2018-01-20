@@ -49,7 +49,7 @@ public protocol ConnectAccount {
     var transfersEnabled: Bool? { get }
 }
 
-public struct StripeConnectAccount: ConnectAccount, StripeModelProtocol {
+public struct StripeConnectAccount: ConnectAccount, StripeModel {
     public var id: String?
     public var object: String?
     public var businessName: String?

@@ -31,7 +31,7 @@ public protocol BalanceTransactionItem {
     var type: BalanceTransactionType? { get }
 }
 
-public struct StripeBalanceTransactionItem: BalanceTransactionItem, StripeModelProtocol {
+public struct StripeBalanceTransactionItem: BalanceTransactionItem, StripeModel {
     public var id: String?
     public var object: String?
     public var amount: Int?

@@ -40,7 +40,7 @@ public protocol DisputeEvidence {
     var uncatagorizedText: String? { get }
 }
 
-public struct StripeDisputeEvidence: DisputeEvidence, StripeModelProtocol {
+public struct StripeDisputeEvidence: DisputeEvidence, StripeModel {
     public var accessActivityLog: String?
     public var billingAddress: String?
     public var cancellationPolicy: String?

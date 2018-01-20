@@ -18,7 +18,7 @@ public protocol DeliveryEstimate {
     var type: DeliveryEstimateType? { get }
 }
 
-public struct StripeDeliveryEstimate: DeliveryEstimate, StripeModelProtocol {
+public struct StripeDeliveryEstimate: DeliveryEstimate, StripeModel {
     public var date: String?
     public var earliest: String?
     public var latest: String?

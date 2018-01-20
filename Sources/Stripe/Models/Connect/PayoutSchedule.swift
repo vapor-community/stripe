@@ -18,7 +18,7 @@ public protocol PayoutSchedule {
     var weeklyAnchor: StripeWeeklyAnchor? { get }
 }
 
-public struct StripePayoutSchedule: PayoutSchedule, StripeModelProtocol {
+public struct StripePayoutSchedule: PayoutSchedule, StripeModel {
     public var delayDays: Int?
     public var interval: StripePayoutInterval?
     public var monthlyAnchor: Int?

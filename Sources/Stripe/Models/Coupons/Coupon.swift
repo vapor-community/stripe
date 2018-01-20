@@ -30,7 +30,7 @@ public protocol Coupon {
     var isValid: Bool? { get }
 }
 
-public struct StripeCoupon: Coupon, StripeModelProtocol {
+public struct StripeCoupon: Coupon, StripeModel {
     public var id: String?
     public var object: String?
     public var amountOff: Int?

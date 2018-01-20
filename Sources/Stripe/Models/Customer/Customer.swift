@@ -37,7 +37,7 @@ public protocol Customer {
     var subscriptions: SL? { get }
 }
 
-public struct StripeCustomer: Customer, StripeModelProtocol {
+public struct StripeCustomer: Customer, StripeModel {
     public var id: String?
     public var object: String?
     public var accountBalance: Int?

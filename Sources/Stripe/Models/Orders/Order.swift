@@ -45,7 +45,7 @@ public protocol Order {
     var upstreamId: String? { get }
 }
 
-public struct StripeOrder: Order, StripeModelProtocol {
+public struct StripeOrder: Order, StripeModel {
     public var id: String?
     public var object: String?
     public var amount: Int?

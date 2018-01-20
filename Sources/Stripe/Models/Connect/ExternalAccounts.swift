@@ -11,7 +11,7 @@
  https://stripe.com/docs/api/curl#account_object-external_accounts
  */
 
-public struct ExternalAccountsList: StripeModelProtocol {
+public struct ExternalAccountsList: StripeModel {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?

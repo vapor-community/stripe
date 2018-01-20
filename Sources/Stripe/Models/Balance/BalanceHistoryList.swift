@@ -11,7 +11,7 @@
  https://stripe.com/docs/api#balance_history
  */
 
-public struct BalanceHistoryList: List, StripeModelProtocol {
+public struct BalanceHistoryList: List, StripeModel {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?

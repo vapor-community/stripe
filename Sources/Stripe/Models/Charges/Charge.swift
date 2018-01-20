@@ -57,7 +57,7 @@ public protocol Charge {
     var transferGroup: String? { get }
 }
 
-public struct StripeCharge: Charge, StripeModelProtocol {
+public struct StripeCharge: Charge, StripeModel {
     public var id: String?
     public var object: String?
     public var amount: Int?

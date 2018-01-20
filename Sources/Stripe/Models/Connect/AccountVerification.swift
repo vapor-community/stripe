@@ -18,7 +18,7 @@ public protocol AccountVerification {
     var fieldsNeeded: [String]? { get }
 }
 
-public struct StripeAccountVerification: AccountVerification, StripeModelProtocol {
+public struct StripeAccountVerification: AccountVerification, StripeModel {
     public var disabledReason: String?
     public var dueBy: Date?
     public var fieldsNeeded: [String]?

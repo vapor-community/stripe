@@ -25,7 +25,7 @@ public protocol Discount {
     var subscription: String? { get }
 }
 
-public struct StripeDiscount: Discount, StripeModelProtocol {
+public struct StripeDiscount: Discount, StripeModel {
     public var object: String?
     public var coupon: StripeCoupon?
     public var customer: String?

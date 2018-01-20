@@ -28,7 +28,7 @@ public protocol Token {
     var bankAccount: B? { get }
 }
 
-public struct StripeToken: Token, StripeModelProtocol {
+public struct StripeToken: Token, StripeModel {
     public var id: String?
     public var object: String?
     public var type: String?

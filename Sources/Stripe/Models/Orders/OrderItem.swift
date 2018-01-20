@@ -21,7 +21,7 @@ public protocol OrderItem {
     var type: OrderItemType? { get }
 }
 
-public struct StripeOrderItem: OrderItem, StripeModelProtocol {
+public struct StripeOrderItem: OrderItem, StripeModel {
     public var object: String?
     public var amount: Int?
     public var currency: StripeCurrency?

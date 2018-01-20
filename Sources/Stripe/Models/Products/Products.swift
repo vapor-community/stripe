@@ -36,7 +36,7 @@ public protocol Product {
     var url: String? { get }
 }
 
-public struct StripeProduct: Product, StripeModelProtocol {
+public struct StripeProduct: Product, StripeModel {
     public var id: String?
     public var object: String?
     public var active: Bool?

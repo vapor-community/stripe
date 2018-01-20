@@ -11,7 +11,7 @@
  https://stripe.com/docs/api/curl#list_accounts
  */
 
-public struct ConnectedAccountsList: List, StripeModelProtocol {
+public struct ConnectedAccountsList: List, StripeModel {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?

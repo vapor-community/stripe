@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Period: StripeModelProtocol {
+public struct Period: StripeModel {
     public var start: Date?
     public var end: Date?
 }

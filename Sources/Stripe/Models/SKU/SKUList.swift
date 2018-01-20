@@ -11,7 +11,7 @@
  https://stripe.com/docs/api/curl#list_skus
  */
 
-public struct SKUList: List, StripeModelProtocol {
+public struct SKUList: List, StripeModel {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?

@@ -18,7 +18,7 @@ public protocol LegalEntityVerification {
     var status: LegalEntityVerificationStatus? { get }
 }
 
-public struct StripeLegalEntityVerification: LegalEntityVerification, StripeModelProtocol {
+public struct StripeLegalEntityVerification: LegalEntityVerification, StripeModel {
     public var details: String?
     public var detailsCode: LegalEntityVerificationState?
     public var document: String?

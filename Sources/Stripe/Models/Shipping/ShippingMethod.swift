@@ -21,7 +21,7 @@ public protocol ShippingMethod {
     var description: String? { get }
 }
 
-public struct StripeShippingMethod: ShippingMethod, StripeModelProtocol {
+public struct StripeShippingMethod: ShippingMethod, StripeModel {
     public var id: String?
     public var amount: Int?
     public var currency: StripeCurrency?

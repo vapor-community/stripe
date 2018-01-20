@@ -28,7 +28,7 @@ public protocol Plan {
     var trialPeriodDays: Int? { get }
 }
 
-public struct StripePlan: Plan, StripeModelProtocol {
+public struct StripePlan: Plan, StripeModel {
     public var id: String?
     public var object: String?
     public var amount: Int?

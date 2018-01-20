@@ -11,7 +11,7 @@
  https://stripe.com/docs/api#list_disputes
  */
 
-public struct DisputesList: List, StripeModelProtocol {
+public struct DisputesList: List, StripeModel {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?

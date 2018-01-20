@@ -33,7 +33,7 @@ public protocol InvoiceLineItem {
     var type: String? { get }
 }
 
-public struct StripeInvoiceLineItem: InvoiceLineItem, StripeModelProtocol {
+public struct StripeInvoiceLineItem: InvoiceLineItem, StripeModel {
     public var id: String?
     public var object: String?
     public var amount: Int?

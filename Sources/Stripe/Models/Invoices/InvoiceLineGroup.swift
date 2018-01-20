@@ -11,7 +11,7 @@
  https://stripe.com/docs/api#invoice_lines
  */
 
-public struct InvoiceLineGroup: List, StripeModelProtocol {
+public struct InvoiceLineGroup: List, StripeModel {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?

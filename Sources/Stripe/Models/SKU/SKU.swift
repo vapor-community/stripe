@@ -33,7 +33,7 @@ public protocol SKU {
     var updated: Date? { get }
 }
 
-public struct StripeSKU: SKU, StripeModelProtocol {
+public struct StripeSKU: SKU, StripeModel {
     public var id: String?
     public var object: String?
     public var active: Bool?

@@ -11,7 +11,7 @@
  https://stripe.com/docs/api/curl#list_subscription_items
  */
 
-public struct SubscriptionItemList: List, StripeModelProtocol {
+public struct SubscriptionItemList: List, StripeModel {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?

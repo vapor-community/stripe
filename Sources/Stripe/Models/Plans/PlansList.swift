@@ -11,7 +11,7 @@
  https://stripe.com/docs/api/curl#list_plans
  */
 
-public struct PlansList: List, StripeModelProtocol {
+public struct PlansList: List, StripeModel {
     public var object: String?
     public var hasMore: Bool?
     public var totalCount: Int?

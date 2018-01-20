@@ -20,7 +20,7 @@ public protocol Address {
     var state: String? { get }
 }
 
-public struct StripeAddress: Address, StripeModelProtocol {
+public struct StripeAddress: Address, StripeModel {
     public var city: String?
     public var country: String?
     public var addressLine1: String?

@@ -20,7 +20,7 @@ public protocol Shipping {
     var trackingNumber: String? { get }
 }
 
-public struct ShippingLabel: Shipping, StripeModelProtocol {
+public struct ShippingLabel: Shipping, StripeModel {
     public var address: StripeAddress?
     public var carrier: String?
     public var name: String?

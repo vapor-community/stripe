@@ -6,7 +6,7 @@
 //
 
 public protocol List {
-    associatedtype T: StripeModelProtocol
+    associatedtype T: StripeModel
     var object: String? { get }
     var hasMore: Bool? { get }
     var totalCount: Int? { get }
