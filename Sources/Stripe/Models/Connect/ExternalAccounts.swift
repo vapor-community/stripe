@@ -29,3 +29,5 @@ public struct ExternalAccountsList: StripeModel {
         case items = "data"
     }
 }
+
+public protocol ExternalAccount {}
