@@ -6,7 +6,6 @@
 //
 //
 
-import Foundation
 import Vapor
 
 /**
@@ -21,7 +20,7 @@ public protocol Fee {
     var type: ActionType? { get }
 }
 
-public struct StripeFee: Fee, StripeModelProtocol {
+public struct StripeFee: Fee, StripeModel {
     public var amount: Int?
     public var currency: StripeCurrency?
     public var description: String?
