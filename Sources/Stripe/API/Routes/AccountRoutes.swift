@@ -9,19 +9,23 @@
 import Vapor
 
 public protocol AccountRoutes {
-    associatedtype SM: StripeModel
+    associatedtype AC: ConnectAccount
+    associatedtype LE: LegalEntity
+    associatedtype TOS: TOSAcceptance
+    associatedtype DO: DeletedObject
+    associatedtype L: List
+    associatedtype CLL: ConnectLoginLink
     
-    func create(type: ConnectedAccountType, email: String?, country: String?, metadata: [String: String]?) throws -> Future<SM>
-    func retrieve(account: String) throws -> Future<SM>
-    func update(account: String, businessName: String?, businessPrimaryColor: String?, businessUrl: String?, debitNegativeBalances: Bool?, declineChargeOn: [String: Bool]?, defaultCurrency: StripeCurrency?, email: String?, externalAccount: Any?, legalEntity: StripeConnectAccountLegalEntity?, metadata: [String: String]?, payoutSchedule: [String: String]?, payoutStatementDescriptor: String?, productDescription: String?, statementDescriptor: String?, supportEmail: String?, supportPhone: String?, supportUrl: String?, tosAcceptance: StripeTOSAcceptance?) throws -> Future<SM>
-    func delete(account: String) -> Future<SM>
-    func reject(account: String, for: AccountRejectReason) -> Future<SM>
-    func listAll(filter: [String: String]) throws -> Future<SM>
-    func createLoginLink(for: String) throws -> Future<SM>
+    func create(type: ConnectedAccountType, email: String?, country: String?, metadata: [String: String]?) throws -> Future<AC>
+    func retrieve(account: String) throws -> Future<AC>
+    func update(account: String, businessName: String?, businessPrimaryColor: String?, businessUrl: String?, debitNegativeBalances: Bool?, declineChargeOn: [String: Bool]?, defaultCurrency: StripeCurrency?, email: String?, externalAccount: Any?, legalEntity: LE?, metadata: [String: String]?, payoutSchedule: [String: String]?, payoutStatementDescriptor: String?, productDescription: String?, statementDescriptor: String?, supportEmail: String?, supportPhone: String?, supportUrl: String?, tosAcceptance: TOS?) throws -> Future<AC>
+    func delete(account: String) throws -> Future<DO>
+    func reject(account: String, for: AccountRejectReason) throws -> Future<AC>
+    func listAll(filter: [String: Any]) throws -> Future<L>
+    func createLoginLink(for: String) throws -> Future<CLL>
 }
 
-public struct StripeAccountRoutes<SR>: AccountRoutes where SR: StripeRequest {
-    public typealias SM = SR.SM
+public struct StripeConnectAccountRoutes<SR>: AccountRoutes where SR: StripeRequest {
     private let request: SR
     
     init(request: SR) {
@@ -33,7 +37,7 @@ public struct StripeAccountRoutes<SR>: AccountRoutes where SR: StripeRequest {
     public func create(type: ConnectedAccountType,
                        email: String? = nil,
                        country: String? = nil,
-                       metadata: [String: String]? = nil) throws -> Future<SM> {
+                       metadata: [String: String]? = nil) throws -> Future<StripeConnectAccount> {
         var body: [String: String] = [:]
         body["type"] = type.rawValue
         
@@ -51,13 +55,13 @@ public struct StripeAccountRoutes<SR>: AccountRoutes where SR: StripeRequest {
             }
         }
         
-        return try request.send(method: .post, path: .account, body: body.queryParameters)
+        return try request.send(method: .post, path: StripeAPIEndpoint.account.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve account details
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_account)
-    public func retrieve(account accountId: String) throws -> Future<SM> {
-        return try request.send(method: .get, path: .accounts(accountId))
+    public func retrieve(account accountId: String) throws -> Future<StripeConnectAccount> {
+        return try request.send(method: .get, path: StripeAPIEndpoint.accounts(accountId).endpoint)
     }
     
     /// Update an account
@@ -80,8 +84,8 @@ public struct StripeAccountRoutes<SR>: AccountRoutes where SR: StripeRequest {
                        supportEmail: String? = nil,
                        supportPhone: String? = nil,
                        supportUrl: String? = nil,
-                       tosAcceptance: StripeTOSAcceptance? = nil) throws -> Future<SM> {
-        var body = [:]
+                       tosAcceptance: StripeTOSAcceptance? = nil) throws -> Future<StripeConnectAccount> {
+        var body: [String: Any] = [:]
         
         if let businessname = businessName {
             body["business_name"] = businessname
@@ -114,19 +118,19 @@ public struct StripeAccountRoutes<SR>: AccountRoutes where SR: StripeRequest {
         }
         
         if let externalBankAccount = externalAccount as? StripeExternalBankAccount {
-            externalBankAccount.toEncodedDictionary().forEach { key, value in
+            try externalBankAccount.toEncodedDictionary().forEach { key, value in
                 body["external_account[\(key)]"] = value
             }
         }
         
         if let externalCardAccount = externalAccount as? StripeExternalCardAccount {
-            externalCardAccount.toEncodedDictionary().forEach { key, value in
+            try externalCardAccount.toEncodedDictionary().forEach { key, value in
                 body["external_account[\(key)]"] = value
             }
         }
         
         if let legalEntity = legalEntity {
-            legalEntity.toEncodedDictionary().forEach { key, value in
+            try legalEntity.toEncodedDictionary().forEach { key, value in
                 body["legal_entity[\(key)]"] = value
             }
         }
@@ -168,36 +172,36 @@ public struct StripeAccountRoutes<SR>: AccountRoutes where SR: StripeRequest {
         }
         
         if let tos = tosAcceptance {
-            tos.toEncodedDictionary().forEach { key, value in
+            try tos.toEncodedDictionary().forEach { key, value in
                 body["tos_acceptance[\(key)]"] = value
             }
         }
         
-        return try request.send(method: .post, path: .accounts(accountId), body: body.queryParameters)
+        return try request.send(method: .post, path: StripeAPIEndpoint.accounts(accountId).endpoint, body: body.queryParameters)
     }
     
     /// Delete an account
     /// [Learn More →](https://stripe.com/docs/api/curl#delete_account)
-    public func delete(account accountId: String) -> Future<SM> {
-        return try request.send(method: .delete, path: .accounts(accountId))
+    public func delete(account accountId: String) throws -> Future<StripeDeletedObject> {
+        return try request.send(method: .delete, path: StripeAPIEndpoint.accounts(accountId).endpoint)
     }
     
     /// Reject an account
     /// [Learn More →](https://stripe.com/docs/api/curl#reject_account)
-    public func reject(account accountId: String, for rejectReason: AccountRejectReason) -> Future<SM> {
+    public func reject(account accountId: String, for rejectReason: AccountRejectReason) throws -> Future<StripeConnectAccount> {
         let body = ["reason": rejectReason.rawValue].queryParameters
-        return try request.send(method: .post, path: .accountsReject(accountId), body: body)
+        return try request.send(method: .post, path: StripeAPIEndpoint.accountsReject(accountId).endpoint, body: body)
     }
     
     /// List all connected accounts
     /// [Learn More →](https://stripe.com/docs/api/curl#list_accounts)
-    public func listAll(filter: [String: String]) throws -> Future<SM> {
-        return try request.send(method: .get, path: .account, query: filter.queryParameters)
+    public func listAll(filter: [String: Any]) throws -> Future<ConnectedAccountsList> {
+        return try request.send(method: .get, path: StripeAPIEndpoint.account.endpoint, query: filter.queryParameters)
     }
     
     /// Create a login link
     /// [Learn More →](https://stripe.com/docs/api/curl#create_login_link)
-    public func createLoginLink(for accountId: String) throws -> Future<SM> {
-        return try request.send(method: .post, path: .accountsLoginLink(accountId))
+    public func createLoginLink(for accountId: String) throws -> Future<StripeConnectLoginLink> {
+        return try request.send(method: .post, path: StripeAPIEndpoint.accountsLoginLink(accountId).endpoint)
     }
 }
