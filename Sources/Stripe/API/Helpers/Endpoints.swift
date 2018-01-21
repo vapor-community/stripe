@@ -7,19 +7,11 @@
 //
 
 import Foundation
-import HTTP
 
 internal let APIBase = "https://api.stripe.com/"
 internal let APIVersion = "v1/"
 
-internal let DefaultHeaders = HTTPHeaders(dictionaryLiteral: ("Stripe-Version", "2017-08-15"), (HTTPHeaders.Name.contentType, "application/x-www-form-urlencoded"))
-
-internal struct StripeHeader {
-    static let Authorization = HTTPHeaders.Name.authorization
-    static let Account = HTTPHeaders.Name("Stripe-Account")
-}
-
-internal enum API {
+internal enum StripeAPIEndpoint {
     
     /**
      BALANCE
