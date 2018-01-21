@@ -8,59 +8,41 @@
 
 import Vapor
 
-private var _stripe: StripeClient?
+public struct StripeConfig {
+    let apiKey: String
+}
 
-extension Droplet {
-    /*
-     Enables use of the `drop.stripe?` convenience methods.
-     */
-    public var stripe: StripeClient? {
-        get {
-            return _stripe
-        }
-        set {
-            _stripe = newValue
+public final class StripeProvider: Provider {
+    public static let repositoryName = "stripe-provider"
+    
+    public func boot(_ worker: Container) throws {}
+    
+    public func register(_ services: inout Services) throws {
+        services.register { (container) -> StripeClient in
+            let httpClient = try container.make(Client.self, for: StripeClient.self)
+            let config = try container.make(StripeConfig.self, for: StripeClient.self)
+            return StripeClient(config: config, client: httpClient)
         }
     }
 }
 
-public final class Provider: Vapor.Provider {
-
-    public static let repositoryName = "vapor-stripe"
+public struct StripeClient: Service {
+    public let balance: StripeBalanceRoutes<StripeAPIRequest>
+    public let charge: StripeChargeRoutes<StripeAPIRequest>
+    public let connectAccount: StripeConnectAccountRoutes<StripeAPIRequest>
+    public let coupon: StripeCouponRoutes<StripeAPIRequest>
     
-    public let apiKey: String
-    public let stripe: StripeClient
-
-    public convenience init(config: Config) throws {
-        guard let stripeConfig = config["stripe"]?.object else {
-            throw StripeError.missingConfig
-        }
-        guard let apiKey = stripeConfig["apiKey"]?.string else {
-            throw StripeError.missingAPIKey
-        }
-        try self.init(apiKey: apiKey)
-    }
-
-    public init(apiKey: String) throws {
-        self.apiKey = apiKey
-        self.stripe = try StripeClient(apiKey: apiKey)
-    }
-
-    public func boot(_ drop: Droplet) {
-        self.stripe.initializeRoutes()
-        drop.stripe = self.stripe
-    }
-    
-    public func boot(_ config: Configs.Config) throws {
+    init(config: StripeConfig, client: Client) {
+        let balanceAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
+        balance = StripeBalanceRoutes<StripeAPIRequest>(request: balanceAPIRequest)
         
+        let chargeAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
+        charge = StripeChargeRoutes<StripeAPIRequest>(request: chargeAPIRequest)
+        
+        let connectAccountAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
+        connectAccount = StripeConnectAccountRoutes<StripeAPIRequest>(request: connectAccountAPIRequest)
+        
+        let couponAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
+        coupon = StripeCouponRoutes<StripeAPIRequest>(request: couponAPIRequest)
     }
-
-    public func afterInit(_ drop: Droplet) {
-
-    }
-
-    public func beforeRun(_ drop: Droplet) {
-
-    }
-
 }
