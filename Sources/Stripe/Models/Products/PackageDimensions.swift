@@ -20,7 +20,7 @@ public protocol PackageDimensions {
     var width: Decimal? { get }
 }
 
-public struct StripePackageDimensions: PackageDimensions, StripeModelProtocol {
+public struct StripePackageDimensions: PackageDimensions, StripeModel {
     public var height: Decimal?
     public var length: Decimal?
     public var weight: Decimal?

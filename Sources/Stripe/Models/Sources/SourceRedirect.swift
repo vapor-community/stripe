@@ -5,7 +5,7 @@
 //  Created by Andrew Edwards on 12/4/17.
 //
 
-public struct SourceRedirect: StripeModelProtocol {
+public struct SourceRedirect: StripeModel {
     public var failureReason: String?
     public var returnUrl: String?
     public var status: String?
