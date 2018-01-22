@@ -21,11 +21,11 @@ public protocol AccountRoutes {
     func update(account: String, businessName: String?, businessPrimaryColor: String?, businessUrl: String?, debitNegativeBalances: Bool?, declineChargeOn: [String: Bool]?, defaultCurrency: StripeCurrency?, email: String?, externalAccount: Any?, legalEntity: LE?, metadata: [String: String]?, payoutSchedule: [String: String]?, payoutStatementDescriptor: String?, productDescription: String?, statementDescriptor: String?, supportEmail: String?, supportPhone: String?, supportUrl: String?, tosAcceptance: TOS?) throws -> Future<AC>
     func delete(account: String) throws -> Future<DO>
     func reject(account: String, for: AccountRejectReason) throws -> Future<AC>
-    func listAll(filter: [String: Any]) throws -> Future<L>
+    func listAll(filter: [String: Any]?) throws -> Future<L>
     func createLoginLink(for: String) throws -> Future<CLL>
 }
 
-public struct StripeConnectAccountRoutes<SR>: AccountRoutes where SR: StripeRequest {
+public struct StripeConnectAccountRoutes<SR: StripeRequest>: AccountRoutes {
     private let request: SR
     
     init(request: SR) {
@@ -195,8 +195,12 @@ public struct StripeConnectAccountRoutes<SR>: AccountRoutes where SR: StripeRequ
     
     /// List all connected accounts
     /// [Learn More →](https://stripe.com/docs/api/curl#list_accounts)
-    public func listAll(filter: [String: Any]) throws -> Future<ConnectedAccountsList> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.account.endpoint, query: filter.queryParameters)
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<ConnectedAccountsList> {
+        var queryParams = ""
+        if let filter = filter {
+            queryParams = filter.queryParameters
+        }
+        return try request.send(method: .get, path: StripeAPIEndpoint.account.endpoint, query: queryParams)
     }
     
     /// Create a login link

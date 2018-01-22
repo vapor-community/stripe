@@ -21,14 +21,14 @@ public protocol CustomerRoutes {
     func retrieve(customer: String) throws -> Future<C>
     func update(customer: String, accountBalance: Int?, businessVatId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, metadata: [String: String]?, shipping: SH?, source: Any?) throws -> Future<C>
     func delete(customer: String) throws -> Future<DO>
-    func listAll(filter: [String: Any]) throws -> Future<L>
+    func listAll(filter: [String: Any]?) throws -> Future<L>
     func addNewSource(customer: String, source: String, toConnectedAccount: String?) throws -> Future<SRC>
     func addNewBankAccountSource(customer: String, source: Any, toConnectedAccount: String?, metadata: [String: String]?) throws -> Future<BNK>
     func addNewCardSource(customer: String, source: Any, toConnectedAccount: String?, metadata: [String : String]?) throws -> Future<CRD>
     func deleteSource(customer: String, source: String) throws -> Future<SRC>
 }
 
-public struct StripeCustomerRoutes<SR>: CustomerRoutes where SR: StripeAPIRequest {
+public struct StripeCustomerRoutes<SR: StripeRequest>: CustomerRoutes {
     private let request: SR
     
     init(request: SR) {
@@ -174,8 +174,13 @@ public struct StripeCustomerRoutes<SR>: CustomerRoutes where SR: StripeAPIReques
     
     /// List all customers
     /// [Learn More →](https://stripe.com/docs/api/curl#list_customers)
-    public func listAll(filter: [String: Any]) throws -> Future<CustomersList> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.customers.endpoint, query: filter.queryParameters)
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<CustomersList> {
+        var queryParams = ""
+        if let filter = filter {
+            queryParams = filter.queryParameters
+        }
+
+        return try request.send(method: .get, path: StripeAPIEndpoint.customers.endpoint, query: queryParams)
     }
     
     /// Attach a source

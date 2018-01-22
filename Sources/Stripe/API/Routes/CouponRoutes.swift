@@ -18,10 +18,10 @@ public protocol CouponRoutes {
     func retrieve(coupon: String) throws -> Future<CP>
     func update(coupon: String, metadata: [String: String]?) throws -> Future<CP>
     func delete(coupon: String) throws -> Future<DO>
-    func listAll(filter: [String: Any]) throws -> Future<L>
+    func listAll(filter: [String: Any]?) throws -> Future<L>
 }
 
-public struct StripeCouponRoutes<SR>: CouponRoutes where SR: StripeAPIRequest {
+public struct StripeCouponRoutes<SR: StripeRequest>: CouponRoutes {
     private let request: SR
     
     init(request: SR) {
@@ -104,7 +104,12 @@ public struct StripeCouponRoutes<SR>: CouponRoutes where SR: StripeAPIRequest {
     
     /// List all coupons
     /// [Learn More →](https://stripe.com/docs/api/curl#list_coupons)
-    public func listAll(filter: [String: Any]) throws -> Future<CouponsList> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.coupons.endpoint, query: filter.queryParameters)
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<CouponsList> {
+        var queryParams = ""
+        if let filter = filter {
+            queryParams = filter.queryParameters
+        }
+
+        return try request.send(method: .get, path: StripeAPIEndpoint.coupons.endpoint, query: queryParams)
     }
 }

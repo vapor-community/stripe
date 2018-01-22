@@ -18,10 +18,10 @@ public protocol ChargeRoutes {
     func retrieve(charge: String) throws -> Future<CH>
     func update(charge: String, customer: String?, description: String?, fraudDetails: FD?, metadata: [String: String]?, receiptEmail: String?, shipping: SH?, transferGroup: String?) throws -> Future<CH>
     func capture(charge: String, amount: Int?, applicationFee: Int?, destinationAmount: Int?, receiptEmail: String?, statementDescriptor: String?) throws -> Future<CH>
-    func listAll(filter: [String: Any]) throws -> Future<CHL>
+    func listAll(filter: [String: Any]?) throws -> Future<CHL>
 }
 
-public struct StripeChargeRoutes<SR>: ChargeRoutes where SR: StripeRequest {
+public struct StripeChargeRoutes<SR: StripeRequest>: ChargeRoutes {
     private let request: SR
     
     init(request: SR) {
@@ -206,7 +206,12 @@ public struct StripeChargeRoutes<SR>: ChargeRoutes where SR: StripeRequest {
     
     /// List all charges
     /// [Learn More →](https://stripe.com/docs/api/curl#list_charges)
-    public func listAll(filter: [String : Any]) throws -> Future<ChargesList> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.account.endpoint, query: filter.queryParameters)
+    public func listAll(filter: [String : Any]? = nil) throws -> Future<ChargesList> {
+        var queryParams = ""
+        if let filter = filter {
+            queryParams = filter.queryParameters
+        }
+
+        return try request.send(method: .get, path: StripeAPIEndpoint.account.endpoint, query: queryParams)
     }
 }
