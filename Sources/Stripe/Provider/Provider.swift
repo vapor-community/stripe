@@ -31,6 +31,7 @@ public struct StripeClient: Service {
     public let charge: StripeChargeRoutes<StripeAPIRequest>
     public let connectAccount: StripeConnectAccountRoutes<StripeAPIRequest>
     public let coupon: StripeCouponRoutes<StripeAPIRequest>
+    public let customer: StripeCustomerRoutes<StripeAPIRequest>
     
     init(config: StripeConfig, client: Client) {
         let balanceAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
@@ -44,5 +45,8 @@ public struct StripeClient: Service {
         
         let couponAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
         coupon = StripeCouponRoutes<StripeAPIRequest>(request: couponAPIRequest)
+        
+        let customerAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
+        customer = StripeCustomerRoutes<StripeAPIRequest>(request: customerAPIRequest)
     }
 }

@@ -43,6 +43,7 @@ internal enum StripeAPIEndpoint {
     case customers
     case customer(String)
     case customerSources(String)
+    case customerDetachSources(String,String)
     case customerDiscount(String)
     
     /**
@@ -194,6 +195,7 @@ internal enum StripeAPIEndpoint {
         case .customers: return APIBase + APIVersion + "customers"
         case .customer(let id): return APIBase + APIVersion + "customers/\(id)"
         case .customerSources(let id): return APIBase + APIVersion + "customers/\(id)/sources"
+        case .customerDetachSources(let id, let src): return APIBase + APIVersion + "customers/\(id)/sources\(src)"
         case .customerDiscount(let id): return APIBase + APIVersion + "customers/\(id)/discount"
             
         case .tokens: return APIBase + APIVersion + "tokens"
