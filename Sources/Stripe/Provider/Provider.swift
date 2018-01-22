@@ -32,6 +32,9 @@ public struct StripeClient: Service {
     public let connectAccount: StripeConnectAccountRoutes<StripeAPIRequest>
     public let coupon: StripeCouponRoutes<StripeAPIRequest>
     public let customer: StripeCustomerRoutes<StripeAPIRequest>
+    public let dispute: StripeDisputeRoutes<StripeAPIRequest>
+    public let ephemeralKey: StripeEphemeralKeyRoutes<StripeAPIRequest>
+    public let invoiceItem: StripeInvoiceItemRoutes<StripeAPIRequest>
     
     init(config: StripeConfig, client: Client) {
         let balanceAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
@@ -48,5 +51,14 @@ public struct StripeClient: Service {
         
         let customerAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
         customer = StripeCustomerRoutes<StripeAPIRequest>(request: customerAPIRequest)
+        
+        let disputeAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
+        dispute = StripeDisputeRoutes<StripeAPIRequest>(request: disputeAPIRequest)
+        
+        let ephemeralKeyAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
+        ephemeralKey = StripeEphemeralKeyRoutes<StripeAPIRequest>(request: ephemeralKeyAPIRequest)
+        
+        let invoiceItemAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
+        invoiceItem = StripeInvoiceItemRoutes<StripeAPIRequest>(request: invoiceItemAPIRequest)
     }
 }
