@@ -84,7 +84,7 @@ public struct StripeCouponRoutes<SR: StripeRequest>: CouponRoutes {
     
     /// Update coupon
     /// [Learn More →](https://stripe.com/docs/api/curl#update_coupon)
-    public func update(coupon: String, metadata: [String : String]?) throws -> Future<StripeCoupon> {
+    public func update(coupon: String, metadata: [String : String]? = nil) throws -> Future<StripeCoupon> {
         var body: [String: Any] = [:]
         
         if let metadata = metadata {
