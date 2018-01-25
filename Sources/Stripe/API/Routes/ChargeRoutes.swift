@@ -76,9 +76,7 @@ public struct StripeChargeRoutes<SR: StripeRequest>: ChargeRoutes {
         }
         
         if let metadata = metadata {
-            metadata.forEach { key, value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1}
         }
         
         if let receiptEmail = receiptEmail {
@@ -86,9 +84,7 @@ public struct StripeChargeRoutes<SR: StripeRequest>: ChargeRoutes {
         }
         
         if let shipping = shipping {
-            try shipping.toEncodedDictionary().forEach { key, value in
-                body["shipping[\(key)]"] = value
-            }
+            try shipping.toEncodedDictionary().forEach { body["shipping[\($0)]"] = $1 }
         }
         
         if let customer = customer {
@@ -100,9 +96,7 @@ public struct StripeChargeRoutes<SR: StripeRequest>: ChargeRoutes {
         }
         
         if let cardDictionarySource = source as? [String: Any] {
-            cardDictionarySource.forEach { key,value in
-                body["source[\(key)]"] = value
-            }
+            cardDictionarySource.forEach { body["source[\($0)]"] = $1 }
         }
         
         if let statementDescriptor = statementDescriptor {
@@ -159,9 +153,7 @@ public struct StripeChargeRoutes<SR: StripeRequest>: ChargeRoutes {
         }
         
         if let shipping = shipping {
-            try shipping.toEncodedDictionary().forEach { key, value in
-                body["shipping[\(key)]"] = value
-            }
+            try shipping.toEncodedDictionary().forEach { body["shipping[\($0)]"] = $1 }
         }
         
         if let transferGroup = transferGroup {

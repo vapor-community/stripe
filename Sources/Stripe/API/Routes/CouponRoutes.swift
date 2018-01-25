@@ -68,9 +68,7 @@ public struct StripeCouponRoutes<SR: StripeRequest>: CouponRoutes {
         }
 
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         return try request.send(method: .post, path: StripeAPIEndpoint.coupons.endpoint, body: body.queryParameters)
@@ -88,9 +86,7 @@ public struct StripeCouponRoutes<SR: StripeRequest>: CouponRoutes {
         var body: [String: Any] = [:]
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         return try request.send(method: .post, path: StripeAPIEndpoint.coupon(coupon).endpoint, body: body.queryParameters)

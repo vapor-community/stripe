@@ -53,22 +53,16 @@ public struct StripeOrderRoutes<SR: StripeRequest>: OrderRoutes {
         
         if let items = items {
             for i in 0..<items.count {
-                items[i].forEach { key,value in
-                    body["items[\(i)][\(key)]"] = value
-                }
+                items[i].forEach { body["items[\(i)][\($0)]"] = $1 }
             }
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let shipping = shipping {
-            try shipping.toEncodedDictionary().forEach { key,value in
-                body["shipping[\(key)]"] = value
-            }
+            try shipping.toEncodedDictionary().forEach { body["shipping[\($0)]"] = $1 }
         }
         
         return try request.send(method: .post, path: StripeAPIEndpoint.order.endpoint, body: body.queryParameters)
@@ -95,9 +89,7 @@ public struct StripeOrderRoutes<SR: StripeRequest>: OrderRoutes {
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
 
         if let selectedShippingMethod = selectedShippingMethod {
@@ -105,9 +97,7 @@ public struct StripeOrderRoutes<SR: StripeRequest>: OrderRoutes {
         }
         
         if let shipping = shipping {
-            try shipping.toEncodedDictionary().forEach { key,value in
-                body["shipping[\(key)]"] = value
-            }
+            try shipping.toEncodedDictionary().forEach { body["shipping[\($0)]"] = $1 }
         }
         
         if let status = status {
@@ -138,9 +128,7 @@ public struct StripeOrderRoutes<SR: StripeRequest>: OrderRoutes {
         }
         
         if let source = source as? [String: Any] {
-            source.forEach { key,value in
-                body["source[\(key)]"] = value
-            }
+            source.forEach { body["source[\($0)]"] = $1 }
         }
         
         if let applicationfee = applicationFee {
@@ -156,9 +144,7 @@ public struct StripeOrderRoutes<SR: StripeRequest>: OrderRoutes {
         }
 
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
 
         return try request.send(method: .post, path: StripeAPIEndpoint.ordersPay(order).endpoint, body: body.queryParameters, headers: headers)
@@ -182,9 +168,7 @@ public struct StripeOrderRoutes<SR: StripeRequest>: OrderRoutes {
         
         if let items = items {
             for i in 0..<items.count {
-                items[i].forEach { key,value in
-                    body["items[\(i)][\(key)]"] = value
-                }
+                items[i].forEach { body["items[\(i)][\($0)]"] = $1 }
             }
         }
 

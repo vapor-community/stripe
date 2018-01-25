@@ -38,15 +38,11 @@ public struct StripeDisputeRoutes<SR: StripeRequest>: DisputeRoutes {
         var body: [String: Any] = [:]
         
         if let disputeEvidence = disputeEvidence {
-           try disputeEvidence.toEncodedDictionary().forEach { key,value in
-                body["evidence[\(key)]"] = value
-            }
+           try disputeEvidence.toEncodedDictionary().forEach { body["evidence[\($0)]"] = $1 }
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let submit = submit {

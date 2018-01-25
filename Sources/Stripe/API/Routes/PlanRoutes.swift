@@ -56,9 +56,7 @@ public struct StripePlanRoutes<SR: StripeRequest>: PlanRoutes {
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let statementDescriptor = statementDescriptor {
@@ -83,9 +81,7 @@ public struct StripePlanRoutes<SR: StripeRequest>: PlanRoutes {
         var body: [String: Any] = [:]
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
 
         if let name = name {

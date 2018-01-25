@@ -73,15 +73,11 @@ public struct StripeCustomerRoutes<SR: StripeRequest>: CustomerRoutes {
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let shipping = shipping {
-            try shipping.toEncodedDictionary().forEach { key, value in
-                body["shipping[\(key)]"] = value
-            }
+            try shipping.toEncodedDictionary().forEach { body["shipping[\($0)]"] = $1 }
         }
         
         if let tokenSource = source as? String {
@@ -89,9 +85,7 @@ public struct StripeCustomerRoutes<SR: StripeRequest>: CustomerRoutes {
         }
         
         if let cardDictionarySource = source as? [String: Any] {
-            cardDictionarySource.forEach { key,value in
-                body["source[\(key)]"] = value
-            }
+            cardDictionarySource.forEach { body["source[\($0)]"] = $1 }
         }
         
         return try request.send(method: .post, path: StripeAPIEndpoint.customers.endpoint, body: body.queryParameters)
@@ -142,15 +136,11 @@ public struct StripeCustomerRoutes<SR: StripeRequest>: CustomerRoutes {
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let shipping = shipping {
-            try shipping.toEncodedDictionary().forEach { key, value in
-                body["shipping[\(key)]"] = value
-            }
+            try shipping.toEncodedDictionary().forEach { body["shipping[\($0)]"] = $1 }
         }
         
         if let tokenSource = source as? String {
@@ -158,9 +148,7 @@ public struct StripeCustomerRoutes<SR: StripeRequest>: CustomerRoutes {
         }
         
         if let cardDictionarySource = source as? [String: Any] {
-            cardDictionarySource.forEach { key,value in
-                body["source[\(key)]"] = value
-            }
+            cardDictionarySource.forEach { body["source[\($0)]"] = $1 }
         }
         
         return try request.send(method: .post, path: StripeAPIEndpoint.customer(customer).endpoint, body: body.queryParameters)
@@ -211,15 +199,11 @@ public struct StripeCustomerRoutes<SR: StripeRequest>: CustomerRoutes {
         }
         
         if let source = source as? [String: Any] {
-            source.forEach { key,value in
-                body["source[\(key)]"] = value
-            }
+            source.forEach { body["source[\($0)]"] = $1 }
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         return try request.send(method: .post, path: StripeAPIEndpoint.customerSources(customer).endpoint, body: body.queryParameters, headers: headers)
@@ -240,15 +224,11 @@ public struct StripeCustomerRoutes<SR: StripeRequest>: CustomerRoutes {
         }
         
         if let source = source as? [String: Any] {
-            source.forEach { key,value in
-                body["source[\(key)]"] = value
-            }
+            source.forEach { body["source[\($1)]"] = $1 }
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         return try request.send(method: .post, path: StripeAPIEndpoint.customerSources(customer).endpoint, body: body.queryParameters, headers: headers)

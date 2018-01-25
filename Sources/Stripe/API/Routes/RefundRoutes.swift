@@ -42,9 +42,7 @@ public struct StripeRefundRoutes<SR: StripeRequest>: RefundRoutes {
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
 
         if let refundReason = reason {
@@ -74,9 +72,7 @@ public struct StripeRefundRoutes<SR: StripeRequest>: RefundRoutes {
         var body: [String: Any] = [:]
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         return try request.send(method: .post, path: StripeAPIEndpoint.refund(refund).endpoint, body: body.queryParameters)

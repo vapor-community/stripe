@@ -56,9 +56,7 @@ public struct StripeInvoiceItemRoutes<SR: StripeRequest>: InvoiceItemRoutes {
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let subscription = subscription {
@@ -96,9 +94,7 @@ public struct StripeInvoiceItemRoutes<SR: StripeRequest>: InvoiceItemRoutes {
         }
 
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         return try request.send(method: .post, path: StripeAPIEndpoint.invoiceItem(invoiceItem).endpoint, body: body.queryParameters)

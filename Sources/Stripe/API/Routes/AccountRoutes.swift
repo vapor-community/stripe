@@ -50,9 +50,7 @@ public struct StripeConnectAccountRoutes<SR: StripeRequest>: AccountRoutes {
         }
         
         if let metadata = metadata {
-            metadata.forEach { key, value in
-                 body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         return try request.send(method: .post, path: StripeAPIEndpoint.account.endpoint, body: body.queryParameters)
@@ -104,9 +102,7 @@ public struct StripeConnectAccountRoutes<SR: StripeRequest>: AccountRoutes {
         }
         
         if let declinechargeon = declineChargeOn {
-            declinechargeon.forEach { key,value in
-                body["decline_charge_on[\(key)]"] = value
-            }
+            declinechargeon.forEach { body["decline_charge_on[\($0)]"] = $1 }
         }
         
         if let currency = defaultCurrency {
@@ -118,33 +114,23 @@ public struct StripeConnectAccountRoutes<SR: StripeRequest>: AccountRoutes {
         }
         
         if let externalBankAccount = externalAccount as? StripeExternalBankAccount {
-            try externalBankAccount.toEncodedDictionary().forEach { key, value in
-                body["external_account[\(key)]"] = value
-            }
+            try externalBankAccount.toEncodedDictionary().forEach { body["external_account[\($0)]"] = $1 }
         }
         
         if let externalCardAccount = externalAccount as? StripeExternalCardAccount {
-            try externalCardAccount.toEncodedDictionary().forEach { key, value in
-                body["external_account[\(key)]"] = value
-            }
+            try externalCardAccount.toEncodedDictionary().forEach { body["external_account[\($0)]"] = $1 }
         }
         
         if let legalEntity = legalEntity {
-            try legalEntity.toEncodedDictionary().forEach { key, value in
-                body["legal_entity[\(key)]"] = value
-            }
+            try legalEntity.toEncodedDictionary().forEach { body["legal_entity[\($0)]"] = $1 }
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let payoutSchedule = payoutSchedule {
-            payoutSchedule.forEach { key,value in
-                body["payout_schedule[\(key)]"] = value
-            }
+            payoutSchedule.forEach { body["payout_schedule[\($0)]"] = $1 }
         }
         
         if let payoutstatement = payoutStatementDescriptor {
@@ -172,9 +158,7 @@ public struct StripeConnectAccountRoutes<SR: StripeRequest>: AccountRoutes {
         }
         
         if let tos = tosAcceptance {
-            try tos.toEncodedDictionary().forEach { key, value in
-                body["tos_acceptance[\(key)]"] = value
-            }
+            try tos.toEncodedDictionary().forEach { body["tos_acceptance[\($0)]"] = $1 }
         }
         
         return try request.send(method: .post, path: StripeAPIEndpoint.accounts(accountId).endpoint, body: body.queryParameters)

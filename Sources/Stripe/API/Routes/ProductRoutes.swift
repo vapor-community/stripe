@@ -81,15 +81,11 @@ public struct StripeProductRoutes<SR: StripeRequest>: ProductRoutes {
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let packageDimensions = packageDimensions {
-            try packageDimensions.toEncodedDictionary().forEach { key,value in
-                body["package_dimensions[\(key)]"] = value
-            }
+            try packageDimensions.toEncodedDictionary().forEach { body["package_dimensions[\($0)]"] = $1 }
         }
         
         if let shippable = shippable {
@@ -156,9 +152,7 @@ public struct StripeProductRoutes<SR: StripeRequest>: ProductRoutes {
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
 
         if let name = name {
@@ -166,9 +160,7 @@ public struct StripeProductRoutes<SR: StripeRequest>: ProductRoutes {
         }
         
         if let packageDimensions = packageDimensions {
-            try packageDimensions.toEncodedDictionary().forEach { key,value in
-                body["package_dimensions[\(key)]"] = value
-            }
+            try packageDimensions.toEncodedDictionary().forEach { body["package_dimensions[\($0)]"] = $1 }
         }
         
         if let shippable = shippable {

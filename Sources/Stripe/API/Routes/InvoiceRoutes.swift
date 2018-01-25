@@ -73,9 +73,7 @@ public struct StripeInvoiceRoutes<SR: StripeRequest>: InvoiceRoutes {
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let statementDescriptor = statementDescriptor {
@@ -111,9 +109,7 @@ public struct StripeInvoiceRoutes<SR: StripeRequest>: InvoiceRoutes {
         var query: [String: Any] = ["customer": customer]
         
         if let filter = filter {
-            filter.forEach {key,value in
-                query["\(key)"] = value
-            }
+            filter.forEach { query["\($0)"] = $1 }
         }
         
         return try request.send(method: .get, path: StripeAPIEndpoint.upcomingInvoices.endpoint, query: query.queryParameters)
@@ -155,9 +151,7 @@ public struct StripeInvoiceRoutes<SR: StripeRequest>: InvoiceRoutes {
         }
         
         if let metadata = metadata {
-            metadata.forEach { key,value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let paid = paid {
