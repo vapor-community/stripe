@@ -25,7 +25,7 @@ public protocol Source {
     var codeVerification: CodeVerification? { get }
     var created: Date? { get }
     var currency: StripeCurrency? { get }
-    var flow: String? { get }
+    var flow: Flow? { get }
     var isLive: Bool? { get }
     var metadata: [String: String]? { get }
     var owner: O? { get }
@@ -55,7 +55,7 @@ public struct StripeSource: Source, StripeModel {
     public var codeVerification: CodeVerification?
     public var created: Date?
     public var currency: StripeCurrency?
-    public var flow: String?
+    public var flow: Flow?
     public var isLive: Bool?
     public var metadata: [String: String]?
     public var owner: StripeOwner?
@@ -116,7 +116,7 @@ public struct StripeSource: Source, StripeModel {
         codeVerification = try container.decode(CodeVerification.self, forKey: .codeVerification)
         created = try container.decode(Date.self, forKey: .created)
         currency = try container.decode(StripeCurrency.self, forKey: .currency)
-        flow = try container.decode(String.self, forKey: .flow)
+        flow = try container.decode(Flow.self, forKey: .flow)
         isLive = try container.decode(Bool.self, forKey: .isLive)
         metadata = try container.decode([String: String].self, forKey: .metadata)
         owner = try container.decode(StripeOwner.self, forKey: .owner)
