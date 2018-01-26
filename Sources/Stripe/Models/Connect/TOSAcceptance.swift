@@ -16,17 +16,20 @@ import Foundation
 public protocol TOSAcceptance {
     var timestamp: Date? { get }
     var ip: String? { get }
+    var status: String? { get }
     var userAgent: String? { get }
 }
 
 public struct StripeTOSAcceptance: TOSAcceptance, StripeModel {
     public var timestamp: Date?
     public var ip: String?
+    public var status: String?
     public var userAgent: String?
     
     enum CodingKeys: String, CodingKey {
         case timestamp
         case ip
+        case status
         case userAgent =  "user_agent"
     }
 }
