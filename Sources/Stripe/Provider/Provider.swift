@@ -42,6 +42,7 @@ public struct StripeClient: Service {
     public let product: StripeProductRoutes<StripeAPIRequest>
     public let refund: StripeRefundRoutes<StripeAPIRequest>
     public let sku: StripeSKURoutes<StripeAPIRequest>
+    public let source: StripeSourceRoutes<StripeAPIRequest>
 
     fileprivate init(config: StripeConfig, client: Client) {
         let balanceAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
@@ -88,5 +89,9 @@ public struct StripeClient: Service {
         
         let skuAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
         sku = StripeSKURoutes<StripeAPIRequest>(request: skuAPIRequest)
+        
+        let sourceAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
+        source = StripeSourceRoutes<StripeAPIRequest>(request: sourceAPIRequest)
+
     }
 }
