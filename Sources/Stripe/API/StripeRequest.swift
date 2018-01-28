@@ -37,7 +37,7 @@ public extension StripeRequest {
 public class StripeAPIRequest: StripeRequest {
     private let httpClient: Client
     private let apiKey: String
-    private var StripeDefaultHeaders: HTTPHeaders = ["Stripe-Version": "2017-08-15", .authorization: "application/x-www-form-urlencoded"]
+    private var StripeDefaultHeaders: HTTPHeaders = ["Stripe-Version": "2017-08-15", .contentType: "application/x-www-form-urlencoded"]
     
     init(httpClient: Client, apiKey: String) {
         self.httpClient = httpClient
