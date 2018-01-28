@@ -37,7 +37,7 @@ public extension StripeRequest {
 public class StripeAPIRequest: StripeRequest {
     private let httpClient: Client
     private let apiKey: String
-    private var StripeDefaultHeaders: HTTPHeaders = ["Stripe-Version": "2017-08-15", .contentType: "application/x-www-form-urlencoded"]
+    private let StripeDefaultHeaders: HTTPHeaders = ["Stripe-Version": "2017-08-15", .contentType: "application/x-www-form-urlencoded"]
     
     init(httpClient: Client, apiKey: String) {
         self.httpClient = httpClient
@@ -47,9 +47,11 @@ public class StripeAPIRequest: StripeRequest {
     public func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: String, headers: HTTPHeaders) throws -> Future<SM> {
         let encodedHTTPBody = HTTPBody(string: body)
         
-        headers.forEach { StripeDefaultHeaders[$0.name] = $0.value }
+        var finalHeaders: HTTPHeaders = StripeDefaultHeaders
         
-        StripeDefaultHeaders[.authorization] = "Bearer \(apiKey)"
+        headers.forEach { finalHeaders[$0.name] = $0.value }
+        
+        finalHeaders[.authorization] = "Bearer \(apiKey)"
         
         let request = HTTPRequest(method: method, uri: URI(stringLiteral: path + "?" + query), headers: StripeDefaultHeaders, body: encodedHTTPBody)
         
