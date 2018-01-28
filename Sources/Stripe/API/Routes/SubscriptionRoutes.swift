@@ -12,12 +12,14 @@ import Foundation
 public protocol SubscriptionRoutes {
     associatedtype SB: Subscription
     associatedtype L: List
+    associatedtype DO: DeletedObject
     
     func create(customer: String, applicationFeePercent: Decimal?, billing: String?, coupon: String?, daysUntilDue: Int?, items: [String: Any]?, metadata: [String: String]?, source: Any?, taxPercent: Decimal?, trialEnd: Date?, trialPeriodDays: Int?) throws -> Future<SB>
     func retrieve(id: String) throws -> Future<SB>
     func update(subscription: String, applicationFeePercent: Decimal?, billing: String?, coupon: String?, daysUntilDue: Int?, items: [String: Any]?, metadata: [String: String]?, prorate: Bool?, prorationDate: Date?, source: Any?, taxPercent: Decimal?, trialEnd: Date?) throws -> Future<SB>
     func cancel(subscription: String, atPeriodEnd: Bool?) throws -> Future<SB>
     func listAll(filter: [String: Any]?) throws -> Future<L>
+    func deleteDiscount(subscription: String) throws -> Future<DO>
 }
 
 public struct StripeSubscriptionRoutes<SR: StripeRequest>: SubscriptionRoutes {
@@ -185,5 +187,11 @@ public struct StripeSubscriptionRoutes<SR: StripeRequest>: SubscriptionRoutes {
         }
         
         return try request.send(method: .get, path: StripeAPIEndpoint.subscription.endpoint, query: queryParams)
+    }
+    
+    /// Delete a subscription discount
+    /// [Learn More →](https://stripe.com/docs/api/curl#delete_subscription_discount)
+    public func deleteDiscount(subscription: String) throws -> Future<StripeDeletedObject> {
+        return try request.send(method: .delete, path: StripeAPIEndpoint.subscriptionDiscount(subscription).endpoint)
     }
 }

@@ -26,6 +26,7 @@ public protocol CustomerRoutes {
     func addNewBankAccountSource(customer: String, source: Any, toConnectedAccount: String?, metadata: [String: String]?) throws -> Future<BNK>
     func addNewCardSource(customer: String, source: Any, toConnectedAccount: String?, metadata: [String : String]?) throws -> Future<CRD>
     func deleteSource(customer: String, source: String) throws -> Future<SRC>
+    func deleteDiscount(customer: String) throws -> Future<DO>
 }
 
 public struct StripeCustomerRoutes<SR: StripeRequest>: CustomerRoutes {
@@ -238,5 +239,11 @@ public struct StripeCustomerRoutes<SR: StripeRequest>: CustomerRoutes {
     /// [Learn More →](https://stripe.com/docs/api/curl#detach_source)
     public func deleteSource(customer: String, source: String) throws -> Future<StripeSource> {
         return try request.send(method: .delete, path: StripeAPIEndpoint.customerDetachSources(customer, source).endpoint)
+    }
+    
+    /// Delete a customer discount
+    /// [Learn More →](https://stripe.com/docs/api/curl#delete_discount)
+    public func deleteDiscount(customer: String) throws -> Future<StripeDeletedObject> {
+        return try request.send(method: .delete, path: StripeAPIEndpoint.customerDiscount(customer).endpoint)
     }
 }
