@@ -1,324 +1,215 @@
-////
-////  SubscriptionTests.swift
-////  Stripe
-////
-////  Created by Andrew Edwards on 6/10/17.
-////
-////
 //
-//import XCTest
+//  SubscriptionTests.swift
+//  Stripe
 //
-//@testable import Stripe
-//@testable import Vapor
+//  Created by Andrew Edwards on 6/10/17.
 //
 //
-//
-//
-//@testable import Random
-//
-//class SubscriptionTests: XCTestCase {
-//    
-//    var drop: Droplet?
-//    var subscriptionId: String = ""
-//    
-//    override func setUp() {
-//        do {
-//            drop = try self.makeDroplet()
-//            
-//            let planId = try drop?.stripe?.plans.create(id: Data(bytes: URandom.bytes(count: 16)).base64String,
-//                                                        amount: 10_00,
-//                                                        currency: .usd,
-//                                                        interval: .week,
-//                                                        name: "Test Plan",
-//                                                        intervalCount: 5,
-//                                                        statementDescriptor: "Test Plan",
-//                                                        trialPeriodDays: nil,
-//                                                        metadata: nil)
-//                                                        .serializedResponse().id ?? ""
-//            
-//            let paymentTokenSource = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
-//                                                                              expirationMonth: 10,
-//                                                                              expirationYear: 2018,
-//                                                                              cvc: 123,
-//                                                                              name: "Test Card",
-//                                                                              customer: nil,
-//                                                                              currency: nil)
-//                                                                              .serializedResponse().id ?? ""
-//            
-//            let customerId = try drop?.stripe?.customer.create(accountBalance: nil,
-//                                                               businessVATId: nil,
-//                                                               coupon: nil,
-//                                                               defaultSource: nil,
-//                                                               description: nil,
-//                                                               email: nil,
-//                                                               shipping: nil,
-//                                                               source: paymentTokenSource)
-//                                                               .serializedResponse().id ?? ""
-//            
-//            subscriptionId = try drop?.stripe?.subscriptions.create(forCustomer: customerId,
-//                                                                    plan: planId,
-//                                                                    applicationFeePercent: nil,
-//                                                                    couponId: nil,
-//                                                                    items: nil,
-//                                                                    quantity: nil,
-//                                                                    source: nil,
-//                                                                    taxPercent: nil,
-//                                                                    trialEnd: nil,
-//                                                                    trialPeriodDays: nil)
-//                                                                    .serializedResponse().id ?? ""
-//        }
-//        catch let error as StripeError {
-//            
-//            switch error {
-//            case .apiConnectionError:
-//                XCTFail(error.localizedDescription)
-//            case .apiError:
-//                XCTFail(error.localizedDescription)
-//            case .authenticationError:
-//                XCTFail(error.localizedDescription)
-//            case .cardError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidRequestError:
-//                XCTFail(error.localizedDescription)
-//            case .rateLimitError:
-//                XCTFail(error.localizedDescription)
-//            case .validationError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidSourceType:
-//                XCTFail(error.localizedDescription)
-//            default:
-//                XCTFail(error.localizedDescription)
-//            }
-//        }
-//        catch {
-//            fatalError("Setup failed: \(error.localizedDescription)")
-//        }
-//    }
-//    
-//    override func tearDown() {
-//        drop = nil
-//        subscriptionId = ""
-//    }
-//    
-//    func testRetrieveSubscription() throws {
-//        do {
-//            let subscription = try drop?.stripe?.subscriptions.retrieve(subscription: subscriptionId).serializedResponse()
-//            
-//            XCTAssertNotNil(subscription)
-//        }
-//        catch let error as StripeError {
-//            
-//            switch error {
-//            case .apiConnectionError:
-//                XCTFail(error.localizedDescription)
-//            case .apiError:
-//                XCTFail(error.localizedDescription)
-//            case .authenticationError:
-//                XCTFail(error.localizedDescription)
-//            case .cardError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidRequestError:
-//                XCTFail(error.localizedDescription)
-//            case .rateLimitError:
-//                XCTFail(error.localizedDescription)
-//            case .validationError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidSourceType:
-//                XCTFail(error.localizedDescription)
-//            default:
-//                XCTFail(error.localizedDescription)
-//            }
-//        }
-//        catch {
-//            XCTFail(error.localizedDescription)
-//        }
-//    }
-//    
-//    func testUpdateSubscription() throws {
-//        do {
-//            let newQuantity = 2
-//            
-//            let updatedSubscription = try drop?.stripe?.subscriptions.update(subscription: subscriptionId,
-//                                                                                 applicationFeePercent: nil,
-//                                                                                 couponId: nil,
-//                                                                                 items: nil,
-//                                                                                 plan: nil,
-//                                                                                 prorate: nil,
-//                                                                                 quantity: newQuantity,
-//                                                                                 source: nil,
-//                                                                                 taxPercent: nil,
-//                                                                                 trialEnd: nil)
-//                                                                                 .serializedResponse()
-//
-//            XCTAssertNotNil(updatedSubscription)
-//            
-//            XCTAssertEqual(updatedSubscription?.quantity, newQuantity)
-//        }
-//        catch let error as StripeError {
-//            
-//            switch error {
-//            case .apiConnectionError:
-//                XCTFail(error.localizedDescription)
-//            case .apiError:
-//                XCTFail(error.localizedDescription)
-//            case .authenticationError:
-//                XCTFail(error.localizedDescription)
-//            case .cardError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidRequestError:
-//                XCTFail(error.localizedDescription)
-//            case .rateLimitError:
-//                XCTFail(error.localizedDescription)
-//            case .validationError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidSourceType:
-//                XCTFail(error.localizedDescription)
-//            default:
-//                XCTFail(error.localizedDescription)
-//            }
-//        }
-//        catch {
-//            XCTFail(error.localizedDescription)
-//        }
-//    }
-//   
-//    func testDeleteDiscount() throws {
-//        do {
-//            let couponId = try drop?.stripe?.coupons.create(id: nil,
-//                                                            duration: .once,
-//                                                            amountOff: nil,
-//                                                            currency: nil,
-//                                                            durationInMonths: nil,
-//                                                            maxRedemptions: nil,
-//                                                            percentOff: 5,
-//                                                            redeemBy: nil)
-//                                                            .serializedResponse().id ?? ""
-//            
-//            let updatedSubscription = try drop?.stripe?.subscriptions.update(subscription: subscriptionId,
-//                                                                             applicationFeePercent: nil,
-//                                                                             couponId: couponId,
-//                                                                             items: nil,
-//                                                                             plan: nil,
-//                                                                             prorate: nil,
-//                                                                             quantity: nil,
-//                                                                             source: nil,
-//                                                                             taxPercent: nil,
-//                                                                             trialEnd: nil)
-//                                                                             .serializedResponse()
-//            
-//            XCTAssertNotNil(updatedSubscription?.discount)
-//            
-//            let deletedDiscount = try drop?.stripe?.subscriptions.deleteDiscount(onSubscription: updatedSubscription?.id ?? "").serializedResponse()
-//            
-//            XCTAssertTrue(deletedDiscount?.deleted ?? false)
-//        }
-//        catch let error as StripeError {
-//            
-//            switch error {
-//            case .apiConnectionError:
-//                XCTFail(error.localizedDescription)
-//            case .apiError:
-//                XCTFail(error.localizedDescription)
-//            case .authenticationError:
-//                XCTFail(error.localizedDescription)
-//            case .cardError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidRequestError:
-//                XCTFail(error.localizedDescription)
-//            case .rateLimitError:
-//                XCTFail(error.localizedDescription)
-//            case .validationError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidSourceType:
-//                XCTFail(error.localizedDescription)
-//            default:
-//                XCTFail(error.localizedDescription)
-//            }
-//        }
-//        catch {
-//            XCTFail(error.localizedDescription)
-//        }
-//    }
-//    
-//    func testCancelSubscription() throws {
-//        do {
-//            let canceledSubscription = try drop?.stripe?.subscriptions.cancel(subscription: subscriptionId, atPeriodEnd: false).serializedResponse()
-//            
-//            XCTAssertNotNil(canceledSubscription)
-//            
-//            XCTAssertTrue(canceledSubscription?.status == StripeSubscriptionStatus.canceled)
-//        }
-//        catch let error as StripeError {
-//            
-//            switch error {
-//            case .apiConnectionError:
-//                XCTFail(error.localizedDescription)
-//            case .apiError:
-//                XCTFail(error.localizedDescription)
-//            case .authenticationError:
-//                XCTFail(error.localizedDescription)
-//            case .cardError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidRequestError:
-//                XCTFail(error.localizedDescription)
-//            case .rateLimitError:
-//                XCTFail(error.localizedDescription)
-//            case .validationError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidSourceType:
-//                XCTFail(error.localizedDescription)
-//            default:
-//                XCTFail(error.localizedDescription)
-//            }
-//        }
-//        catch {
-//            XCTFail(error.localizedDescription)
-//        }
-//    }
-//    
-//    func testFilterSubscriptionItems() throws {
-//        do {
-//            let filter = StripeFilter()
-//            
-//            filter.limit = 1
-//            
-//            let subscriptions = try drop?.stripe?.subscriptions.listAll(filter: filter).serializedResponse()
-//            
-//            XCTAssertNotNil(subscriptions)
-//            
-//            if let subscriptionItems = subscriptions?.items {
-//                XCTAssertEqual(subscriptionItems.count, 1)
-//                XCTAssertNotNil(subscriptionItems.first)
-//            } else {
-//                XCTFail("Subscriptions are not present")
-//            }
-//        }
-//        catch let error as StripeError {
-//            
-//            switch error {
-//            case .apiConnectionError:
-//                XCTFail(error.localizedDescription)
-//            case .apiError:
-//                XCTFail(error.localizedDescription)
-//            case .authenticationError:
-//                XCTFail(error.localizedDescription)
-//            case .cardError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidRequestError:
-//                XCTFail(error.localizedDescription)
-//            case .rateLimitError:
-//                XCTFail(error.localizedDescription)
-//            case .validationError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidSourceType:
-//                XCTFail(error.localizedDescription)
-//            default:
-//                XCTFail(error.localizedDescription)
-//            }
-//        }
-//        catch {
-//            XCTFail(error.localizedDescription)
-//        }
-//    }
-//}
 
+import XCTest
+@testable import Stripe
+@testable import Vapor
+
+class SubscriptionTests: XCTestCase {
+    func testSubscriptionParsedProperly() throws {
+        do {
+            let body = HTTPBody(string: subscriptionString)
+            let subscription = try JSONDecoder().decode(StripeSubscription.self, from: body)
+
+            subscription.do({ (sub) in
+                XCTAssertNotNil(sub.discount)
+                XCTAssertEqual(sub.discount?.object, "discount")
+                XCTAssertEqual(sub.discount?.customer, "cus_CCMIISleHrbPlY")
+                XCTAssertEqual(sub.discount?.end, Date(timeIntervalSinceReferenceDate: 1399384361))
+                XCTAssertEqual(sub.discount?.start, Date(timeIntervalSinceReferenceDate: 1391694761))
+                XCTAssertEqual(sub.discount?.subscription, "sub_12345")
+                
+                XCTAssertNotNil(sub.discount?.coupon)
+                XCTAssertEqual(sub.discount?.coupon?.id, "35OFF")
+                XCTAssertEqual(sub.discount?.coupon?.object, "coupon")
+                XCTAssertEqual(sub.discount?.coupon?.amountOff, 5)
+                XCTAssertEqual(sub.discount?.coupon?.created, Date(timeIntervalSinceReferenceDate: 1391694467))
+                XCTAssertEqual(sub.discount?.coupon?.currency, .usd)
+                XCTAssertEqual(sub.discount?.coupon?.duration, .repeating)
+                XCTAssertEqual(sub.discount?.coupon?.durationInMonths, 3)
+                XCTAssertEqual(sub.discount?.coupon?.isLive, false)
+                XCTAssertEqual(sub.discount?.coupon?.maxRedemptions, 22)
+                XCTAssertEqual(sub.discount?.coupon?.metadata?["hello"], "world")
+                XCTAssertEqual(sub.discount?.coupon?.percentOff, 25)
+                XCTAssertEqual(sub.discount?.coupon?.redeemBy, Date(timeIntervalSinceReferenceDate: 1489793908))
+                XCTAssertEqual(sub.discount?.coupon?.timesRedeemed, 1)
+                XCTAssertEqual(sub.discount?.coupon?.isValid, true)
+                
+                XCTAssertNotNil(sub.items)
+                XCTAssertEqual(sub.items?.object, "list")
+                XCTAssertEqual(sub.items?.hasMore, false)
+                XCTAssertEqual(sub.items?.totalCount, 1)
+                XCTAssertEqual(sub.items?.url, "/v1/subscription_items?subscription=sub_AJ6s2Iy65K3RxN")
+                XCTAssertNotNil(sub.items?.items)
+                XCTAssertNotNil(sub.items?.items?[0])
+                XCTAssertEqual(sub.items?.items?[0].id, "si_19yUeQ2eZvKYlo2CnJwkz3pK")
+                XCTAssertEqual(sub.items?.items?[0].object, "subscription_item")
+                XCTAssertEqual(sub.items?.items?[0].created, Date(timeIntervalSinceReferenceDate: 1489793911))
+                XCTAssertEqual(sub.items?.items?[0].metadata?["hello"], "world")
+                XCTAssertEqual(sub.items?.items?[0].quantity, 1)
+                XCTAssertEqual(sub.items?.items?[0].subscription, "sub_AJ6s2Iy65K3RxN")
+                
+                XCTAssertNotNil(sub.items?.items?[0].plan)
+                XCTAssertEqual(sub.items?.items?[0].plan?.id, "30990foo1489793903")
+                XCTAssertEqual(sub.items?.items?[0].plan?.object, "plan")
+                XCTAssertEqual(sub.items?.items?[0].plan?.amount, 100)
+                XCTAssertEqual(sub.items?.items?[0].plan?.created, Date(timeIntervalSinceReferenceDate: 1489793908))
+                XCTAssertEqual(sub.items?.items?[0].plan?.currency, .usd)
+                XCTAssertEqual(sub.items?.items?[0].plan?.interval, .week)
+                XCTAssertEqual(sub.items?.items?[0].plan?.intervalCount, 1)
+                XCTAssertEqual(sub.items?.items?[0].plan?.isLive, false)
+                XCTAssertEqual(sub.items?.items?[0].plan?.metadata?["hello"], "world")
+                XCTAssertEqual(sub.items?.items?[0].plan?.name, "Foo")
+                XCTAssertEqual(sub.items?.items?[0].plan?.statementDescriptor, "FOO")
+                XCTAssertEqual(sub.items?.items?[0].plan?.trialPeriodDays, 3)
+                
+                XCTAssertNotNil(sub.plan)
+                XCTAssertEqual(sub.plan?.id, "30990foo1489793903")
+                XCTAssertEqual(sub.plan?.object, "plan")
+                XCTAssertEqual(sub.plan?.amount, 100)
+                XCTAssertEqual(sub.plan?.created, Date(timeIntervalSinceReferenceDate: 1489793908))
+                XCTAssertEqual(sub.plan?.currency, .usd)
+                XCTAssertEqual(sub.plan?.interval, .week)
+                XCTAssertEqual(sub.plan?.intervalCount, 1)
+                XCTAssertEqual(sub.plan?.isLive, false)
+                XCTAssertEqual(sub.plan?.metadata?["hello"], "world")
+                XCTAssertEqual(sub.plan?.name, "Foo")
+                XCTAssertEqual(sub.plan?.statementDescriptor, "PLAN FOO")
+                XCTAssertEqual(sub.plan?.trialPeriodDays, 14)
+                
+                XCTAssertEqual(sub.id, "sub_AJ6s2Iy65K3RxN")
+                XCTAssertEqual(sub.object, "subscription")
+                XCTAssertEqual(sub.applicationFeePercent, 12.7)
+                XCTAssertEqual(sub.billing, "charge_automatically")
+                XCTAssertEqual(sub.cancelAtPeriodEnd, false)
+                XCTAssertEqual(sub.canceledAt, Date(timeIntervalSinceReferenceDate: 1489793914))
+                XCTAssertEqual(sub.created, Date(timeIntervalSinceReferenceDate: 1489793910))
+                XCTAssertEqual(sub.currentPeriodEnd, Date(timeIntervalSinceReferenceDate: 1490398710))
+                XCTAssertEqual(sub.currentPeriodStart, Date(timeIntervalSinceReferenceDate: 1489793910))
+                XCTAssertEqual(sub.customer, "cus_CCMIISleHrbPlY")
+                XCTAssertEqual(sub.daysUntilDue, 4)
+                XCTAssertEqual(sub.endedAt, Date(timeIntervalSinceReferenceDate: 1489793914))
+                XCTAssertEqual(sub.isLive, false)
+                XCTAssertEqual(sub.metadata?["foo"], "bar")
+                XCTAssertEqual(sub.quantity, 1)
+                XCTAssertEqual(sub.start, Date(timeIntervalSinceReferenceDate: 1489793910))
+                XCTAssertEqual(sub.status, .active)
+                XCTAssertEqual(sub.taxPercent, 4.5)
+                XCTAssertEqual(sub.trialEnd, Date(timeIntervalSinceReferenceDate: 1489793910))
+                XCTAssertEqual(sub.trialStart, Date(timeIntervalSinceReferenceDate: 1489793910))
+            }).catch({ (error) in
+                XCTFail("\(error)")
+            })
+        }
+        catch {
+            XCTFail("\(error)")
+        }
+    }
+    
+    let subscriptionString = """
+{
+  "id": "sub_AJ6s2Iy65K3RxN",
+  "object": "subscription",
+  "application_fee_percent": 12.7,
+  "billing": "charge_automatically",
+  "cancel_at_period_end": false,
+  "canceled_at": 1489793914,
+  "created": 1489793910,
+  "current_period_end": 1490398710,
+  "current_period_start": 1489793910,
+  "customer": "cus_CCMIISleHrbPlY",
+  "days_until_due": 4,
+  "discount": {
+      "object": "discount",
+      "coupon": {
+        "id": "35OFF",
+        "object": "coupon",
+        "amount_off": 5,
+        "created": 1391694467,
+        "currency": "usd",
+        "duration": "repeating",
+        "duration_in_months": 3,
+        "livemode": false,
+        "max_redemptions": 22,
+        "metadata": {
+            "hello": "world"
+        },
+        "percent_off": 25,
+        "redeem_by": 1489793908,
+        "times_redeemed": 1,
+        "valid": true
+      },
+      "customer": "cus_CCMIISleHrbPlY",
+      "end": 1399384361,
+      "start": 1391694761,
+      "subscription": "sub_12345"
+    },
+  "ended_at": 1489793914,
+  "items": {
+    "object": "list",
+    "data": [
+      {
+        "id": "si_19yUeQ2eZvKYlo2CnJwkz3pK",
+        "object": "subscription_item",
+        "created": 1489793911,
+        "metadata": {
+            "hello": "world"
+        },
+        "plan": {
+          "id": "30990foo1489793903",
+          "object": "plan",
+          "amount": 100,
+          "created": 1489793908,
+          "currency": "usd",
+          "interval": "week",
+          "interval_count": 1,
+          "livemode": false,
+          "metadata": {
+            "hello": "world"
+          },
+          "name": "Foo",
+          "statement_descriptor": "FOO",
+          "trial_period_days": 3
+        },
+        "quantity": 1,
+        "subscription": "sub_AJ6s2Iy65K3RxN"
+      }
+    ],
+    "has_more": false,
+    "total_count": 1,
+    "url": "/v1/subscription_items?subscription=sub_AJ6s2Iy65K3RxN"
+  },
+  "livemode": false,
+  "metadata": {
+    "foo": "bar"
+  },
+  "plan": {
+    "id": "30990foo1489793903",
+    "object": "plan",
+    "amount": 100,
+    "created": 1489793908,
+    "currency": "usd",
+    "interval": "week",
+    "interval_count": 1,
+    "livemode": false,
+    "metadata": {
+        "hello": "world"
+    },
+    "name": "Foo",
+    "statement_descriptor": "PLAN FOO",
+    "trial_period_days": 14
+  },
+  "quantity": 1,
+  "start": 1489793910,
+  "status": "active",
+  "tax_percent": 4.5,
+  "trial_end": 1489793910,
+  "trial_start": 1489793910
+}
+"""
+}
