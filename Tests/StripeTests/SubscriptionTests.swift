@@ -17,6 +17,8 @@ class SubscriptionTests: XCTestCase {
             let subscription = try JSONDecoder().decode(StripeSubscription.self, from: body)
 
             subscription.do({ (sub) in
+                
+                // This test covers the Discount object
                 XCTAssertNotNil(sub.discount)
                 XCTAssertEqual(sub.discount?.object, "discount")
                 XCTAssertEqual(sub.discount?.customer, "cus_CCMIISleHrbPlY")
@@ -24,6 +26,7 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.discount?.start, Date(timeIntervalSinceReferenceDate: 1391694761))
                 XCTAssertEqual(sub.discount?.subscription, "sub_12345")
                 
+                // This test covers the Coupon object
                 XCTAssertNotNil(sub.discount?.coupon)
                 XCTAssertEqual(sub.discount?.coupon?.id, "35OFF")
                 XCTAssertEqual(sub.discount?.coupon?.object, "coupon")
@@ -40,11 +43,14 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.discount?.coupon?.timesRedeemed, 1)
                 XCTAssertEqual(sub.discount?.coupon?.isValid, true)
                 
+                // This test covers the Subscription item list object
                 XCTAssertNotNil(sub.items)
                 XCTAssertEqual(sub.items?.object, "list")
                 XCTAssertEqual(sub.items?.hasMore, false)
                 XCTAssertEqual(sub.items?.totalCount, 1)
                 XCTAssertEqual(sub.items?.url, "/v1/subscription_items?subscription=sub_AJ6s2Iy65K3RxN")
+                
+                // This test covers the SubscriptionItem  object
                 XCTAssertNotNil(sub.items?.items)
                 XCTAssertNotNil(sub.items?.items?[0])
                 XCTAssertEqual(sub.items?.items?[0].id, "si_19yUeQ2eZvKYlo2CnJwkz3pK")
@@ -54,6 +60,7 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.items?.items?[0].quantity, 1)
                 XCTAssertEqual(sub.items?.items?[0].subscription, "sub_AJ6s2Iy65K3RxN")
                 
+                // These cover the Plan object
                 XCTAssertNotNil(sub.items?.items?[0].plan)
                 XCTAssertEqual(sub.items?.items?[0].plan?.id, "30990foo1489793903")
                 XCTAssertEqual(sub.items?.items?[0].plan?.object, "plan")
@@ -68,6 +75,7 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.items?.items?[0].plan?.statementDescriptor, "FOO")
                 XCTAssertEqual(sub.items?.items?[0].plan?.trialPeriodDays, 3)
                 
+                // These cover the Plan object
                 XCTAssertNotNil(sub.plan)
                 XCTAssertEqual(sub.plan?.id, "30990foo1489793903")
                 XCTAssertEqual(sub.plan?.object, "plan")
