@@ -28,15 +28,15 @@ public protocol Card {
     var brand: String? { get }
     var country: String? { get }
     var currency: StripeCurrency? { get }
-    var customerId: String? { get }
+    var customer: String? { get }
     var cvcCheck: CardValidationCheck? { get }
     var defaultForCurrency: Bool? { get }
     var dynamicLastFour: String? { get }
     var expirationMonth: Int? { get}
     var expirationyear: Int? { get}
     var fingerprint: String? { get }
-    var fundingType: FundingType? { get }
-    var lastFour: String { get }
+    var funding: FundingType? { get }
+    var last4: String? { get }
     var metadata: [String: String]? { get }
     var name: String? { get }
     var recipient: String? { get }
@@ -60,15 +60,15 @@ public struct StripeCard: Card, StripeModel {
     public var brand: String?
     public var country: String?
     public var currency: StripeCurrency?
-    public var customerId: String?
+    public var customer: String?
     public var cvcCheck: CardValidationCheck?
     public var defaultForCurrency: Bool?
     public var dynamicLastFour: String?
     public var expirationMonth: Int?
     public var expirationyear: Int?
     public var fingerprint: String?
-    public var fundingType: FundingType?
-    public var lastFour: String
+    public var funding: FundingType?
+    public var last4: String?
     public var metadata: [String : String]?
     public var name: String?
     public var recipient: String?
@@ -91,15 +91,15 @@ public struct StripeCard: Card, StripeModel {
         case brand
         case country
         case currency
-        case customerId
+        case customer
         case cvcCheck = "cvc_check"
         case defaultForCurrency = "default_for_currency"
         case dynamicLastFour = "dynamic_last4"
         case expirationMonth = "exp_month"
         case expirationyear = "exp_year"
         case fingerprint
-        case fundingType
-        case lastFour
+        case funding
+        case last4
         case metadata
         case name
         case recipient
