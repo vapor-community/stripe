@@ -27,7 +27,7 @@ public protocol Subscription {
     var created: Date? { get }
     var currentPeriodEnd: Date? { get }
     var currentPeriodStart: Date? { get }
-    var customerId: String? { get }
+    var customer: String? { get }
     var daysUntilDue: Int? { get }
     var discount: D? { get }
     var endedAt: Date? { get }
@@ -53,7 +53,7 @@ public struct StripeSubscription: Subscription, StripeModel {
     public var created: Date?
     public var currentPeriodEnd: Date?
     public var currentPeriodStart: Date?
-    public var customerId: String?
+    public var customer: String?
     public var daysUntilDue: Int?
     public var discount: StripeDiscount?
     public var endedAt: Date?
@@ -78,7 +78,7 @@ public struct StripeSubscription: Subscription, StripeModel {
         case created
         case currentPeriodEnd = "current_period_end"
         case currentPeriodStart = "current_period_start"
-        case customerId = "customer"
+        case customer
         case daysUntilDue = "days_until_due"
         case discount
         case endedAt = "ended_at"
