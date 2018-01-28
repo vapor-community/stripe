@@ -13,8 +13,11 @@ import XCTest
 class TokenTests: XCTestCase {
     func testCardTokenParsedProperly() throws {
         do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+
             let body = HTTPBody(string: cardTokenString)
-            let cardToken = try JSONDecoder().decode(StripeToken.self, from: body)
+            let cardToken = try decoder.decode(StripeToken.self, from: body)
             
             cardToken.do({ (token) in
                 XCTAssertNil(token.bankAccount)
@@ -45,7 +48,7 @@ class TokenTests: XCTestCase {
                 XCTAssertEqual(token.id, "tok_1BnxhQ2eZvKYlo2CVEbDC7jK")
                 XCTAssertEqual(token.object, "token")
                 XCTAssertEqual(token.clientIp, "0.0.0.0")
-                XCTAssertEqual(token.created, Date(timeIntervalSinceReferenceDate: 1516836636))
+                XCTAssertEqual(token.created, Date(timeIntervalSince1970: 1516836636))
                 XCTAssertEqual(token.isLive, false)
                 XCTAssertEqual(token.type, "card")
                 XCTAssertEqual(token.isUsed, false)
@@ -60,9 +63,11 @@ class TokenTests: XCTestCase {
 
     func testBankTokenParsedProperly() throws {
         do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
             
             let body = HTTPBody(string: bankAccountTokenString)
-            let bankToken = try JSONDecoder().decode(StripeToken.self, from: body)
+            let bankToken = try decoder.decode(StripeToken.self, from: body)
             
             bankToken.do({ (token) in
                 XCTAssertNil(token.card)
@@ -83,7 +88,7 @@ class TokenTests: XCTestCase {
                 XCTAssertEqual(token.id, "btok_1BnxhQ2eZvKYlo2CbYrQL91x")
                 XCTAssertEqual(token.object, "token")
                 XCTAssertEqual(token.clientIp, "0.0.0.0")
-                XCTAssertEqual(token.created, Date(timeIntervalSinceReferenceDate: 1516836636))
+                XCTAssertEqual(token.created, Date(timeIntervalSince1970: 1516836636))
                 XCTAssertEqual(token.isLive, false)
                 XCTAssertEqual(token.type, "bank_account")
                 XCTAssertEqual(token.isUsed, false)
