@@ -9,11 +9,6 @@
 import Foundation
 
 public enum TokenizedMethod: String, Codable {
-    case applePay
-    case androidPay
-    
-    enum CodingKeys: String, CodingKey {
-        case applePay = "apple_pay"
-        case androidPay = "android_pay"
-    }
+    case applePay = "apple_pay"
+    case androidPay = "android_pay"
 }
