@@ -21,10 +21,10 @@ public protocol ChargeRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<CHL>
 }
 
-public struct StripeChargeRoutes<SR: StripeRequest>: ChargeRoutes {
-    private let request: SR
+public struct StripeChargeRoutes: ChargeRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
     

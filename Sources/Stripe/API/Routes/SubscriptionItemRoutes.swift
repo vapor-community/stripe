@@ -20,10 +20,10 @@ public protocol SubscriptionItemRoutes {
     func listAll(subscription: String, filter: [String: Any]?) throws -> Future<L>
 }
 
-public struct StripeSubscriptionItemRoutes<SR: StripeRequest>: SubscriptionItemRoutes {
-    private let request: SR
+public struct StripeSubscriptionItemRoutes: SubscriptionItemRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
 

@@ -21,10 +21,10 @@ public protocol ProductRoutes {
     func delete(id: String) throws -> Future<DO>
 }
 
-public struct StripeProductRoutes<SR: StripeRequest>: ProductRoutes {
-    private let request: SR
+public struct StripeProductRoutes: ProductRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
 

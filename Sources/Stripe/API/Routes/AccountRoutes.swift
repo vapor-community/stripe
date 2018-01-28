@@ -25,10 +25,10 @@ public protocol AccountRoutes {
     func createLoginLink(for: String) throws -> Future<CLL>
 }
 
-public struct StripeConnectAccountRoutes<SR: StripeRequest>: AccountRoutes {
-    private let request: SR
+public struct StripeConnectAccountRoutes: AccountRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
     

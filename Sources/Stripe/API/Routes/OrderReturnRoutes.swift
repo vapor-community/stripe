@@ -16,10 +16,10 @@ public protocol OrderReturnRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<L>
 }
 
-public struct StripeOrderReturnRoutes<SR: StripeRequest>: OrderReturnRoutes {
-    private let request: SR
+public struct StripeOrderReturnRoutes: OrderReturnRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
     

@@ -20,10 +20,10 @@ public protocol PlanRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<L>
 }
 
-public struct StripePlanRoutes<SR: StripeRequest>: PlanRoutes {
-    private let request: SR
+public struct StripePlanRoutes: PlanRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
     

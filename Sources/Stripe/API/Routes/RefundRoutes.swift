@@ -18,10 +18,10 @@ public protocol RefundRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<L>
 }
 
-public struct StripeRefundRoutes<SR: StripeRequest>: RefundRoutes {
-    private let request: SR
+public struct StripeRefundRoutes: RefundRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
 

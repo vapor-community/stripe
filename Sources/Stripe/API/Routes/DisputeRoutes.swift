@@ -19,10 +19,10 @@ public protocol DisputeRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<L>
 }
 
-public struct StripeDisputeRoutes<SR: StripeRequest>: DisputeRoutes {
-    private let request: SR
+public struct StripeDisputeRoutes: DisputeRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
     

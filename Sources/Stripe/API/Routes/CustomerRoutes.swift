@@ -29,10 +29,10 @@ public protocol CustomerRoutes {
     func deleteDiscount(customer: String) throws -> Future<DO>
 }
 
-public struct StripeCustomerRoutes<SR: StripeRequest>: CustomerRoutes {
-    private let request: SR
+public struct StripeCustomerRoutes: CustomerRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
     

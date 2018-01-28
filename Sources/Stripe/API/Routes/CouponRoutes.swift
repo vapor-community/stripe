@@ -21,10 +21,10 @@ public protocol CouponRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<L>
 }
 
-public struct StripeCouponRoutes<SR: StripeRequest>: CouponRoutes {
-    private let request: SR
+public struct StripeCouponRoutes: CouponRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
 

@@ -22,10 +22,10 @@ public protocol SKURoutes {
     func delete(sku: String) throws -> Future<DO>
 }
 
-public struct StripeSKURoutes<SR: StripeRequest>: SKURoutes {
-    private let request: SR
+public struct StripeSKURoutes: SKURoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
 

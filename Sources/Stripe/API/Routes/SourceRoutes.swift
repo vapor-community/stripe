@@ -18,10 +18,10 @@ public protocol SourceRoutes {
     func update(source: String, mandate: M?, metadata: [String: String]?, owner: O?) throws -> Future<S>
 }
 
-public struct StripeSourceRoutes<SR: StripeRequest>: SourceRoutes {
-    private let request: SR
+public struct StripeSourceRoutes: SourceRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
 

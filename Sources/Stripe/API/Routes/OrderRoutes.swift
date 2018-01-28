@@ -21,10 +21,10 @@ public protocol OrderRoutes {
     func `return`(order: String, items: [[String: Any]]?) throws -> Future<O>
 }
 
-public struct StripeOrderRoutes<SR: StripeRequest>: OrderRoutes {
-    private let request: SR
+public struct StripeOrderRoutes: OrderRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
     

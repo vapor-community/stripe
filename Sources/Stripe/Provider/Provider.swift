@@ -27,82 +27,82 @@ public final class StripeProvider: Provider {
 }
 
 public struct StripeClient: Service {
-    public let balance: StripeBalanceRoutes<StripeAPIRequest>
-    public let charge: StripeChargeRoutes<StripeAPIRequest>
-    public let connectAccount: StripeConnectAccountRoutes<StripeAPIRequest>
-    public let coupon: StripeCouponRoutes<StripeAPIRequest>
-    public let customer: StripeCustomerRoutes<StripeAPIRequest>
-    public let dispute: StripeDisputeRoutes<StripeAPIRequest>
-    public let ephemeralKey: StripeEphemeralKeyRoutes<StripeAPIRequest>
-    public let invoiceItem: StripeInvoiceItemRoutes<StripeAPIRequest>
-    public let invoice: StripeInvoiceRoutes<StripeAPIRequest>
-    public let orderReturn: StripeOrderReturnRoutes<StripeAPIRequest>
-    public let order: StripeOrderRoutes<StripeAPIRequest>
-    public let plan: StripePlanRoutes<StripeAPIRequest>
-    public let product: StripeProductRoutes<StripeAPIRequest>
-    public let refund: StripeRefundRoutes<StripeAPIRequest>
-    public let sku: StripeSKURoutes<StripeAPIRequest>
-    public let source: StripeSourceRoutes<StripeAPIRequest>
-    public let subscriptionItem: StripeSubscriptionItemRoutes<StripeAPIRequest>
-    public let subscription: StripeSubscriptionRoutes<StripeAPIRequest>
-    public let token: StripeTokenRoutes<StripeAPIRequest>
+    public let balance: StripeBalanceRoutes
+    public let charge: StripeChargeRoutes
+    public let connectAccount: StripeConnectAccountRoutes
+    public let coupon: StripeCouponRoutes
+    public let customer: StripeCustomerRoutes
+    public let dispute: StripeDisputeRoutes
+    public let ephemeralKey: StripeEphemeralKeyRoutes
+    public let invoiceItem: StripeInvoiceItemRoutes
+    public let invoice: StripeInvoiceRoutes
+    public let orderReturn: StripeOrderReturnRoutes
+    public let order: StripeOrderRoutes
+    public let plan: StripePlanRoutes
+    public let product: StripeProductRoutes
+    public let refund: StripeRefundRoutes
+    public let sku: StripeSKURoutes
+    public let source: StripeSourceRoutes
+    public let subscriptionItem: StripeSubscriptionItemRoutes
+    public let subscription: StripeSubscriptionRoutes
+    public let token: StripeTokenRoutes
 
     fileprivate init(config: StripeConfig, client: Client) {
         let balanceAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        balance = StripeBalanceRoutes<StripeAPIRequest>(request: balanceAPIRequest)
+        balance = StripeBalanceRoutes(request: balanceAPIRequest)
         
         let chargeAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        charge = StripeChargeRoutes<StripeAPIRequest>(request: chargeAPIRequest)
+        charge = StripeChargeRoutes(request: chargeAPIRequest)
         
         let connectAccountAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        connectAccount = StripeConnectAccountRoutes<StripeAPIRequest>(request: connectAccountAPIRequest)
+        connectAccount = StripeConnectAccountRoutes(request: connectAccountAPIRequest)
         
         let couponAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        coupon = StripeCouponRoutes<StripeAPIRequest>(request: couponAPIRequest)
+        coupon = StripeCouponRoutes(request: couponAPIRequest)
         
         let customerAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        customer = StripeCustomerRoutes<StripeAPIRequest>(request: customerAPIRequest)
+        customer = StripeCustomerRoutes(request: customerAPIRequest)
         
         let disputeAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        dispute = StripeDisputeRoutes<StripeAPIRequest>(request: disputeAPIRequest)
+        dispute = StripeDisputeRoutes(request: disputeAPIRequest)
         
         let ephemeralKeyAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        ephemeralKey = StripeEphemeralKeyRoutes<StripeAPIRequest>(request: ephemeralKeyAPIRequest)
+        ephemeralKey = StripeEphemeralKeyRoutes(request: ephemeralKeyAPIRequest)
         
         let invoiceItemAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        invoiceItem = StripeInvoiceItemRoutes<StripeAPIRequest>(request: invoiceItemAPIRequest)
+        invoiceItem = StripeInvoiceItemRoutes(request: invoiceItemAPIRequest)
         
         let invoiceAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        invoice = StripeInvoiceRoutes<StripeAPIRequest>(request: invoiceAPIRequest)
+        invoice = StripeInvoiceRoutes(request: invoiceAPIRequest)
         
         let orderReturnAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        orderReturn = StripeOrderReturnRoutes<StripeAPIRequest>(request: orderReturnAPIRequest)
+        orderReturn = StripeOrderReturnRoutes(request: orderReturnAPIRequest)
         
         let orderAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        order = StripeOrderRoutes<StripeAPIRequest>(request: orderAPIRequest)
+        order = StripeOrderRoutes(request: orderAPIRequest)
         
         let planAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        plan = StripePlanRoutes<StripeAPIRequest>(request: planAPIRequest)
+        plan = StripePlanRoutes(request: planAPIRequest)
         
         let productAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        product = StripeProductRoutes<StripeAPIRequest>(request: productAPIRequest)
+        product = StripeProductRoutes(request: productAPIRequest)
         
         let refundAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        refund = StripeRefundRoutes<StripeAPIRequest>(request: refundAPIRequest)
+        refund = StripeRefundRoutes(request: refundAPIRequest)
         
         let skuAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        sku = StripeSKURoutes<StripeAPIRequest>(request: skuAPIRequest)
+        sku = StripeSKURoutes(request: skuAPIRequest)
         
         let sourceAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        source = StripeSourceRoutes<StripeAPIRequest>(request: sourceAPIRequest)
+        source = StripeSourceRoutes(request: sourceAPIRequest)
 
         let subscriptionItemAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        subscriptionItem = StripeSubscriptionItemRoutes<StripeAPIRequest>(request: subscriptionItemAPIRequest)
+        subscriptionItem = StripeSubscriptionItemRoutes(request: subscriptionItemAPIRequest)
         
         let subscriptionAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        subscription = StripeSubscriptionRoutes<StripeAPIRequest>(request: subscriptionAPIRequest)
+        subscription = StripeSubscriptionRoutes(request: subscriptionAPIRequest)
         
         let tokenAPIRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
-        token = StripeTokenRoutes<StripeAPIRequest>(request: tokenAPIRequest)
+        token = StripeTokenRoutes(request: tokenAPIRequest)
     }
 }

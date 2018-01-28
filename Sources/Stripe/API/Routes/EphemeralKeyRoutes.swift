@@ -15,10 +15,10 @@ public protocol EphemeralKeyRoutes {
     func delete(ephemeralKey: String) throws -> Future<EK>
 }
 
-public struct StripeEphemeralKeyRoutes<SR: StripeRequest>: EphemeralKeyRoutes {
-    private let request: SR
+public struct StripeEphemeralKeyRoutes: EphemeralKeyRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
     

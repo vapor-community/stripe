@@ -18,10 +18,10 @@ public protocol BalanceRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<BHL>
 }
 
-public struct StripeBalanceRoutes<SR: StripeRequest>: BalanceRoutes {
-    private let request: SR
+public struct StripeBalanceRoutes: BalanceRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
     

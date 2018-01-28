@@ -17,10 +17,10 @@ public protocol TokenRoutes {
     func retrieve(token: String) throws -> Future<T>
 }
 
-public struct StripeTokenRoutes<SR: StripeRequest>: TokenRoutes {
-    private let request: SR
+public struct StripeTokenRoutes: TokenRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
 

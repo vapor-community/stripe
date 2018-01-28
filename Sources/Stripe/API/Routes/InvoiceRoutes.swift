@@ -23,10 +23,10 @@ public protocol InvoiceRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<L>
 }
 
-public struct StripeInvoiceRoutes<SR: StripeRequest>: InvoiceRoutes {
-    private let request: SR
+public struct StripeInvoiceRoutes: InvoiceRoutes {
+    private let request: StripeRequest
     
-    init(request: SR) {
+    init(request: StripeRequest) {
         self.request = request
     }
     
@@ -126,7 +126,7 @@ public struct StripeInvoiceRoutes<SR: StripeRequest>: InvoiceRoutes {
                        metadata: [String : String]? = nil,
                        paid: Bool? = nil,
                        statementDescriptor: String? = nil,
-                       taxPercent: Decimal? = nil) throws -> Future<StripeInvoiceRoutes<SR>.I> {
+                       taxPercent: Decimal? = nil) throws -> Future<StripeInvoice> {
         var body: [String: Any] = [:]
         var headers: HTTPHeaders = [:]
         
