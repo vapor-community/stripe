@@ -10,169 +10,156 @@ import XCTest
 @testable import Stripe
 @testable import Vapor
 
-
-
-
 class TokenTests: XCTestCase {
-    
-    var drop: Droplet?
-    var tokenId: String = ""
-    
-    override func setUp() {
+    func testCardTokenParsedProperly() throws {
         do {
-            drop = try self.makeDroplet()
             
-            tokenId = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
-                                                               expirationMonth: 10,
-                                                               expirationYear: 2018,
-                                                               cvc: 123,
-                                                               name: "Test Card",
-                                                               customer: nil,
-                                                               currency: nil)
-                                                               .serializedResponse().id ?? ""
-        }
-        catch let error as StripeError {
+            let body = HTTPBody(string: cardTokenString)
+            let cardToken = try JSONDecoder().decode(StripeToken.self, from: body)
             
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
+            cardToken.do({ (token) in
+                XCTAssertNil(token.bankAccount)
+                XCTAssertNotNil(token.card)
+                XCTAssertEqual(token.card?.id, "card_1BnxhQ2eZvKYlo2CPNu4CkoA")
+                XCTAssertEqual(token.card?.object, "card")
+                XCTAssertEqual(token.card?.addressCity, "Miami")
+                XCTAssertEqual(token.card?.addressCountry, "US")
+                XCTAssertEqual(token.card?.addressLine1, "123 Main Street")
+                XCTAssertEqual(token.card?.addressLine1Check, .failed)
+                XCTAssertEqual(token.card?.addressLine2, "Apt 123")
+                XCTAssertEqual(token.card?.addressState, "Florida")
+                XCTAssertEqual(token.card?.addressZip, "12345")
+                XCTAssertEqual(token.card?.addressZipCheck, .pass)
+                XCTAssertEqual(token.card?.brand, "Visa")
+                XCTAssertEqual(token.card?.country, "US")
+                XCTAssertEqual(token.card?.cvcCheck, .pass)
+                XCTAssertEqual(token.card?.dynamicLastFour, "1234")
+                XCTAssertEqual(token.card?.expirationMonth, 8)
+                XCTAssertEqual(token.card?.expirationyear, 2019)
+                XCTAssertEqual(token.card?.fingerprint, "Xt5EWLLDS7FJjR1c")
+                XCTAssertEqual(token.card?.funding, .credit)
+                XCTAssertEqual(token.card?.last4, "4242")
+                XCTAssertEqual(token.card?.metadata?["hello"], "world")
+                XCTAssertEqual(token.card?.name, "Vapor")
+                XCTAssertEqual(token.card?.tokenizedMethod, .applePay)
+                
+                XCTAssertEqual(token.id, "tok_1BnxhQ2eZvKYlo2CVEbDC7jK")
+                XCTAssertEqual(token.object, "token")
+                XCTAssertEqual(token.clientIp, "0.0.0.0")
+                XCTAssertEqual(token.created, Date(timeIntervalSinceReferenceDate: 1516836636))
+                XCTAssertEqual(token.isLive, false)
+                XCTAssertEqual(token.type, "card")
+                XCTAssertEqual(token.isUsed, false)
+            }).catch({ (error) in
+                XCTFail("\(error)")
+            })
         }
         catch {
-            fatalError("Setup failed: \(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
-    
-    override func tearDown() {
-        drop = nil
-        tokenId = ""
-    }
-    
-    func testCardTokenCreation() throws {
+
+    func testBankTokenParsedProperly() throws {
         do {
-            let object = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
-                                                                  expirationMonth: 10,
-                                                                  expirationYear: 2018,
-                                                                  cvc: 123,
-                                                                  name: "Test Card",
-                                                                  customer: nil,
-                                                                  currency: nil)
-                                                                  .serializedResponse()
-            XCTAssertNotNil(object?.card)
-        }
-        catch let error as StripeError {
             
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
+            let body = HTTPBody(string: bankAccountTokenString)
+            let bankToken = try JSONDecoder().decode(StripeToken.self, from: body)
+            
+            bankToken.do({ (token) in
+                XCTAssertNil(token.card)
+                XCTAssertNotNil(token.bankAccount)
+                XCTAssertEqual(token.bankAccount?.id, "ba_1BnxhQ2eZvKYlo2C5cM6hYK1")
+                XCTAssertEqual(token.bankAccount?.object, "bank_account")
+                XCTAssertEqual(token.bankAccount?.accountHolderName, "Jane Austen")
+                XCTAssertEqual(token.bankAccount?.accountHolderType, "individual")
+                XCTAssertEqual(token.bankAccount?.bankName, "STRIPE TEST BANK")
+                XCTAssertEqual(token.bankAccount?.country, "US")
+                XCTAssertEqual(token.bankAccount?.currency, .usd)
+                XCTAssertEqual(token.bankAccount?.fingerprint, "1JWtPxqbdX5Gamtc")
+                XCTAssertEqual(token.bankAccount?.last4, "6789")
+                XCTAssertEqual(token.bankAccount?.metadata?["hello"], "world")
+                XCTAssertEqual(token.bankAccount?.routingNumber, "110000000")
+                XCTAssertEqual(token.bankAccount?.status, "new")
+                
+                XCTAssertEqual(token.id, "btok_1BnxhQ2eZvKYlo2CbYrQL91x")
+                XCTAssertEqual(token.object, "token")
+                XCTAssertEqual(token.clientIp, "0.0.0.0")
+                XCTAssertEqual(token.created, Date(timeIntervalSinceReferenceDate: 1516836636))
+                XCTAssertEqual(token.isLive, false)
+                XCTAssertEqual(token.type, "bank_account")
+                XCTAssertEqual(token.isUsed, false)
+            }).catch({ (error) in
+                XCTFail("\(error)")
+            })
         }
         catch {
-            XCTFail(error.localizedDescription)
+            XCTFail("\(error)")
         }
     }
     
-    func testTokenRetrieval() throws {
-        do {
-            let object = try drop?.stripe?.tokens.retrieve(tokenId).serializedResponse()
-            XCTAssertNotNil(object)
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
+    let cardTokenString = """
+{
+  "id": "tok_1BnxhQ2eZvKYlo2CVEbDC7jK",
+  "object": "token",
+  "card": {
+    "id": "card_1BnxhQ2eZvKYlo2CPNu4CkoA",
+    "object": "card",
+    "address_city":"Miami",
+    "address_country":"US",
+    "address_line1":"123 Main Street",
+    "address_line1_check":"failed",
+    "address_line2":"Apt 123",
+    "address_state":"Florida",
+    "address_zip":"12345",
+    "address_zip_check":"pass",
+    "brand": "Visa",
+    "country": "US",
+    "cvc_check": "pass",
+    "dynamic_last4": "1234",
+    "exp_month": 8,
+    "exp_year": 2019,
+    "fingerprint": "Xt5EWLLDS7FJjR1c",
+    "funding": "credit",
+    "last4": "4242",
+    "metadata": {
+        "hello": "world"
+    },
+    "name": "Vapor",
+    "tokenization_method": "apple_pay"
+  },
+  "client_ip": "0.0.0.0",
+  "created": 1516836636,
+  "livemode": false,
+  "type": "card",
+  "used": false
+}
+"""
     
-    func testBankAccountTokenCreation() throws {
-        do {
-            let object = try drop?.stripe?.tokens.createBankAccountToken(withAccountNumber: "000123456789",
-                                                                         country: "US",
-                                                                         currency: .usd,
-                                                                         routingNumber: "110000000",
-                                                                         accountHolderName: "Test Person",
-                                                                         accountHolderType: "Individual",
-                                                                         customer: nil).serializedResponse()
-            XCTAssertNotNil(object?.bankAccount)
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
+    let bankAccountTokenString = """
+{
+  "id": "btok_1BnxhQ2eZvKYlo2CbYrQL91x",
+  "object": "token",
+  "bank_account": {
+    "id": "ba_1BnxhQ2eZvKYlo2C5cM6hYK1",
+    "object": "bank_account",
+    "account_holder_name": "Jane Austen",
+    "account_holder_type": "individual",
+    "bank_name": "STRIPE TEST BANK",
+    "country": "US",
+    "currency": "usd",
+    "fingerprint": "1JWtPxqbdX5Gamtc",
+    "last4": "6789",
+    "metadata": {
+        "hello": "world"
+    },
+    "routing_number": "110000000",
+    "status": "new"
+  },
+  "client_ip": "0.0.0.0",
+  "created": 1516836636,
+  "livemode": false,
+  "type": "bank_account",
+  "used": false
+}
+"""
 }
