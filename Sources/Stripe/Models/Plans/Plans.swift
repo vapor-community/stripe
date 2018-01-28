@@ -20,7 +20,7 @@ public protocol Plan {
     var created: Date? { get }
     var currency: StripeCurrency? { get }
     var interval: StripePlanInterval? { get }
-    var intervalCount: String? { get }
+    var intervalCount: Int? { get }
     var isLive: Bool? { get }
     var metadata: [String: String]? { get }
     var name: String? { get }
@@ -35,7 +35,7 @@ public struct StripePlan: Plan, StripeModel {
     public var created: Date?
     public var currency: StripeCurrency?
     public var interval: StripePlanInterval?
-    public var intervalCount: String?
+    public var intervalCount: Int?
     public var isLive: Bool?
     public var metadata: [String: String]?
     public var name: String?
