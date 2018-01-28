@@ -8,7 +8,7 @@
 
 import Vapor
 
-public struct StripeConfig {
+public struct StripeConfig: Service {
     let apiKey: String
 }
 
