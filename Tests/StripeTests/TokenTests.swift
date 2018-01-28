@@ -13,7 +13,6 @@ import XCTest
 class TokenTests: XCTestCase {
     func testCardTokenParsedProperly() throws {
         do {
-            
             let body = HTTPBody(string: cardTokenString)
             let cardToken = try JSONDecoder().decode(StripeToken.self, from: body)
             

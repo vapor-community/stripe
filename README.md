@@ -1,70 +1,51 @@
 # Vapor Stripe Provider
 
-![Swift](http://img.shields.io/badge/swift-3.1-brightgreen.svg)
-![Vapor](http://img.shields.io/badge/vapor-2.0-brightgreen.svg)
-![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
+![Swift](http://img.shields.io/badge/swift-4-brightgreen.svg)
+![Vapor](http://img.shields.io/badge/vapor-3.0-brightgreen.svg)
+[![CircleCI](https://circleci.com/gh/vapor-community/stripe/tree/vapor-3.svg?style=svg)](https://circleci.com/gh/vapor-community/stripe/tree/vapor-3)
 
 [Stripe][stripe_home] is a payment platform that handles credit cards, bitcoin and ACH transfers. They have become one of the best platforms for handling payments for projects, services or products.
 
-## Why Create this?
-There wasn't a library for it that worked with Vapor, and I needed one for my project.
-The Stripe API is huge, and therefor I only plan on implementing the things that deal with payments. If there is something you need outside of that scope, feel free to submit a Pull Request.
-
 ## Getting Started
 In your `Package.swift` file, add a Package
-For Swift 3
-~~~~swift
-.Package(url: "https://github.com/vapor-community/stripe.git", Version(1,0,0))
-~~~~
+
 For Swift 4
 ~~~~swift
-.package(url: "https://github.com/vapor-community/stripe.git", .exact(Version(1,0,0)))
+.package(url: "https://github.com/vapor-community/stripe.git", .branch("beta"))
 ~~~~
 
-You'll need a config file as well. Place a `stripe.json` file in your `Config` folder
-~~~~json
-{
-    "apiKey": "YOUR_API_KEY"
-}
-~~~~
-
-Add the provider to your droplet
+Register the config and the provider to your Application
 ~~~~swift
-try drop.addProvider(Stripe.Provider.self)
+let config = StripeConfig(apiKey: "sk_12345678")
+
+services.register(config)
+
+try services.register(StripeProvider())
+
+app = try Application(services: services)
+
+stripeClient = try app.make(StripeClient.self)
 ~~~~
 
-And you are all set. Interacting with the API is quite easy. Everything is Node backed with a simple API.
-
-Making calls to the api is a simple one line
+And you are all set. Interacting with the API is quite easy and adopts the `Future` syntax used in Vapor 3.
+Making calls to the api is straight forward.
 ~~~~swift
-let object = try drop.stripe?.balance.history().serializedResponse()
-~~~~
-The object is returned response model, or model array.
+let cardParams = ["exp_month": 1,
+                  "exp_year": 2030,
+                  "number": "4242424242424242",
+                  "cvc": 123,
+                  "object": "card"]
 
-## Testing
+let futureCharge = try stripeClient.charge.create(amount: 2500, currency: .usd, source: cardParams)
 
-To avoid having to remember to add tests to `LinuxMain.swift` you can use [Sourcery][sourcery] to add your tets cases there for you. Just install the sourcery binary with Homebrew `brew install sourcery`, navigate to your project folder, and from the command line run the following:
-~~~~bash
-sourcery --sources Tests/ --templates Sourcery/LinuxMain.stencil --args testimports='@testable import StripeTests'
+futureCharge.do({ (charge) in
+    // do something with charge object...
+}).catch({ (error) in
+    print(error)
+})
 ~~~~
-It will generate the following with your tests added:
 
-~~~~swift
-import XCTest
-@testable import StripeTests
-extension BalanceTests {
-static var allTests = [
-  ("testBalance", testBalance),
-  ...
-]
-}
-.
-.
-XCTMain([
-  testCase(BalanceTests.allTests),
-  ...
-])
-~~~~
+And you can always check the documentation to see the required paramaters for specific API calls.
 
 ## Whats Implemented
 * [x] Balance Fetching
@@ -84,10 +65,10 @@ XCTMain([
 * [x] Invoices
 * [x] Invoice Items
 * [x] Ephemeral Keys
+* [] Events API
 
 [stripe_home]: http://stripe.com "Stripe"
 [stripe_api]: https://stripe.com/docs/api "Stripe API Endpoints"
-[sourcery]: https://github.com/krzysztofzablocki/Sourcery "Sourcery"
 
 ## License
 
