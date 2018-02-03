@@ -3,25 +3,25 @@ version: 2
 jobs:
   macos:
     macos:
-      xcode: "9.0"
+      xcode: "9.2"
     steps:
       - run: brew install vapor/tap/vapor
       - checkout
       - run: swift build
       - run: swift test
 
-  linux-4:
+  linux:
     docker:
-      - image: swift:4.0.2
+      - image: norionomura/swift:swift-4.1-branch
     steps:
+      - checkout
       - run: apt-get install -yq libssl-dev
       - checkout
       - run: swift build
       - run: swift test
-
 workflows:
   version: 2
   tests:
     jobs:
-      - macos
-      - linux-4
+      #- macos
+      - linux
