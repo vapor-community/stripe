@@ -14,15 +14,8 @@ public enum InventoryType: String, Codable {
 }
 
 public enum InventoryTypeValue: String, Codable {
-    case inStock
+    case inStock = "in_stock"
     case limited
-    case outOfStock
+    case outOfStock = "out_of_stock"
     case unknown
-    
-    enum Codingeys: String, CodingKey {
-        case inStock = "in_stock"
-        case limited
-        case outOfStock = "out_of_stock"
-        case unknown
-    }
 }

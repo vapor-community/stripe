@@ -8,12 +8,6 @@
 
 public enum ActionType: String, Codable {
     case charge
-    case stripeFee
+    case stripeFee = "stripe_fee"
     case none
-    
-    enum CodingKeys: String, CodingKey {
-        case charge
-        case stripeFee = "stripe_fee"
-        case none
-    }
 }

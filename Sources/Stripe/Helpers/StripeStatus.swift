@@ -20,17 +20,9 @@ public enum StripeStatus: String, Codable {
 public enum StripeSubscriptionStatus: String, Codable {
     case trailing
     case active
-    case pastdue
+    case pastDue = "past_due"
     case canceled
     case unpaid
-    
-    enum CodingKeys: String, CodingKey {
-        case trailing
-        case active
-        case pastdue = "past_due"
-        case canceled
-        case unpaid
-    }
 }
 
 public enum LegalEntityVerificationStatus: String, Codable {
@@ -40,27 +32,14 @@ public enum LegalEntityVerificationStatus: String, Codable {
 }
 
 public enum LegalEntityVerificationState: String, Codable {
-    case scanCorrupt
-    case scanNotReadable
-    case scanFailedGreyScale
-    case scanNotUploaded
-    case scanIdTypeNotUploaded
-    case scanIdCountryNotSupported
-    case scanNameMismatch
-    case scanFailedOther
-    case failedKeyedIdentity
-    case failedOther
-    
-    enum CodingKeys: String, CodingKey {
-        case scanCorrupt = "scan_corrupt"
-        case scanNotReadable = "scan_not_readable"
-        case scanFailedGreyScale = "scan_failed_greyscale"
-        case scanNotUploaded = "scan_not_uploaded"
-        case scanIdTypeNotUploaded = "scan_id_type_not_supported"
-        case scanIdCountryNotSupported = "scan_id_country_not_supported"
-        case scanNameMismatch = "scan_name_mismatch"
-        case scanFailedOther = "scan_failed_other"
-        case failedKeyedIdentity = "failed_keyed_identity"
-        case failedOther = "failed_other"
-    }
+    case scanCorrupt = "scan_corrupt"
+    case scanNotReadable = "scan_not_readable"
+    case scanFailedGreyscale = "scan_failed_greyscale"
+    case scanNotUploaded = "scan_not_uploaded"
+    case scanIdTypeNotUploaded = "scan_id_type_not_supported"
+    case scanIdCountryNotSupported = "scan_id_country_not_supported"
+    case scanNameMismatch = "scan_name_mismatch"
+    case scanFailedOther = "scan_failed_other"
+    case failedKeyedIdentity = "failed_keyed_identity"
+    case failedOther = "failed_other"
 }

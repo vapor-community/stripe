@@ -14,11 +14,5 @@
 public enum RefundReason: String, Codable {
     case duplicate
     case fraudulent
-    case requestedByCustomer
-    
-    enum CdingKeys: String, CodingKey {
-        case duplicate
-        case fraudulent
-        case requestedByCustomer = "requested_by_customer"
-    }
+    case requestedByCustomer = "requested_by_customer"
 }

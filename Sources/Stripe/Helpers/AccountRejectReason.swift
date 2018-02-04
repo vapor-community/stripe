@@ -8,12 +8,6 @@
 
 public enum AccountRejectReason: String, Codable {
     case fraud
-    case termsOfService
+    case termsOfService = "terms_of_service"
     case other
-    
-    enum CodingKeys: String, CodingKey {
-        case fraud
-        case termsOfService = "terms_of_service"
-        case other
-    }
 }
