@@ -15,7 +15,8 @@ class TokenTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            
             let body = HTTPBody(string: cardTokenString)
             let cardToken = try decoder.decode(StripeToken.self, from: body)
             
@@ -37,23 +38,23 @@ class TokenTests: XCTestCase {
                 XCTAssertEqual(token.card?.brand, "Visa")
                 XCTAssertEqual(token.card?.country, "US")
                 XCTAssertEqual(token.card?.cvcCheck, .pass)
-                XCTAssertEqual(token.card?.dynamicLastFour, "1234")
-                XCTAssertEqual(token.card?.expirationMonth, 8)
-                XCTAssertEqual(token.card?.expirationyear, 2019)
+                XCTAssertEqual(token.card?.dynamicLast4, "1234")
+                XCTAssertEqual(token.card?.expMonth, 8)
+                XCTAssertEqual(token.card?.expYear, 2019)
                 XCTAssertEqual(token.card?.fingerprint, "Xt5EWLLDS7FJjR1c")
                 XCTAssertEqual(token.card?.funding, .credit)
                 XCTAssertEqual(token.card?.last4, "4242")
                 XCTAssertEqual(token.card?.metadata?["hello"], "world")
                 XCTAssertEqual(token.card?.name, "Vapor")
-                XCTAssertEqual(token.card?.tokenizedMethod, .applePay)
+                XCTAssertEqual(token.card?.tokenizationMethod, .applePay)
                 
                 XCTAssertEqual(token.id, "tok_1BnxhQ2eZvKYlo2CVEbDC7jK")
                 XCTAssertEqual(token.object, "token")
                 XCTAssertEqual(token.clientIp, "0.0.0.0")
                 XCTAssertEqual(token.created, Date(timeIntervalSince1970: 1516836636))
-                XCTAssertEqual(token.isLive, false)
+                XCTAssertEqual(token.livemode, false)
                 XCTAssertEqual(token.type, "card")
-                XCTAssertEqual(token.isUsed, false)
+                XCTAssertEqual(token.used, false)
             }.catch { (error) in
                 XCTFail("\(error)")
             }
@@ -67,6 +68,7 @@ class TokenTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: bankAccountTokenString)
             let bankToken = try decoder.decode(StripeToken.self, from: body)
@@ -93,9 +95,9 @@ class TokenTests: XCTestCase {
                 XCTAssertEqual(token.object, "token")
                 XCTAssertEqual(token.clientIp, "0.0.0.0")
                 XCTAssertEqual(token.created, Date(timeIntervalSince1970: 1516836636))
-                XCTAssertEqual(token.isLive, false)
+                XCTAssertEqual(token.livemode, false)
                 XCTAssertEqual(token.type, "bank_account")
-                XCTAssertEqual(token.isUsed, false)
+                XCTAssertEqual(token.used, false)
                 
             }.catch { (error) in
                 XCTFail("\(error)")

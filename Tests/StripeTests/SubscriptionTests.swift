@@ -15,6 +15,7 @@ class SubscriptionTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: subscriptionString)
             let subscription = try decoder.decode(StripeSubscription.self, from: body)
@@ -38,13 +39,13 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.discount?.coupon?.currency, .usd)
                 XCTAssertEqual(sub.discount?.coupon?.duration, .repeating)
                 XCTAssertEqual(sub.discount?.coupon?.durationInMonths, 3)
-                XCTAssertEqual(sub.discount?.coupon?.isLive, false)
+                XCTAssertEqual(sub.discount?.coupon?.livemode, false)
                 XCTAssertEqual(sub.discount?.coupon?.maxRedemptions, 22)
                 XCTAssertEqual(sub.discount?.coupon?.metadata?["hello"], "world")
                 XCTAssertEqual(sub.discount?.coupon?.percentOff, 25)
                 XCTAssertEqual(sub.discount?.coupon?.redeemBy, Date(timeIntervalSince1970: 1489793908))
                 XCTAssertEqual(sub.discount?.coupon?.timesRedeemed, 1)
-                XCTAssertEqual(sub.discount?.coupon?.isValid, true)
+                XCTAssertEqual(sub.discount?.coupon?.valid, true)
                 
                 // This test covers the Subscription item list object
                 XCTAssertNotNil(sub.items)
@@ -54,29 +55,29 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.items?.url, "/v1/subscription_items?subscription=sub_AJ6s2Iy65K3RxN")
                 
                 // This test covers the SubscriptionItem  object
-                XCTAssertNotNil(sub.items?.items)
-                XCTAssertNotNil(sub.items?.items?[0])
-                XCTAssertEqual(sub.items?.items?[0].id, "si_19yUeQ2eZvKYlo2CnJwkz3pK")
-                XCTAssertEqual(sub.items?.items?[0].object, "subscription_item")
-                XCTAssertEqual(sub.items?.items?[0].created, Date(timeIntervalSince1970: 1489793911))
-                XCTAssertEqual(sub.items?.items?[0].metadata?["hello"], "world")
-                XCTAssertEqual(sub.items?.items?[0].quantity, 1)
-                XCTAssertEqual(sub.items?.items?[0].subscription, "sub_AJ6s2Iy65K3RxN")
+                XCTAssertNotNil(sub.items?.data)
+                XCTAssertNotNil(sub.items?.data?[0])
+                XCTAssertEqual(sub.items?.data?[0].id, "si_19yUeQ2eZvKYlo2CnJwkz3pK")
+                XCTAssertEqual(sub.items?.data?[0].object, "subscription_item")
+                XCTAssertEqual(sub.items?.data?[0].created, Date(timeIntervalSince1970: 1489793911))
+                XCTAssertEqual(sub.items?.data?[0].metadata?["hello"], "world")
+                XCTAssertEqual(sub.items?.data?[0].quantity, 1)
+                XCTAssertEqual(sub.items?.data?[0].subscription, "sub_AJ6s2Iy65K3RxN")
                 
                 // These cover the Plan object
-                XCTAssertNotNil(sub.items?.items?[0].plan)
-                XCTAssertEqual(sub.items?.items?[0].plan?.id, "30990foo1489793903")
-                XCTAssertEqual(sub.items?.items?[0].plan?.object, "plan")
-                XCTAssertEqual(sub.items?.items?[0].plan?.amount, 100)
-                XCTAssertEqual(sub.items?.items?[0].plan?.created, Date(timeIntervalSince1970: 1489793908))
-                XCTAssertEqual(sub.items?.items?[0].plan?.currency, .usd)
-                XCTAssertEqual(sub.items?.items?[0].plan?.interval, .week)
-                XCTAssertEqual(sub.items?.items?[0].plan?.intervalCount, 1)
-                XCTAssertEqual(sub.items?.items?[0].plan?.isLive, false)
-                XCTAssertEqual(sub.items?.items?[0].plan?.metadata?["hello"], "world")
-                XCTAssertEqual(sub.items?.items?[0].plan?.name, "Foo")
-                XCTAssertEqual(sub.items?.items?[0].plan?.statementDescriptor, "FOO")
-                XCTAssertEqual(sub.items?.items?[0].plan?.trialPeriodDays, 3)
+                XCTAssertNotNil(sub.items?.data?[0].plan)
+                XCTAssertEqual(sub.items?.data?[0].plan?.id, "30990foo1489793903")
+                XCTAssertEqual(sub.items?.data?[0].plan?.object, "plan")
+                XCTAssertEqual(sub.items?.data?[0].plan?.amount, 100)
+                XCTAssertEqual(sub.items?.data?[0].plan?.created, Date(timeIntervalSince1970: 1489793908))
+                XCTAssertEqual(sub.items?.data?[0].plan?.currency, .usd)
+                XCTAssertEqual(sub.items?.data?[0].plan?.interval, .week)
+                XCTAssertEqual(sub.items?.data?[0].plan?.intervalCount, 1)
+                XCTAssertEqual(sub.items?.data?[0].plan?.livemode, false)
+                XCTAssertEqual(sub.items?.data?[0].plan?.metadata?["hello"], "world")
+                XCTAssertEqual(sub.items?.data?[0].plan?.name, "Foo")
+                XCTAssertEqual(sub.items?.data?[0].plan?.statementDescriptor, "FOO")
+                XCTAssertEqual(sub.items?.data?[0].plan?.trialPeriodDays, 3)
                 
                 // These cover the Plan object
                 XCTAssertNotNil(sub.plan)
@@ -87,7 +88,7 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.plan?.currency, .usd)
                 XCTAssertEqual(sub.plan?.interval, .week)
                 XCTAssertEqual(sub.plan?.intervalCount, 1)
-                XCTAssertEqual(sub.plan?.isLive, false)
+                XCTAssertEqual(sub.plan?.livemode, false)
                 XCTAssertEqual(sub.plan?.metadata?["hello"], "world")
                 XCTAssertEqual(sub.plan?.name, "Foo")
                 XCTAssertEqual(sub.plan?.statementDescriptor, "PLAN FOO")
@@ -105,11 +106,11 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.customer, "cus_CCMIISleHrbPlY")
                 XCTAssertEqual(sub.daysUntilDue, 4)
                 XCTAssertEqual(sub.endedAt, Date(timeIntervalSince1970: 1489793914))
-                XCTAssertEqual(sub.isLive, false)
+                XCTAssertEqual(sub.livemode, true)
                 XCTAssertEqual(sub.metadata?["foo"], "bar")
                 XCTAssertEqual(sub.quantity, 1)
                 XCTAssertEqual(sub.start, Date(timeIntervalSince1970: 1489793910))
-                XCTAssertEqual(sub.status, .active)
+                XCTAssertEqual(sub.status, StripeSubscriptionStatus.pastDue)
                 XCTAssertEqual(sub.taxPercent, 4.5)
                 XCTAssertEqual(sub.trialEnd, Date(timeIntervalSince1970: 1489793910))
                 XCTAssertEqual(sub.trialStart, Date(timeIntervalSince1970: 1489793910))
@@ -195,7 +196,7 @@ class SubscriptionTests: XCTestCase {
     "total_count": 1,
     "url": "/v1/subscription_items?subscription=sub_AJ6s2Iy65K3RxN"
   },
-  "livemode": false,
+  "livemode": true,
   "metadata": {
     "foo": "bar"
   },
@@ -217,7 +218,7 @@ class SubscriptionTests: XCTestCase {
   },
   "quantity": 1,
   "start": 1489793910,
-  "status": "active",
+  "status": "past_due",
   "tax_percent": 4.5,
   "trial_end": 1489793910,
   "trial_start": 1489793910

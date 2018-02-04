@@ -11,6 +11,12 @@ import XCTest
 @testable import Vapor
 
 class SourceTests: XCTestCase {
+    let decoder = JSONDecoder()
+    
+    override func setUp() {
+        decoder.dateDecodingStrategy = .secondsSince1970
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+    }
     
     let cardSourceString = """
  {
@@ -78,9 +84,6 @@ class SourceTests: XCTestCase {
     
     func testCardSourceParsedProperly() throws {
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            
             let body = HTTPBody(string: cardSourceString)
             let source = try decoder.decode(StripeSource.self, from: body)
             
@@ -104,7 +107,7 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.created, Date(timeIntervalSince1970: 1500471469))
                 XCTAssertEqual(source.currency, .usd)
                 XCTAssertEqual(source.flow, Flow.redirect)
-                XCTAssertEqual(source.isLive, false)
+                XCTAssertEqual(source.livemode, false)
                 XCTAssertEqual(source.metadata?["hello"], "world")
                 XCTAssertEqual(source.status, .chargeable)
                 XCTAssertEqual(source.type, .card)
@@ -114,8 +117,8 @@ class SourceTests: XCTestCase {
                 XCTAssertNotNil(source.owner)
                 XCTAssertEqual(source.owner?.address?.city, "Berlin")
                 XCTAssertEqual(source.owner?.address?.country, "DE")
-                XCTAssertEqual(source.owner?.address?.addressLine1, "Nollendorfstraße 27")
-                XCTAssertEqual(source.owner?.address?.addressLine2, nil)
+                XCTAssertEqual(source.owner?.address?.line1, "Nollendorfstraße 27")
+                XCTAssertEqual(source.owner?.address?.line2, nil)
                 XCTAssertEqual(source.owner?.address?.postalCode, "10777")
                 XCTAssertEqual(source.owner?.address?.state, nil)
                 XCTAssertEqual(source.owner?.email, "jenny.rosen@example.com")
@@ -131,8 +134,8 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.receiver?.amountCharged, 10)
                 XCTAssertEqual(source.receiver?.amountReceived, 101)
                 XCTAssertEqual(source.receiver?.amountReturned, 110)
-                XCTAssertEqual(source.receiver?.refundMethod, "email")
-                XCTAssertEqual(source.receiver?.refundStatus, "missing")
+                XCTAssertEqual(source.receiver?.refundAttributesMethod, "email")
+                XCTAssertEqual(source.receiver?.refundAttributesStatus, "missing")
                 
                 // This tests covers the redirect object
                 XCTAssertNotNil(source.redirect)
@@ -189,9 +192,6 @@ class SourceTests: XCTestCase {
     
     func testThreeDSecureSourceParsedProperly() throws {
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            
             let body = HTTPBody(string: threeDSecureSourceString)
             let source = try decoder.decode(StripeSource.self, from: body)
             
@@ -255,9 +255,6 @@ class SourceTests: XCTestCase {
     
     func testSepaDebitSourceParsedProperly() throws {
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            
             let body = HTTPBody(string: sepaDebitSourceString)
             let source = try decoder.decode(StripeSource.self, from: body)
             
@@ -326,9 +323,6 @@ class SourceTests: XCTestCase {
 
     func testAlipaySourceParsedProperly() throws {
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            
             let body = HTTPBody(string: alipaySourceString)
             let source = try decoder.decode(StripeSource.self, from: body)
             
@@ -396,9 +390,6 @@ class SourceTests: XCTestCase {
     
     func testGiropaySourceParsedProperly() throws {
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            
             let body = HTTPBody(string: giroPaySourceString)
             let source = try decoder.decode(StripeSource.self, from: body)
             
@@ -468,9 +459,6 @@ class SourceTests: XCTestCase {
     
     func testIdealSourceParsedProperly() throws {
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            
             let body = HTTPBody(string: idealSourceString)
             let source = try decoder.decode(StripeSource.self, from: body)
             
@@ -487,7 +475,7 @@ class SourceTests: XCTestCase {
                 XCTAssertNotNil(source.ideal)
                 XCTAssertEqual(source.ideal?.bank, "Vapor Bank")
                 XCTAssertEqual(source.ideal?.bic, "who knows")
-                XCTAssertEqual(source.ideal?.iBanLast4, "1234")
+                XCTAssertEqual(source.ideal?.ibanLast4, "1234")
                 XCTAssertEqual(source.ideal?.statementDescriptor, "Buy more Vapor Cloud")
                 
                 }.catch { (error) in
@@ -537,9 +525,6 @@ class SourceTests: XCTestCase {
     
     func testP24SourceParsedProperly() throws {
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            
             let body = HTTPBody(string: p24SourceString)
             let source = try decoder.decode(StripeSource.self, from: body)
             
@@ -609,9 +594,6 @@ class SourceTests: XCTestCase {
     
     func testSofortSourceParsedProperly() throws {
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            
             let body = HTTPBody(string: sofortSourceString)
             let source = try decoder.decode(StripeSource.self, from: body)
             
@@ -630,7 +612,7 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.sofort?.bankCode, "34569")
                 XCTAssertEqual(source.sofort?.bic, "Meh")
                 XCTAssertEqual(source.sofort?.bankName, "Vapor Bank")
-                XCTAssertEqual(source.sofort?.iBanLast4, "4560")
+                XCTAssertEqual(source.sofort?.ibanLast4, "4560")
                 XCTAssertEqual(source.sofort?.preferredLanguage, "English")
                 XCTAssertEqual(source.sofort?.statementDescriptor, "Henlo friend")
                 
@@ -685,9 +667,6 @@ class SourceTests: XCTestCase {
     
     func testBancontactSourceParsedProperly() throws {
         do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .secondsSince1970
-            
             let body = HTTPBody(string: bancontactSourceString)
             let source = try decoder.decode(StripeSource.self, from: body)
             
