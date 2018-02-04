@@ -22,7 +22,6 @@ public protocol Source {
     var object: String? { get }
     var amount: Int? { get }
     var clientSecret: String? { get }
-    var codeVerification: CodeVerification? { get }
     var created: Date? { get }
     var currency: StripeCurrency? { get }
     var flow: Flow? { get }
@@ -38,13 +37,14 @@ public protocol Source {
     var card: C? { get }
     var threeDSecure: ThreeDSecure? { get }
     var giropay: Giropay? { get }
-    var bitcoin: Bitcoin? { get }
     var sepaDebit: SepaDebit? { get }
     var ideal: iDEAL? { get }
     var sofort: SOFORT? { get }
     var bancontact: Bancontact? { get }
     var alipay: Alipay? { get }
     var p24: P24? { get }
+    // TODO: - Add multibanco, EPS and ACHCreditTransfer
+    // https://stripe.com/docs/sources
 }
 
 public struct StripeSource: Source, StripeModel {
@@ -52,7 +52,6 @@ public struct StripeSource: Source, StripeModel {
     public var object: String?
     public var amount: Int?
     public var clientSecret: String?
-    public var codeVerification: CodeVerification?
     public var created: Date?
     public var currency: StripeCurrency?
     public var flow: Flow?
@@ -68,7 +67,6 @@ public struct StripeSource: Source, StripeModel {
     public var card: StripeCard?
     public var threeDSecure: ThreeDSecure?
     public var giropay: Giropay?
-    public var bitcoin: Bitcoin?
     public var sepaDebit: SepaDebit?
     public var ideal: iDEAL?
     public var sofort: SOFORT?
@@ -81,7 +79,6 @@ public struct StripeSource: Source, StripeModel {
         case object
         case amount
         case clientSecret = "client_secret"
-        case codeVerification = "code_verification"
         case created
         case currency
         case flow
@@ -97,7 +94,6 @@ public struct StripeSource: Source, StripeModel {
         case card
         case threeDSecure = "three_d_secure"
         case giropay
-        case bitcoin
         case sepaDebit = "sepa_debit"
         case ideal
         case sofort

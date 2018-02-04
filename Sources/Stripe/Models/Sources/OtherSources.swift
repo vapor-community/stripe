@@ -10,27 +10,6 @@
  https://stripe.com/docs/sources
  */
 
-// MARK: - Bitcoin
-public struct Bitcoin: StripeModel {
-    public var address: String?
-    public var amount: Int?
-    public var amountCharged: Int?
-    public var amountReceived: Int?
-    public var amountReturned: Int?
-    public var uri: String?
-    public var refundAddress: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case address
-        case amount
-        case amountCharged = "amount_charged"
-        case amountReceived = "amount_received"
-        case amountReturned = "amount_refunded"
-        case uri
-        case refundAddress = "refund_address"
-    }
-}
-
 // MARK: - ThreeDSecure
 public struct ThreeDSecure: StripeModel {
     public var card: String?
