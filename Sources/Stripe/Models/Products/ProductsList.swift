@@ -16,13 +16,6 @@ public struct ProductsList: List, StripeModel {
     public var hasMore: Bool?
     public var totalCount: Int?
     public var url: String?
-    public var items: [StripeProduct]?
+    public var data: [StripeProduct]?
     
-    enum CodingKeys: String, CodingKey {
-        case object
-        case hasMore = "has_more"
-        case totalCount = "total_count"
-        case url
-        case items = "data"
-    }
 }

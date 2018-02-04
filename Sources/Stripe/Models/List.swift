@@ -11,5 +11,5 @@ public protocol List {
     var hasMore: Bool? { get }
     var totalCount: Int? { get }
     var url: String? { get }
-    var items: [T]? { get }
+    var data: [T]? { get }
 }
