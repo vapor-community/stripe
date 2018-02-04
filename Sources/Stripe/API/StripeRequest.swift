@@ -24,6 +24,7 @@ public extension StripeRequest {
     public func serializedResponse<SM: StripeModel>(response: HTTPResponse) throws -> SM {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
         
         guard response.status == .ok  else
         {
