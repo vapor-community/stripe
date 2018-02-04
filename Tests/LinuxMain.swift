@@ -4,6 +4,24 @@
 import XCTest
 @testable import StripeTests
 
+extension ProductTests {
+static var allTests = [
+  ("testProductParsedProperly", testProductParsedProperly),
+]
+}
+
+extension RefundTests {
+static var allTests = [
+  ("testRefundParsedProperly", testRefundParsedProperly),
+]
+}
+
+extension SKUTests {
+static var allTests = [
+  ("testSkuParsedProperly", testSkuParsedProperly),
+]
+}
+
 extension SourceTests {
 static var allTests = [
   ("testCardSourceParsedProperly", testCardSourceParsedProperly),
@@ -33,6 +51,9 @@ static var allTests = [
 
 
 XCTMain([
+  testCase(ProductTests.allTests),
+  testCase(RefundTests.allTests),
+  testCase(SKUTests.allTests),
   testCase(SourceTests.allTests),
   testCase(SubscriptionTests.allTests),
   testCase(TokenTests.allTests),
