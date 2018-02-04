@@ -13,13 +13,6 @@
 public enum Flow: String, Codable {
     case redirect
     case receiver
-    case codeVerification
+    case codeVerification = "code_verification"
     case none
-    
-    enum CodingKeys: String, CodingKey {
-        case redirect
-        case receiver
-        case codeVerification = "code_verification"
-        case none
-    }
 }
