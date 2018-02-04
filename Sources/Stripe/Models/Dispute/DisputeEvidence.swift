@@ -68,34 +68,4 @@ public struct StripeDisputeEvidence: DisputeEvidence, StripeModel {
     public var shippingTrackingNumber: String?
     public var uncatagorizedFile: String?
     public var uncatagorizedText: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case accessActivityLog = "access_activity_log"
-        case billingAddress = "billing_address"
-        case cancellationPolicy = "cancellation_policy"
-        case cancellationPolicyDisclosure = "cancellation_policy_disclosure"
-        case cancellationRebuttal = "cancellation_rebuttal"
-        case customerCommunication = "customer_communication"
-        case customerEmailAddress = "customer_email_address"
-        case customerName = "customer_name"
-        case customerPurchaseIp = "customer_purchase_ip"
-        case customerSignature = "customer_signature"
-        case duplicateChargeDocumantation = "duplicate_charge_documentation"
-        case duplicateChargeExplination = "duplicate_charge_explanation"
-        case duplicateChargeId = "duplicate_charge_id"
-        case productDescription = "product_description"
-        case receipt
-        case refundPolicy = "refund_policy"
-        case refundPolicyDisclosure = "refund_policy_disclosure"
-        case refundRefusalExplination = "refund_refusal_explanation"
-        case serviceDate = "service_date"
-        case serviceDocumentation = "service_documentation"
-        case shippingAddress = "shipping_address"
-        case shippingCarrier = "shipping_carrier"
-        case shippingDate = "shipping_date"
-        case shippingDocumentation = "shipping_documentation"
-        case shippingTrackingNumber = "shipping_tracking_number"
-        case uncatagorizedFile = "uncategorized_file"
-        case uncatagorizedText = "uncategorized_text"
-    }
 }

@@ -22,10 +22,4 @@ public struct StripeAccountVerification: AccountVerification, StripeModel {
     public var disabledReason: String?
     public var dueBy: Date?
     public var fieldsNeeded: [String]?
-    
-    enum CodingKeys: String, CodingKey {
-        case disabledReason = "disabled_reason"
-        case dueBy = "due_by"
-        case fieldsNeeded = "fields_needed"
-    }
 }

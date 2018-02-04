@@ -24,9 +24,4 @@ public protocol FraudDetails {
 public struct StripeFraudDetails: FraudDetails, StripeModel {
     public var userReport: FraudReport?
     public var stripeReport: FraudReport?
-    
-    enum CodingKeys: String, CodingKey {
-        case userReport = "user_report"
-        case stripeReport = "stripe_report"
-    }
 }

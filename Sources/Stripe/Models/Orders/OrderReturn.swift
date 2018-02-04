@@ -22,9 +22,9 @@ public protocol OrderReturn {
     var created: Date? { get }
     var currency: StripeCurrency? { get }
     var items: [OI]? { get }
-    var isLive: Bool? { get }
+    var livemode: Bool? { get }
     var order: String? { get }
-    var refundId: String? { get }
+    var refund: String? { get }
 }
 
 public struct StripeOrderReturn: OrderReturn, StripeModel {
@@ -34,19 +34,7 @@ public struct StripeOrderReturn: OrderReturn, StripeModel {
     public var created: Date?
     public var currency: StripeCurrency?
     public var items: [StripeOrderItem]?
-    public var isLive: Bool?
+    public var livemode: Bool?
     public var order: String?
-    public var refundId: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case amount
-        case created
-        case currency
-        case items
-        case isLive = "livemode"
-        case order
-        case refundId = "refund"
-    }
+    public var refund: String?
 }

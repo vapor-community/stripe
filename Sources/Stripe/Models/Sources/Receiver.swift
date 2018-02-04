@@ -16,25 +16,15 @@ public protocol Receiver {
     var amountCharged: Int? { get }
     var amountReceived: Int? { get }
     var amountReturned: Int? { get }
-    var refundMethod: String? { get }
-    var refundStatus: String? { get }
+    var refundAttributesMethod: String? { get }
+    var refundAttributesStatus: String? { get }
 }
 
 public struct StripeReceiver: Receiver, StripeModel {
-    
     public var address: String?
     public var amountCharged: Int?
     public var amountReceived: Int?
     public var amountReturned: Int?
-    public var refundMethod: String?
-    public var refundStatus: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case address
-        case amountCharged = "amount_charged"
-        case amountReceived = "amount_received"
-        case amountReturned = "amount_returned"
-        case refundMethod = "refund_attributes_method"
-        case refundStatus = "refund_attributes_status"
-    }
+    public var refundAttributesMethod: String?
+    public var refundAttributesStatus: String?
 }

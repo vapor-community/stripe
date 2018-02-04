@@ -32,7 +32,7 @@ public protocol Subscription {
     var discount: D? { get }
     var endedAt: Date? { get }
     var items: L? { get }
-    var isLive: Bool? { get }
+    var livemode: Bool? { get }
     var metadata: [String: String]? { get }
     var plan: P? { get }
     var quantity: Int? { get }
@@ -58,7 +58,7 @@ public struct StripeSubscription: Subscription, StripeModel {
     public var discount: StripeDiscount?
     public var endedAt: Date?
     public var items: SubscriptionItemList?
-    public var isLive: Bool?
+    public var livemode: Bool?
     public var metadata: [String : String]?
     public var plan: StripePlan?
     public var quantity: Int?
@@ -67,30 +67,4 @@ public struct StripeSubscription: Subscription, StripeModel {
     public var taxPercent: Decimal?
     public var trialEnd: Date?
     public var trialStart: Date?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case applicationFeePercent = "application_fee_percent"
-        case billing
-        case cancelAtPeriodEnd = "cancel_at_period_end"
-        case canceledAt = "canceled_at"
-        case created
-        case currentPeriodEnd = "current_period_end"
-        case currentPeriodStart = "current_period_start"
-        case customer
-        case daysUntilDue = "days_until_due"
-        case discount
-        case endedAt = "ended_at"
-        case items
-        case isLive = "livemode"
-        case metadata
-        case plan
-        case quantity
-        case start
-        case status
-        case taxPercent = "tax_percent"
-        case trialEnd = "trial_end"
-        case trialStart = "trial_start"
-    }
 }

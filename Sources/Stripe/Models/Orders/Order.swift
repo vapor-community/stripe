@@ -24,16 +24,16 @@ public protocol Order {
     var object: String? { get }
     var amount: Int? { get }
     var amountReturned: Int? { get }
-    var applicationId: String? { get }
+    var application: String? { get }
     var applicationFee: Int? { get }
-    var chargeId: String? { get }
+    var charge: String? { get }
     var created: Date? { get }
     var currency: StripeCurrency? { get }
-    var customerId: String? { get }
+    var customer: String? { get }
     var email: String? { get }
     var externalCouponCode: String? { get }
     var items: [O]? { get }
-    var isLive: Bool? { get }
+    var livemode: Bool? { get }
     var metadata: [String: String]? { get }
     var returns: [R]? { get }
     var selectedShippingMethod: String? { get }
@@ -50,16 +50,16 @@ public struct StripeOrder: Order, StripeModel {
     public var object: String?
     public var amount: Int?
     public var amountReturned: Int?
-    public var applicationId: String?
+    public var application: String?
     public var applicationFee: Int?
-    public var chargeId: String?
+    public var charge: String?
     public var created: Date?
     public var currency: StripeCurrency?
-    public var customerId: String?
+    public var customer: String?
     public var email: String?
     public var externalCouponCode: String?
     public var items: [StripeOrderItem]?
-    public var isLive: Bool?
+    public var livemode: Bool?
     public var metadata: [String: String]?
     public var returns: [StripeOrderReturn]?
     public var selectedShippingMethod: String?
@@ -69,30 +69,4 @@ public struct StripeOrder: Order, StripeModel {
     public var statusTransitions: StripeOrderStatusTransitions?
     public var updated: Date?
     public var upstreamId: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case amount
-        case amountReturned = "amount_returned"
-        case applicationId = "application"
-        case applicationFee = "application_fee"
-        case chargeId = "charge"
-        case created
-        case currency
-        case customerId = "customer"
-        case email
-        case externalCouponCode = "external_coupon_code"
-        case items
-        case isLive = "livemode"
-        case metadata
-        case returns
-        case selectedShippingMethod = "selected_shipping_method"
-        case shipping
-        case shippingMethods = "shipping_methods"
-        case status
-        case statusTransitions = "status_transitions"
-        case updated
-        case upstreamId = "upstream_id"
-    }
 }

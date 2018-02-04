@@ -13,7 +13,7 @@ public protocol EphemeralKey {
     var associatedObjects: [String: String]? { get }
     var created: Date? { get }
     var expires: Date? { get }
-    var isLive: Bool? { get }
+    var livemode: Bool? { get }
     var secret: String? { get }
 }
 
@@ -23,16 +23,6 @@ public struct StripeEphemeralKey: EphemeralKey, StripeModel {
     public var associatedObjects: [String : String]?
     public var created: Date?
     public var expires: Date?
-    public var isLive: Bool?
+    public var livemode: Bool?
     public var secret: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case associatedObjects = "associated_objects"
-        case created
-        case expires
-        case isLive = "livemode"
-        case secret
-    }
 }

@@ -23,7 +23,7 @@ public protocol LegalEntity {
     var businessName: String?  { get }
     var businessTaxIdProvided: Bool?  { get }
     var businessVATIdProvided: Bool?  { get }
-    var dateOfBirth: [String: Int]? { get }
+    var dob: [String: Int]? { get }
     var firstName: String? { get }
     var lastName: String? { get }
     var gender: String? { get }
@@ -42,7 +42,7 @@ public struct StripeConnectAccountLegalEntity: LegalEntity, StripeModel {
     public var businessName: String?
     public var businessTaxIdProvided: Bool?
     public var businessVATIdProvided: Bool?
-    public var dateOfBirth: [String: Int]?
+    public var dob: [String: Int]?
     public var firstName: String?
     public var lastName: String?
     public var gender: String?
@@ -53,23 +53,4 @@ public struct StripeConnectAccountLegalEntity: LegalEntity, StripeModel {
     public var taxIdRegistrar: String?
     public var type: String?
     public var verification: StripeLegalEntityVerification?
-    
-    enum CodingKeys: String, CodingKey {
-        case additionalOwners = "additional_owners"
-        case address
-        case businessName = "business_name"
-        case businessTaxIdProvided = "business_tax_id_provided"
-        case businessVATIdProvided = "business_vat_id_provided"
-        case dateOfBirth = "dob"
-        case firstName = "first_name"
-        case lastName = "last_name"
-        case gender
-        case maidenName = "maiden_name"
-        case personalAddress = "personal_address"
-        case phoneNumber = "phone_number"
-        case ssnLast4Provided = "ssn_last_4_provided"
-        case taxIdRegistrar = "tax_id_registrar"
-        case type
-        case verification
-    }
 }

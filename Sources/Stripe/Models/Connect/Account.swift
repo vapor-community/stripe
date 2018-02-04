@@ -78,37 +78,4 @@ public struct StripeConnectAccount: ConnectAccount, StripeModel {
     public var type: ConnectedAccountType?
     public var verification: StripeAccountVerification?
     public var transfersEnabled: Bool?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case businessName = "business_name"
-        case businessUrl = "business_url"
-        case chargesEnabled = "charges_enabled"
-        // TODO - investigate, not getting value from response after rejecting account.
-        // https://stripe.com/docs/api/curl#reject_account
-        case country
-        case created
-        case debitNegativeBalances = "debit_negative_balances"
-        case declineChargeOn = "decline_charge_on"
-        case defaultCurrency = "default_currency"
-        case detailsSubmitted = "details_submitted"
-        case displayName = "display_name"
-        case email
-        case externalAccounts = "external_accounts"
-        case legalEntity = "legal_entity"
-        case metadata
-        case payoutSchedule = "payout_schedule"
-        case payoutStatementDescriptor = "payout_statement_descriptor"
-        case payoutsEnabled = "payouts_enabled"
-        case productDescription = "product_description"
-        case statementDescriptor = "statement_descriptor"
-        case supportEmail = "support_email"
-        case supportPhone = "support_phone"
-        case timezone
-        case tosAcceptance = "tos_acceptance"
-        case type
-        case verification
-        case transfersEnabled = "transfers_enabled"
-    }
 }

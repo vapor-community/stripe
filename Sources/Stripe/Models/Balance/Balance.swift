@@ -17,7 +17,7 @@ public protocol Balance {
     var object: String? { get }
     var available: [BT]? { get }
     var connectReserved: [BT]? { get }
-    var isLive: Bool? { get }
+    var livemode: Bool? { get }
     var pending: [BT]? { get }
 }
 
@@ -25,14 +25,6 @@ public struct StripeBalance: Balance, StripeModel {
     public var object: String?
     public var available: [StripeBalanceTransfer]?
     public var connectReserved: [StripeBalanceTransfer]?
-    public var isLive: Bool?
+    public var livemode: Bool?
     public var pending: [StripeBalanceTransfer]?
-    
-    enum CodingKeys: String, CodingKey {
-        case object
-        case available
-        case connectReserved = "connected_reserved"
-        case isLive = "livemode"
-        case pending
-    }
 }

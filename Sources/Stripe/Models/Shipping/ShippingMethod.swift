@@ -27,12 +27,4 @@ public struct StripeShippingMethod: ShippingMethod, StripeModel {
     public var currency: StripeCurrency?
     public var deliveryEstimate: StripeDeliveryEstimate?
     public var description: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case amount
-        case currency
-        case deliveryEstimate = "delivery_estimate"
-        case description
-    }
 }

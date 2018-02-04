@@ -25,7 +25,7 @@ public protocol Source {
     var created: Date? { get }
     var currency: StripeCurrency? { get }
     var flow: Flow? { get }
-    var isLive: Bool? { get }
+    var livemode: Bool? { get }
     var metadata: [String: String]? { get }
     var owner: O? { get }
     var receiver: R? { get }
@@ -55,7 +55,7 @@ public struct StripeSource: Source, StripeModel {
     public var created: Date?
     public var currency: StripeCurrency?
     public var flow: Flow?
-    public var isLive: Bool?
+    public var livemode: Bool?
     public var metadata: [String: String]?
     public var owner: StripeOwner?
     public var receiver: StripeReceiver?
@@ -74,34 +74,6 @@ public struct StripeSource: Source, StripeModel {
     public var alipay: Alipay?
     public var p24: P24?
     
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case amount
-        case clientSecret = "client_secret"
-        case created
-        case currency
-        case flow
-        case isLive = "livemode"
-        case metadata
-        case owner
-        case receiver
-        case redirect
-        case statementDescriptor = "statement_descriptor"
-        case status
-        case type
-        case usage
-        case card
-        case threeDSecure = "three_d_secure"
-        case giropay
-        case sepaDebit = "sepa_debit"
-        case ideal
-        case sofort
-        case bancontact
-        case alipay
-        case p24
-    }
-    
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decodeIfPresent(String.self, forKey: .id)
@@ -111,7 +83,7 @@ public struct StripeSource: Source, StripeModel {
         created = try container.decodeIfPresent(Date.self, forKey: .created)
         currency = try container.decodeIfPresent(StripeCurrency.self, forKey: .currency)
         flow = try container.decodeIfPresent(Flow.self, forKey: .flow)
-        isLive = try container.decodeIfPresent(Bool.self, forKey: .isLive)
+        livemode = try container.decodeIfPresent(Bool.self, forKey: .livemode)
         metadata = try container.decodeIfPresent([String: String].self, forKey: .metadata)
         owner = try container.decodeIfPresent(StripeOwner.self, forKey: .owner)
         receiver = try container.decodeIfPresent(StripeReceiver.self, forKey: .receiver)

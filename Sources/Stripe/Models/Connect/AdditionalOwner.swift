@@ -17,7 +17,7 @@ public protocol LegalEntityAdditionalOwner {
     
     var firstName: String? { get }
     var lastName: String? { get }
-    var dateOfBirth: [String: Int]? { get }
+    var dob: [String: Int]? { get }
     var address: SA? { get }
     var verification: LEV? { get }
 }
@@ -25,15 +25,7 @@ public protocol LegalEntityAdditionalOwner {
 public struct StripeLegalEntityAdditionalOwner: LegalEntityAdditionalOwner, StripeModel {
     public var firstName: String?
     public var lastName: String?
-    public var dateOfBirth: [String: Int]?
+    public var dob: [String: Int]?
     public var address: StripeAddress?
     public var verification: StripeLegalEntityVerification?
-    
-    enum CodingKeys: String, CodingKey {
-        case firstName = "first_name"
-        case lastName = "last_name"
-        case dateOfBirth = "dob"
-        case address
-        case verification
-    }
 }

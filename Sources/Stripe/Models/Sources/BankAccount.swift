@@ -45,22 +45,4 @@ public struct StripeBankAccount: BankAccount, StripeModel {
     public var metadata: [String : String]?
     public var routingNumber: String?
     public var status: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case account
-        case accountHolderName = "account_holder_name"
-        case accountHolderType = "account_holder_type"
-        case bankName = "bank_name"
-        case country
-        case currency
-        case customer
-        case defaultForCurrency = "default_for_currency"
-        case fingerprint
-        case last4
-        case metadata
-        case routingNumber = "routing_number"
-        case status
-    }
 }

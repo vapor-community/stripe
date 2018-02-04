@@ -25,11 +25,11 @@ public protocol SKU {
     var currency: StripeCurrency? { get }
     var image: String? { get }
     var inventory: I? { get }
-    var isLive: Bool? { get }
+    var livemode: Bool? { get }
     var metadata: [String: String]? { get }
     var packageDimensions: PD? { get }
     var price: Int? { get }
-    var productId: String? { get }
+    var product: String? { get }
     var updated: Date? { get }
 }
 
@@ -42,27 +42,10 @@ public struct StripeSKU: SKU, StripeModel {
     public var currency: StripeCurrency?
     public var image: String?
     public var inventory: StripeInventory?
-    public var isLive: Bool?
+    public var livemode: Bool?
     public var metadata: [String: String]?
     public var packageDimensions: StripePackageDimensions?
     public var price: Int?
-    public var productId: String?
+    public var product: String?
     public var updated: Date?
-    
-    enum CodngKeys: String, CodingKey {
-        case id
-        case object
-        case active
-        case attributes
-        case created
-        case currency
-        case image
-        case inventory
-        case isLive = "livemode"
-        case metadata
-        case packageDimensions = "package_dimensions"
-        case price
-        case productId = "product"
-        case updated
-    }
 }

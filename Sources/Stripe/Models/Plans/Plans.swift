@@ -21,7 +21,7 @@ public protocol Plan {
     var currency: StripeCurrency? { get }
     var interval: StripePlanInterval? { get }
     var intervalCount: Int? { get }
-    var isLive: Bool? { get }
+    var livemode: Bool? { get }
     var metadata: [String: String]? { get }
     var name: String? { get }
     var statementDescriptor: String? { get }
@@ -36,24 +36,9 @@ public struct StripePlan: Plan, StripeModel {
     public var currency: StripeCurrency?
     public var interval: StripePlanInterval?
     public var intervalCount: Int?
-    public var isLive: Bool?
+    public var livemode: Bool?
     public var metadata: [String: String]?
     public var name: String?
     public var statementDescriptor: String?
     public var trialPeriodDays: Int?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case amount
-        case created
-        case currency
-        case interval
-        case intervalCount = "interval_count"
-        case isLive = "livemode"
-        case metadata
-        case name
-        case statementDescriptor = "statement_descriptor"
-        case trialPeriodDays = "trial_period_days"
-    }
 }

@@ -24,8 +24,8 @@ public protocol Invoice {
     var attemptCount: Int?  { get }
     var attempted: Bool? { get }
     var billing: String? { get }
-    var chargeId: String?  { get }
-    var isClosed: Bool?  { get }
+    var charge: String?  { get }
+    var closed: Bool?  { get }
     var currency: StripeCurrency? { get }
     var customer: String? { get }
     var date: Date? { get }
@@ -33,13 +33,13 @@ public protocol Invoice {
     var discount: D? { get }
     var dueDate: Date? { get }
     var endingBalance: Int? { get }
-    var isForgiven: Bool?  { get }
+    var forgiven: Bool?  { get }
     var lines: [L]? { get }
-    var isLive: Bool?  { get }
+    var livemode: Bool?  { get }
     var metadata: [String: String]? { get }
     var nextPaymentAttempt: Date? { get }
     var number: String? { get }
-    var isPaid: Bool?  { get }
+    var paid: Bool?  { get }
     var periodEnd: Date? { get }
     var periodStart: Date? { get }
     var receiptNumber: String? { get }
@@ -62,8 +62,8 @@ public struct StripeInvoice: Invoice, StripeModel {
     public var attemptCount: Int?
     public var attempted: Bool?
     public var billing: String?
-    public var chargeId: String?
-    public var isClosed: Bool?
+    public var charge: String?
+    public var closed: Bool?
     public var currency: StripeCurrency?
     public var customer: String?
     public var date: Date?
@@ -71,13 +71,13 @@ public struct StripeInvoice: Invoice, StripeModel {
     public var discount: StripeDiscount?
     public var dueDate: Date?
     public var endingBalance: Int?
-    public var isForgiven: Bool?
+    public var forgiven: Bool?
     public var lines: [InvoiceLineGroup]?
-    public var isLive: Bool?
+    public var livemode: Bool?
     public var metadata: [String: String]?
     public var nextPaymentAttempt: Date?
     public var number: String?
-    public var isPaid: Bool?
+    public var paid: Bool?
     public var periodEnd: Date?
     public var periodStart: Date?
     public var receiptNumber: String?
@@ -90,42 +90,4 @@ public struct StripeInvoice: Invoice, StripeModel {
     public var tax: Int?
     public var taxPercent: Decimal?
     public var webhooksDeliveredAt: Date?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case amountDue = "amount_due"
-        case applicationFee = "application_fee"
-        case attemptCount = "attempt_count"
-        case attempted
-        case billing
-        case chargeId = "charge"
-        case isClosed = "closed"
-        case currency
-        case customer
-        case date
-        case description
-        case discount
-        case dueDate = "due_date"
-        case endingBalance = "ending_balance"
-        case isForgiven = "forgiven"
-        case lines
-        case isLive = "livemode"
-        case metadata
-        case nextPaymentAttempt = "next_payment_attempt"
-        case number
-        case isPaid = "paid"
-        case periodEnd = "period_end"
-        case periodStart = "period_start"
-        case receiptNumber = "receipt_number"
-        case startingBalance = "starting_balance"
-        case statementDescriptor = "statement_descriptor"
-        case subscription
-        case subscriptionProrationDate = "subscription_proration_date"
-        case subtotal
-        case total
-        case tax
-        case taxPercent = "tax_percent"
-        case webhooksDeliveredAt = "webhooks_delivered_at"
-    }
 }

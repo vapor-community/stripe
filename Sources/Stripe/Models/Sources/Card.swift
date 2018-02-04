@@ -31,16 +31,16 @@ public protocol Card {
     var customer: String? { get }
     var cvcCheck: CardValidationCheck? { get }
     var defaultForCurrency: Bool? { get }
-    var dynamicLastFour: String? { get }
-    var expirationMonth: Int? { get}
-    var expirationyear: Int? { get}
+    var dynamicLast4: String? { get }
+    var expMonth: Int? { get}
+    var expYear: Int? { get}
     var fingerprint: String? { get }
     var funding: FundingType? { get }
     var last4: String? { get }
     var metadata: [String: String]? { get }
     var name: String? { get }
     var recipient: String? { get }
-    var tokenizedMethod: TokenizedMethod? { get }
+    var tokenizationMethod: TokenizedMethod? { get }
     var threeDSecure: String? { get }
 }
 
@@ -63,47 +63,15 @@ public struct StripeCard: Card, StripeModel {
     public var customer: String?
     public var cvcCheck: CardValidationCheck?
     public var defaultForCurrency: Bool?
-    public var dynamicLastFour: String?
-    public var expirationMonth: Int?
-    public var expirationyear: Int?
+    public var dynamicLast4: String?
+    public var expMonth: Int?
+    public var expYear: Int?
     public var fingerprint: String?
     public var funding: FundingType?
     public var last4: String?
     public var metadata: [String : String]?
     public var name: String?
     public var recipient: String?
-    public var tokenizedMethod: TokenizedMethod?
+    public var tokenizationMethod: TokenizedMethod?
     public var threeDSecure: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case account
-        case addressCity = "address_city"
-        case addressCountry = "address_country"
-        case addressLine1 = "address_line1"
-        case addressLine1Check = "address_line1_check"
-        case addressLine2 = "address_line2"
-        case addressState = "address_state"
-        case addressZip = "address_zip"
-        case addressZipCheck = "address_zip_check"
-        case availablePayoutMethods = "available_payout_methods"
-        case brand
-        case country
-        case currency
-        case customer
-        case cvcCheck = "cvc_check"
-        case defaultForCurrency = "default_for_currency"
-        case dynamicLastFour = "dynamic_last4"
-        case expirationMonth = "exp_month"
-        case expirationyear = "exp_year"
-        case fingerprint
-        case funding
-        case last4
-        case metadata
-        case name
-        case recipient
-        case tokenizedMethod = "tokenization_method"
-        case threeDSecure = "three_d_secure"
-    }
 }

@@ -22,8 +22,8 @@ public protocol Token {
     var type: String? { get }
     var clientIp: String? { get }
     var created: Date? { get }
-    var isLive: Bool? { get }
-    var isUsed: Bool? { get }
+    var livemode: Bool? { get }
+    var used: Bool? { get }
     var card: C? { get }
     var bankAccount: B? { get }
 }
@@ -34,20 +34,8 @@ public struct StripeToken: Token, StripeModel {
     public var type: String?
     public var clientIp: String?
     public var created: Date?
-    public var isLive: Bool?
-    public var isUsed: Bool?
+    public var livemode: Bool?
+    public var used: Bool?
     public var card: StripeCard?
     public var bankAccount: StripeBankAccount?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case type
-        case clientIp = "client_ip"
-        case created
-        case isLive = "livemode"
-        case isUsed = "used"
-        case card
-        case bankAccount = "bank_account"
-    }
 }

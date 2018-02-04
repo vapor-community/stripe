@@ -24,7 +24,7 @@ public protocol BalanceTransactionItem {
     var currency: StripeCurrency? { get }
     var description: String? { get }
     var fee: Int? { get }
-    var fees: [F]? { get }
+    var feeDetails: [F]? { get }
     var net: Int? { get }
     var source: String? { get }
     var status: StripeStatus? { get }
@@ -40,25 +40,9 @@ public struct StripeBalanceTransactionItem: BalanceTransactionItem, StripeModel 
     public var currency: StripeCurrency?
     public var description: String?
     public var fee: Int?
-    public var fees: [StripeFee]?
+    public var feeDetails: [StripeFee]?
     public var net: Int?
     public var source: String?
     public var status: StripeStatus?
     public var type: BalanceTransactionType?
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case amount
-        case availableOn = "available_on"
-        case created
-        case currency
-        case description
-        case fee
-        case fees = "fee_details"
-        case net
-        case source
-        case status
-        case type
-    }
 }
