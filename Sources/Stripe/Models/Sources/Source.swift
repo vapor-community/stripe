@@ -108,56 +108,51 @@ public struct StripeSource: Source, StripeModel {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeIfPresent(String.self, forKey: .id)
+        object = try container.decodeIfPresent(String.self, forKey: .object)
+        amount = try container.decodeIfPresent(Int.self, forKey: .amount)
+        clientSecret = try container.decodeIfPresent(String.self, forKey: .clientSecret)
+        created = try container.decodeIfPresent(Date.self, forKey: .created)
+        currency = try container.decodeIfPresent(StripeCurrency.self, forKey: .currency)
+        flow = try container.decodeIfPresent(Flow.self, forKey: .flow)
+        isLive = try container.decodeIfPresent(Bool.self, forKey: .isLive)
+        metadata = try container.decodeIfPresent([String: String].self, forKey: .metadata)
+        owner = try container.decodeIfPresent(StripeOwner.self, forKey: .owner)
+        receiver = try container.decodeIfPresent(StripeReceiver.self, forKey: .receiver)
+        redirect = try container.decodeIfPresent(SourceRedirect.self, forKey: .redirect)
+        statementDescriptor = try container.decodeIfPresent(String.self, forKey: .statementDescriptor)
+        status = try container.decodeIfPresent(StripeStatus.self, forKey: .status)
+        usage = try container.decodeIfPresent(String.self, forKey: .usage)
         
-        id = try container.decode(String.self, forKey: .id)
-        object = try container.decode(String.self, forKey: .object)
-        amount = try container.decode(Int.self, forKey: .amount)
-        clientSecret = try container.decode(String.self, forKey: .clientSecret)
-        codeVerification = try container.decode(CodeVerification.self, forKey: .codeVerification)
-        created = try container.decode(Date.self, forKey: .created)
-        currency = try container.decode(StripeCurrency.self, forKey: .currency)
-        flow = try container.decode(Flow.self, forKey: .flow)
-        isLive = try container.decode(Bool.self, forKey: .isLive)
-        metadata = try container.decode([String: String].self, forKey: .metadata)
-        owner = try container.decode(StripeOwner.self, forKey: .owner)
-        receiver = try container.decode(StripeReceiver.self, forKey: .receiver)
-        redirect = try container.decode(SourceRedirect.self, forKey: .redirect)
-        statementDescriptor = try container.decode(String.self, forKey: .statementDescriptor)
-        status = try container.decode(StripeStatus.self, forKey: .status)
-        usage = try container.decode(String.self, forKey: .usage)
-        
-        type = try container.decode(SourceType.self, forKey: .type)
+        type = try container.decodeIfPresent(SourceType.self, forKey: .type)
         
         switch type! {
         case .card:
-            card = try container.decode(StripeCard.self, forKey: .card)
+            card = try container.decodeIfPresent(StripeCard.self, forKey: .card)
 
-        case .bitcoin:
-            bitcoin = try container.decode(Bitcoin.self, forKey: .bitcoin)
-            
         case .threeDSecure:
-            threeDSecure = try container.decode(ThreeDSecure.self, forKey: .threeDSecure)
+            threeDSecure = try container.decodeIfPresent(ThreeDSecure.self, forKey: .threeDSecure)
             
         case .giropay:
-            giropay = try container.decode(Giropay.self, forKey: .giropay)
+            giropay = try container.decodeIfPresent(Giropay.self, forKey: .giropay)
             
         case .sepaDebit:
-            sepaDebit = try container.decode(SepaDebit.self, forKey: .sepaDebit)
+            sepaDebit = try container.decodeIfPresent(SepaDebit.self, forKey: .sepaDebit)
             
         case .ideal:
-            ideal = try container.decode(iDEAL.self, forKey: .ideal)
+            ideal = try container.decodeIfPresent(iDEAL.self, forKey: .ideal)
             
         case .sofort:
-            sofort = try container.decode(SOFORT.self, forKey: .sofort)
+            sofort = try container.decodeIfPresent(SOFORT.self, forKey: .sofort)
             
         case .bancontact:
-            bancontact = try container.decode(Bancontact.self, forKey: .bancontact)
+            bancontact = try container.decodeIfPresent(Bancontact.self, forKey: .bancontact)
             
         case .alipay:
-            alipay = try container.decode(Alipay.self, forKey: .alipay)
+            alipay = try container.decodeIfPresent(Alipay.self, forKey: .alipay)
             
         case .p24:
-            p24 = try container.decode(P24.self, forKey: .p24)
+            p24 = try container.decodeIfPresent(P24.self, forKey: .p24)
         }
     }
 }

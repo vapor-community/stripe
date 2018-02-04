@@ -31,15 +31,18 @@ public struct StripeBalanceTransfer: BalanceTransfer, StripeModel {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        currency = try container.decode(StripeCurrency.self, forKey: .currency)
-        amount = try container.decode(Int.self, forKey: .amount)
+        currency = try container.decodeIfPresent(StripeCurrency.self, forKey: .currency)
+        amount = try container.decodeIfPresent(Int.self, forKey: .amount)
     
-        let tempTypes = try container.decode([String: Int].self, forKey: .sourceTypes)
+        let tempTypes = try container.decodeIfPresent([String: Int].self, forKey: .sourceTypes)
         
-        tempTypes.forEach { (key, value) in
-            let newKey = SourceType(rawValue: key)
-            // TODO: Figure out a way around this force unwrap.
-            sourceTypes[newKey!] = value
+        if let types = tempTypes {
+            types.forEach { (key, value) in
+                let newKey = SourceType(rawValue: key)
+                // TODO: Figure out a way around this force unwrap.
+                sourceTypes[newKey!] = value
+            }
         }
+
     }
 }
