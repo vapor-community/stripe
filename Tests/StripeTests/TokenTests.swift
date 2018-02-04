@@ -19,9 +19,11 @@ class TokenTests: XCTestCase {
             let body = HTTPBody(string: cardTokenString)
             let cardToken = try decoder.decode(StripeToken.self, from: body)
             
-            cardToken.do({ (token) in
+            cardToken.do { (token) in
                 XCTAssertNil(token.bankAccount)
                 XCTAssertNotNil(token.card)
+                
+                // This test covers the card object
                 XCTAssertEqual(token.card?.id, "card_1BnxhQ2eZvKYlo2CPNu4CkoA")
                 XCTAssertEqual(token.card?.object, "card")
                 XCTAssertEqual(token.card?.addressCity, "Miami")
@@ -52,9 +54,9 @@ class TokenTests: XCTestCase {
                 XCTAssertEqual(token.isLive, false)
                 XCTAssertEqual(token.type, "card")
                 XCTAssertEqual(token.isUsed, false)
-            }).catch({ (error) in
+            }.catch { (error) in
                 XCTFail("\(error)")
-            })
+            }
         }
         catch {
             XCTFail("\(error)")
@@ -69,9 +71,11 @@ class TokenTests: XCTestCase {
             let body = HTTPBody(string: bankAccountTokenString)
             let bankToken = try decoder.decode(StripeToken.self, from: body)
             
-            bankToken.do({ (token) in
+            bankToken.do { (token) in
                 XCTAssertNil(token.card)
                 XCTAssertNotNil(token.bankAccount)
+                
+                // This test covers the bank account object
                 XCTAssertEqual(token.bankAccount?.id, "ba_1BnxhQ2eZvKYlo2C5cM6hYK1")
                 XCTAssertEqual(token.bankAccount?.object, "bank_account")
                 XCTAssertEqual(token.bankAccount?.accountHolderName, "Jane Austen")
@@ -92,9 +96,10 @@ class TokenTests: XCTestCase {
                 XCTAssertEqual(token.isLive, false)
                 XCTAssertEqual(token.type, "bank_account")
                 XCTAssertEqual(token.isUsed, false)
-            }).catch({ (error) in
+                
+            }.catch { (error) in
                 XCTFail("\(error)")
-            })
+            }
         }
         catch {
             XCTFail("\(error)")
