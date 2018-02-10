@@ -17,5 +17,4 @@ public struct ProductsList: List, StripeModel {
     public var totalCount: Int?
     public var url: String?
     public var data: [StripeProduct]?
-    
 }
