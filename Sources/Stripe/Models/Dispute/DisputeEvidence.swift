@@ -21,14 +21,14 @@ public protocol DisputeEvidence {
     var customerName: String? { get }
     var customerPurchaseIp: String? { get }
     var customerSignature: String? { get }
-    var duplicateChargeDocumantation: String? { get }
-    var duplicateChargeExplination: String? { get }
+    var duplicateChargeDocumentation: String? { get }
+    var duplicateChargeExplanation: String? { get }
     var duplicateChargeId: String? { get }
     var productDescription: String? { get }
     var receipt: String? { get }
     var refundPolicy: String? { get }
     var refundPolicyDisclosure: String? { get }
-    var refundRefusalExplination: String? { get }
+    var refundRefusalExplanation: String? { get }
     var serviceDate: String? { get }
     var serviceDocumentation: String? { get }
     var shippingAddress: String? { get }
@@ -36,8 +36,8 @@ public protocol DisputeEvidence {
     var shippingDate: String? { get }
     var shippingDocumentation: String? { get }
     var shippingTrackingNumber: String? { get }
-    var uncatagorizedFile: String? { get }
-    var uncatagorizedText: String? { get }
+    var uncategorizedFile: String? { get }
+    var uncategorizedText: String? { get }
 }
 
 public struct StripeDisputeEvidence: DisputeEvidence, StripeModel {
@@ -51,14 +51,14 @@ public struct StripeDisputeEvidence: DisputeEvidence, StripeModel {
     public var customerName: String?
     public var customerPurchaseIp: String?
     public var customerSignature: String?
-    public var duplicateChargeDocumantation: String?
-    public var duplicateChargeExplination: String?
+    public var duplicateChargeDocumentation: String?
+    public var duplicateChargeExplanation: String?
     public var duplicateChargeId: String?
     public var productDescription: String?
     public var receipt: String?
     public var refundPolicy: String?
     public var refundPolicyDisclosure: String?
-    public var refundRefusalExplination: String?
+    public var refundRefusalExplanation: String?
     public var serviceDate: String?
     public var serviceDocumentation: String?
     public var shippingAddress: String?
@@ -66,6 +66,6 @@ public struct StripeDisputeEvidence: DisputeEvidence, StripeModel {
     public var shippingDate: String?
     public var shippingDocumentation: String?
     public var shippingTrackingNumber: String?
-    public var uncatagorizedFile: String?
-    public var uncatagorizedText: String?
+    public var uncategorizedFile: String?
+    public var uncategorizedText: String?
 }

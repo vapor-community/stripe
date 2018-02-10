@@ -15,14 +15,14 @@ import Foundation
 
 public protocol OrderStatusTransitions {
     var canceled: Date? { get }
-    var fufilled: Date? { get }
+    var fulfiled: Date? { get }
     var paid: Date? { get }
     var returned: Date? { get }
 }
 
 public struct StripeOrderStatusTransitions: OrderStatusTransitions, StripeModel {
     public var canceled: Date?
-    public var fufilled: Date?
+    public var fulfiled: Date?
     public var paid: Date?
     public var returned: Date?
 }
