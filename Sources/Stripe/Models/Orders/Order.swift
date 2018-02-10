@@ -15,7 +15,7 @@ import Foundation
 
 public protocol Order {
     associatedtype O: OrderItem
-    associatedtype R: OrderReturn
+    associatedtype L: List
     associatedtype S: Shipping
     associatedtype SM: ShippingMethod
     associatedtype SS: OrderStatusTransitions
@@ -35,7 +35,7 @@ public protocol Order {
     var items: [O]? { get }
     var livemode: Bool? { get }
     var metadata: [String: String]? { get }
-    var returns: [R]? { get }
+    var returns: L? { get }
     var selectedShippingMethod: String? { get }
     var shipping: S? { get }
     var shippingMethods: [SM]? { get }
@@ -61,7 +61,7 @@ public struct StripeOrder: Order, StripeModel {
     public var items: [StripeOrderItem]?
     public var livemode: Bool?
     public var metadata: [String: String]?
-    public var returns: [StripeOrderReturn]?
+    public var returns: OrderReturnList?
     public var selectedShippingMethod: String?
     public var shipping: ShippingLabel?
     public var shippingMethods: [StripeShippingMethod]?

@@ -34,7 +34,7 @@ public protocol Invoice {
     var dueDate: Date? { get }
     var endingBalance: Int? { get }
     var forgiven: Bool?  { get }
-    var lines: [L]? { get }
+    var lines: L? { get }
     var livemode: Bool?  { get }
     var metadata: [String: String]? { get }
     var nextPaymentAttempt: Date? { get }
@@ -72,7 +72,7 @@ public struct StripeInvoice: Invoice, StripeModel {
     public var dueDate: Date?
     public var endingBalance: Int?
     public var forgiven: Bool?
-    public var lines: [InvoiceLineGroup]?
+    public var lines: InvoiceLineGroup?
     public var livemode: Bool?
     public var metadata: [String: String]?
     public var nextPaymentAttempt: Date?
