@@ -10,7 +10,7 @@ import XCTest
 @testable import Stripe
 @testable import Vapor
 
- class RefundTests: XCTestCase {
+class RefundTests: XCTestCase {
     let refundString = """
 {
   "id": "re_1BrXqE2eZvKYlo2Cfa7NO6GF",
