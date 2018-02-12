@@ -21,6 +21,7 @@ public protocol ConnectAccount {
     
     var id: String? { get }
     var object: String? { get }
+    var businessLogo: String? { get }
     var businessName: String? { get }
     var businessUrl: String? { get }
     var chargesEnabled: Bool? { get }
@@ -52,6 +53,7 @@ public protocol ConnectAccount {
 public struct StripeConnectAccount: ConnectAccount, StripeModel {
     public var id: String?
     public var object: String?
+    public var businessLogo: String?
     public var businessName: String?
     public var businessUrl: String?
     public var chargesEnabled: Bool?
