@@ -9,20 +9,18 @@
 import Foundation
 
 /**
- Terms of acceptance objecr
+ Terms of acceptance object
  https://stripe.com/docs/api/curl#account_object-tos_acceptance
  */
 
 public protocol TOSAcceptance {
-    var timestamp: Date? { get }
+    var date: Date? { get }
     var ip: String? { get }
-    var status: String? { get }
     var userAgent: String? { get }
 }
 
 public struct StripeTOSAcceptance: TOSAcceptance, StripeModel {
-    public var timestamp: Date?
+    public var date: Date?
     public var ip: String?
-    public var status: String?
     public var userAgent: String?
 }
