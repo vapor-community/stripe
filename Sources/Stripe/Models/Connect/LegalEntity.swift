@@ -30,6 +30,7 @@ public protocol LegalEntity {
     var maidenName: String? { get }
     var personalAddress: A? { get }
     var phoneNumber: String? { get }
+    var personalIdNumberProvided: Bool? { get }
     var ssnLast4Provided: Bool? { get }
     var taxIdRegistrar: String? { get }
     var type: String? { get }
@@ -47,6 +48,7 @@ public struct StripeConnectAccountLegalEntity: LegalEntity, StripeModel {
     public var lastName: String?
     public var gender: String?
     public var maidenName: String?
+    public var personalIdNumberProvided: Bool?
     public var personalAddress: StripeAddress?
     public var phoneNumber: String?
     public var ssnLast4Provided: Bool?
