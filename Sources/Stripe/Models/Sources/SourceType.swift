@@ -13,6 +13,7 @@
 
 public enum SourceType: String, Codable {
     case card
+    case achCreditTransfer = "ach_credit_transfer"
     case threeDSecure = "three_d_secure"
     case giropay
     case sepaDebit = "sepa_debit"

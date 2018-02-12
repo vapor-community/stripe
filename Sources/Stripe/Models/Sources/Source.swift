@@ -22,6 +22,7 @@ public protocol Source {
     var object: String? { get }
     var amount: Int? { get }
     var clientSecret: String? { get }
+    var codeVerification: CodeVerification? { get }
     var created: Date? { get }
     var currency: StripeCurrency? { get }
     var flow: Flow? { get }
@@ -43,7 +44,8 @@ public protocol Source {
     var bancontact: Bancontact? { get }
     var alipay: Alipay? { get }
     var p24: P24? { get }
-    // TODO: - Add multibanco, EPS and ACHCreditTransfer
+    var achCreditTransfer: ACHCreditTransfer? { get }
+    // TODO: - Add multibanco, EPS
     // https://stripe.com/docs/sources
 }
 
@@ -52,6 +54,7 @@ public struct StripeSource: Source, StripeModel {
     public var object: String?
     public var amount: Int?
     public var clientSecret: String?
+    public var codeVerification: CodeVerification?
     public var created: Date?
     public var currency: StripeCurrency?
     public var flow: Flow?
@@ -73,6 +76,7 @@ public struct StripeSource: Source, StripeModel {
     public var bancontact: Bancontact?
     public var alipay: Alipay?
     public var p24: P24?
+    public var achCreditTransfer: ACHCreditTransfer?
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -80,6 +84,7 @@ public struct StripeSource: Source, StripeModel {
         object = try container.decodeIfPresent(String.self, forKey: .object)
         amount = try container.decodeIfPresent(Int.self, forKey: .amount)
         clientSecret = try container.decodeIfPresent(String.self, forKey: .clientSecret)
+        codeVerification = try container.decodeIfPresent(CodeVerification.self, forKey: .codeVerification)
         created = try container.decodeIfPresent(Date.self, forKey: .created)
         currency = try container.decodeIfPresent(StripeCurrency.self, forKey: .currency)
         flow = try container.decodeIfPresent(Flow.self, forKey: .flow)
@@ -97,7 +102,7 @@ public struct StripeSource: Source, StripeModel {
         switch type! {
         case .card:
             card = try container.decodeIfPresent(StripeCard.self, forKey: .card)
-
+            
         case .threeDSecure:
             threeDSecure = try container.decodeIfPresent(ThreeDSecure.self, forKey: .threeDSecure)
             
@@ -121,6 +126,9 @@ public struct StripeSource: Source, StripeModel {
             
         case .p24:
             p24 = try container.decodeIfPresent(P24.self, forKey: .p24)
+            
+        case .achCreditTransfer:
+            achCreditTransfer = try container.decodeIfPresent(ACHCreditTransfer.self, forKey: .achCreditTransfer)
         }
     }
 }

@@ -73,3 +73,12 @@ public struct Alipay: StripeModel {
 public struct P24: StripeModel {
     public var reference: String?
 }
+
+// MARK: - ACH Credit Transfer
+public struct ACHCreditTransfer: StripeModel {
+    public var accountNumber: String?
+    public var routingNumber: String?
+    public var fingerprint: String?
+    public var bankName: String?
+    public var swiftCode: String?
+}
