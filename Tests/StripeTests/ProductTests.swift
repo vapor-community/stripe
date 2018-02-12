@@ -113,11 +113,11 @@ class ProductTests: XCTestCase {
                 XCTAssertNotNil(product.skus?.data?[0])
                 
                 }.catch { (error) in
-                    XCTFail("\(error)")
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
 }

@@ -115,11 +115,11 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.trialEnd, Date(timeIntervalSince1970: 1489793910))
                 XCTAssertEqual(sub.trialStart, Date(timeIntervalSince1970: 1489793910))
             }).catch({ (error) in
-                XCTFail("\(error)")
+                XCTFail("\(error.localizedDescription)")
             })
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
     

@@ -52,11 +52,11 @@ class RefundTests: XCTestCase {
                 XCTAssertEqual(refund.status, .succeeded)
                 
                 }.catch { (error) in
-                    XCTFail("\(error)")
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
 }

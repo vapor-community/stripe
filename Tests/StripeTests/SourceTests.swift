@@ -145,11 +145,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.redirect?.url, "https://www.apple.com")
                 
             }.catch { (error) in
-                XCTFail("\(error)")
+                XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
     
@@ -211,11 +211,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.threeDSecure?.authenticated, false)
 
                 }.catch { (error) in
-                    XCTFail("\(error)")
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
     
@@ -277,11 +277,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.sepaDebit?.mandateUrl, "https://hooks.stripe.com/adapter/sepa_debit/file/src_18HgGjHNCLa1Vra6Y9TIP6tU/src_client_secret_XcBmS94nTg5o0xc9MSliSlDW")
                 
                 }.catch { (error) in
-                    XCTFail("\(error)")
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
     
@@ -341,11 +341,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.alipay?.nativeUrl, "https://www.vapor.codes")
                 
                 }.catch { (error) in
-                    XCTFail("\(error)")
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
     
@@ -410,11 +410,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.giropay?.statementDescriptor, "Buy more Vapor Cloud")
                 
                 }.catch { (error) in
-                    XCTFail("\(error)")
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
 
@@ -479,11 +479,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.ideal?.statementDescriptor, "Buy more Vapor Cloud")
                 
                 }.catch { (error) in
-                    XCTFail("\(error)")
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
     
@@ -542,11 +542,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.p24?.reference, "P24-000-111-222")
                 
                 }.catch { (error) in
-                    XCTFail("\(error)")
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
     
@@ -617,11 +617,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.sofort?.statementDescriptor, "Henlo friend")
                 
                 }.catch { (error) in
-                    XCTFail("\(error)")
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
     

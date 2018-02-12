@@ -77,11 +77,11 @@ class SKUTests: XCTestCase {
                 XCTAssertEqual(sku.inventory?.value, .inStock)
                 
                 }.catch { (error) in
-                    XCTFail("\(error)")
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
 }

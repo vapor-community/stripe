@@ -43,11 +43,11 @@ class EphemeralKeyTests: XCTestCase {
                 XCTAssertEqual(key.secret, "imasecret")
                 
                 }.catch { (error) in
-                    XCTFail("\(error)")
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
 }

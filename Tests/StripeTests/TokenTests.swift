@@ -56,11 +56,11 @@ class TokenTests: XCTestCase {
                 XCTAssertEqual(token.type, "card")
                 XCTAssertEqual(token.used, false)
             }.catch { (error) in
-                XCTFail("\(error)")
+                XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
 
@@ -100,11 +100,11 @@ class TokenTests: XCTestCase {
                 XCTAssertEqual(token.used, false)
                 
             }.catch { (error) in
-                XCTFail("\(error)")
+                XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
         }
     }
     
