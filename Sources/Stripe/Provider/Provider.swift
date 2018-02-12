@@ -47,7 +47,7 @@ public struct StripeClient: Service {
     public let subscription: StripeSubscriptionRoutes
     public let token: StripeTokenRoutes
 
-    fileprivate init(config: StripeConfig, client: Client) {
+    internal init(config: StripeConfig, client: Client) {
         let apiRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
         
         balance = StripeBalanceRoutes(request: apiRequest)
