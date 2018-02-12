@@ -23,6 +23,7 @@ public protocol BalanceTransactionItem {
     var created: Date? { get }
     var currency: StripeCurrency? { get }
     var description: String? { get }
+    var exchangeRate: Decimal? { get }
     var fee: Int? { get }
     var feeDetails: [F]? { get }
     var net: Int? { get }
@@ -38,6 +39,7 @@ public struct StripeBalanceTransactionItem: BalanceTransactionItem, StripeModel 
     public var availableOn: Date?
     public var created: Date?
     public var currency: StripeCurrency?
+    public var exchangeRate: Decimal?
     public var description: String?
     public var fee: Int?
     public var feeDetails: [StripeFee]?
