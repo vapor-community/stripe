@@ -1,225 +1,178 @@
-////
-////  BalanceTests.swift
-////  Stripe
-////
-////  Created by Anthony Castelli on 4/14/17.
-////
-////
 //
-//import XCTest
+//  BalanceTests.swift
+//  Stripe
 //
-//@testable import Stripe
-//@testable import Vapor
+//  Created by Anthony Castelli on 4/14/17.
 //
 //
-//
-//class BalanceTests: XCTestCase {
-//
-//    var drop: Droplet?
-//    var transactionId: String = ""
-//    
-//    override func setUp() {
-//        do {
-//            drop = try self.makeDroplet()
-//            
-//            let paymentToken = try drop?.stripe?.tokens.createCardToken(withCardNumber: "4242 4242 4242 4242",
-//                                                             expirationMonth: 10,
-//                                                             expirationYear: 2018,
-//                                                             cvc: 123,
-//                                                             name: "Test Card",
-//                                                             customer: nil,
-//                                                             currency: nil)
-//                                                            .serializedResponse().id ?? ""
-//            
-//            transactionId = try drop?.stripe?.charge.create(amount: 10_00,
-//                                                            in: .usd,
-//                                                            withFee: nil,
-//                                                            toAccount: nil,
-//                                                           capture: nil,
-//                                                           description: "Vapor Stripe: Test Description",
-//                                                           destinationAccountId: nil,
-//                                                           destinationAmount: nil,
-//                                                           transferGroup: nil,
-//                                                           onBehalfOf: nil,
-//                                                           receiptEmail: nil,
-//                                                           shippingLabel: nil,
-//                                                           customer: nil,
-//                                                           statementDescriptor: nil,
-//                                                           source: paymentToken,
-//                                                           metadata: nil)
-//                                                           .serializedResponse().balanceTransactionId ?? ""
-//        }
-//        catch let error as StripeError {
-//            
-//            switch error {
-//            case .apiConnectionError:
-//                XCTFail(error.localizedDescription)
-//            case .apiError:
-//                XCTFail(error.localizedDescription)
-//            case .authenticationError:
-//                XCTFail(error.localizedDescription)
-//            case .cardError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidRequestError:
-//                XCTFail(error.localizedDescription)
-//            case .rateLimitError:
-//                XCTFail(error.localizedDescription)
-//            case .validationError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidSourceType:
-//                XCTFail(error.localizedDescription)
-//            default:
-//                XCTFail(error.localizedDescription)
-//            }
-//        }
-//        catch {
-//            fatalError("Setup failed: \(error.localizedDescription)")
-//        }
-//    }
-//    override func tearDown() {
-//        drop = nil
-//        transactionId = ""
-//    }
-//    
-//    func testBalance() throws {
-//        
-//        do {
-//            let object = try drop?.stripe?.balance.retrieveBalance().serializedResponse()
-//            XCTAssertNotNil(object)
-//        }
-//        catch let error as StripeError {
-//            
-//            switch error {
-//            case .apiConnectionError:
-//                XCTFail(error.localizedDescription)
-//            case .apiError:
-//                XCTFail(error.localizedDescription)
-//            case .authenticationError:
-//                XCTFail(error.localizedDescription)
-//            case .cardError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidRequestError:
-//                XCTFail(error.localizedDescription)
-//            case .rateLimitError:
-//                XCTFail(error.localizedDescription)
-//            case .validationError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidSourceType:
-//                XCTFail(error.localizedDescription)
-//            default:
-//                XCTFail(error.localizedDescription)
-//            }
-//        }
-//        catch {
-//            XCTFail(error.localizedDescription)
-//        }
-//    }
-//    
-//    func testBalanceTransactionItem() throws {
-//        do {
-//            let object = try drop?.stripe?.balance.retrieveBalance(forTransaction: transactionId).serializedResponse()
-//            XCTAssertNotNil(object)
-//        }
-//        catch let error as StripeError {
-//            
-//            switch error {
-//            case .apiConnectionError:
-//                XCTFail(error.localizedDescription)
-//            case .apiError:
-//                XCTFail(error.localizedDescription)
-//            case .authenticationError:
-//                XCTFail(error.localizedDescription)
-//            case .cardError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidRequestError:
-//                XCTFail(error.localizedDescription)
-//            case .rateLimitError:
-//                XCTFail(error.localizedDescription)
-//            case .validationError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidSourceType:
-//                XCTFail(error.localizedDescription)
-//            default:
-//                XCTFail(error.localizedDescription)
-//            }
-//        }
-//        catch {
-//            XCTFail(error.localizedDescription)
-//        }
-//    }
-//    
-//    func testBalanceHistory() throws {
-//        do {
-//            let object = try drop?.stripe?.balance.history(forFilter: nil).serializedResponse()
-//            XCTAssertNotNil(object)
-//        }
-//        catch let error as StripeError {
-//            
-//            switch error {
-//            case .apiConnectionError:
-//                XCTFail(error.localizedDescription)
-//            case .apiError:
-//                XCTFail(error.localizedDescription)
-//            case .authenticationError:
-//                XCTFail(error.localizedDescription)
-//            case .cardError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidRequestError:
-//                XCTFail(error.localizedDescription)
-//            case .rateLimitError:
-//                XCTFail(error.localizedDescription)
-//            case .validationError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidSourceType:
-//                XCTFail(error.localizedDescription)
-//            default:
-//                XCTFail(error.localizedDescription)
-//            }
-//        }
-//        catch {
-//            XCTFail(error.localizedDescription)
-//        }
-//    }
-//    
-//    func testFilterBalanceHistory() throws {
-//        
-//        do {
-//            let filter = StripeFilter()
-//            filter.limit = 1
-//            let balance = try drop?.stripe?.balance.history(forFilter: filter).serializedResponse()
-//            
-//            if let balances = balance?.items {
-//                XCTAssertEqual(balances.count, 1)
-//            } else {
-//                XCTFail("Balances are not present")
-//            }
-//        }
-//        catch let error as StripeError {
-//            
-//            switch error {
-//            case .apiConnectionError:
-//                XCTFail(error.localizedDescription)
-//            case .apiError:
-//                XCTFail(error.localizedDescription)
-//            case .authenticationError:
-//                XCTFail(error.localizedDescription)
-//            case .cardError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidRequestError:
-//                XCTFail(error.localizedDescription)
-//            case .rateLimitError:
-//                XCTFail(error.localizedDescription)
-//            case .validationError:
-//                XCTFail(error.localizedDescription)
-//            case .invalidSourceType:
-//                XCTFail(error.localizedDescription)
-//            default:
-//                XCTFail(error.localizedDescription)
-//            }
-//        }
-//        catch {
-//            XCTFail(error.localizedDescription)
-//        }
-//    }
-//}
 
+import XCTest
+@testable import Stripe
+@testable import Vapor
+
+class BalanceTests: XCTestCase {
+    let balanceString = """
+{
+  "object": "balance",
+  "available": [
+    {
+      "currency": "usd",
+      "amount": 32147287853,
+      "source_types": {
+        "card": 32026441972,
+        "bank_account": 119300699
+      }
+    },
+   ],
+  "connect_reserved": [
+    {
+      "currency": "eur",
+      "amount": 0
+    },
+    {
+      "currency": "nzd",
+      "amount": 0
+    },
+    ],
+  "livemode": false,
+  "pending": [
+    {
+      "currency": "cad",
+      "amount": -21092,
+      "source_types": {
+        "card": -21092
+      }
+    },
+    {
+      "currency": "jpy",
+      "amount": 0,
+      "source_types": {
+      }
+    },
+    {
+      "currency": "aud",
+      "amount": -33,
+      "source_types": {
+      }
+    },
+    {
+      "currency": "gbp",
+      "amount": -81045,
+      "source_types": {
+      }
+    }
+  ]
+}
+"""
+    
+    func testBalanceParsedProperly() throws {
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            
+            let body = HTTPBody(string: balanceString)
+            let futureBalance = try decoder.decode(StripeBalance.self, from: body)
+            
+            futureBalance.do { (balance) in
+                XCTAssertEqual(balance.object, "balance")
+                XCTAssertEqual(balance.livemode, false)
+                
+                // BalanceTransfer
+                XCTAssertEqual(balance.available?[0].currency, .usd)
+                XCTAssertEqual(balance.available?[0].amount, 32147287853)
+                XCTAssertEqual(balance.available?[0].sourceTypes?["card"], 32026441972)
+                // TODO: - Seeif this camel case is resolved in future versions of swift 4.1 snapshot
+                XCTAssertEqual(balance.available?[0].sourceTypes?["bankAccount"], 119300699)
+                
+                XCTAssertEqual(balance.connectReserved?[0].currency, .eur)
+                XCTAssertEqual(balance.connectReserved?[0].amount, 0)
+                XCTAssertEqual(balance.connectReserved?[1].currency, .nzd)
+                XCTAssertEqual(balance.connectReserved?[1].amount, 0)
+                
+                XCTAssertEqual(balance.pending?[0].currency, .cad)
+                XCTAssertEqual(balance.pending?[0].amount, -21092)
+                XCTAssertEqual(balance.pending?[0].sourceTypes?["card"], -21092)
+                XCTAssertEqual(balance.pending?[1].currency, .jpy)
+                XCTAssertEqual(balance.pending?[1].amount, 0)
+                XCTAssertEqual(balance.pending?[2].currency, .aud)
+                XCTAssertEqual(balance.pending?[2].amount, -33)
+                XCTAssertEqual(balance.pending?[3].currency, .gbp)
+                XCTAssertEqual(balance.pending?[3].amount, -81045)
+                
+                }.catch { (error) in
+                    XCTFail("\(error.localizedDescription)")
+            }
+        }
+        catch {
+            XCTFail("\(error.localizedDescription)")
+        }
+    }
+    
+    let balanceTransactionString = """
+{
+  "id": "txn_19XJJ02eZvKYlo2ClwuJ1rbA",
+  "object": "balance_transaction",
+  "amount": 999,
+  "available_on": 1483920000,
+  "created": 1483315442,
+  "currency": "usd",
+  "description": null,
+  "exchange_rate": 12.5,
+  "fee": 59,
+  "fee_details": [
+    {
+      "amount": 59,
+      "application": null,
+      "currency": "usd",
+      "description": "Stripe processing fees",
+      "type": "stripe_fee"
+    }
+  ],
+  "net": 940,
+  "source": "ch_19XJJ02eZvKYlo2CHfSUsSpl",
+  "status": "pending",
+  "type": "charge"
+}
+"""
+    
+    func testBalanceTransactionParsedProperly() throws {
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            
+            let body = HTTPBody(string: balanceTransactionString)
+            let futureBalanceTransaction = try decoder.decode(StripeBalanceTransactionItem.self, from: body)
+            
+            futureBalanceTransaction.do { (balancetransaction) in
+                XCTAssertEqual(balancetransaction.id, "txn_19XJJ02eZvKYlo2ClwuJ1rbA")
+                XCTAssertEqual(balancetransaction.object, "balance_transaction")
+                XCTAssertEqual(balancetransaction.amount, 999)
+                XCTAssertEqual(balancetransaction.availableOn, Date(timeIntervalSince1970: 1483920000))
+                XCTAssertEqual(balancetransaction.created, Date(timeIntervalSince1970: 1483315442))
+                XCTAssertEqual(balancetransaction.currency, .usd)
+                XCTAssertEqual(balancetransaction.exchangeRate, 12.5)
+                XCTAssertEqual(balancetransaction.fee, 59)
+                XCTAssertEqual(balancetransaction.net, 940)
+                XCTAssertEqual(balancetransaction.source, "ch_19XJJ02eZvKYlo2CHfSUsSpl")
+                XCTAssertEqual(balancetransaction.status, .pending)
+                XCTAssertEqual(balancetransaction.type, .charge)
+                
+                // Fee
+                XCTAssertEqual(balancetransaction.feeDetails?[0].amount, 59)
+                XCTAssertEqual(balancetransaction.feeDetails?[0].currency, .usd)
+                XCTAssertEqual(balancetransaction.feeDetails?[0].description, "Stripe processing fees")
+                XCTAssertEqual(balancetransaction.feeDetails?[0].type, .stripeFee)
+                
+                
+                
+                }.catch { (error) in
+                    XCTFail("\(error.localizedDescription)")
+            }
+        }
+        catch {
+            XCTFail("\(error.localizedDescription)")
+        }
+    }
+}
