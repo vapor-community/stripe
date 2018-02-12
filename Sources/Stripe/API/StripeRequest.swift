@@ -16,7 +16,6 @@ public protocol StripeRequest: class {
 }
 
 public extension StripeRequest {
-
     public func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String = "", body: String = "", headers: HTTPHeaders = [:]) throws -> Future<SM> {
         return try send(method: method, path: path, query: query, body: body, headers: headers)
     }
