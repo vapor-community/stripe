@@ -96,6 +96,7 @@ class SourceTests: XCTestCase {
                 XCTAssertNil(source.bancontact)
                 XCTAssertNil(source.alipay)
                 XCTAssertNil(source.p24)
+                XCTAssertNil(source.achCreditTransfer)
 
                 // Cards have already been tested in the token tests.
                 XCTAssertNotNil(source.card)
@@ -204,6 +205,7 @@ class SourceTests: XCTestCase {
                 XCTAssertNil(source.bancontact)
                 XCTAssertNil(source.alipay)
                 XCTAssertNil(source.p24)
+                XCTAssertNil(source.achCreditTransfer)
                 
                 XCTAssertNotNil(source.threeDSecure)
                 XCTAssertEqual(source.threeDSecure?.card, "src_19YP2AAHEMiOZZp1Di4rt1K6")
@@ -267,6 +269,7 @@ class SourceTests: XCTestCase {
                 XCTAssertNil(source.bancontact)
                 XCTAssertNil(source.alipay)
                 XCTAssertNil(source.p24)
+                XCTAssertNil(source.achCreditTransfer)
                 
                 XCTAssertNotNil(source.sepaDebit)
                 XCTAssertEqual(source.sepaDebit?.bankCode, "37040044")
@@ -335,6 +338,7 @@ class SourceTests: XCTestCase {
                 XCTAssertNil(source.bancontact)
                 XCTAssertNil(source.sepaDebit)
                 XCTAssertNil(source.p24)
+                XCTAssertNil(source.achCreditTransfer)
                 
                 XCTAssertNotNil(source.alipay)
                 XCTAssertEqual(source.alipay?.statementDescriptor, "Veggies are healthy")
@@ -402,6 +406,7 @@ class SourceTests: XCTestCase {
                 XCTAssertNil(source.bancontact)
                 XCTAssertNil(source.sepaDebit)
                 XCTAssertNil(source.p24)
+                XCTAssertNil(source.achCreditTransfer)
                 
                 XCTAssertNotNil(source.giropay)
                 XCTAssertEqual(source.giropay?.bankCode, "76547382")
@@ -471,6 +476,7 @@ class SourceTests: XCTestCase {
                 XCTAssertNil(source.bancontact)
                 XCTAssertNil(source.sepaDebit)
                 XCTAssertNil(source.p24)
+                XCTAssertNil(source.achCreditTransfer)
                 
                 XCTAssertNotNil(source.ideal)
                 XCTAssertEqual(source.ideal?.bank, "Vapor Bank")
@@ -537,6 +543,7 @@ class SourceTests: XCTestCase {
                 XCTAssertNil(source.bancontact)
                 XCTAssertNil(source.sepaDebit)
                 XCTAssertNil(source.ideal)
+                XCTAssertNil(source.achCreditTransfer)
                 
                 XCTAssertNotNil(source.p24)
                 XCTAssertEqual(source.p24?.reference, "P24-000-111-222")
@@ -606,6 +613,7 @@ class SourceTests: XCTestCase {
                 XCTAssertNil(source.bancontact)
                 XCTAssertNil(source.sepaDebit)
                 XCTAssertNil(source.ideal)
+                XCTAssertNil(source.achCreditTransfer)
                 
                 XCTAssertNotNil(source.sofort)
                 XCTAssertEqual(source.sofort?.country, "DE")
@@ -679,6 +687,7 @@ class SourceTests: XCTestCase {
                 XCTAssertNil(source.sofort)
                 XCTAssertNil(source.sepaDebit)
                 XCTAssertNil(source.ideal)
+                XCTAssertNil(source.achCreditTransfer)
                 
                 XCTAssertNotNil(source.bancontact)
                 XCTAssertEqual(source.bancontact?.bankCode, "33333")
@@ -688,11 +697,85 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.bancontact?.preferredLanguage, "English")
                 
                 }.catch { (error) in
-                    XCTFail("\(error)")
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail("\(error)")
+            XCTFail("\(error.localizedDescription)")
+        }
+    }
+    
+    let achSourceString = """
+{
+  "id": "src_16xhynE8WzK49JbAs9M21jaR",
+  "object": "source",
+  "amount": 1099,
+  "client_secret": "src_client_secret_UfwvW2WHpZ0s3QEn9g5x7waU",
+  "created": 1445277809,
+  "currency": "eur",
+  "statement_descriptor": null,
+  "flow": "code_verification",
+  "livemode": true,
+  "owner": {
+    "address": null,
+    "email": null,
+    "name": "Jenny Rosen",
+    "phone": null,
+    "verified_address": null,
+    "verified_email": null,
+    "verified_name": "Jenny Rosen",
+    "verified_phone": null
+  },
+  "code_verification": {
+    "attempts_remaining": 30,
+    "status": "pending",
+  },
+  "status": "pending",
+  "type": "ach_credit_transfer",
+  "usage": "single_use",
+  "ach_credit_transfer": {
+    "account_number": "test_52796e3294dc",
+    "routing_number": "110000000",
+    "fingerprint": "nfd2882gh38h",
+    "bank_name": "TEST BANK",
+    "swift_code": "TSTEZ122"
+  }
+}
+"""
+    
+    func testACHSourceParsedProperly() throws {
+        do {
+            let body = HTTPBody(string: achSourceString)
+            let source = try decoder.decode(StripeSource.self, from: body)
+            
+            source.do { (source) in
+                XCTAssertNil(source.card)
+                XCTAssertNil(source.alipay)
+                XCTAssertNil(source.threeDSecure)
+                XCTAssertNil(source.giropay)
+                XCTAssertNil(source.p24)
+                XCTAssertNil(source.sofort)
+                XCTAssertNil(source.sepaDebit)
+                XCTAssertNil(source.ideal)
+                XCTAssertNil(source.bancontact)
+                
+                XCTAssertNotNil(source.achCreditTransfer)
+                XCTAssertEqual(source.achCreditTransfer?.accountNumber, "test_52796e3294dc")
+                XCTAssertEqual(source.achCreditTransfer?.routingNumber, "110000000")
+                XCTAssertEqual(source.achCreditTransfer?.fingerprint, "nfd2882gh38h")
+                XCTAssertEqual(source.achCreditTransfer?.bankName, "TEST BANK")
+                XCTAssertEqual(source.achCreditTransfer?.swiftCode, "TSTEZ122")
+                
+                // CodeVerification
+                XCTAssertEqual(source.codeVerification?.attemptsRemaining, 30)
+                XCTAssertEqual(source.codeVerification?.status, .pending)
+                
+                }.catch { (error) in
+                    XCTFail("\(error.localizedDescription)")
+            }
+        }
+        catch {
+            XCTFail("\(error.localizedDescription)")
         }
     }
 }
