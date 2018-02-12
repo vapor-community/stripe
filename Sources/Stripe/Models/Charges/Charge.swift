@@ -26,7 +26,7 @@ public protocol Charge {
     var application: String? { get }
     var applicationFee: String? { get }
     var balanceTransaction: String? { get }
-    var isCaptured: Bool? { get }
+    var captured: Bool? { get }
     var created: Date? { get }
     var currency: StripeCurrency? { get }
     var customer: String? { get }
@@ -36,7 +36,7 @@ public protocol Charge {
     var failureCode: String? { get }
     var failureMessage: String? { get }
     var fraudDetails: F? { get }
-    var invoiceId: String? { get }
+    var invoice: String? { get }
     var livemode: Bool? { get }
     var metadata: [String: String]? { get }
     var onBehalfOf: String? { get }
@@ -65,7 +65,7 @@ public struct StripeCharge: Charge, StripeModel {
     public var application: String?
     public var applicationFee: String?
     public var balanceTransaction: String?
-    public var isCaptured: Bool?
+    public var captured: Bool?
     public var created: Date?
     public var currency: StripeCurrency?
     public var customer: String?
@@ -75,7 +75,7 @@ public struct StripeCharge: Charge, StripeModel {
     public var failureCode: String?
     public var failureMessage: String?
     public var fraudDetails: StripeFraudDetails?
-    public var invoiceId: String?
+    public var invoice: String?
     public var livemode: Bool?
     public var metadata: [String: String]?
     public var onBehalfOf: String?
