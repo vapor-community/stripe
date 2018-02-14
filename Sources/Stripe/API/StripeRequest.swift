@@ -11,7 +11,7 @@ import Vapor
 import HTTP
 
 public protocol StripeRequest: class {
-    func serializedResponse<SM: StripeModel>(response: HTTPResponse) throws -> SM
+    func serializedResponse<SM: StripeModel>(response: HTTPResponse) throws -> Future<SM>
     func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: String, headers: HTTPHeaders) throws -> Future<SM>
 }
 
@@ -20,7 +20,7 @@ public extension StripeRequest {
         return try send(method: method, path: path, query: query, body: body, headers: headers)
     }
     
-    public func serializedResponse<SM: StripeModel>(response: HTTPResponse) throws -> SM {
+    public func serializedResponse<SM: StripeModel>(response: HTTPResponse) throws -> Future<SM> {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
         decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -31,7 +31,7 @@ public extension StripeRequest {
             throw StripeError.apiError(error)
         }
         
-        return try decoder.decode(SM.self, from: response.body).requireCompleted()
+        return try decoder.decode(SM.self, from: response.body)
     }
 }
 
@@ -56,7 +56,7 @@ public class StripeAPIRequest: StripeRequest {
         
         let request = HTTPRequest(method: method, uri: URI(stringLiteral: path + "?" + query), headers: StripeDefaultHeaders, body: encodedHTTPBody)
         
-        return try httpClient.respond(to: Request(http: request, using: httpClient.container)).map(to: SM.self) { (response) -> SM in
+        return try httpClient.respond(to: Request(http: request, using: httpClient.container)).flatMap(to: SM.self) { (response) -> Future<SM> in
             return try self.serializedResponse(response: response.http)
         }
     }
