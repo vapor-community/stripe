@@ -16,13 +16,7 @@ public protocol StripeModel: Content {
 
 extension StripeModel {
     public func toEncodedBody() throws -> String {
-        let encoded = try JSONEncoder().encode(self)
-        
-        let jsonString = String(data: encoded, encoding: .utf8) ?? ""
-        
-        let final = try JSONDecoder().decode(AnyDecodable.self, from: jsonString.data(using: .utf8) ??  Data()).value as? [String: Any] ?? [:]
-        
-        return final.queryParameters
+        return try self.toEncodedDictionary().queryParameters
     }
     
     public func toEncodedDictionary() throws -> [String: Any] {
