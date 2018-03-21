@@ -25,10 +25,10 @@ public extension StripeRequest {
         decoder.dateDecodingStrategy = .secondsSince1970
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         
-        guard response.status == .ok  else
-        {
-            let error = try decoder.decode(StripeAPIError.self, from: response.body).requireCompleted()
-            throw StripeError.apiError(error)
+        guard response.status == .ok else {
+            return try decoder.decode(StripeAPIError.self, from: response.body).map(to: SM.self) { error in
+                throw StripeError.apiError(error)
+            }
         }
         
         return try decoder.decode(SM.self, from: response.body)
