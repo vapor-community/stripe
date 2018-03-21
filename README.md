@@ -47,25 +47,53 @@ futureCharge.do({ (charge) in
 
 And you can always check the documentation to see the required paramaters for specific API calls.
 
+## Linux compatibility
+Currently the project won't compile for linux.
+You can track this issue [here](https://bugs.swift.org/browse/SR-7180)
+
 ## Whats Implemented
-* [x] Balance Fetching
+
+### Core Resources
+* [x] Balance
 * [x] Charges
 * [x] Customers
-* [x] Coupons
-* [x] Plans
+* [x] Disputes  
+* [ ] Events
+* [ ] File Uploads
+* [ ] Payouts
 * [x] Refunds
 * [x] Tokens
+---
+### Payment Methods
+* [x] Bank Accounts
+* [x] Cards
 * [x] Sources
+---
+### Subscriptions
+* [x] Coupons
+* [x] Discounts
+* [x] Invoices
+* [x] Invoice Items
+* [x] Plans
 * [x] Subscriptions
-* [x] Connect account
+* [x] Subscription items
+---
+### Connect
+* [x] Account
+* [ ] Application Fee Refunds
+* [ ] Application Fees
+* [ ] Country Specs
+* [x] External Accounts
+* [ ] Transfers
+* [ ] Transfer Reversals
+---
+### Relay
 * [x] Orders
 * [x] Order Items
 * [x] Products
-* [x] Disputes  
-* [x] Invoices
-* [x] Invoice Items
+* [x] Returns
+* [x] SKUs
 * [x] Ephemeral Keys
-* [] Events API
 
 [stripe_home]: http://stripe.com "Stripe"
 [stripe_api]: https://stripe.com/docs/api "Stripe API Endpoints"
