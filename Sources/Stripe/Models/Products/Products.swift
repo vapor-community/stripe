@@ -32,6 +32,8 @@ public protocol Product {
     var packageDimensions: PD? { get }
     var shippable: Bool? { get }
     var skus: L? { get }
+    var statementDescriptor: String? { get }
+    var type: String? { get }
     var updated: Date? { get }
     var url: String? { get }
 }
@@ -52,6 +54,8 @@ public struct StripeProduct: Product, StripeModel {
     public var packageDimensions: StripePackageDimensions?
     public var shippable: Bool?
     public var skus: SKUList?
+    public var statementDescriptor: String?
+    public var type: String?
     public var updated: Date?
     public var url: String?
 }
