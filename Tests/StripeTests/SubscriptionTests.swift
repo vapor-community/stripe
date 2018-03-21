@@ -75,8 +75,8 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.items?.data?[0].plan?.intervalCount, 1)
                 XCTAssertEqual(sub.items?.data?[0].plan?.livemode, false)
                 XCTAssertEqual(sub.items?.data?[0].plan?.metadata?["hello"], "world")
-                XCTAssertEqual(sub.items?.data?[0].plan?.name, "Foo")
-                XCTAssertEqual(sub.items?.data?[0].plan?.statementDescriptor, "FOO")
+                XCTAssertEqual(sub.items?.data?[0].plan?.nickname, "Foo")
+                XCTAssertEqual(sub.items?.data?[0].plan?.product, "prod_1234")
                 XCTAssertEqual(sub.items?.data?[0].plan?.trialPeriodDays, 3)
                 
                 // These cover the Plan object
@@ -90,8 +90,8 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.plan?.intervalCount, 1)
                 XCTAssertEqual(sub.plan?.livemode, false)
                 XCTAssertEqual(sub.plan?.metadata?["hello"], "world")
-                XCTAssertEqual(sub.plan?.name, "Foo")
-                XCTAssertEqual(sub.plan?.statementDescriptor, "PLAN FOO")
+                XCTAssertEqual(sub.plan?.nickname, "Foo")
+                XCTAssertEqual(sub.plan?.product, "prod_1234")
                 XCTAssertEqual(sub.plan?.trialPeriodDays, 14)
                 
                 XCTAssertEqual(sub.id, "sub_AJ6s2Iy65K3RxN")
@@ -186,8 +186,8 @@ class SubscriptionTests: XCTestCase {
           "metadata": {
             "hello": "world"
           },
-          "name": "Foo",
-          "statement_descriptor": "FOO",
+          "nickname": "Foo",
+          "product": "prod_1234",
           "trial_period_days": 3
         },
         "quantity": 1,
@@ -214,8 +214,8 @@ class SubscriptionTests: XCTestCase {
     "metadata": {
         "hello": "world"
     },
-    "name": "Foo",
-    "statement_descriptor": "PLAN FOO",
+    "nickname": "Foo",
+    "product": "prod_1234",
     "trial_period_days": 14
   },
   "quantity": 1,
