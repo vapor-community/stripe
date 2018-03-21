@@ -73,6 +73,7 @@ class ProductTests: XCTestCase {
         "url": "/v1/skus?product=prod_BosWT9EsdzgjPn&active=true"
         },
     "updated": 1511422435,
+    "type": "good",
     "url": "https://api.stripe.com/"
     }
 """
@@ -106,6 +107,7 @@ class ProductTests: XCTestCase {
                 XCTAssertEqual(product.shippable, false)
                 XCTAssertEqual(product.updated, Date(timeIntervalSince1970: 1511422435))
                 XCTAssertEqual(product.url, "https://api.stripe.com/")
+                XCTAssertEqual(product.type, "good")
                 XCTAssertEqual(product.skus?.object, "list")
                 XCTAssertEqual(product.skus?.hasMore, false)
                 XCTAssertEqual(product.skus?.totalCount, 1)
