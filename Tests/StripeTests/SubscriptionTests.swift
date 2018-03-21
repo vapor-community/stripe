@@ -98,6 +98,7 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.object, "subscription")
                 XCTAssertEqual(sub.applicationFeePercent, 12.7)
                 XCTAssertEqual(sub.billing, "charge_automatically")
+                XCTAssertEqual(sub.billingCycleAnchor, Date(timeIntervalSince1970: 1490398710))
                 XCTAssertEqual(sub.cancelAtPeriodEnd, false)
                 XCTAssertEqual(sub.canceledAt, Date(timeIntervalSince1970: 1489793914))
                 XCTAssertEqual(sub.created, Date(timeIntervalSince1970: 1489793910))
@@ -129,6 +130,7 @@ class SubscriptionTests: XCTestCase {
   "object": "subscription",
   "application_fee_percent": 12.7,
   "billing": "charge_automatically",
+  "billing_cycle_anchor": 1490398710,
   "cancel_at_period_end": false,
   "canceled_at": 1489793914,
   "created": 1489793910,

@@ -22,6 +22,7 @@ public protocol Subscription {
     var object: String? { get }
     var applicationFeePercent: Decimal? { get }
     var billing: String? { get }
+    var billingCycleAnchor: Date? { get }
     var cancelAtPeriodEnd: Bool? { get }
     var canceledAt: Date? { get }
     var created: Date? { get }
@@ -48,6 +49,7 @@ public struct StripeSubscription: Subscription, StripeModel {
     public var object: String?
     public var applicationFeePercent: Decimal?
     public var billing: String?
+    public var billingCycleAnchor: Date?
     public var cancelAtPeriodEnd: Bool?
     public var canceledAt: Date?
     public var created: Date?

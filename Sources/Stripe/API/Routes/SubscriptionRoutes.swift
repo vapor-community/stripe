@@ -8,15 +8,15 @@
 
 import Vapor
 import Foundation
-
+// TODO: Support sources being different objects
 public protocol SubscriptionRoutes {
     associatedtype SB: Subscription
     associatedtype L: List
     associatedtype DO: DeletedObject
     
-    func create(customer: String, applicationFeePercent: Decimal?, billing: String?, coupon: String?, daysUntilDue: Int?, items: [String: Any]?, metadata: [String: String]?, source: Any?, taxPercent: Decimal?, trialEnd: Date?, trialPeriodDays: Int?) throws -> Future<SB>
+    func create(customer: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: Date?, coupon: String?, daysUntilDue: Int?, items: [String: Any]?, metadata: [String: String]?, source: Any?, taxPercent: Decimal?, trialEnd: Any?, trialPeriodDays: Int?) throws -> Future<SB>
     func retrieve(id: String) throws -> Future<SB>
-    func update(subscription: String, applicationFeePercent: Decimal?, billing: String?, coupon: String?, daysUntilDue: Int?, items: [String: Any]?, metadata: [String: String]?, prorate: Bool?, prorationDate: Date?, source: Any?, taxPercent: Decimal?, trialEnd: Date?) throws -> Future<SB>
+    func update(subscription: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: String?, coupon: String?, daysUntilDue: Int?, items: [String: Any]?, metadata: [String: String]?, prorate: Bool?, prorationDate: Date?, source: Any?, taxPercent: Decimal?, trialEnd: Any?) throws -> Future<SB>
     func cancel(subscription: String, atPeriodEnd: Bool?) throws -> Future<SB>
     func listAll(filter: [String: Any]?) throws -> Future<L>
     func deleteDiscount(subscription: String) throws -> Future<DO>
@@ -34,13 +34,14 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
     public func create(customer: String,
                        applicationFeePercent: Decimal? = nil,
                        billing: String? = nil,
+                       billingCycleAnchor: Date? = nil,
                        coupon: String? = nil,
                        daysUntilDue: Int? = nil,
                        items: [String : Any]? = nil,
                        metadata: [String : String]? = nil,
                        source: Any? = nil,
                        taxPercent: Decimal? = nil,
-                       trialEnd: Date? = nil,
+                       trialEnd: Any? = nil,
                        trialPeriodDays: Int? = nil) throws -> Future<StripeSubscription> {
         var body: [String: Any] = [:]
         
@@ -52,6 +53,10 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
         
         if let billing = billing {
             body["billing"] = billing
+        }
+        
+        if let billingCycleAnchor = billingCycleAnchor {
+            body["billing_cycle_anchor"] = Int(billingCycleAnchor.timeIntervalSince1970)
         }
         
         if let coupon = coupon {
@@ -82,8 +87,12 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
             body["tax_percent"] = taxPercent
         }
         
-        if let trialEnd = trialEnd {
+        if let trialEnd = trialEnd as? Date {
             body["trial_end"] = Int(trialEnd.timeIntervalSince1970)
+        }
+        
+        if let trialEnd = trialEnd as? String {
+            body["trial_end"] = trialEnd
         }
         
         if let trialPeriodDays = trialPeriodDays {
@@ -104,6 +113,7 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
     public func update(subscription: String,
                        applicationFeePercent: Decimal? = nil,
                        billing: String? = nil,
+                       billingCycleAnchor: String? = nil,
                        coupon: String? = nil,
                        daysUntilDue: Int? = nil,
                        items: [String : Any]? = nil,
@@ -112,7 +122,7 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
                        prorationDate: Date? = nil,
                        source: Any? = nil,
                        taxPercent: Decimal? = nil,
-                       trialEnd: Date? = nil) throws -> Future<StripeSubscription> {
+                       trialEnd: Any? = nil) throws -> Future<StripeSubscription> {
         var body: [String: Any] = [:]
         
         if let applicationFeePercent = applicationFeePercent {
@@ -121,6 +131,10 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
         
         if let billing = billing {
             body["billing"] = billing
+        }
+        
+        if let billingCycleAnchor = billingCycleAnchor {
+            body["billing_cycle_anchor"] = billingCycleAnchor
         }
         
         if let coupon = coupon {
@@ -159,10 +173,14 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
             body["tax_percent"] = taxPercent
         }
         
-        if let trialEnd = trialEnd {
+        if let trialEnd = trialEnd as? Date {
             body["trial_end"] = Int(trialEnd.timeIntervalSince1970)
         }
         
+        if let trialEnd = trialEnd as? String {
+            body["trial_end"] = trialEnd
+        }
+
         return try request.send(method: .post, path: StripeAPIEndpoint.subscriptions(subscription).endpoint, body: body.queryParameters)
     }
     
