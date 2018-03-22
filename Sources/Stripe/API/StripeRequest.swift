@@ -11,7 +11,7 @@ import Vapor
 import HTTP
 
 public protocol StripeRequest: class {
-    func serializedResponse<SM: StripeModel>(response: HTTPResponse) throws -> Future<SM>
+    func serializedResponse<SM: StripeModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<SM>
     func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: String, headers: HTTPHeaders) throws -> Future<SM>
 }
 
@@ -20,13 +20,13 @@ public extension StripeRequest {
         return try send(method: method, path: path, query: query, body: body, headers: headers)
     }
     
-    public func serializedResponse<SM: StripeModel>(response: HTTPResponse) throws -> Future<SM> {
+    public func serializedResponse<SM: StripeModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<SM> {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         
         guard response.status == .ok else {
-            return try decoder.decode(StripeAPIError.self, from: response.body).map(to: SM.self) { error in
+            return try decoder.decode(StripeAPIError.self, from: response.body, on: worker).map(to: SM.self) { error in
                 throw StripeError.apiError(error)
             }
         }
