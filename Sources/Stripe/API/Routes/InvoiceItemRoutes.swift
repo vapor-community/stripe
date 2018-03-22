@@ -63,13 +63,13 @@ public struct StripeInvoiceItemRoutes: InvoiceItemRoutes {
             body["subscription"] = subscription
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.invoiceItems.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.invoiceItems.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve an invoice item
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_invoiceitem)
     public func retrieve(invoiceItem: String) throws -> Future<StripeInvoiceItem> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.invoiceItem(invoiceItem).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.invoiceItem(invoiceItem).endpoint)
     }
     
     /// Update an invoice item
@@ -97,13 +97,13 @@ public struct StripeInvoiceItemRoutes: InvoiceItemRoutes {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.invoiceItem(invoiceItem).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.invoiceItem(invoiceItem).endpoint, body: body.queryParameters)
     }
     
     /// Delete an invoice item
     /// [Learn More →](https://stripe.com/docs/api/curl#delete_invoiceitem)
     public func delete(invoiceItem: String) throws -> Future<StripeDeletedObject> {
-        return try request.send(method: .delete, path: StripeAPIEndpoint.invoiceItem(invoiceItem).endpoint)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.invoiceItem(invoiceItem).endpoint)
     }
     
     /// List all invoice items
@@ -114,6 +114,6 @@ public struct StripeInvoiceItemRoutes: InvoiceItemRoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.invoiceItems.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.invoiceItems.endpoint, query: queryParams)
     }
 }

@@ -83,7 +83,7 @@ public struct StripeSourceRoutes: SourceRoutes {
             body["usage"] = usage
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.sources.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.sources.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve a source
@@ -94,7 +94,7 @@ public struct StripeSourceRoutes: SourceRoutes {
             query = "client_secret=\(clientSecret)" 
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.source(source).endpoint, query: query)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.source(source).endpoint, query: query)
     }
     
     /// Update a source
@@ -117,6 +117,6 @@ public struct StripeSourceRoutes: SourceRoutes {
             try owner.toEncodedDictionary().forEach { body["owner[\($0)]"] = $1 }
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.source(source).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.source(source).endpoint, body: body.queryParameters)
     }
 }

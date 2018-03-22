@@ -89,13 +89,13 @@ public struct StripeCustomerRoutes: CustomerRoutes {
             cardDictionarySource.forEach { body["source[\($0)]"] = $1 }
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.customers.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.customers.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve customer
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_customer)
     public func retrieve(customer: String) throws -> Future<StripeCustomer> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.customer(customer).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.customer(customer).endpoint)
     }
     
     /// Update customer
@@ -152,13 +152,13 @@ public struct StripeCustomerRoutes: CustomerRoutes {
             cardDictionarySource.forEach { body["source[\($0)]"] = $1 }
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.customer(customer).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.customer(customer).endpoint, body: body.queryParameters)
     }
     
     /// Delete a customer
     /// [Learn More →](https://stripe.com/docs/api/curl#delete_customer)
     public func delete(customer: String) throws -> Future<StripeDeletedObject> {
-        return try request.send(method: .delete, path: StripeAPIEndpoint.customer(customer).endpoint)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.customer(customer).endpoint)
     }
     
     /// List all customers
@@ -169,7 +169,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
             queryParams = filter.queryParameters
         }
 
-        return try request.send(method: .get, path: StripeAPIEndpoint.customers.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.customers.endpoint, query: queryParams)
     }
     
     /// Attach a source
@@ -182,7 +182,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
             headers["Stripe-Account"] = connectedAccount
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.customerSources(customer).endpoint, body: body.queryParameters, headers: headers)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.customerSources(customer).endpoint, body: body.queryParameters, headers: headers)
     }
     
     /// Create a bank account
@@ -207,7 +207,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.customerSources(customer).endpoint, body: body.queryParameters, headers: headers)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.customerSources(customer).endpoint, body: body.queryParameters, headers: headers)
     }
     
     /// Create a card
@@ -232,18 +232,18 @@ public struct StripeCustomerRoutes: CustomerRoutes {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.customerSources(customer).endpoint, body: body.queryParameters, headers: headers)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.customerSources(customer).endpoint, body: body.queryParameters, headers: headers)
     }
 
     /// Detach a source
     /// [Learn More →](https://stripe.com/docs/api/curl#detach_source)
     public func deleteSource(customer: String, source: String) throws -> Future<StripeSource> {
-        return try request.send(method: .delete, path: StripeAPIEndpoint.customerDetachSources(customer, source).endpoint)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.customerDetachSources(customer, source).endpoint)
     }
     
     /// Delete a customer discount
     /// [Learn More →](https://stripe.com/docs/api/curl#delete_discount)
     public func deleteDiscount(customer: String) throws -> Future<StripeDeletedObject> {
-        return try request.send(method: .delete, path: StripeAPIEndpoint.customerDiscount(customer).endpoint)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.customerDiscount(customer).endpoint)
     }
 }

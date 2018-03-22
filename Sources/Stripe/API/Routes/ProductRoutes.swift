@@ -104,13 +104,13 @@ public struct StripeProductRoutes: ProductRoutes {
             body["url"] = url
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.product.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.product.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve a product
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_product)
     public func retrieve(id: String) throws -> Future<StripeProduct> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.products(id).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.products(id).endpoint)
     }
     
     /// Update a product
@@ -184,7 +184,7 @@ public struct StripeProductRoutes: ProductRoutes {
             body["url"] = url
         }
 
-        return try request.send(method: .post, path: StripeAPIEndpoint.products(product).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.products(product).endpoint, body: body.queryParameters)
     }
     
     /// List all products
@@ -195,12 +195,12 @@ public struct StripeProductRoutes: ProductRoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.product.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.product.endpoint, query: queryParams)
     }
     
     /// Delete a product
     /// [Learn More →](https://stripe.com/docs/api/curl#delete_product)
     public func delete(id: String) throws -> Future<StripeDeletedObject> {
-        return try request.send(method: .delete, path: StripeAPIEndpoint.products(id).endpoint)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.products(id).endpoint)
     }
 }

@@ -103,13 +103,13 @@ public struct StripeChargeRoutes: ChargeRoutes {
             body["statement_descriptor"] = statementDescriptor
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.charges.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.charges.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve a charge
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_charge)
     public func retrieve(charge: String) throws -> Future<StripeCharge> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.charge(charge).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.charge(charge).endpoint)
     }
 
     /// Update a charge
@@ -160,7 +160,7 @@ public struct StripeChargeRoutes: ChargeRoutes {
             body["transfer_group"] = transferGroup
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.charge(chargeId).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.charge(chargeId).endpoint, body: body.queryParameters)
     }
     
     /// Capture a charge
@@ -193,7 +193,7 @@ public struct StripeChargeRoutes: ChargeRoutes {
             body["statement_descriptor"] = statementDescriptor
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.captureCharge(charge).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.captureCharge(charge).endpoint, body: body.queryParameters)
     }
     
     /// List all charges
@@ -204,6 +204,6 @@ public struct StripeChargeRoutes: ChargeRoutes {
             queryParams = filter.queryParameters
         }
 
-        return try request.send(method: .get, path: StripeAPIEndpoint.account.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.account.endpoint, query: queryParams)
     }
 }

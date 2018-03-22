@@ -29,7 +29,7 @@ public struct StripeDisputeRoutes: DisputeRoutes {
     /// Retrieve a dispute
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_dispute)
     public func retrieve(dispute: String) throws -> Future<StripeDispute> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.disputes(dispute).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.disputes(dispute).endpoint)
     }
     
     /// Update a dispute
@@ -49,13 +49,13 @@ public struct StripeDisputeRoutes: DisputeRoutes {
             body["submit"] = submit
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.disputes(dispute).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.disputes(dispute).endpoint, body: body.queryParameters)
     }
     
     /// Close a dispute
     /// [Learn More →](https://stripe.com/docs/api/curl#close_dispute)
     public func close(dispute: String) throws -> Future<StripeDispute> {
-        return try request.send(method: .post, path: StripeAPIEndpoint.closeDispute(dispute).endpoint)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.closeDispute(dispute).endpoint)
     }
     
     /// List all disputes
@@ -66,6 +66,6 @@ public struct StripeDisputeRoutes: DisputeRoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.dispute.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.dispute.endpoint, query: queryParams)
     }
 }

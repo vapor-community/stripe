@@ -72,13 +72,13 @@ public struct StripeSKURoutes: SKURoutes {
             try packageDimensions.toEncodedDictionary().forEach { body["package_dimensions[\($0)]"] = $1 }
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.sku.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.sku.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve a SKU
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_sku)
     public func retrieve(id: String) throws -> Future<StripeSKU> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.skus(id).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.skus(id).endpoint)
     }
     
     /// Update a SKU
@@ -131,7 +131,7 @@ public struct StripeSKURoutes: SKURoutes {
             body["product"] = product
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.skus(sku).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.skus(sku).endpoint, body: body.queryParameters)
     }
     
     /// List all SKUs
@@ -142,12 +142,12 @@ public struct StripeSKURoutes: SKURoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.sku.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.sku.endpoint, query: queryParams)
     }
     
     /// Delete a SKU
     /// [Learn More →](https://stripe.com/docs/api/curl#delete_sku)
     public func delete(sku: String) throws -> Future<StripeDeletedObject> {
-        return try request.send(method: .delete, path: StripeAPIEndpoint.skus(sku).endpoint)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.skus(sku).endpoint)
     }
 }

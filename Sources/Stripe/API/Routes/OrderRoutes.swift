@@ -65,13 +65,13 @@ public struct StripeOrderRoutes: OrderRoutes {
             try shipping.toEncodedDictionary().forEach { body["shipping[\($0)]"] = $1 }
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.order.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.order.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve a new order
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_order)
     public func retrieve(order: String) throws -> Future<StripeOrder> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.orders(order).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.orders(order).endpoint)
     }
     
     /// Update an order
@@ -104,7 +104,7 @@ public struct StripeOrderRoutes: OrderRoutes {
             body["status"] = status
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.orders(order).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.orders(order).endpoint, body: body.queryParameters)
     }
     
     /// Pay an order
@@ -147,7 +147,7 @@ public struct StripeOrderRoutes: OrderRoutes {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
 
-        return try request.send(method: .post, path: StripeAPIEndpoint.ordersPay(order).endpoint, body: body.queryParameters, headers: headers)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.ordersPay(order).endpoint, body: body.queryParameters, headers: headers)
     }
     
     /// List all orders
@@ -158,7 +158,7 @@ public struct StripeOrderRoutes: OrderRoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.order.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.order.endpoint, query: queryParams)
     }
 
     /// Return an order
@@ -172,6 +172,6 @@ public struct StripeOrderRoutes: OrderRoutes {
             }
         }
 
-        return try request.send(method: .post, path: StripeAPIEndpoint.ordersReturn(order).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.ordersReturn(order).endpoint, body: body.queryParameters)
     }
 }

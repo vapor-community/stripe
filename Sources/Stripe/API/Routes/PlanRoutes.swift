@@ -63,13 +63,13 @@ public struct StripePlanRoutes: PlanRoutes {
             body["nickname"] = nickname
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.plans.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.plans.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve a plan
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_plan)
     public func retrieve(plan: String) throws -> Future<StripePlan> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.plan(plan).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.plan(plan).endpoint)
     }
     
     /// Update a plan
@@ -92,13 +92,13 @@ public struct StripePlanRoutes: PlanRoutes {
             body["product"] = product
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.plan(plan).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.plan(plan).endpoint, body: body.queryParameters)
     }
     
     /// Delete a plan
     /// [Learn More →](https://stripe.com/docs/api/curl#delete_plan)
     public func delete(plan: String) throws -> Future<StripeDeletedObject> {
-        return try request.send(method: .delete, path: StripeAPIEndpoint.plan(plan).endpoint)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.plan(plan).endpoint)
     }
     
     /// List all plans
@@ -109,6 +109,6 @@ public struct StripePlanRoutes: PlanRoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.plans.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.plans.endpoint, query: queryParams)
     }
 }

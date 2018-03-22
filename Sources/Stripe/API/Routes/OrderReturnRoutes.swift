@@ -26,7 +26,7 @@ public struct StripeOrderReturnRoutes: OrderReturnRoutes {
     /// Retrieve an order return
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_order_return)
     public func retrieve(order: String) throws -> Future<StripeOrderReturn> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.orderReturns(order).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.orderReturns(order).endpoint)
     }
     
     /// List all order returns
@@ -37,6 +37,6 @@ public struct StripeOrderReturnRoutes: OrderReturnRoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.orderReturn.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.orderReturn.endpoint, query: queryParams)
     }
 }

@@ -99,13 +99,13 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
             body["trial_period_days"] = trialPeriodDays
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.subscription.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.subscription.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve a subscription
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_subscription)
     public func retrieve(id: String) throws -> Future<StripeSubscription> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.subscriptions(id).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.subscriptions(id).endpoint)
     }
     
     /// Update a subscription
@@ -181,7 +181,7 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
             body["trial_end"] = trialEnd
         }
 
-        return try request.send(method: .post, path: StripeAPIEndpoint.subscriptions(subscription).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.subscriptions(subscription).endpoint, body: body.queryParameters)
     }
     
     /// Cancel a subscription
@@ -193,7 +193,7 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
             body["at_period_end"] = atPeriodEnd
         }
         
-        return try request.send(method: .delete, path: StripeAPIEndpoint.subscriptions(subscription).endpoint, body: body.queryParameters)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.subscriptions(subscription).endpoint, body: body.queryParameters)
     }
     
     /// List subscriptions
@@ -204,12 +204,12 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.subscription.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.subscription.endpoint, query: queryParams)
     }
     
     /// Delete a subscription discount
     /// [Learn More →](https://stripe.com/docs/api/curl#delete_subscription_discount)
     public func deleteDiscount(subscription: String) throws -> Future<StripeDeletedObject> {
-        return try request.send(method: .delete, path: StripeAPIEndpoint.subscriptionDiscount(subscription).endpoint)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.subscriptionDiscount(subscription).endpoint)
     }
 }

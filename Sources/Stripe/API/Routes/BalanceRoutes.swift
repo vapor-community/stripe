@@ -28,13 +28,13 @@ public struct StripeBalanceRoutes: BalanceRoutes {
     /// Retrieve balance
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_balance)
     public func retrieve() throws -> Future<StripeBalance> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.balance.endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.balance.endpoint)
     }
     
     /// Retrieve a balance transaction
     /// [Learn More →](https://stripe.com/docs/api/curl#balance_transaction_retrieve)
     public func retrieve(forTransaction transactionId: String) throws -> Future<StripeBalanceTransactionItem> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.balanceHistoryTransaction(transactionId).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.balanceHistoryTransaction(transactionId).endpoint)
     }
     
     /// List all balance history
@@ -44,6 +44,6 @@ public struct StripeBalanceRoutes: BalanceRoutes {
         if let filter = filter {
             queryParams = filter.queryParameters
         }
-        return try request.send(method: .get, path: StripeAPIEndpoint.account.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.account.endpoint, query: queryParams)
     }
 }
