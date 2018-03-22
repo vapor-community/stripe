@@ -72,7 +72,7 @@ class BalanceTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: balanceString)
-            let futureBalance = try decoder.decode(StripeBalance.self, from: body)
+            let futureBalance = try decoder.decode(StripeBalance.self, from: body, on: EmbeddedEventLoop())
             
             futureBalance.do { (balance) in
                 XCTAssertEqual(balance.object, "balance")
@@ -143,7 +143,7 @@ class BalanceTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: balanceTransactionString)
-            let futureBalanceTransaction = try decoder.decode(StripeBalanceTransactionItem.self, from: body)
+            let futureBalanceTransaction = try decoder.decode(StripeBalanceTransactionItem.self, from: body, on: EmbeddedEventLoop())
             
             futureBalanceTransaction.do { (balancetransaction) in
                 XCTAssertEqual(balancetransaction.id, "txn_19XJJ02eZvKYlo2ClwuJ1rbA")

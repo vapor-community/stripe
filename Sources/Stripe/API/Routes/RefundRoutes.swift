@@ -57,13 +57,13 @@ public struct StripeRefundRoutes: RefundRoutes {
             body["reverse_transfer"] = reverseTransfer
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.refunds.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.refunds.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve a refund
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_refund)
     public func retrieve(refund: String) throws -> Future<StripeRefund> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.refund(refund).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.refund(refund).endpoint)
     }
     
     /// Update a refund
@@ -75,7 +75,7 @@ public struct StripeRefundRoutes: RefundRoutes {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.refund(refund).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.refund(refund).endpoint, body: body.queryParameters)
     }
     
     /// List all refunds
@@ -86,6 +86,6 @@ public struct StripeRefundRoutes: RefundRoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.refunds.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.refunds.endpoint, query: queryParams)
     }
 }

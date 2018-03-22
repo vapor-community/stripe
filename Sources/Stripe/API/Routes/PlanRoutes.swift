@@ -13,9 +13,9 @@ public protocol PlanRoutes {
     associatedtype DO: DeletedObject
     associatedtype L: List
     
-    func create(id: String?, currency: StripeCurrency, interval: StripePlanInterval, name: String, amount: Int?, intervalCount: Int?, metadata: [String: String]?, statementDescriptor: String?) throws -> Future<P>
+    func create(id: String?, currency: StripeCurrency, interval: StripePlanInterval, product: String, amount: Int?, intervalCount: Int?, metadata: [String: String]?, nickname: String?) throws -> Future<P>
     func retrieve(plan: String) throws -> Future<P>
-    func update(plan: String, metadata: [String: String]?, name: String?, statementDescriptor: String?) throws -> Future<P>
+    func update(plan: String, metadata: [String: String]?, nickname: String?, product: String?) throws -> Future<P>
     func delete(plan: String) throws -> Future<DO>
     func listAll(filter: [String: Any]?) throws -> Future<L>
 }
@@ -32,16 +32,16 @@ public struct StripePlanRoutes: PlanRoutes {
     public func create(id: String? = nil,
                        currency: StripeCurrency,
                        interval: StripePlanInterval,
-                       name: String,
+                       product: String,
                        amount: Int? = nil,
                        intervalCount: Int? = nil,
                        metadata: [String : String]? = nil,
-                       statementDescriptor: String? = nil) throws -> Future<StripePlan> {
+                       nickname: String? = nil) throws -> Future<StripePlan> {
         var body: [String: Any] = [:]
         
         body["currency"] = currency.rawValue
         body["interval"] = interval.rawValue
-        body["name"] = name
+        body["product"] = product
         
         if let id = id {
             body["id"] = id
@@ -59,46 +59,46 @@ public struct StripePlanRoutes: PlanRoutes {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
-        if let statementDescriptor = statementDescriptor {
-            body["statement_descriptor"] = statementDescriptor
+        if let nickname = nickname {
+            body["nickname"] = nickname
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.plans.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.plans.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve a plan
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_plan)
     public func retrieve(plan: String) throws -> Future<StripePlan> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.plan(plan).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.plan(plan).endpoint)
     }
     
     /// Update a plan
     /// [Learn More →](https://stripe.com/docs/api/curl#update_plan)
     public func update(plan: String,
                        metadata: [String : String]? = nil,
-                       name: String? = nil,
-                       statementDescriptor: String? = nil) throws -> Future<StripePlan> {
+                       nickname: String? = nil,
+                       product: String? = nil) throws -> Future<StripePlan> {
         var body: [String: Any] = [:]
         
         if let metadata = metadata {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
 
-        if let name = name {
-            body["name"] = name
+        if let nickname = nickname {
+            body["nickname"] = nickname
         }
         
-        if let statementDescriptor = statementDescriptor {
-            body["statement_descriptor"] = statementDescriptor
+        if let product = product {
+            body["product"] = product
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.plan(plan).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.plan(plan).endpoint, body: body.queryParameters)
     }
     
     /// Delete a plan
     /// [Learn More →](https://stripe.com/docs/api/curl#delete_plan)
     public func delete(plan: String) throws -> Future<StripeDeletedObject> {
-        return try request.send(method: .delete, path: StripeAPIEndpoint.plan(plan).endpoint)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.plan(plan).endpoint)
     }
     
     /// List all plans
@@ -109,6 +109,6 @@ public struct StripePlanRoutes: PlanRoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.plans.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.plans.endpoint, query: queryParams)
     }
 }

@@ -18,7 +18,7 @@ class SubscriptionTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: subscriptionString)
-            let subscription = try decoder.decode(StripeSubscription.self, from: body)
+            let subscription = try decoder.decode(StripeSubscription.self, from: body, on: EmbeddedEventLoop())
 
             subscription.do({ (sub) in
                 
@@ -75,8 +75,8 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.items?.data?[0].plan?.intervalCount, 1)
                 XCTAssertEqual(sub.items?.data?[0].plan?.livemode, false)
                 XCTAssertEqual(sub.items?.data?[0].plan?.metadata?["hello"], "world")
-                XCTAssertEqual(sub.items?.data?[0].plan?.name, "Foo")
-                XCTAssertEqual(sub.items?.data?[0].plan?.statementDescriptor, "FOO")
+                XCTAssertEqual(sub.items?.data?[0].plan?.nickname, "Foo")
+                XCTAssertEqual(sub.items?.data?[0].plan?.product, "prod_1234")
                 XCTAssertEqual(sub.items?.data?[0].plan?.trialPeriodDays, 3)
                 
                 // These cover the Plan object
@@ -90,14 +90,15 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.plan?.intervalCount, 1)
                 XCTAssertEqual(sub.plan?.livemode, false)
                 XCTAssertEqual(sub.plan?.metadata?["hello"], "world")
-                XCTAssertEqual(sub.plan?.name, "Foo")
-                XCTAssertEqual(sub.plan?.statementDescriptor, "PLAN FOO")
+                XCTAssertEqual(sub.plan?.nickname, "Foo")
+                XCTAssertEqual(sub.plan?.product, "prod_1234")
                 XCTAssertEqual(sub.plan?.trialPeriodDays, 14)
                 
                 XCTAssertEqual(sub.id, "sub_AJ6s2Iy65K3RxN")
                 XCTAssertEqual(sub.object, "subscription")
                 XCTAssertEqual(sub.applicationFeePercent, 12.7)
                 XCTAssertEqual(sub.billing, "charge_automatically")
+                XCTAssertEqual(sub.billingCycleAnchor, Date(timeIntervalSince1970: 1490398710))
                 XCTAssertEqual(sub.cancelAtPeriodEnd, false)
                 XCTAssertEqual(sub.canceledAt, Date(timeIntervalSince1970: 1489793914))
                 XCTAssertEqual(sub.created, Date(timeIntervalSince1970: 1489793910))
@@ -129,6 +130,7 @@ class SubscriptionTests: XCTestCase {
   "object": "subscription",
   "application_fee_percent": 12.7,
   "billing": "charge_automatically",
+  "billing_cycle_anchor": 1490398710,
   "cancel_at_period_end": false,
   "canceled_at": 1489793914,
   "created": 1489793910,
@@ -184,8 +186,8 @@ class SubscriptionTests: XCTestCase {
           "metadata": {
             "hello": "world"
           },
-          "name": "Foo",
-          "statement_descriptor": "FOO",
+          "nickname": "Foo",
+          "product": "prod_1234",
           "trial_period_days": 3
         },
         "quantity": 1,
@@ -212,8 +214,8 @@ class SubscriptionTests: XCTestCase {
     "metadata": {
         "hello": "world"
     },
-    "name": "Foo",
-    "statement_descriptor": "PLAN FOO",
+    "nickname": "Foo",
+    "product": "prod_1234",
     "trial_period_days": 14
   },
   "quantity": 1,

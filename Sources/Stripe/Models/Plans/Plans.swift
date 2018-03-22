@@ -23,8 +23,8 @@ public protocol Plan {
     var intervalCount: Int? { get }
     var livemode: Bool? { get }
     var metadata: [String: String]? { get }
-    var name: String? { get }
-    var statementDescriptor: String? { get }
+    var nickname: String? { get }
+    var product: String? { get }
     var trialPeriodDays: Int? { get }
 }
 
@@ -38,7 +38,7 @@ public struct StripePlan: Plan, StripeModel {
     public var intervalCount: Int?
     public var livemode: Bool?
     public var metadata: [String: String]?
-    public var name: String?
-    public var statementDescriptor: String?
+    public var nickname: String?
+    public var product: String?
     public var trialPeriodDays: Int?
 }

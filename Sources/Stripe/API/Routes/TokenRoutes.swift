@@ -41,10 +41,10 @@ public struct StripeTokenRoutes: TokenRoutes {
         }
         
         if let connectAccount = connectAccount {
-            headers["Stripe-Account"] = connectAccount
+            headers.add(name: .stripeAccount, value: connectAccount)
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.tokens.endpoint, body: body.queryParameters, headers: headers)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.tokens.endpoint, body: body.queryParameters, headers: headers)
     }
     
     /// Create a bank account token
@@ -64,10 +64,10 @@ public struct StripeTokenRoutes: TokenRoutes {
         }
         
         if let connectAccount = connectAccount {
-            headers["Stripe-Account"] = connectAccount
+            headers.add(name: .stripeAccount, value: connectAccount)
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.tokens.endpoint, body: body.queryParameters, headers: headers)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.tokens.endpoint, body: body.queryParameters, headers: headers)
     }
     
     /// Create a PII token
@@ -79,12 +79,12 @@ public struct StripeTokenRoutes: TokenRoutes {
             body["personal_id_number"] = personalId
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.tokens.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.tokens.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve a token
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_token)
     public func retrieve(token: String) throws -> Future<StripeToken> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.token(token).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.token(token).endpoint)
     }
 }

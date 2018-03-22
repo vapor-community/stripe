@@ -66,7 +66,7 @@ class ChargeTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: chargeString)
-            let futureCharge = try decoder.decode(StripeCharge.self, from: body)
+            let futureCharge = try decoder.decode(StripeCharge.self, from: body, on: EmbeddedEventLoop())
 
             futureCharge.do { (charge) in
                 XCTAssertEqual(charge.id, "ch_1BrbM42eZvKYlo2CIu7qiNPF")

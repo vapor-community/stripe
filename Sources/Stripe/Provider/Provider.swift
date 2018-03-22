@@ -20,10 +20,14 @@ public final class StripeProvider: Provider {
     
     public func boot(_ worker: Container) throws {}
     
+    public func didBoot(_ worker: Container) throws -> EventLoopFuture<Void> {
+        return .done(on: worker)
+    }
+    
     public func register(_ services: inout Services) throws {
         services.register { (container) -> StripeClient in
-            let httpClient = try container.make(Client.self, for: StripeClient.self)
-            let config = try container.make(StripeConfig.self, for: StripeClient.self)
+            let httpClient = try container.make(Client.self)
+            let config = try container.make(StripeConfig.self)
             return StripeClient(config: config, client: httpClient)
         }
     }

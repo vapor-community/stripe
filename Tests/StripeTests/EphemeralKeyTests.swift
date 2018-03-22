@@ -31,7 +31,7 @@ class EphemeralKeyTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: emphkeyString)
-            let futureKey = try decoder.decode(StripeEphemeralKey.self, from: body)
+            let futureKey = try decoder.decode(StripeEphemeralKey.self, from: body, on: EmbeddedEventLoop())
             
             futureKey.do { (key) in
                 XCTAssertEqual(key.id, "eph_123456")

@@ -14,9 +14,9 @@ public protocol ProductRoutes {
     associatedtype L: List
     associatedtype PD: PackageDimensions
     
-    func create(id: String?, name: String, active: Bool?, attributes: [String]?, caption: String?, deactivateOn: [String]?, description: String?, images: [String]?, metadata: [String: String]?, packageDimensions: PD?, shippable: Bool?, url: String?) throws -> Future<PR>
+    func create(id: String?, name: String, type: String, active: Bool?, attributes: [String]?, caption: String?, deactivateOn: [String]?, description: String?, images: [String]?, metadata: [String: String]?, packageDimensions: PD?, shippable: Bool?, statementDescriptor: String?, url: String?) throws -> Future<PR>
     func retrieve(id: String) throws -> Future<PR>
-    func update(product: String, active: Bool?, attributes: [String]?, caption: String?, deactivateOn: [String]?, description: String?, images: [String]?, metadata: [String: String]?, name: String?, packageDimensions: PD?, shippable: Bool?, url: String?) throws -> Future<PR>
+    func update(product: String, active: Bool?, attributes: [String]?, caption: String?, deactivateOn: [String]?, description: String?, images: [String]?, metadata: [String: String]?, name: String?, packageDimensions: PD?, shippable: Bool?, statementDescriptor: String?, url: String?) throws -> Future<PR>
     func listAll(filter: [String: Any]?) throws -> Future<L>
     func delete(id: String) throws -> Future<DO>
 }
@@ -32,6 +32,7 @@ public struct StripeProductRoutes: ProductRoutes {
     /// [Learn More →](https://stripe.com/docs/api/curl#create_product)
     public func create(id: String? = nil,
                        name: String,
+                       type: String,
                        active: Bool? = nil,
                        attributes: [String]? = nil,
                        caption: String? = nil,
@@ -41,10 +42,13 @@ public struct StripeProductRoutes: ProductRoutes {
                        metadata: [String : String]? = nil,
                        packageDimensions: StripePackageDimensions? = nil,
                        shippable: Bool? = nil,
+                       statementDescriptor: String? = nil,
                        url: String? = nil) throws -> Future<StripeProduct> {
         var body: [String: Any] = [:]
         
         body["name"] = name
+        
+        body["type"] = type
 
         if let id = id {
             body["id"] = id
@@ -91,18 +95,22 @@ public struct StripeProductRoutes: ProductRoutes {
         if let shippable = shippable {
             body["shippable"] = shippable
         }
+
+        if let statementDescriptor = statementDescriptor {
+            body["statement_descriptor"] = statementDescriptor
+        }
         
         if let url = url {
             body["url"] = url
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.product.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.product.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve a product
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_product)
     public func retrieve(id: String) throws -> Future<StripeProduct> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.products(id).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.products(id).endpoint)
     }
     
     /// Update a product
@@ -118,6 +126,7 @@ public struct StripeProductRoutes: ProductRoutes {
                        name: String? = nil,
                        packageDimensions: StripePackageDimensions? = nil,
                        shippable: Bool? = nil,
+                       statementDescriptor: String? = nil,
                        url: String? = nil) throws -> Future<StripeProduct> {
         var body: [String: Any] = [:]
         
@@ -167,11 +176,15 @@ public struct StripeProductRoutes: ProductRoutes {
             body["shippable"] = shippable
         }
         
+        if let statementDescriptor = statementDescriptor {
+            body["statement_descriptor"] = statementDescriptor
+        }
+        
         if let url = url {
             body["url"] = url
         }
 
-        return try request.send(method: .post, path: StripeAPIEndpoint.products(product).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.products(product).endpoint, body: body.queryParameters)
     }
     
     /// List all products
@@ -182,12 +195,12 @@ public struct StripeProductRoutes: ProductRoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.product.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.product.endpoint, query: queryParams)
     }
     
     /// Delete a product
     /// [Learn More →](https://stripe.com/docs/api/curl#delete_product)
     public func delete(id: String) throws -> Future<StripeDeletedObject> {
-        return try request.send(method: .delete, path: StripeAPIEndpoint.products(id).endpoint)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.products(id).endpoint)
     }
 }

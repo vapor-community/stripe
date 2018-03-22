@@ -14,13 +14,19 @@ import Foundation
  */
 
 public enum BalanceTransactionType: String, Codable {
-    case charge
-    case refund
     case adjustment
     case applicationFee = "application_fee"
     case applicationFeeRefund = "application_fee_refund"
-    case transfer
+    case charge
     case payment
+    case paymentFailureRefund = "payment_failure_refund"
+    case paymentRefund = "payment_refund"
+    case refund
+    case transfer
+    case transferRefund = "transfer_refund"
     case payout
+    case payoutCancel = "payout_cancel"
     case payoutFailure = "payout_failure"
+    case validation
+    case stripeFee = "stripe_fee"
 }

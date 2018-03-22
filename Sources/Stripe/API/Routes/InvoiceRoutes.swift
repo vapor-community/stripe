@@ -53,7 +53,7 @@ public struct StripeInvoiceRoutes: InvoiceRoutes {
         }
         
         if let connectAccount = connectAccount {
-            headers["Stripe-Account"] = connectAccount
+            headers.add(name: .stripeAccount, value: connectAccount)
         }
         
         if let billing = billing {
@@ -88,19 +88,19 @@ public struct StripeInvoiceRoutes: InvoiceRoutes {
             body["tax_percent"] = taxPercent
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.invoices.endpoint, body: body.queryParameters, headers: headers)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.invoices.endpoint, body: body.queryParameters, headers: headers)
     }
     
     /// Retrieve an invoice
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_invoice)
     public func retrieve(invoice: String) throws -> Future<StripeInvoice> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.invoice(invoice).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.invoice(invoice).endpoint)
     }
     
     /// Retrieve an invoice's line items
     /// [Learn More →](https://stripe.com/docs/api/curl#invoice_lines)
     public func retrieveLineItems(invoice: String, filter: [String: Any]? = nil) throws -> Future<InvoiceLineGroup> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.invoiceLines(invoice).endpoint, query: filter?.queryParameters ?? "")
+        return try request.send(method: .GET, path: StripeAPIEndpoint.invoiceLines(invoice).endpoint, query: filter?.queryParameters ?? "")
     }
     
     /// Retrieve an upcoming invoice
@@ -112,7 +112,7 @@ public struct StripeInvoiceRoutes: InvoiceRoutes {
             filter.forEach { query["\($0)"] = $1 }
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.upcomingInvoices.endpoint, query: query.queryParameters)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.upcomingInvoices.endpoint, query: query.queryParameters)
     }
     
     /// Update an invoice
@@ -135,7 +135,7 @@ public struct StripeInvoiceRoutes: InvoiceRoutes {
         }
         
         if let connectAccount = connectAccount {
-            headers["Stripe-Account"] = connectAccount
+            headers.add(name: .stripeAccount, value: connectAccount)
         }
         
         if let closed = closed {
@@ -166,7 +166,7 @@ public struct StripeInvoiceRoutes: InvoiceRoutes {
             body["tax_percent"] = taxPercent
         }
 
-        return try request.send(method: .post, path: StripeAPIEndpoint.invoice(invoice).endpoint, body: body.queryParameters, headers: headers)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.invoice(invoice).endpoint, body: body.queryParameters, headers: headers)
     }
     
     /// Pay an invoice
@@ -178,7 +178,7 @@ public struct StripeInvoiceRoutes: InvoiceRoutes {
             body["source"] = source
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.payInvoice(invoice).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.payInvoice(invoice).endpoint, body: body.queryParameters)
     }
     
     /// List all invoices
@@ -189,6 +189,6 @@ public struct StripeInvoiceRoutes: InvoiceRoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.invoices.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.invoices.endpoint, query: queryParams)
     }
 }

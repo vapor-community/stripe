@@ -39,7 +39,7 @@ class CustomerTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: customerString)
-            let futureCustomer = try decoder.decode(StripeCustomer.self, from: body)
+            let futureCustomer = try decoder.decode(StripeCustomer.self, from: body, on: EmbeddedEventLoop())
 
             futureCustomer.do { (customer) in
                 XCTAssertEqual(customer.id, "cus_CG7FIUH6U4JTkB")

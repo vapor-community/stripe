@@ -71,13 +71,13 @@ public struct StripeCouponRoutes: CouponRoutes {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.coupons.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.coupons.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve coupon
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_coupon)
     public func retrieve(coupon: String) throws -> Future<StripeCoupon> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.coupon(coupon).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.coupon(coupon).endpoint)
     }
     
     /// Update coupon
@@ -89,13 +89,13 @@ public struct StripeCouponRoutes: CouponRoutes {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.coupon(coupon).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.coupon(coupon).endpoint, body: body.queryParameters)
     }
     
     /// Delete coupon
     /// [Learn More →](https://stripe.com/docs/api/curl#delete_coupon)
     public func delete(coupon: String) throws -> Future<StripeDeletedObject> {
-        return try request.send(method: .delete, path: StripeAPIEndpoint.coupon(coupon).endpoint)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.coupon(coupon).endpoint)
     }
     
     /// List all coupons
@@ -106,6 +106,6 @@ public struct StripeCouponRoutes: CouponRoutes {
             queryParams = filter.queryParameters
         }
 
-        return try request.send(method: .get, path: StripeAPIEndpoint.coupons.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.coupons.endpoint, query: queryParams)
     }
 }

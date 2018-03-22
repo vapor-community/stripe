@@ -56,13 +56,13 @@ public struct StripeSubscriptionItemRoutes: SubscriptionItemRoutes {
             body["quantity"] = quantity
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.subscriptionItem.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.subscriptionItem.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve a subscription item
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_subscription_item)
     public func retrieve(item: String) throws -> Future<StripeSubscriptionItem> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.subscriptionItems(item).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.subscriptionItems(item).endpoint)
     }
     
     /// Update a subscription item
@@ -95,7 +95,7 @@ public struct StripeSubscriptionItemRoutes: SubscriptionItemRoutes {
             body["quantity"] = quantity
         }
 
-        return try request.send(method: .post, path: StripeAPIEndpoint.subscriptionItems(item).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.subscriptionItems(item).endpoint, body: body.queryParameters)
     }
     
     /// Delete a subscription item
@@ -113,7 +113,7 @@ public struct StripeSubscriptionItemRoutes: SubscriptionItemRoutes {
             body["proration_date"] = Int(prorationDate.timeIntervalSince1970)
         }
 
-        return try request.send(method: .delete, path: StripeAPIEndpoint.subscriptionItems(item).endpoint, body: body.queryParameters)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.subscriptionItems(item).endpoint, body: body.queryParameters)
     }
     
     /// List all subscription items
@@ -124,6 +124,6 @@ public struct StripeSubscriptionItemRoutes: SubscriptionItemRoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .get, path: StripeAPIEndpoint.subscriptionItems(subscription).endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.subscriptionItems(subscription).endpoint, query: queryParams)
     }
 }

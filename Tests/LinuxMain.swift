@@ -41,6 +41,12 @@ static var allTests = [
 ]
 }
 
+extension ErrorTests {
+static var allTests = [
+  ("testErrorParsedProperly", testErrorParsedProperly),
+]
+}
+
 extension InvoiceTests {
 static var allTests = [
   ("testInvoiceParsedProperly", testInvoiceParsedProperly),
@@ -108,6 +114,7 @@ XCTMain([
   testCase(CustomerTests.allTests),
   testCase(DisputeTests.allTests),
   testCase(EphemeralKeyTests.allTests),
+  testCase(ErrorTests.allTests),
   testCase(InvoiceTests.allTests),
   testCase(OrderTests.allTests),
   testCase(ProductTests.allTests),

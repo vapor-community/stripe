@@ -36,7 +36,7 @@ class RefundTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: refundString)
-            let futureRefund = try decoder.decode(StripeRefund.self, from: body)
+            let futureRefund = try decoder.decode(StripeRefund.self, from: body, on: EmbeddedEventLoop())
             
             futureRefund.do { (refund) in
                 XCTAssertEqual(refund.id, "re_1BrXqE2eZvKYlo2Cfa7NO6GF")

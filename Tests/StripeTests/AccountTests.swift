@@ -171,7 +171,7 @@ class AccountTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: accountString)
-            let futureAccount = try decoder.decode(StripeConnectAccount.self, from: body)
+            let futureAccount = try decoder.decode(StripeConnectAccount.self, from: body, on: EmbeddedEventLoop())
             
             futureAccount.do { (account) in
                 XCTAssertEqual(account.id, "acct_1032D82eZvKYlo2C")

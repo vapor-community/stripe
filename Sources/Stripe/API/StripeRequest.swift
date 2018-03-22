@@ -11,7 +11,7 @@ import Vapor
 import HTTP
 
 public protocol StripeRequest: class {
-    func serializedResponse<SM: StripeModel>(response: HTTPResponse) throws -> Future<SM>
+    func serializedResponse<SM: StripeModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<SM>
     func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: String, headers: HTTPHeaders) throws -> Future<SM>
 }
 
@@ -20,25 +20,42 @@ public extension StripeRequest {
         return try send(method: method, path: path, query: query, body: body, headers: headers)
     }
     
-    public func serializedResponse<SM: StripeModel>(response: HTTPResponse) throws -> Future<SM> {
+    public func serializedResponse<SM: StripeModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<SM> {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         
-        guard response.status == .ok  else
-        {
-            let error = try decoder.decode(StripeAPIError.self, from: response.body).requireCompleted()
-            throw StripeError.apiError(error)
+        guard response.status == .ok else {
+            return try decoder.decode(StripeAPIError.self, from: response.body, on: worker).map(to: SM.self) { error in
+                throw StripeError.apiError(error)
+            }
         }
         
-        return try decoder.decode(SM.self, from: response.body)
+        return try decoder.decode(SM.self, from: response.body, on: worker)
+    }
+}
+
+extension HTTPHeaderName {
+    public static var stripeVersion: HTTPHeaderName {
+        return .init("Stripe-Version")
+    }
+    public static var stripeAccount: HTTPHeaderName {
+        return .init("Stripe-Version")
+    }
+}
+
+extension HTTPHeaders {
+    public static var stripeDefault: HTTPHeaders {
+        var headers: HTTPHeaders = [:]
+        headers.replaceOrAdd(name: .stripeVersion, value: "2018-02-28")
+        headers.replaceOrAdd(name: .contentType, value: MediaType.urlEncodedForm.description)
+        return headers
     }
 }
 
 public class StripeAPIRequest: StripeRequest {
     private let httpClient: Client
     private let apiKey: String
-    private let StripeDefaultHeaders: HTTPHeaders = ["Stripe-Version": "2017-08-15", .contentType: "application/x-www-form-urlencoded"]
     
     init(httpClient: Client, apiKey: String) {
         self.httpClient = httpClient
@@ -48,16 +65,16 @@ public class StripeAPIRequest: StripeRequest {
     public func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: String, headers: HTTPHeaders) throws -> Future<SM> {
         let encodedHTTPBody = HTTPBody(string: body)
         
-        var finalHeaders: HTTPHeaders = StripeDefaultHeaders
+        var finalHeaders: HTTPHeaders = .stripeDefault
         
-        headers.forEach { finalHeaders[$0.name] = $0.value }
+        headers.forEach { finalHeaders.add(name: $0.name, value: $0.value) }
         
-        finalHeaders[.authorization] = "Bearer \(apiKey)"
+        finalHeaders.add(name: .authorization, value: "Bearer \(apiKey)")
         
-        let request = HTTPRequest(method: method, uri: URI(stringLiteral: path + "?" + query), headers: StripeDefaultHeaders, body: encodedHTTPBody)
+        let request = HTTPRequest(method: method, url: URL(string: "\(path)?\(query)") ?? .root, headers: finalHeaders, body: encodedHTTPBody)
         
         return try httpClient.respond(to: Request(http: request, using: httpClient.container)).flatMap(to: SM.self) { (response) -> Future<SM> in
-            return try self.serializedResponse(response: response.http)
+            return try self.serializedResponse(response: response.http, worker: self.httpClient.container.eventLoop)
         }
     }
 }

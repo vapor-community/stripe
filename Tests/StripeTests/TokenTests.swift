@@ -18,7 +18,7 @@ class TokenTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: cardTokenString)
-            let cardToken = try decoder.decode(StripeToken.self, from: body)
+            let cardToken = try decoder.decode(StripeToken.self, from: body, on: EmbeddedEventLoop())
             
             cardToken.do { (token) in
                 XCTAssertNil(token.bankAccount)
@@ -71,7 +71,7 @@ class TokenTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: bankAccountTokenString)
-            let bankToken = try decoder.decode(StripeToken.self, from: body)
+            let bankToken = try decoder.decode(StripeToken.self, from: body, on: EmbeddedEventLoop())
             
             bankToken.do { (token) in
                 XCTAssertNil(token.card)

@@ -53,13 +53,13 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.account.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.account.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve account details
     /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_account)
     public func retrieve(account accountId: String) throws -> Future<StripeConnectAccount> {
-        return try request.send(method: .get, path: StripeAPIEndpoint.accounts(accountId).endpoint)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.accounts(accountId).endpoint)
     }
     
     /// Update an account
@@ -161,20 +161,20 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
             try tos.toEncodedDictionary().forEach { body["tos_acceptance[\($0)]"] = $1 }
         }
         
-        return try request.send(method: .post, path: StripeAPIEndpoint.accounts(accountId).endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.accounts(accountId).endpoint, body: body.queryParameters)
     }
     
     /// Delete an account
     /// [Learn More →](https://stripe.com/docs/api/curl#delete_account)
     public func delete(account accountId: String) throws -> Future<StripeDeletedObject> {
-        return try request.send(method: .delete, path: StripeAPIEndpoint.accounts(accountId).endpoint)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.accounts(accountId).endpoint)
     }
     
     /// Reject an account
     /// [Learn More →](https://stripe.com/docs/api/curl#reject_account)
     public func reject(account accountId: String, for rejectReason: AccountRejectReason) throws -> Future<StripeConnectAccount> {
         let body = ["reason": rejectReason.rawValue].queryParameters
-        return try request.send(method: .post, path: StripeAPIEndpoint.accountsReject(accountId).endpoint, body: body)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.accountsReject(accountId).endpoint, body: body)
     }
     
     /// List all connected accounts
@@ -184,12 +184,12 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
         if let filter = filter {
             queryParams = filter.queryParameters
         }
-        return try request.send(method: .get, path: StripeAPIEndpoint.account.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.account.endpoint, query: queryParams)
     }
     
     /// Create a login link
     /// [Learn More →](https://stripe.com/docs/api/curl#create_login_link)
     public func createLoginLink(for accountId: String) throws -> Future<StripeConnectLoginLink> {
-        return try request.send(method: .post, path: StripeAPIEndpoint.accountsLoginLink(accountId).endpoint)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.accountsLoginLink(accountId).endpoint)
     }
 }
