@@ -136,7 +136,7 @@ public struct StripeOrderRoutes: OrderRoutes {
         }
         
         if let connectAccount = connectAccount {
-            headers["Stripe-Account"] = connectAccount
+            headers.add(name: .stripeAccount, value: connectAccount)
         }
 
         if let email = email {

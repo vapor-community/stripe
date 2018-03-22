@@ -179,7 +179,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
         var headers: HTTPHeaders = [:]
         
         if let connectedAccount = toConnectedAccount {
-            headers["Stripe-Account"] = connectedAccount
+            headers.add(name: .stripeAccount, value: connectedAccount)
         }
         
         return try request.send(method: .POST, path: StripeAPIEndpoint.customerSources(customer).endpoint, body: body.queryParameters, headers: headers)
@@ -192,7 +192,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
         var headers: HTTPHeaders = [:]
         
         if let connectedAccount = toConnectedAccount {
-            headers["Stripe-Account"] = connectedAccount
+            headers.add(name: .stripeAccount, value: connectedAccount)
         }
         
         if let source = source as? String {
@@ -217,7 +217,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
         var headers: HTTPHeaders = [:]
         
         if let connectedAccount = toConnectedAccount {
-            headers["Stripe-Account"] = connectedAccount
+            headers.add(name: .stripeAccount, value: connectedAccount)
         }
         
         if let source = source as? String {

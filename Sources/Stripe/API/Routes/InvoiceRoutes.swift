@@ -53,7 +53,7 @@ public struct StripeInvoiceRoutes: InvoiceRoutes {
         }
         
         if let connectAccount = connectAccount {
-            headers["Stripe-Account"] = connectAccount
+            headers.add(name: .stripeAccount, value: connectAccount)
         }
         
         if let billing = billing {
@@ -135,7 +135,7 @@ public struct StripeInvoiceRoutes: InvoiceRoutes {
         }
         
         if let connectAccount = connectAccount {
-            headers["Stripe-Account"] = connectAccount
+            headers.add(name: .stripeAccount, value: connectAccount)
         }
         
         if let closed = closed {

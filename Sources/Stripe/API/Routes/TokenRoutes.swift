@@ -41,7 +41,7 @@ public struct StripeTokenRoutes: TokenRoutes {
         }
         
         if let connectAccount = connectAccount {
-            headers["Stripe-Account"] = connectAccount
+            headers.add(name: .stripeAccount, value: connectAccount)
         }
         
         return try request.send(method: .POST, path: StripeAPIEndpoint.tokens.endpoint, body: body.queryParameters, headers: headers)
@@ -64,7 +64,7 @@ public struct StripeTokenRoutes: TokenRoutes {
         }
         
         if let connectAccount = connectAccount {
-            headers["Stripe-Account"] = connectAccount
+            headers.add(name: .stripeAccount, value: connectAccount)
         }
         
         return try request.send(method: .POST, path: StripeAPIEndpoint.tokens.endpoint, body: body.queryParameters, headers: headers)
