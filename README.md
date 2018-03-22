@@ -49,7 +49,7 @@ And you can always check the documentation to see the required paramaters for sp
 
 ## Linux compatibility
 Currently the project won't compile for linux.
-You can track this issue [here](https://bugs.swift.org/browse/SR-7180)
+You can track this issue [here](https://bugs.swift.org/browse/SR-7180) and [here](https://github.com/apple/swift-corelibs-foundation/pull/1347)
 
 ## Whats Implemented
 
