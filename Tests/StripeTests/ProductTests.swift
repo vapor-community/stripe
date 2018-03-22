@@ -85,7 +85,7 @@ class ProductTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: productString)
-            let futureProduct = try decoder.decode(StripeProduct.self, from: body)
+            let futureProduct = try decoder.decode(StripeProduct.self, from: body, on: EmbeddedEventLoop())
             
             futureProduct.do { (product) in
                 XCTAssertEqual(product.id, "prod_BosWT9EsdzgjPn")

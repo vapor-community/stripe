@@ -28,7 +28,7 @@ class ErrorTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: errorString)
-            let futureError = try decoder.decode(StripeAPIError.self, from: body)
+            let futureError = try decoder.decode(StripeAPIError.self, from: body, on: EmbeddedEventLoop())
             
             futureError.do { (stripeError) in
                 XCTAssertEqual(stripeError.type, .cardError)

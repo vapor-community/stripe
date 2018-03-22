@@ -18,7 +18,7 @@ class SubscriptionTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: subscriptionString)
-            let subscription = try decoder.decode(StripeSubscription.self, from: body)
+            let subscription = try decoder.decode(StripeSubscription.self, from: body, on: EmbeddedEventLoop())
 
             subscription.do({ (sub) in
                 

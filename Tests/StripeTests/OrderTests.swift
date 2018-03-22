@@ -93,7 +93,7 @@ class OrderTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
 
             let body = HTTPBody(string: orderString)
-            let futureOrder = try decoder.decode(StripeOrder.self, from: body)
+            let futureOrder = try decoder.decode(StripeOrder.self, from: body, on: EmbeddedEventLoop())
             
             futureOrder.do { (order) in
                 XCTAssertEqual(order.id, "or_1BoJ2NKrZ43eBVAbFf4SZyvD")

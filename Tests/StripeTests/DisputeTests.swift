@@ -70,7 +70,7 @@ class DisputeTests: XCTestCase {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: disputeString)
-            let futureDispute = try decoder.decode(StripeDispute.self, from: body)
+            let futureDispute = try decoder.decode(StripeDispute.self, from: body, on: EmbeddedEventLoop())
             
             futureDispute.do { (dispute) in
                 XCTAssertEqual(dispute.amount, 1000)
