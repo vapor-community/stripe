@@ -10,77 +10,71 @@ import Foundation
 import Vapor
 import HTTP
 
-internal enum HTTPMethod {
-    case get
-    case post
-    case patch
-    case put
-    case delete
+public protocol StripeRequest: class {
+    func serializedResponse<SM: StripeModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<SM>
+    func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: String, headers: HTTPHeaders) throws -> Future<SM>
 }
 
-public class StripeRequest<T : StripeModelProtocol> {
-    var client: StripeClient!
-    var response: HTTP.Response!
-    let httpClient = EngineClient.factory
-
-    init(client: StripeClient, method: HTTPMethod = .get, route: API, query: [String : NodeRepresentable] = [:], body: BodyRepresentable? = nil, headers: [HeaderKey : String]? = nil) throws {
-        self.client = client
-
-        var allHeaders = DefaultHeaders
-        allHeaders[StripeHeader.Authorization] = "Bearer \(self.client.apiKey)"
-        
-        if let headers = headers {
-            headers.forEach {
-                allHeaders[$0.key] = $0.value
-            }
-        }
-        
-        switch method {
-        case .get: self.response = try self.httpClient.get(route.endpoint, query: query, allHeaders, body, through: [])
-        case .post: self.response = try self.httpClient.post(route.endpoint, query: query, allHeaders, body, through: [])
-        case .patch: self.response = try self.httpClient.patch(route.endpoint, query: query, allHeaders, body, through: [])
-        case .put: self.response = try self.httpClient.put(route.endpoint, query: query, allHeaders, body, through: [])
-        case .delete: self.response = try self.httpClient.delete(route.endpoint, query: query, allHeaders, body, through: [])
-        }
-    }
-
-    @discardableResult
-    public func serializedResponse() throws -> T {
-        guard self.response.status == .ok else {
-            guard let error = self.response.json?["error"]?.object else { throw self.response.status }
-            guard let type = error["type"]?.string else { throw self.response.status }
-            switch type {
-            case "api_connection_error":  throw StripeError.apiConnectionError(error["message"]?.string ?? "unknown error")
-            case "api_error":             throw StripeError.apiError(error["message"]?.string ?? "unknown error")
-            case "authentication_error":  throw StripeError.authenticationError(error["message"]?.string ?? "unknown error")
-            case "card_error":            throw StripeError.cardError(error["message"]?.string ?? "unknown error")
-            case "invalid_request_error": throw StripeError.invalidRequestError(error["message"]?.string ?? "unknown error")
-            case "rate_limit_error":      throw StripeError.rateLimitError(error["message"]?.string ?? "unknown error")
-            case "validation_error":      throw StripeError.validationError(error["message"]?.string ?? "unknown error")
-            default:                      throw self.response.status
-            }
-        }
-        guard let value = self.response.json else { throw StripeError.serializationError }
-        return try T(node: value)
+public extension StripeRequest {
+    public func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String = "", body: String = "", headers: HTTPHeaders = [:]) throws -> Future<SM> {
+        return try send(method: method, path: path, query: query, body: body, headers: headers)
     }
     
-    @discardableResult
-    public func json() throws -> JSON {
-        guard self.response.status == .ok else {
-            guard let error = self.response.json?["error"]?.object else { throw self.response.status }
-            guard let type = error["type"]?.string else { throw self.response.status }
-            switch type {
-            case "api_connection_error":  throw StripeError.apiConnectionError(error["message"]?.string ?? "unknown error")
-            case "api_error":             throw StripeError.apiError(error["message"]?.string ?? "unknown error")
-            case "authentication_error":  throw StripeError.authenticationError(error["message"]?.string ?? "unknown error")
-            case "card_error":            throw StripeError.cardError(error["message"]?.string ?? "unknown error")
-            case "invalid_request_error": throw StripeError.invalidRequestError(error["message"]?.string ?? "unknown error")
-            case "rate_limit_error":      throw StripeError.rateLimitError(error["message"]?.string ?? "unknown error")
-            case "validation_error":      throw StripeError.validationError(error["message"]?.string ?? "unknown error")
-            default:                      throw self.response.status
+    public func serializedResponse<SM: StripeModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<SM> {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .secondsSince1970
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        guard response.status == .ok else {
+            return try decoder.decode(StripeAPIError.self, from: response.body, on: worker).map(to: SM.self) { error in
+                throw StripeError.apiError(error)
             }
         }
-        guard let value = self.response.json else { throw StripeError.serializationError }
-        return value
+        
+        return try decoder.decode(SM.self, from: response.body, on: worker)
+    }
+}
+
+extension HTTPHeaderName {
+    public static var stripeVersion: HTTPHeaderName {
+        return .init("Stripe-Version")
+    }
+    public static var stripeAccount: HTTPHeaderName {
+        return .init("Stripe-Version")
+    }
+}
+
+extension HTTPHeaders {
+    public static var stripeDefault: HTTPHeaders {
+        var headers: HTTPHeaders = [:]
+        headers.replaceOrAdd(name: .stripeVersion, value: "2018-02-28")
+        headers.replaceOrAdd(name: .contentType, value: MediaType.urlEncodedForm.description)
+        return headers
+    }
+}
+
+public class StripeAPIRequest: StripeRequest {
+    private let httpClient: Client
+    private let apiKey: String
+    
+    init(httpClient: Client, apiKey: String) {
+        self.httpClient = httpClient
+        self.apiKey = apiKey
+    }
+    
+    public func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: String, headers: HTTPHeaders) throws -> Future<SM> {
+        let encodedHTTPBody = HTTPBody(string: body)
+        
+        var finalHeaders: HTTPHeaders = .stripeDefault
+        
+        headers.forEach { finalHeaders.add(name: $0.name, value: $0.value) }
+        
+        finalHeaders.add(name: .authorization, value: "Bearer \(apiKey)")
+        
+        let request = HTTPRequest(method: method, url: URL(string: "\(path)?\(query)") ?? .root, headers: finalHeaders, body: encodedHTTPBody)
+        
+        return try httpClient.respond(to: Request(http: request, using: httpClient.container)).flatMap(to: SM.self) { (response) -> Future<SM> in
+            return try self.serializedResponse(response: response.http, worker: self.httpClient.container.eventLoop)
+        }
     }
 }

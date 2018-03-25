@@ -6,10 +6,8 @@
 //
 //
 
-import Foundation
-
-public enum ActionType: String {
-    case charge = "charge"
-    case stripeFee = "stripe_fee"    
-    case none = "none"
+public enum ActionType: String, Codable {
+    case charge
+    case stripeFee = "stripe_fee"
+    case none
 }

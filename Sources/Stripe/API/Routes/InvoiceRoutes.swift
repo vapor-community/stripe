@@ -6,269 +6,189 @@
 //
 //
 
-import Node
-import HTTP
+import Vapor
+import Foundation
 
-open class InvoiceRoutes {
+public protocol InvoiceRoutes {
+    associatedtype I: Invoice
+    associatedtype L: List
     
-    let client: StripeClient
+    func create(customer: String, applicationFee: Int?, connectAccount: String?, billing: String?, daysUntilDue: Int?, description: String?, dueDate: Date?, metadata: [String: String]?, statementDescriptor: String?, subscription: String?, taxPercent: Decimal?) throws -> Future<I>
+    func retrieve(invoice: String) throws -> Future<I>
+    func retrieveLineItems(invoice: String, filter: [String: Any]?) throws -> Future<L>
+    func retrieveUpcomingInvoice(customer: String, filter: [String: Any]?) throws -> Future<I>
+    func update(invoice: String, applicationFee: Int?,
+    connectAccount: String?, closed: Bool?, description: String?, forgiven: Bool?, metadata: [String: String]?, paid: Bool?, statementDescriptor: String?, taxPercent: Decimal?) throws -> Future<I>
+    func pay(invoice: String, source: String?) throws -> Future<I>
+    func listAll(filter: [String: Any]?) throws -> Future<L>
+}
+
+public struct StripeInvoiceRoutes: InvoiceRoutes {
+    private let request: StripeRequest
     
-    init(client: StripeClient) {
-        self.client = client
+    init(request: StripeRequest) {
+        self.request = request
     }
     
-    /**
-     Create invoice
-     If you need to invoice your customer outside the regular billing cycle, you can create an invoice that pulls in all 
-     pending invoice items, including prorations. The customer’s billing cycle and regular subscription won’t be affected.
-     
-     Once you create the invoice, Stripe will attempt to collect payment according to your subscriptions settings, 
-     though you can choose to pay it right away.
-     
-     - parameter customer:            The ID of the customer to attach the invoice to
-     - parameter subscription:        The ID of the subscription to invoice. If not set, the created invoice will include all 
-                                      pending invoice items for the customer. If set, the created invoice will exclude pending 
-                                      invoice items that pertain to other subscriptions.
-     - parameter fee:                 A fee to charge if you are using connected accounts (Must be in cents)
-     - parameter account:             The account to transfer the fee to
-     - parameter description:         A description for the invoice
-     - parameter metadata:            Aditional metadata info
-     - parameter taxPercent:          The percent tax rate applied to the invoice, represented as a decimal number.
-     - parameter statementDescriptor: Extra information about a charge for the customer’s credit card statement.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    
-    public func create(forCustomer customer: String, subscription: String? = nil, withFee fee: Int? = nil, toAccount account: String? = nil, description: String? = nil, metadata: Node? = nil, taxPercent: Double? = nil, statementDescriptor: String? = nil) throws -> StripeRequest<Invoice> {
-        var body = Node([:])
-        // Create the headers
-        var headers: [HeaderKey : String]?
-        if let account = account {
-            headers = [
-                StripeHeader.Account: account
-            ]
-            
-            if let fee = fee {
-                body["application_fee"] = Node(fee)
-            }
+    /// Create an invoice
+    /// [Learn More →](https://stripe.com/docs/api/curl#create_invoice)
+    public func create(customer: String,
+                       applicationFee: Int? = nil,
+                       connectAccount: String? = nil,
+                       billing: String? = nil,
+                       daysUntilDue: Int? = nil,
+                       description: String? = nil,
+                       dueDate: Date? = nil,
+                       metadata: [String : String]? = nil,
+                       statementDescriptor: String? = nil,
+                       subscription: String? = nil,
+                       taxPercent: Decimal? = nil) throws -> Future<StripeInvoice> {
+        var body: [String: Any] = [:]
+        var headers: HTTPHeaders = [:]
+        
+        body["customer"] = customer
+        
+        if let applicationFee = applicationFee {
+            body["application_fee"] = applicationFee
         }
         
-        body["customer"] = Node(customer)
+        if let connectAccount = connectAccount {
+            headers.add(name: .stripeAccount, value: connectAccount)
+        }
         
-        if let subscription = subscription {
-            body["subscription"] = Node(subscription)
+        if let billing = billing {
+            body["billing"] = billing
+        }
+        
+        if let daysUntilDue = daysUntilDue {
+            body["days_until_due"] = daysUntilDue
         }
         
         if let description = description {
-            body["description"] = Node(description)
+            body["description"] = description
         }
         
-        if let taxPercent = taxPercent {
-            body["tax_percent"] = Node(taxPercent)
+        if let dueDate = dueDate {
+            body["due_date"] = Int(dueDate.timeIntervalSince1970)
+        }
+        
+        if let metadata = metadata {
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let statementDescriptor = statementDescriptor {
-            body["statement_descriptor"] = Node(statementDescriptor)
-        }
-        
-        if let metadata = metadata?.object {
-            for (key, value) in metadata {
-                body["metadata[\(key)]"] = value
-            }
-        }
-        
-        return try StripeRequest(client: self.client, method: .post, route: .invoices, body: Body.data(body.formURLEncoded()), headers: headers)
-    }
-    
-    /**
-     Fetch an invoice
-     Retrieves the invoice with the given ID.
-     
-     - parameter invoice: The Invoice ID to fetch
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-    */
-    public func fetch(invoice invoiceId: String) throws -> StripeRequest<Invoice> {
-        return try StripeRequest(client: self.client, method: .post, route: .invoice(invoiceId), body: nil, headers: nil)
-    }
-    
-    /**
-     List items for invoice
-     When retrieving an invoice, you’ll get a lines property containing the total count of line items and the first handful 
-     of those items. There is also a URL where you can retrieve the full (paginated) list of line items.
-     
-     - parameter invoiceId: The Invoice ID to fetch
-     - parameter customer:  In the case of upcoming invoices, the customer of the upcoming invoice is required. In other 
-                            cases it is ignored.
-     - parameter coupon:    For upcoming invoices, preview applying this coupon to the invoice. If a subscription or 
-                            subscription_items is provided, the invoice returned will preview updating or creating a 
-                            subscription with that coupon. Otherwise, it will preview applying that coupon to the customer 
-                            for the next upcoming invoice from among the customer’s subscriptions. Otherwise this parameter 
-                            is ignored. This will be unset if you POST an empty value.
-     - parameter filter:    Parameters used to filter the results
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-    */
-    
-    public func listItems(forInvoice invoiceId: String, customer: String? = nil, coupon: String? = nil, filter: StripeFilter? = nil) throws -> StripeRequest<InvoiceLineGroup> {
-        var query = [String : NodeRepresentable]()
-        if let data = try filter?.createQuery() {
-            query = data
-        }
-        
-        if let customer = customer {
-            query["customer"] = customer
-        }
-        
-        if let coupon = coupon {
-            query["coupon"] = coupon
-        }
-        
-        return try StripeRequest(client: self.client, method: .get, route: .invoiceLines(invoiceId), query: query, body: nil, headers: nil)
-    }
-    
-    /**
-     List Upcoming invoice for Customer
-     At any time, you can preview the upcoming invoice for a customer. This will show you all the charges that are pending, 
-     including subscription renewal charges, invoice item charges, etc. It will also show you any discount that is applicable 
-     to the customer.
-     
-     - parameter customerId:    The identifier of the customer whose upcoming invoice you’d like to retrieve.
-     - parameter coupon:        The code of the coupon to apply. If subscription or subscription_items is provided, the invoice 
-                                returned will preview updating or creating a subscription with that coupon. Otherwise, it will 
-                                preview applying that coupon to the customer for the next upcoming invoice from among the customer’s 
-                                subscriptions. The invoice can be previewed without a coupon by passing this value as an empty string.
-     - parameter subscription:  The identifier of the subscription for which you’d like to retrieve the upcoming invoice. If not provided, 
-                                but a subscription_items is provided, you will preview creating a subscription with those items. If neither 
-                                subscription nor subscription_items is provided, you will retrieve the next upcoming invoice from among the 
-                                customer’s subscriptions.
-     - parameter filter:        Parameters used to filter the result
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-    */
-    public func upcomingInvoice(forCustomer customerId: String, coupon: String? = nil, subscription: String? = nil, filter: StripeFilter? = nil) throws -> StripeRequest<Invoice> {
-        var query = [String : NodeRepresentable]()
-        query["customer"] = customerId
-        
-        if let data = try filter?.createQuery() {
-            query = data
-        }
-        
-        if let coupon = coupon {
-            query["coupon"] = coupon
+            body["statement_descriptor"] = statementDescriptor
         }
         
         if let subscription = subscription {
-            query["subscription"] = subscription
+            body["subscription"] = subscription
         }
         
-        return try StripeRequest(client: self.client, method: .get, route: .upcomingInvoices, query: query, body: nil, headers: nil)
+        if let taxPercent = taxPercent {
+            body["tax_percent"] = taxPercent
+        }
+        
+        return try request.send(method: .POST, path: StripeAPIEndpoint.invoices.endpoint, body: body.queryParameters, headers: headers)
     }
     
-    /**
-     Update Invoice
-     Until an invoice is paid, it is marked as open (closed=false). If you’d like to stop Stripe from attempting to collect payment on an 
-     invoice or would simply like to close the invoice out as no longer owed by the customer, you can update the closed parameter.
-     
-     - parameter invoiceId:           The ID of the Invoice to update
-     - parameter closed:              Boolean representing whether an invoice is closed or not. To close an invoice, pass true.
-     - parameter forgiven:            Boolean representing whether an invoice is forgiven or not. To forgive an invoice, pass true. 
-                                      Forgiving an invoice instructs us to update the subscription status as if the invoice were successfully paid. 
-                                      Once an invoice has been forgiven, it cannot be unforgiven or reopened.
-     - parameter applicationFee:      A fee in cents that will be applied to the invoice and transferred to the application owner’s Stripe account. 
-                                      The request must be made with an OAuth key or the Stripe-Account header in order to take an application fee. 
-                                      For more information, see the application fees documentation.
-     - parameter account:             The account to transfer the fee to
-     - parameter description:         A description for the invoice
-     - parameter metadata:            Aditional metadata info
-     - parameter taxPercent:          The percent tax rate applied to the invoice, represented as a decimal number. The tax rate of an attempted, 
-                                      paid or forgiven invoice cannot be changed.
-     - parameter statementDescriptor: Extra information about a charge for the customer’s credit card statement.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-    */
-    public func update(invoice invoiceId: String, closed: Bool? = nil, forgiven: Bool? = nil, applicationFee: Int? = nil, toAccount account: String? = nil, description: String? = nil, metadata: Node? = nil, taxPercent: Double? = nil, statementDescriptor: String? = nil) throws -> StripeRequest<Invoice> {
-        var body = Node([:])
-        // Create the headers
-        var headers: [HeaderKey : String]?
-        if let account = account {
-            headers = [
-                StripeHeader.Account: account
-            ]
-            
-            if let fee = applicationFee {
-                body["application_fee"] = Node(fee)
-            }
+    /// Retrieve an invoice
+    /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_invoice)
+    public func retrieve(invoice: String) throws -> Future<StripeInvoice> {
+        return try request.send(method: .GET, path: StripeAPIEndpoint.invoice(invoice).endpoint)
+    }
+    
+    /// Retrieve an invoice's line items
+    /// [Learn More →](https://stripe.com/docs/api/curl#invoice_lines)
+    public func retrieveLineItems(invoice: String, filter: [String: Any]? = nil) throws -> Future<InvoiceLineGroup> {
+        return try request.send(method: .GET, path: StripeAPIEndpoint.invoiceLines(invoice).endpoint, query: filter?.queryParameters ?? "")
+    }
+    
+    /// Retrieve an upcoming invoice
+    /// [Learn More →](https://stripe.com/docs/api/curl#upcoming_invoice)
+    public func retrieveUpcomingInvoice(customer: String, filter: [String: Any]? = nil) throws -> Future<StripeInvoice> {
+        var query: [String: Any] = ["customer": customer]
+        
+        if let filter = filter {
+            filter.forEach { query["\($0)"] = $1 }
+        }
+        
+        return try request.send(method: .GET, path: StripeAPIEndpoint.upcomingInvoices.endpoint, query: query.queryParameters)
+    }
+    
+    /// Update an invoice
+    /// [Learn More →](https://stripe.com/docs/api/curl#update_invoice)
+    public func update(invoice: String,
+                       applicationFee: Int? = nil,
+                       connectAccount: String? = nil,
+                       closed: Bool? = nil,
+                       description: String? = nil,
+                       forgiven: Bool? = nil,
+                       metadata: [String : String]? = nil,
+                       paid: Bool? = nil,
+                       statementDescriptor: String? = nil,
+                       taxPercent: Decimal? = nil) throws -> Future<StripeInvoice> {
+        var body: [String: Any] = [:]
+        var headers: HTTPHeaders = [:]
+        
+        if let applicationFee = applicationFee {
+            body["application_fee"] = applicationFee
+        }
+        
+        if let connectAccount = connectAccount {
+            headers.add(name: .stripeAccount, value: connectAccount)
         }
         
         if let closed = closed {
-            body["closed"] = Node(closed)
-        }
-        
-        if let forgiven = forgiven {
-            body["forgiven"] = Node(forgiven)
+            body["closed"] = closed
         }
         
         if let description = description {
-            body["description"] = Node(description)
+            body["description"] = description
+        }
+        
+        if let forgiven = forgiven {
+            body["forgiven"] = forgiven
+        }
+        
+        if let metadata = metadata {
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
+        }
+        
+        if let paid = paid {
+            body["paid"] = paid
+        }
+
+        if let statementDescriptor = statementDescriptor {
+            body["statement_descriptor"] = statementDescriptor
         }
         
         if let taxPercent = taxPercent {
-            body["tax_percent"] = Node(taxPercent)
+            body["tax_percent"] = taxPercent
         }
-        
-        if let statementDescriptor = statementDescriptor {
-            body["statement_descriptor"] = Node(statementDescriptor)
-        }
-        
-        if let metadata = metadata?.object {
-            for (key, value) in metadata {
-                body["metadata[\(key)]"] = value
-            }
-        }
-        
-        return try StripeRequest(client: self.client, method: .post, route: .invoice(invoiceId), body: Body.data(body.formURLEncoded()), headers: headers)
+
+        return try request.send(method: .POST, path: StripeAPIEndpoint.invoice(invoice).endpoint, body: body.queryParameters, headers: headers)
     }
     
-    /**
-     Pay Invoice
-     Stripe automatically creates and then attempts to collect payment on invoices for customers on subscriptions according to your 
-     subscriptions settings. However, if you’d like to attempt payment on an invoice out of the normal collection schedule or for some 
-     other reason, you can do so.
-     
-     - parameter invoiceId: The ID of the invoice to pay.
-     - parameter source:    A payment source to be charged. The source must be the ID of a source belonging to the customer associated 
-                            with the invoice being paid.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-    */
-    public func pay(invoice invoiceId: String, source: String? = nil) throws -> StripeRequest<Invoice> {
-        var body = Node([:])
-        
+    /// Pay an invoice
+    /// [Learn More →](https://stripe.com/docs/api/curl#pay_invoice)
+    public func pay(invoice: String, source: String? = nil) throws -> Future<StripeInvoice> {
+        var body: [String: Any] = [:]
+
         if let source = source {
-            body["source"] = Node(source)
+            body["source"] = source
         }
         
-        return try StripeRequest(client: self.client, method: .post, route: .payInvoice(invoiceId), body: Body.data(body.formURLEncoded()), headers: nil)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.payInvoice(invoice).endpoint, body: body.queryParameters)
     }
     
-    /**
-     List all Invoices
-     You can list all invoices, or list the invoices for a specific customer. The invoices are returned sorted by creation date, 
-     with the most recently created invoices appearing first.
-     
-     - parameter filter: A Filter item to pass query parameters when fetching results
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func listAll(customer: String? = nil, filter: StripeFilter? = nil) throws -> StripeRequest<InvoiceList> {
-        var query = [String : NodeRepresentable]()
-        if let customer = customer {
-            query["customer"] = customer
+    /// List all invoices
+    /// [Learn More →](https://stripe.com/docs/api/curl#list_invoices)
+    public func listAll(filter: [String : Any]? = nil) throws -> Future<InvoiceLineGroup> {
+        var queryParams = ""
+        if let filter = filter {
+            queryParams = filter.queryParameters
         }
-        if let data = try filter?.createQuery() {
-            query = data
-        }
-        return try StripeRequest(client: self.client, method: .get, route: .invoices, query: query, body: nil, headers: nil)
+        
+        return try request.send(method: .GET, path: StripeAPIEndpoint.invoices.endpoint, query: queryParams)
     }
 }

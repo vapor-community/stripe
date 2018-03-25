@@ -6,259 +6,117 @@
 //
 //
 
-import Node
-import HTTP
+import Vapor
 
-open class SourceRoutes {
+public protocol SourceRoutes {
+    associatedtype S: Source
+    associatedtype M: Mandate
+    associatedtype O: Owner
     
-    let client: StripeClient
+    func create(type: SourceType, amount: Int?, currency: StripeCurrency?, flow: Flow?, mandate: M?, metadata: [String: String]?, owner: O?, receiver: [String: String]?, redirect: [String: String]?, statementDescriptor: String?, token: String?, usage: String?) throws -> Future<S>
+    func retrieve(source: String, clientSecret: String?) throws -> Future<S>
+    func update(source: String, mandate: M?, metadata: [String: String]?, owner: O?) throws -> Future<S>
+}
+
+public struct StripeSourceRoutes: SourceRoutes {
+    private let request: StripeRequest
     
-    init(client: StripeClient) {
-        self.client = client
+    init(request: StripeRequest) {
+        self.request = request
     }
-    
-    /**
-     Create a Source
-     Creates a new customer object.
-     
-     - parameter type:              The type of the source to create.
-     
-     - parameter amount:            Amount associated with the source. This is the amount for which the source 
-                                    will be chargeable once ready.
-     
-     - parameter currency:          This is the currency for which the source will be chargeable once ready.
-     
-     - parameter flow:              The authentication flow of the source to create.
-     
-     - parameter owner:             Information about the owner of the payment instrument that may be used or 
-                                    required by particular source types.
-     
-     - parameter redirectReturnUrl: The URL you provide to redirect the customer back to you after they
-                                    authenticated their payment.
-     
-     - parameter token:             An optional token used to create the source. When passed, token properties 
-                                    will override source parameters.
-     
-     - parameter usage:             Either reusable or single_use.
-     
-     - parameter metadata:          A set of key/value pairs that you can attach to a customer object.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    
-    public func createNewSource(sourceType: SourceType, source: Node, amount: Int? = nil, currency: StripeCurrency? = nil, flow: String? = nil, owner: Owner? = nil, redirectReturnUrl: String? = nil, token: String? = nil, usage: String? = nil, metadata: Node? = nil) throws -> StripeRequest<Source> {
+
+    /// Create a source
+    /// [Learn More →](https://stripe.com/docs/api/curl#create_source)
+    public func create(type: SourceType,
+                       amount: Int? = nil,
+                       currency: StripeCurrency? = nil,
+                       flow: Flow? = nil,
+                       mandate: StripeMandate? = nil,
+                       metadata: [String : String]? = nil,
+                       owner: StripeOwner? = nil,
+                       receiver: [String : String]? = nil,
+                       redirect: [String : String]? = nil,
+                       statementDescriptor: String? = nil,
+                       token: String? = nil,
+                       usage: String? = nil) throws -> Future<StripeSource> {
+        var body: [String: Any] = [:]
         
-        var body = Node([:])
-        
-        body["type"] = Node(sourceType.rawValue)
-        
-        switch sourceType{
-            
-        case .card:
-            if let source = source.object {
-                for (key,val) in source {
-                    body["card[\(key)]"] = val
-                }
-            }
-        case .bitcoin:
-            if let source = source.object {
-                for (key,val) in source {
-                    body["bitcoin[\(key)]"] = val
-                }
-            }
-        case .threeDSecure:
-            if let source = source.object {
-                for (key,val) in source {
-                    body["three_d_secure[\(key)]"] = val
-                }
-            }
-            
-        case .bancontact:
-            if let source = source.object {
-                for (key,val) in source {
-                    body["bancontact[\(key)]"] = val
-                }
-            }
-        case .giropay:
-            if let source = source.object {
-                for (key,val) in source {
-                    body["giropay[\(key)]"] = val
-                }
-            }
-        case .ideal:
-            if let source = source.object {
-                for (key,val) in source {
-                    body["ideal[\(key)]"] = val
-                }
-            }
-        case .sepaDebit:
-            if let source = source.object {
-                for (key,val) in source {
-                    body["sepa_debit[\(key)]"] = val
-                }
-            }
-        case .sofort:
-            if let source = source.object {
-                for (key,val) in source {
-                    body["sofort[\(key)]"] = val
-                }
-            }
-        default:
-            body[""] = ""
-        }
-        
-        if let amount = amount {
-            
-            body["amount"] = Node(amount)
-        }
+        body["type"] = type.rawValue
         
         if let currency = currency {
-            body["currency"] = Node(currency.rawValue)
+            body["currency"] = currency.rawValue
         }
         
         if let flow = flow {
-            body["flow"] = Node(flow)
+            body["flow"] = flow.rawValue
         }
         
-        if let metadata = metadata?.object {
-            for (key, value) in metadata {
-                body["metadata[\(key)]"] = value
-            }
+        if let mandate = mandate {
+            try mandate.toEncodedDictionary().forEach { body["mandate[\($0)]"] = $1 }
+        }
+        
+        if let metadata = metadata {
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let owner = owner {
-         
-            if let email = owner.email {
-                body["owner[email]"] = Node(email)
-            }
-            
-            if let name = owner.name {
-                body["owner[name]"] = Node(name)
-            }
-            
-            if let phone = owner.phone {
-                body["owner[phone]"] = Node(phone)
-            }
-            
-            if let address = owner.address {
-                
-                if let line1 = address.addressLine1 {
-                    body["owner[address][line1]"] = Node(line1)
-                }
-                
-                if let city = address.city {
-                    body["owner[address][city]"] = Node(city)
-                }
-                
-                if let country = address.country {
-                    body["owner[address][country]"] = Node(country)
-                }
-                
-                if let postalCode = address.postalCode {
-                    body["owner[address][postal_code]"] = Node(postalCode)
-                }
-                
-                if let state = address.state {
-                    body["owner[address][state]"] = Node(state)
-                }
-                
-                if let line2 = address.addressLine2 {
-                    body["owner[address][line2]"] = Node(line2)
-                }
-            }
+            try owner.toEncodedDictionary().forEach { body["owner[\($0)]"] = $1 }
         }
         
-        if let redirectReturnUrl = redirectReturnUrl {
-            body["redirect[return_url]"] = Node(redirectReturnUrl)
+        if let receiver =  receiver {
+            receiver.forEach { body["receiver[\($0)]"] = $1 }
+        }
+        
+        if let redirect = redirect {
+            redirect.forEach { body["redirect[\($0)]"] = $1 }
+        }
+        
+        if let statementDescriptor = statementDescriptor {
+            body["statement_descriptor"] = statementDescriptor
         }
         
         if let token = token {
-            body["token"] = Node(token)
+            body["token"] = token
         }
         
         if let usage = usage {
-            body["usage"] = Node(usage)
+            body["usage"] = usage
         }
         
-        return try StripeRequest(client: self.client, method: .post, route: .sources, query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.sources.endpoint, body: body.queryParameters)
     }
     
-    /**
-     Retrieve a source
-     Retrieves an existing source object. Supply the unique source ID from a source creation request and Stripe will return the corresponding up-to-date source object information.
-     
-     - parameter sourceId: The identifier of the source to be retrieved.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func retrieveSource(withId sourceId: String) throws -> StripeRequest<Source> {
-        return try StripeRequest(client: self.client, method: .get, route: .source(sourceId), query: [:], body: nil, headers: nil)
+    /// Retrieve a source
+    /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_source)
+    public func retrieve(source: String, clientSecret: String?) throws -> Future<StripeSource> {
+        var query = ""
+        if let clientSecret = clientSecret {
+            query = "client_secret=\(clientSecret)" 
+        }
+        
+        return try request.send(method: .GET, path: StripeAPIEndpoint.source(source).endpoint, query: query)
     }
     
-    /**
-     Update a Source
-     Updates the specified source by setting the values of the parameters passed. Any parameters not provided will be left unchanged.
-     
-     - parameter metadata:  A set of key/value pairs that you can attach to a source object.
-     
-     - parameter owner:     Information about the owner of the payment instrument that may be used or required by particular 
-                            source types.
-     
-     - parameter sourceId:  The identifier of the source to be updated.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node.
-     */
-    
-    public func update(owner: Owner? = nil, metadata: Node? = nil, forSourceId sourceId: String) throws -> StripeRequest<Source> {
-        var body = Node([:])
+    /// Update a source
+    /// [Learn More →](https://stripe.com/docs/api/curl#update_source)
+    public func update(source: String,
+                       mandate: StripeMandate? = nil,
+                       metadata: [String : String]? = nil,
+                       owner: StripeOwner? = nil) throws -> Future<StripeSource> {
+        var body: [String: Any] = [:]
+        
+        if let mandate = mandate {
+            try mandate.toEncodedDictionary().forEach { body["mandate[\($0)]"] = $1 }
+        }
+        
+        if let metadata = metadata {
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
+        }
         
         if let owner = owner {
-            
-            if let email = owner.email {
-                body["owner[email]"] = Node(email)
-            }
-            
-            if let name = owner.name {
-                body["owner[name]"] = Node(name)
-            }
-            
-            if let phone = owner.phone {
-                body["owner[phone]"] = Node(phone)
-            }
-            
-            if let address = owner.address {
-                
-                if let line1 = address.addressLine1 {
-                    body["owner[address][line1]"] = Node(line1)
-                }
-                
-                if let city = address.city {
-                    body["owner[address][city]"] = Node(city)
-                }
-                
-                if let country = address.country {
-                    body["owner[address][country]"] = Node(country)
-                }
-                
-                if let postalCode = address.postalCode {
-                    body["owner[address][postal_code]"] = Node(postalCode)
-                }
-                
-                if let state = address.state {
-                    body["owner[address][state]"] = Node(state)
-                }
-                
-                if let line2 = address.addressLine2 {
-                    body["owner[address][line2]"] = Node(line2)
-                }
-            }
+            try owner.toEncodedDictionary().forEach { body["owner[\($0)]"] = $1 }
         }
-
-        if let metadata = metadata?.object {
-            for (key, value) in metadata {
-                body["metadata[\(key)]"] = value
-            }
-        }
-        return try StripeRequest(client: self.client, method: .post, route: .source(sourceId), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
+        
+        return try request.send(method: .POST, path: StripeAPIEndpoint.source(source).endpoint, body: body.queryParameters)
     }
 }

@@ -6,36 +6,25 @@
 //
 //
 
-import Foundation
-import Vapor
+/**
+ Receiver object
+ https://stripe.com/docs/api/curl#source_object-receiver
+ */
 
-open class Receiver: StripeModelProtocol {
-    
-    public private(set) var address: String?
-    public private(set) var amountCharged: Int?
-    public private(set) var amountReceived: Int?
-    public private(set) var amountReturned: Int?
-    public private(set) var refundMethod: String?
-    public private(set) var refundStatus: String?
-    
-    public required init(node: Node) throws {
-        self.address = try node.get("address")
-        self.amountCharged = try node.get("amount_charged")
-        self.amountReceived = try node.get("amount_received")
-        self.amountReturned = try node.get("amount_returned")
-        self.refundMethod = try node.get("refund_attributes_method")
-        self.refundStatus = try node.get("refund_attributes_status")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String : Any?] = [
-            "address": self.address,
-            "amount_charged": self.amountCharged,
-            "amount_received": self.amountReceived,
-            "amount_returned": self.amountReturned,
-            "refund_attributes_method": self.refundMethod,
-            "refund_attributes_status": self.refundStatus
-        ]
-        return try Node(node: object)
-    }
+public protocol Receiver {
+    var address: String? { get }
+    var amountCharged: Int? { get }
+    var amountReceived: Int? { get }
+    var amountReturned: Int? { get }
+    var refundAttributesMethod: String? { get }
+    var refundAttributesStatus: String? { get }
+}
+
+public struct StripeReceiver: Receiver, StripeModel {
+    public var address: String?
+    public var amountCharged: Int?
+    public var amountReceived: Int?
+    public var amountReturned: Int?
+    public var refundAttributesMethod: String?
+    public var refundAttributesStatus: String?
 }

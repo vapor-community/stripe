@@ -6,10 +6,8 @@
 //
 //
 
-import Foundation
-
-public enum AccountRejectReason: String {
-    case fraud = "fraud"
+public enum AccountRejectReason: String, Codable {
+    case fraud
     case termsOfService = "terms_of_service"
-    case other = "other"
+    case other
 }

@@ -6,41 +6,37 @@
 //
 //
 
-import Node
+import Vapor
 
-open class OrderReturnRoutes {
-    let client: StripeClient
+public protocol OrderReturnRoutes {
+    associatedtype OR: OrderReturn
+    associatedtype L: List
     
-    init(client: StripeClient) {
-        self.client = client
+    func retrieve(order: String) throws -> Future<OR>
+    func listAll(filter: [String: Any]?) throws -> Future<L>
+}
+
+public struct StripeOrderReturnRoutes: OrderReturnRoutes {
+    private let request: StripeRequest
+    
+    init(request: StripeRequest) {
+        self.request = request
     }
     
-    /**
-     Retrieve an order return
-     Retrieves the returned order by the given id
-     
-     - parameter orderReturnId: The ID of the desired return order.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func retrieve(orderReturn orderReturnId: String) throws -> StripeRequest<OrderReturn> {
-        return try StripeRequest(client: self.client, method: .get, route: .orderReturns(orderReturnId), query: [:], body: nil, headers: nil)
+    /// Retrieve an order return
+    /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_order_return)
+    public func retrieve(order: String) throws -> Future<StripeOrderReturn> {
+        return try request.send(method: .GET, path: StripeAPIEndpoint.orderReturns(order).endpoint)
     }
     
-    /**
-     List all order returns
-     Returns a list of your order returns.
-     
-     - parameter filter: A Filter item to pass query parameters when fetching results
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func listAll(filter: StripeFilter? = nil) throws -> StripeRequest<OrderReturnList> {
-        var query = [String : NodeRepresentable]()
-        
-        if let data = try filter?.createQuery() {
-            query = data
+    /// List all order returns
+    /// [Learn More →](https://stripe.com/docs/api/curl#list_order_returns)
+    public func listAll(filter: [String : Any]?) throws -> Future<OrderReturnList> {
+        var queryParams = ""
+        if let filter = filter {
+            queryParams = filter.queryParameters
         }
-        return try StripeRequest(client: self.client, method: .get, route: .orderReturn, query: query, body: nil, headers: nil)
+        
+        return try request.send(method: .GET, path: StripeAPIEndpoint.orderReturn.endpoint, query: queryParams)
     }
 }

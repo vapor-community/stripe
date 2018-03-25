@@ -6,30 +6,27 @@
 //
 //
 
-public enum StripeDuration: String {
-    case forever = "forever"
-    case once = "once"
-    case repeating = "repeating"
-    case never = "never"
-    
-    var description: String {
-        return self.rawValue.uppercased()
-    }
+public enum StripeDuration: String, Codable {
+    case forever
+    case once
+    case repeating
 }
 
-public enum StripePayoutInterval: String {
-    case manual = "manual"
-    case daily = "daily"
-    case weekly = "weekly"
-    case monthly = "monthly"
+// https://stripe.com/docs/api/curl#account_object-payout_schedule-interval
+public enum StripePayoutInterval: String, Codable {
+    case manual
+    case daily
+    case weekly
+    case monthly
 }
 
-public enum StripeWeeklyAnchor: String {
-    case sunday = "sunday"
-    case monday = "monday"
-    case tuesday = "tuesday"
-    case wednesday = "wednesday"
-    case thursday = "thursday"
-    case friday = "friday"
-    case saturday = "saturday"
+// https://stripe.com/docs/api/curl#account_object-payout_schedule-weekly_anchor
+public enum StripeWeeklyAnchor: String, Codable {
+    case sunday
+    case monday
+    case tuesday
+    case wednesday
+    case thursday
+    case friday
+    case saturday
 }

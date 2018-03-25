@@ -6,257 +6,210 @@
 //
 //
 
-import HTTP
-import Node
+import Vapor
+import Foundation
+// TODO: Support sources being different objects
+public protocol SubscriptionRoutes {
+    associatedtype SB: Subscription
+    associatedtype L: List
+    associatedtype DO: DeletedObject
+    
+    func create(customer: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: Date?, coupon: String?, daysUntilDue: Int?, items: [String: Any]?, metadata: [String: String]?, source: Any?, taxPercent: Decimal?, trialEnd: Any?, trialPeriodDays: Int?) throws -> Future<SB>
+    func retrieve(id: String) throws -> Future<SB>
+    func update(subscription: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: String?, coupon: String?, daysUntilDue: Int?, items: [String: Any]?, metadata: [String: String]?, prorate: Bool?, prorationDate: Date?, source: Any?, taxPercent: Decimal?, trialEnd: Any?) throws -> Future<SB>
+    func cancel(subscription: String, atPeriodEnd: Bool?) throws -> Future<SB>
+    func listAll(filter: [String: Any]?) throws -> Future<L>
+    func deleteDiscount(subscription: String) throws -> Future<DO>
+}
 
-open class SubscriptionRoutes {
+public struct StripeSubscriptionRoutes: SubscriptionRoutes {
+    private let request: StripeRequest
     
-    let client: StripeClient
-    
-    init(client: StripeClient) {
-        self.client = client
+    init(request: StripeRequest) {
+        self.request = request
+    }
+
+    /// Create a subscription
+    /// [Learn More →](https://stripe.com/docs/api/curl#create_subscription)
+    public func create(customer: String,
+                       applicationFeePercent: Decimal? = nil,
+                       billing: String? = nil,
+                       billingCycleAnchor: Date? = nil,
+                       coupon: String? = nil,
+                       daysUntilDue: Int? = nil,
+                       items: [String : Any]? = nil,
+                       metadata: [String : String]? = nil,
+                       source: Any? = nil,
+                       taxPercent: Decimal? = nil,
+                       trialEnd: Any? = nil,
+                       trialPeriodDays: Int? = nil) throws -> Future<StripeSubscription> {
+        var body: [String: Any] = [:]
+        
+        body["customer"] = customer
+        
+        if let applicationFeePercent = applicationFeePercent {
+            body["application_fee_percent"] = applicationFeePercent
+        }
+        
+        if let billing = billing {
+            body["billing"] = billing
+        }
+        
+        if let billingCycleAnchor = billingCycleAnchor {
+            body["billing_cycle_anchor"] = Int(billingCycleAnchor.timeIntervalSince1970)
+        }
+        
+        if let coupon = coupon {
+            body["coupon"] = coupon
+        }
+        
+        if let daysUntilDue = daysUntilDue {
+            body["days_until_due"] = daysUntilDue
+        }
+        
+        if let items = items {
+            items.forEach { body["items[\($0)]"] = $1 }
+        }
+        
+        if let metadata = metadata {
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
+        }
+        
+        if let source = source as? String {
+            body["source"] = source
+        }
+        
+        if let source = source as? [String: Any] {
+            source.forEach { body["source[\($0)]"] = $1 }
+        }
+        
+        if let taxPercent = taxPercent {
+            body["tax_percent"] = taxPercent
+        }
+        
+        if let trialEnd = trialEnd as? Date {
+            body["trial_end"] = Int(trialEnd.timeIntervalSince1970)
+        }
+        
+        if let trialEnd = trialEnd as? String {
+            body["trial_end"] = trialEnd
+        }
+        
+        if let trialPeriodDays = trialPeriodDays {
+            body["trial_period_days"] = trialPeriodDays
+        }
+        
+        return try request.send(method: .POST, path: StripeAPIEndpoint.subscription.endpoint, body: body.queryParameters)
     }
     
-    /**
-     Create a subscription
-     Creates a new subscription on an existing customer.
-     
-     - parameter customerId: The identifier of the customer to subscribe.
-     
-     - parameter plan: The identifier of the plan to subscribe the customer to.
-     
-     - parameter applicationFeePercent: This represents the percentage of the subscription invoice subtotal that will be transferred to the application owner’s Stripe account. Must be a possitive integer betwee 0 and 100
-     
-     - parameter coupon: The code of the coupon to apply to this subscription.
-     
-     - parameter items: List of subscription items, each with an attached plan.
-     
-     - parameter quantity: The quantity you’d like to apply to the subscription you’re creating.
-     
-     - parameter source: The source can either be a token, like the ones returned by Elements, or a dictionary containing a user’s credit card details
-     
-     - parameter taxPercent: A non-negative decimal between 0 and 100.
-     
-     - parameter trialEnd: Unix timestamp representing the end of the trial period the customer will get before being charged for the first time.
-     
-     - parameter trialPeriodDays: Integer representing the number of trial period days before the customer is charged for the first time.
-     
-     - parameter metadata: A set of key/value pairs that you can attach to a subscription object.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     
-    */
-    
-    public func create(forCustomer customerId: String, plan: String? = nil, applicationFeePercent: Int? = nil, onAccount account: String? = nil, couponId: String? = nil, items: Node? = nil, quantity: Int? = nil, source: Node? = nil, taxPercent: Double? = nil, trialEnd: Date? = nil, trialPeriodDays: Int? = nil, metadata: Node? = nil) throws -> StripeRequest<Subscription> {
-        
-        var headers: [HeaderKey : String]?
-        if let account = account {
-            headers = [
-                StripeHeader.Account: account
-            ]
-        }
-        
-        var body = Node([:])
-        body["customer"] = Node(customerId)
-        
-        if let plan = plan {
-            body["plan"] = Node(plan)
-        }
-        
-        if let appFeePercent = applicationFeePercent {
-            body["application_fee_percent"] = Node(appFeePercent)
-        }
-        
-        if let couponId = couponId {
-            body["coupon"] = Node(couponId)
-        }
-        
-        if let items = items?.array {
-            
-            for(index, item) in items.enumerated() {
-                body["items[\(index)]"] = Node(item)
-            }
-        }
-        
-        if let quantity = quantity {
-            body["quantity"] = Node(quantity)
-        }
-        
-        /// source can either be a token or a dictionary
-        if let sourceToken = source?.string {
-            body["source"] = Node(sourceToken)
-        }
-        /** 
-         Since source is passed to us we assume it's in a dictionary format with correct keys/values set as per the Stripe API
-         So we just set the dictionary as the paramater because it's expecting that type anyway
-         https://stripe.com/docs/api/curl#create_subscription
-        */
-        if let source = source?.object {
-            
-            body["source"] = Node(source)
-        }
-        if let tax = taxPercent {
-            body["tax_percent"] = Node(tax)
-        }
-        if let trialEnd = trialEnd {
-            body["trial_end"] = Node(Int(trialEnd.timeIntervalSince1970))
-        }
-        if let trialDays = trialPeriodDays {
-            body["trial_period_days"] = Node(trialDays)
-        }
-        if let metadata = metadata?.object {
-            for (key, value) in metadata {
-                body["metadata[\(key)]"] = value
-            }
-        }
-        
-        return try StripeRequest(client: self.client, method: .post, route: .subscription, query: [:], body: Body.data(body.formURLEncoded()), headers: headers)
+    /// Retrieve a subscription
+    /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_subscription)
+    public func retrieve(id: String) throws -> Future<StripeSubscription> {
+        return try request.send(method: .GET, path: StripeAPIEndpoint.subscriptions(id).endpoint)
     }
     
-    /**
-     Retrieve a subscription
-     
-     - parameter subscriptionId: The identifier of the source to be retrieved.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func retrieve(subscription subscriptionId: String, onAccount account: String? = nil) throws -> StripeRequest<Subscription> {
-        return try StripeRequest(client: self.client, method: .get, route: .subscriptions(subscriptionId), query: [:], body: nil, headers: nil)
-    }
-    
-    /**
-     Update a subscription
-     
-     - parameter subscriptionId: The identifier of the subscription to update
-     
-     - parameter applicationFeePercent: This represents the percentage of the subscription invoice subtotal that will be transferred to the application owner’s Stripe account.
-     
-     - parameter coupon: The code of the coupon to apply to this subscription.
-     
-     - parameter items: List of subscription items, each with an attached plan.
-     
-     - parameter plan: The identifier of the plan to subscribe the customer to.
-     
-     - parameter prorate: Flag telling us whether to prorate switching plans during a billing cycle.
-     
-     - parameter prorationDate: If set, the proration will be calculated as though the subscription was updated at the given time.
-     
-     - parameter quantity: The quantity you’d like to apply to the subscription you’re creating.
-     
-     - parameter source: The source can either be a token, like the ones returned by Elements, or a dictionary containing a user’s credit card details
-     
-     - parameter taxPercent: A non-negative decimal between 0 and 100.
-     
-     - parameter trialEnd: Unix timestamp representing the end of the trial period the customer will get before being charged for the first time.
-     
-     - parameter metadata: A set of key/value pairs that you can attach to a subscription object.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     
-     */
-    
-    public func update(subscription subscriptionId: String, applicationFeePercent: Double? = nil, couponId: String? = nil, items: Node? = nil, plan: String? = nil, prorate: Bool? = nil, quantity: Int? = nil, source: Node? = nil, taxPercent: Double? = nil, trialEnd: Date? = nil, onAccount account: String? = nil, metadata: Node? = nil) throws -> StripeRequest<Subscription> {
-        var body = Node([:])
+    /// Update a subscription
+    /// [Learn More →](https://stripe.com/docs/api/curl#update_subscription)
+    public func update(subscription: String,
+                       applicationFeePercent: Decimal? = nil,
+                       billing: String? = nil,
+                       billingCycleAnchor: String? = nil,
+                       coupon: String? = nil,
+                       daysUntilDue: Int? = nil,
+                       items: [String : Any]? = nil,
+                       metadata: [String : String]? = nil,
+                       prorate: Bool? = nil,
+                       prorationDate: Date? = nil,
+                       source: Any? = nil,
+                       taxPercent: Decimal? = nil,
+                       trialEnd: Any? = nil) throws -> Future<StripeSubscription> {
+        var body: [String: Any] = [:]
         
-        if let plan = plan {
-            body["plan"] = Node(plan)
+        if let applicationFeePercent = applicationFeePercent {
+            body["application_fee_percent"] = applicationFeePercent
         }
         
-        if let appFeePercent = applicationFeePercent {
-            body["application_fee_percent"] = Node(appFeePercent)
+        if let billing = billing {
+            body["billing"] = billing
         }
         
-        if let couponId = couponId {
-            body["coupon"] = Node(couponId)
+        if let billingCycleAnchor = billingCycleAnchor {
+            body["billing_cycle_anchor"] = billingCycleAnchor
         }
         
-        if let items = items?.array {
-            
-            for(index, item) in items.enumerated() {
-                body["items[\(index)]"] = Node(item)
-            }
+        if let coupon = coupon {
+            body["coupon"] = coupon
+        }
+        
+        if let daysUntilDue = daysUntilDue {
+            body["days_until_due"] = daysUntilDue
+        }
+        
+        if let items = items {
+            items.forEach { body["items[\($0)]"] = $1 }
+        }
+        
+        if let metadata = metadata {
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let prorate = prorate {
-            body["prorate"] = Node(prorate)
+            body["prorate"] = prorate
         }
         
-        if let quantity = quantity {
-            body["quantity"] = Node(quantity)
+        if let prorationDate = prorationDate {
+            body["proration_date"] = Int(prorationDate.timeIntervalSince1970)
         }
-        /// source can either be a token or a dictionary
-        if let sourceToken = source?.string {
-            body["source"] = Node(sourceToken)
+        
+        if let source = source as? String {
+            body["source"] = source
         }
-        /**
-         Since source is passed to us we assume it's in a dictionary format with correct keys/values set as per the Stripe API
-         So we just set the dictionary as the paramater because it's expecting that type anyway
-         https://stripe.com/docs/api/curl#create_subscription
-         */
-        if let source = source?.object {
-            
-            body["source"] = Node(source)
+        
+        if let source = source as? [String: Any] {
+            source.forEach { body["source[\($0)]"] = $1 }
         }
-        if let tax = taxPercent {
-            body["tax_percent"] = Node(tax)
+        
+        if let taxPercent = taxPercent {
+            body["tax_percent"] = taxPercent
         }
-        if let trialEnd = trialEnd {
-            body["trial_end"] = Node(Int(trialEnd.timeIntervalSince1970))
+        
+        if let trialEnd = trialEnd as? Date {
+            body["trial_end"] = Int(trialEnd.timeIntervalSince1970)
         }
-        if let metadata = metadata?.object {
-            for (key, value) in metadata {
-                body["metadata[\(key)]"] = value
-            }
+        
+        if let trialEnd = trialEnd as? String {
+            body["trial_end"] = trialEnd
         }
-        return try StripeRequest(client: self.client, method: .post, route: .subscriptions(subscriptionId), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
+
+        return try request.send(method: .POST, path: StripeAPIEndpoint.subscriptions(subscription).endpoint, body: body.queryParameters)
     }
     
-    /**
-     Delete a subscription discount
-     Removes the currently applied discount on a subscription.
-     
-     - parameter subscriptionId: The Customer's ID
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func deleteDiscount(onSubscription subscriptionId: String, onAccount account: String? = nil) throws -> StripeRequest<DeletedObject> {
-        return try StripeRequest(client: self.client, method: .delete, route: .subscriptionDiscount(subscriptionId), query: [:], body: nil, headers: nil)
-    }
-    
-    /**
-     Cancel a subscription
-     
-     - parameter subscriptionId: The identifier of the subscription to cancel
-     
-     - parameter atTrialEnd: A flag that if set to true will delay the cancellation of the subscription until the end of the current period.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    
-    public func cancel(subscription subscriptionId: String, atPeriodEnd: Bool? = nil, onAccount account: String? = nil) throws -> StripeRequest<Subscription> {
+    /// Cancel a subscription
+    /// [Learn More →](https://stripe.com/docs/api/curl#cancel_subscription)
+    public func cancel(subscription: String, atPeriodEnd: Bool? = nil) throws -> Future<StripeSubscription> {
+        var body: [String: Any] = [:]
         
-        var body = Node([:])
-        
-        if let atperiodend = atPeriodEnd {
-            body["at_period_end"] = Node(atperiodend)
+        if let atPeriodEnd = atPeriodEnd {
+            body["at_period_end"] = atPeriodEnd
         }
         
-        return try StripeRequest(client: self.client, method: .delete, route: .subscriptions(subscriptionId), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.subscriptions(subscription).endpoint, body: body.queryParameters)
     }
     
-    /**
-     List all customers
-     By default, returns a list of subscriptions that have not been canceled.
-     
-     - parameter filter: A Filter item to pass query parameters when fetching results
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func listAll(filter: StripeFilter? = nil) throws -> StripeRequest<SubscriptionList> {
-        var query = [String : NodeRepresentable]()
-        if let data = try filter?.createQuery() {
-            query = data
+    /// List subscriptions
+    /// [Learn More →](https://stripe.com/docs/api/curl#list_subscriptions)
+    public func listAll(filter: [String : Any]? = nil) throws -> Future<SubscriptionList> {
+        var queryParams = ""
+        if let filter = filter {
+            queryParams = filter.queryParameters
         }
-        return try StripeRequest(client: self.client, method: .get, route: .subscription, query: query, body: nil, headers: nil)
+        
+        return try request.send(method: .GET, path: StripeAPIEndpoint.subscription.endpoint, query: queryParams)
+    }
+    
+    /// Delete a subscription discount
+    /// [Learn More →](https://stripe.com/docs/api/curl#delete_subscription_discount)
+    public func deleteDiscount(subscription: String) throws -> Future<StripeDeletedObject> {
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.subscriptionDiscount(subscription).endpoint)
     }
 }

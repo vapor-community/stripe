@@ -6,49 +6,29 @@
 //
 //
 
-import Foundation
-import Vapor
+/**
+ External accounts list
+ https://stripe.com/docs/api/curl#account_object-external_accounts
+ */
 
-open class ExternalAccounts: StripeModelProtocol {
+public struct ExternalAccountsList: StripeModel {
+    public var object: String?
+    public var hasMore: Bool?
+    public var totalCount: Int?
+    public var url: String?
+    private var data: String?
+    public var cardAccounts: [StripeCard]?
+    public var bankAccounts: [StripeBankAccount]?
     
-    public private(set) var object: String?
-    public private(set) var url: String?
-    public private(set) var hasMore: Bool?
-    public private(set) var items: [Node]?
-    public private(set) var cardAccounts: [Card] = []
-    public private(set) var bankAccounts: [BankAccount] = []
-    
-    public required init(node: Node) throws {
-        self.object = try node.get("object")
-        self.url = try node.get("url")
-        self.hasMore = try node.get("has_more")
-        self.items = try node.get("data")
-        
-        // Seperate different type of accounts to make it easier to work with.
-        for item in items ?? [] {
-            
-            if let object = item["object"]?.string {
-                if object == "bank_account" {
-                    let bank = try BankAccount(node: item)
-                    bankAccounts.append(bank)
-                }
-            }
-            
-            if let object = item["object"]?.string {
-                if object == "card" {
-                    cardAccounts.append(try Card(node: item))
-                }
-            }
-        }
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String : Any?] = [
-            "object": self.object,
-            "url": self.url,
-            "has_more": self.hasMore,
-            "data": self.items
-        ]
-        return try Node(node: object)
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        object = try container.decodeIfPresent(String.self, forKey: .object)
+        hasMore = try container.decodeIfPresent(Bool.self, forKey: .hasMore)
+        totalCount = try container.decodeIfPresent(Int.self, forKey: .totalCount)
+        url = try container.decodeIfPresent(String.self, forKey: .url)
+        cardAccounts = try container.decodeIfPresent([StripeCard].self, forKey: .data)?.filter{ $0.object == "card" }
+        bankAccounts = try container.decodeIfPresent([StripeBankAccount].self, forKey: .data)?.filter{ $0.object == "bank_account" }
     }
 }
+
+public protocol ExternalAccount {}

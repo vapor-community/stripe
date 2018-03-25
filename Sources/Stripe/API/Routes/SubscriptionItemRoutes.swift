@@ -6,141 +6,124 @@
 //
 //
 
-import Node
-import HTTP
+import Vapor
+import Foundation
 
-open class SubscriptionItemRoutes {
+public protocol SubscriptionItemRoutes {
+    associatedtype SI: SubscriptionItem
+    associatedtype L: List
     
-    let client: StripeClient
+    func create(plan: String, subscription: String, metadata: [String: String]?, prorate: Bool?, prorationDate: Date?, quantity: Int?) throws -> Future<SI>
+    func retrieve(item: String) throws -> Future<SI>
+    func update(item: String, metadata: [String: String]?, plan: String?, prorate: Bool?, prorationDate: Date?, quantity: Int?) throws -> Future<SI>
+    func delete(item: String, prorate: Bool?, prorationDate: Date?) throws -> Future<SI>
+    func listAll(subscription: String, filter: [String: Any]?) throws -> Future<L>
+}
+
+public struct StripeSubscriptionItemRoutes: SubscriptionItemRoutes {
+    private let request: StripeRequest
     
-    init(client: StripeClient) {
-        self.client = client
+    init(request: StripeRequest) {
+        self.request = request
     }
-    
-    /**
-     Create SubscriptionItem 
-     
-      - parameter planId:           The identifier of the plan to add to the subscription.
-     
-      - parameter prorate:          Flag indicating whether to prorate switching plans during a billing cycle.
-     
-      - parameter prorationDate:    If set, the proration will be calculated as though the subscription was updated at the given time.
-     
-      - parameter quantity:         The quantity you’d like to apply to the subscription item you’re creating.
-     
-      - parameter subscriptionId:   The identifier of the subscription to modify.
-     
-      - returns: A StripeRequest<> item which you can then use to convert to the corresponding node.
-     */
-    
-    public func create(planId: String, prorate: Bool, prorationDate: Date, quantity: Int, subscriptionId: String) throws -> StripeRequest<SubscriptionItem> {
+
+    /// Create a subscription item
+    /// [Learn More →](https://stripe.com/docs/api/curl#create_subscription_item)
+    public func create(plan: String,
+                       subscription: String,
+                       metadata: [String : String]? = nil,
+                       prorate: Bool? = nil,
+                       prorationDate: Date? = nil,
+                       quantity: Int? = nil) throws -> Future<StripeSubscriptionItem> {
+        var body: [String: Any] = [:]
         
-        let body: [String: Any] = [
-            "plan": planId,
-            "subscription": subscriptionId,
-            "prorate": prorate,
-            "proration_date": Int(prorationDate.timeIntervalSince1970),
-            "quantity": quantity
-        ]
+        body["plan"] = plan
+        body["subscription"] = subscription
         
-        let node = try Node(node: body)
-        
-        return try StripeRequest(client: self.client, method: .post, route: .subscriptionItem, query: [:], body: Body.data(node.formURLEncoded()), headers: nil)
-    }
-    
-    /**
-     Retrieve a subscriptionItem
-     Retrieves the invoice item with the given ID.
-     
-     - parameter subscriptionId: The identifier of the subscription item to retrieve.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func retrieve(subscriptionItem subscriptionItemId: String) throws -> StripeRequest<SubscriptionItem> {
-        return try StripeRequest(client: self.client, method: .get, route: .subscriptionItems(subscriptionItemId), query: [:], body: nil, headers: nil)
-    }
-    
-    /**
-     Update a subscription item
-     Updates the plan or quantity of an item on a current subscription.
-     
-     - parameter plan: The identifier of the new plan for this subscription item.
-     
-     - parameter prorate: Flag indicating whether to prorate switching plans during a billing cycle.
-     
-     - parameter prorationDate: If set, the proration will be calculated as though the subscription was updated at the given time.
-     
-     - parameter quantity: The quantity you’d like to apply to the subscription item you’re creating.
-     
-     - parameter subscriptionItemId: The identifier of the subscription item to modify.
-     */
-    
-    public func update(plan: String? = nil, prorate: Bool? = nil, prorationDate: Date? = nil, quantity: Int? = nil, subscriptionItemId: String) throws -> StripeRequest<SubscriptionItem> {
-        var body = Node([:])
-        
-        if let plan = plan {
-            body["plan"] = Node(plan)
+        if let metadata = metadata {
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let prorate = prorate {
-            body["prorate"] = Node(prorate)
+            body["prorate"] = prorate
         }
-        if let prorationdate = prorationDate {
-            body["proration_date"] = Node(Int(prorationdate.timeIntervalSince1970))
+        
+        if let prorationDate = prorationDate {
+            body["proration_date"] = Int(prorationDate.timeIntervalSince1970)
         }
+        
         if let quantity = quantity {
-            body["quantity"] = Node(quantity)
+            body["quantity"] = quantity
         }
         
-        return try StripeRequest(client: self.client, method: .post, route: .subscriptionItems(subscriptionItemId), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.subscriptionItem.endpoint, body: body.queryParameters)
     }
     
-    /**
-     Delete a subscription item
-     Deletes an item from the subscription.
-     
-     - parameter subscriptionItemId: The identifier of the coupon to be deleted.
-     
-     - parameter prorate: Flag indicating whether to prorate switching plans during a billing cycle.
-     
-     - parameter prorationDate: If set, the proration will be calculated as though the subscription was updated at the given time.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    
-    public func delete(subscriptionItem subscriptionItemId: String, prorate: Bool? = nil, proprationDate: Date? = nil) throws -> StripeRequest<SubscriptionItem> {
-        
-        var body = Node([:])
-        
-        if let prorate = prorate {
-            body["prorate"] = Node(prorate)
-        }
-        if let prorationdate = proprationDate {
-            body["proration_date"] = Node(Int(prorationdate.timeIntervalSince1970))
-        }
-        
-        return try StripeRequest(client: self.client, method: .delete, route: .subscriptionItems(subscriptionItemId), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
+    /// Retrieve a subscription item
+    /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_subscription_item)
+    public func retrieve(item: String) throws -> Future<StripeSubscriptionItem> {
+        return try request.send(method: .GET, path: StripeAPIEndpoint.subscriptionItems(item).endpoint)
     }
+    
+    /// Update a subscription item
+    /// [Learn More →](https://stripe.com/docs/api/curl#update_subscription_item)
+    public func update(item: String,
+                       metadata: [String : String]? = nil,
+                       plan: String? = nil,
+                       prorate: Bool? = nil,
+                       prorationDate: Date? = nil,
+                       quantity: Int? = nil) throws -> Future<StripeSubscriptionItem> {
+        var body: [String: Any] = [:]
+        
+        if let metadata = metadata {
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
+        }
 
-    /**
-     List all subscription items
-     Returns a list of your subscription items for a given subscription.
-     
-     - parameter filter: A Filter item to pass query parameters when fetching results.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    
-    public func listAll(subscriptionId: String, filter: StripeFilter? = nil) throws -> StripeRequest<SubscriptionItemList> {
-        var query = [String : NodeRepresentable]()
-        
-        if let data = try filter?.createQuery()
-        {
-            query = data
+        if let plan = plan {
+            body["plan"] = plan
+        }
+
+        if let prorate = prorate {
+            body["prorate"] = prorate
         }
         
-        query["subscription"] = Node(subscriptionId)
+        if let prorationDate = prorationDate {
+            body["proration_date"] = Int(prorationDate.timeIntervalSince1970)
+        }
         
-        return try StripeRequest(client: self.client, method: .get, route: .subscriptionItem, query: query, body: nil, headers: nil)
+        if let quantity = quantity {
+            body["quantity"] = quantity
+        }
+
+        return try request.send(method: .POST, path: StripeAPIEndpoint.subscriptionItems(item).endpoint, body: body.queryParameters)
+    }
+    
+    /// Delete a subscription item
+    /// [Learn More →](https://stripe.com/docs/api/curl#delete_subscription_item)
+    public func delete(item: String,
+                       prorate: Bool? = nil,
+                       prorationDate: Date? = nil) throws -> Future<StripeSubscriptionItem> {
+        var body: [String: Any] = [:]
+
+        if let prorate = prorate {
+            body["prorate"] = prorate
+        }
+        
+        if let prorationDate = prorationDate {
+            body["proration_date"] = Int(prorationDate.timeIntervalSince1970)
+        }
+
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.subscriptionItems(item).endpoint, body: body.queryParameters)
+    }
+    
+    /// List all subscription items
+    /// [Learn More →](https://stripe.com/docs/api/curl#list_subscription_item)
+    public func listAll(subscription: String, filter: [String : Any]? = nil) throws -> Future<SubscriptionItemList> {
+        var queryParams = ""
+        if let filter = filter {
+            queryParams = filter.queryParameters
+        }
+        
+        return try request.send(method: .GET, path: StripeAPIEndpoint.subscriptionItems(subscription).endpoint, query: queryParams)
     }
 }

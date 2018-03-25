@@ -8,33 +8,33 @@
 
 import Foundation
 
-public enum StripeStatus: String {
-    case success = "success"
-    case succeeded = "succeeded"
-    case failed = "failed"
-    case pending = "pending"
-    case canceled = "canceled"
-    case chargeable = "chargeable"
+public enum StripeStatus: String, Codable {
+    case success
+    case succeeded
+    case failed
+    case pending
+    case canceled
+    case chargeable
 }
 
-public enum StripeSubscriptionStatus: String {
-    case trailing = "trailing"
-    case active = "active"
-    case pastdue = "past_due"
-    case canceled = "canceled"
-    case unpaid = "unpaid"
+public enum StripeSubscriptionStatus: String, Codable {
+    case trailing
+    case active
+    case pastDue = "past_due"
+    case canceled
+    case unpaid
 }
 
-public enum ConnectLegalEntityVerificationStatus: String {
-    case unverified = "unverified"
-    case pending = "pending"
-    case verified = "verified"
+public enum LegalEntityVerificationStatus: String, Codable {
+    case unverified
+    case pending
+    case verified
 }
 
-public enum ConnectLegalEntityVerificationState: String {
+public enum LegalEntityVerificationState: String, Codable {
     case scanCorrupt = "scan_corrupt"
     case scanNotReadable = "scan_not_readable"
-    case scanFailedGreyScale = "scan_failed_greyscale"
+    case scanFailedGreyscale = "scan_failed_greyscale"
     case scanNotUploaded = "scan_not_uploaded"
     case scanIdTypeNotUploaded = "scan_id_type_not_supported"
     case scanIdCountryNotSupported = "scan_id_country_not_supported"

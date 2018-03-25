@@ -6,24 +6,19 @@
 //
 //
 
-import Foundation
 import Vapor
 
-open class DeletedObject: StripeModelProtocol {
-    public private(set) var deleted: Bool?
-    public private(set) var id: String?
-    
-    public required init(node: Node) throws {
-        self.deleted = try node.get("deleted")
-        self.id = try node.get("id")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String : Any?] = [
-            "deleted": self.deleted,
-            "id": self.id
-        ]
-        return try Node(node: object)
-    }
-    
+/**
+ Deleted object
+ https://stripe.com/docs/api/curl#delete_customer
+ */
+
+public protocol DeletedObject {
+    var deleted: Bool? { get }
+    var id: String? { get }
+}
+
+public struct StripeDeletedObject: DeletedObject, StripeModel {
+    public var deleted: Bool?
+    public var id: String?
 }

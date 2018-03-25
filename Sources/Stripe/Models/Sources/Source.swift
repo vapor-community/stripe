@@ -7,100 +7,128 @@
 //
 
 import Foundation
-import Vapor
 
 /**
- Source Model
+ Source object
  https://stripe.com/docs/api/curl#source_object
  */
-open class Source: StripeModelProtocol {
+
+public protocol Source {
+    associatedtype R: Receiver
+    associatedtype O: Owner
+    associatedtype C: Card
     
-    public private(set) var id: String?
-    public private(set) var object: String?
-    public private(set) var amount: Int?
-    public private(set) var clientSecret: String?
-    public private(set) var codeVerificationStatus: String?
-    public private(set) var attemptsRemaining: Int?
-    public private(set) var created: Date?
-    public private(set) var currency: StripeCurrency?
-    public private(set) var flow: String?
-    public private(set) var isLive: Bool?
-    public private(set) var redirectReturnUrl: String?
-    public private(set) var redirectStatus: String?
-    public private(set) var redirectUrl: String?
-    public private(set) var status: StripeStatus?
-    public private(set) var type: SourceType?
-    public private(set) var usage: String?
-    public private(set) var reciever: Receiver?
-    public private(set) var returnedSource: [String:[String: Node]]?
+    var id: String? { get }
+    var object: String? { get }
+    var amount: Int? { get }
+    var clientSecret: String? { get }
+    var codeVerification: CodeVerification? { get }
+    var created: Date? { get }
+    var currency: StripeCurrency? { get }
+    var flow: Flow? { get }
+    var livemode: Bool? { get }
+    var metadata: [String: String]? { get }
+    var owner: O? { get }
+    var receiver: R? { get }
+    var redirect: SourceRedirect? { get }
+    var statementDescriptor: String? { get }
+    var status: StripeStatus? { get }
+    var type: SourceType? { get }
+    var usage: String? { get }
+    var card: C? { get }
+    var threeDSecure: ThreeDSecure? { get }
+    var giropay: Giropay? { get }
+    var sepaDebit: SepaDebit? { get }
+    var ideal: iDEAL? { get }
+    var sofort: SOFORT? { get }
+    var bancontact: Bancontact? { get }
+    var alipay: Alipay? { get }
+    var p24: P24? { get }
+    var achCreditTransfer: ACHCreditTransfer? { get }
+    // TODO: - Add multibanco, EPS
+    // https://stripe.com/docs/sources
+}
+
+public struct StripeSource: Source, StripeModel {
+    public var id: String?
+    public var object: String?
+    public var amount: Int?
+    public var clientSecret: String?
+    public var codeVerification: CodeVerification?
+    public var created: Date?
+    public var currency: StripeCurrency?
+    public var flow: Flow?
+    public var livemode: Bool?
+    public var metadata: [String: String]?
+    public var owner: StripeOwner?
+    public var receiver: StripeReceiver?
+    public var redirect: SourceRedirect?
+    public var statementDescriptor: String?
+    public var status: StripeStatus?
+    public var type: SourceType?
+    public var usage: String?
+    public var card: StripeCard?
+    public var threeDSecure: ThreeDSecure?
+    public var giropay: Giropay?
+    public var sepaDebit: SepaDebit?
+    public var ideal: iDEAL?
+    public var sofort: SOFORT?
+    public var bancontact: Bancontact?
+    public var alipay: Alipay?
+    public var p24: P24?
+    public var achCreditTransfer: ACHCreditTransfer?
     
-    /**
-     Only these values are mutable/updatable.
-     https://stripe.com/docs/api/curl#update_source
-     */
-    
-    public private(set) var metadata: Node?
-    public private(set) var owner: Owner?
-    
-    public required init(node: Node) throws {
-        self.id = try node.get("id")
-        self.object = try node.get("object")
-        self.amount = try node.get("amount")
-        self.clientSecret = try node.get("client_secret")
-        /// We can check for code verification dictionary here
-        if let codeVerification = node["code_verification"]?.object {
-            self.attemptsRemaining = codeVerification["attempts_remaining"]?.int
-            self.codeVerificationStatus = codeVerification["status"]?.string
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeIfPresent(String.self, forKey: .id)
+        object = try container.decodeIfPresent(String.self, forKey: .object)
+        amount = try container.decodeIfPresent(Int.self, forKey: .amount)
+        clientSecret = try container.decodeIfPresent(String.self, forKey: .clientSecret)
+        codeVerification = try container.decodeIfPresent(CodeVerification.self, forKey: .codeVerification)
+        created = try container.decodeIfPresent(Date.self, forKey: .created)
+        currency = try container.decodeIfPresent(StripeCurrency.self, forKey: .currency)
+        flow = try container.decodeIfPresent(Flow.self, forKey: .flow)
+        livemode = try container.decodeIfPresent(Bool.self, forKey: .livemode)
+        metadata = try container.decodeIfPresent([String: String].self, forKey: .metadata)
+        owner = try container.decodeIfPresent(StripeOwner.self, forKey: .owner)
+        receiver = try container.decodeIfPresent(StripeReceiver.self, forKey: .receiver)
+        redirect = try container.decodeIfPresent(SourceRedirect.self, forKey: .redirect)
+        statementDescriptor = try container.decodeIfPresent(String.self, forKey: .statementDescriptor)
+        status = try container.decodeIfPresent(StripeStatus.self, forKey: .status)
+        usage = try container.decodeIfPresent(String.self, forKey: .usage)
+        
+        type = try container.decodeIfPresent(SourceType.self, forKey: .type)
+        
+        switch type! {
+        case .card:
+            card = try container.decodeIfPresent(StripeCard.self, forKey: .card)
+            
+        case .threeDSecure:
+            threeDSecure = try container.decodeIfPresent(ThreeDSecure.self, forKey: .threeDSecure)
+            
+        case .giropay:
+            giropay = try container.decodeIfPresent(Giropay.self, forKey: .giropay)
+            
+        case .sepaDebit:
+            sepaDebit = try container.decodeIfPresent(SepaDebit.self, forKey: .sepaDebit)
+            
+        case .ideal:
+            ideal = try container.decodeIfPresent(iDEAL.self, forKey: .ideal)
+            
+        case .sofort:
+            sofort = try container.decodeIfPresent(SOFORT.self, forKey: .sofort)
+            
+        case .bancontact:
+            bancontact = try container.decodeIfPresent(Bancontact.self, forKey: .bancontact)
+            
+        case .alipay:
+            alipay = try container.decodeIfPresent(Alipay.self, forKey: .alipay)
+            
+        case .p24:
+            p24 = try container.decodeIfPresent(P24.self, forKey: .p24)
+            
+        case .achCreditTransfer:
+            achCreditTransfer = try container.decodeIfPresent(ACHCreditTransfer.self, forKey: .achCreditTransfer)
         }
-        /// We can check for redirect dictionary here
-        if let redirect = node["redirect"]?.object {
-            self.redirectReturnUrl = redirect["return_url"]?.string
-            self.redirectStatus = redirect["status"]?.string
-            self.redirectUrl = redirect["url"]?.string
-        }
-        self.created = try node.get("created")
-        if let currency = node["currency"]?.string {
-            self.currency = StripeCurrency(rawValue: currency)
-        }
-        self.flow = try node.get("flow")
-        self.isLive = try node.get("livemode")
-        if let status = node["status"]?.string {
-            self.status = StripeStatus(rawValue: status)
-        }
-        /// if we have a type we should have a body to parse
-        if let type = node["type"]?.string {
-            self.type = SourceType(rawValue: type)
-            if let sourceTypeBody = node["\(type)"]?.object {
-                var sourceBody: [String: Node] = [:]
-                for (key,val) in sourceTypeBody {
-                    sourceBody["\(key)"] = val
-                }
-                self.returnedSource = ["\(type)": sourceBody]
-            }
-        }
-        self.usage = try node.get("usage")
-        self.metadata = try node.get("metadata")
-        self.owner = try node.get("owner")
-        self.reciever = try node.get("receiver")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String : Any?] = [
-            "id": self.id,
-            "object": self.object,
-            "amount": self.amount,
-            "client_secret": self.clientSecret,
-            "created": self.created,
-            "currency": self.currency?.rawValue,
-            "flow": self.flow,
-            "livemode": self.isLive,
-            "status": self.status?.rawValue,
-            "type": self.type?.rawValue,
-            "usage": self.usage,
-            "metadata": self.metadata,
-            "owner": self.owner,
-            "receiver": self.reciever
-        ]
-        return try Node(node: object)
     }
 }

@@ -8,59 +8,73 @@
 
 import Vapor
 
-private var _stripe: StripeClient?
+public struct StripeConfig: Service {
+    let apiKey: String
+    public init(apiKey: String) {
+        self.apiKey = apiKey
+    }
+}
 
-extension Droplet {
-    /*
-     Enables use of the `drop.stripe?` convenience methods.
-     */
-    public var stripe: StripeClient? {
-        get {
-            return _stripe
-        }
-        set {
-            _stripe = newValue
+public final class StripeProvider: Provider {
+    public static let repositoryName = "stripe-provider"
+    
+    public func boot(_ worker: Container) throws {}
+    
+    public func didBoot(_ worker: Container) throws -> EventLoopFuture<Void> {
+        return .done(on: worker)
+    }
+    
+    public func register(_ services: inout Services) throws {
+        services.register { (container) -> StripeClient in
+            let httpClient = try container.make(Client.self)
+            let config = try container.make(StripeConfig.self)
+            return StripeClient(config: config, client: httpClient)
         }
     }
 }
 
-public final class Provider: Vapor.Provider {
+public struct StripeClient: Service {
+    public let balance: StripeBalanceRoutes
+    public let charge: StripeChargeRoutes
+    public let connectAccount: StripeConnectAccountRoutes
+    public let coupon: StripeCouponRoutes
+    public let customer: StripeCustomerRoutes
+    public let dispute: StripeDisputeRoutes
+    public let ephemeralKey: StripeEphemeralKeyRoutes
+    public let invoiceItem: StripeInvoiceItemRoutes
+    public let invoice: StripeInvoiceRoutes
+    public let orderReturn: StripeOrderReturnRoutes
+    public let order: StripeOrderRoutes
+    public let plan: StripePlanRoutes
+    public let product: StripeProductRoutes
+    public let refund: StripeRefundRoutes
+    public let sku: StripeSKURoutes
+    public let source: StripeSourceRoutes
+    public let subscriptionItem: StripeSubscriptionItemRoutes
+    public let subscription: StripeSubscriptionRoutes
+    public let token: StripeTokenRoutes
 
-    public static let repositoryName = "vapor-stripe"
-    
-    public let apiKey: String
-    public let stripe: StripeClient
-
-    public convenience init(config: Config) throws {
-        guard let stripeConfig = config["stripe"]?.object else {
-            throw StripeError.missingConfig
-        }
-        guard let apiKey = stripeConfig["apiKey"]?.string else {
-            throw StripeError.missingAPIKey
-        }
-        try self.init(apiKey: apiKey)
-    }
-
-    public init(apiKey: String) throws {
-        self.apiKey = apiKey
-        self.stripe = try StripeClient(apiKey: apiKey)
-    }
-
-    public func boot(_ drop: Droplet) {
-        self.stripe.initializeRoutes()
-        drop.stripe = self.stripe
-    }
-    
-    public func boot(_ config: Configs.Config) throws {
+    internal init(config: StripeConfig, client: Client) {
+        let apiRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
         
+        balance = StripeBalanceRoutes(request: apiRequest)
+        charge = StripeChargeRoutes(request: apiRequest)
+        connectAccount = StripeConnectAccountRoutes(request: apiRequest)
+        coupon = StripeCouponRoutes(request: apiRequest)
+        customer = StripeCustomerRoutes(request: apiRequest)
+        dispute = StripeDisputeRoutes(request: apiRequest)
+        ephemeralKey = StripeEphemeralKeyRoutes(request: apiRequest)
+        invoiceItem = StripeInvoiceItemRoutes(request: apiRequest)
+        invoice = StripeInvoiceRoutes(request: apiRequest)
+        orderReturn = StripeOrderReturnRoutes(request: apiRequest)
+        order = StripeOrderRoutes(request: apiRequest)
+        plan = StripePlanRoutes(request: apiRequest)
+        product = StripeProductRoutes(request: apiRequest)
+        refund = StripeRefundRoutes(request: apiRequest)
+        sku = StripeSKURoutes(request: apiRequest)
+        source = StripeSourceRoutes(request: apiRequest)
+        subscriptionItem = StripeSubscriptionItemRoutes(request: apiRequest)
+        subscription = StripeSubscriptionRoutes(request: apiRequest)
+        token = StripeTokenRoutes(request: apiRequest)
     }
-
-    public func afterInit(_ drop: Droplet) {
-
-    }
-
-    public func beforeRun(_ drop: Droplet) {
-
-    }
-
 }

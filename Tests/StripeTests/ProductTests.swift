@@ -7,292 +7,119 @@
 //
 
 import XCTest
-
 @testable import Stripe
 @testable import Vapor
 
-
-
-
-
 class ProductTests: XCTestCase {
+    let productString = """
+    {
+    "id": "prod_BosWT9EsdzgjPn",
+    "object": "product",
+    "active": false,
+    "attributes": [
+    "size",
+    "gender"
+    ],
+    "caption": "test",
+    "created": 1511420673,
+    "deactivate_on": [
     
-    var drop: Droplet?
-    var productId: String = ""
+    ],
+    "description": "Comfortable cotton t-shirt",
+    "images": [
     
-    override func setUp() {
-        do {
-            drop = try makeDroplet()
-            
-            
-            productId = try drop?.stripe?.products.create(name: "Vapor Node",
-                                                          id: nil,
-                                                          active: nil,
-                                                          attributes: try Node(node:["size"]),
-                                                          caption: nil,
-                                                          deactivateOn: nil,
-                                                          description: "A Vapor Node",
-                                                          images: nil,
-                                                          packageDimensions: nil,
-                                                          shippable: nil,
-                                                          url: nil)
-                                                          .serializedResponse().id ?? ""
+    ],
+    "livemode": false,
+    "metadata": {
+    },
+    "name": "T-shirt",
+    "package_dimensions": {
+    "height": 1.25,
+    "length": 2.44,
+    "weight": 3.0,
+    "width": 4.0
+    },
+    "shippable": false,
+    "skus": {
+        "object": "list",
+        "data": [
+        {
+        "id": "sku_C3rCQ7Eq4wRfLw",
+        "object": "sku",
+        "active": true,
+        "attributes": {
+        "size": "Medium",
+        "gender": "Unisex"
+        },
+        "created": 1514875358,
+        "currency": "usd",
+        "image": null,
+        "inventory": {
+        "quantity": 500,
+        "type": "finite",
+        "value": null
+        },
+        "livemode": false,
+        "metadata": {
+        },
+        "package_dimensions": null,
+        "price": 1500,
+        "product": "prod_BosWT9EsdzgjPn",
+        "updated": 1514875358
         }
-        catch let error as StripeError {
+        ],
+        "has_more": false,
+        "total_count": 1,
+        "url": "/v1/skus?product=prod_BosWT9EsdzgjPn&active=true"
+        },
+    "updated": 1511422435,
+    "type": "good",
+    "url": "https://api.stripe.com/"
+    }
+"""
+    
+    func testProductParsedProperly() throws {
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
+            let body = HTTPBody(string: productString)
+            let futureProduct = try decoder.decode(StripeProduct.self, from: body, on: EmbeddedEventLoop())
+            
+            futureProduct.do { (product) in
+                XCTAssertEqual(product.id, "prod_BosWT9EsdzgjPn")
+                XCTAssertEqual(product.object, "product")
+                XCTAssertEqual(product.active, false)
+                XCTAssertEqual(product.attributes, ["size", "gender"])
+                XCTAssertEqual(product.caption, "test")
+                XCTAssertEqual(product.created, Date(timeIntervalSince1970: 1511420673))
+                XCTAssertEqual(product.deactivateOn, [])
+                XCTAssertEqual(product.description, "Comfortable cotton t-shirt")
+                XCTAssertEqual(product.images, [])
+                XCTAssertEqual(product.livemode, false)
+                XCTAssertEqual(product.metadata, [:])
+                XCTAssertEqual(product.name, "T-shirt")
+                XCTAssertEqual(product.packageDimensions?.height, 1.25)
+                XCTAssertEqual(product.packageDimensions?.length, 2.44)
+                XCTAssertEqual(product.packageDimensions?.weight, 3.0)
+                XCTAssertEqual(product.packageDimensions?.width, 4.0)
+                XCTAssertEqual(product.shippable, false)
+                XCTAssertEqual(product.updated, Date(timeIntervalSince1970: 1511422435))
+                XCTAssertEqual(product.url, "https://api.stripe.com/")
+                XCTAssertEqual(product.type, "good")
+                XCTAssertEqual(product.skus?.object, "list")
+                XCTAssertEqual(product.skus?.hasMore, false)
+                XCTAssertEqual(product.skus?.totalCount, 1)
+                XCTAssertEqual(product.skus?.url, "/v1/skus?product=prod_BosWT9EsdzgjPn&active=true")
+                XCTAssertNotNil(product.skus?.data?[0])
+                
+                }.catch { (error) in
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            fatalError("Setup failed: \(error.localizedDescription)")
-        }
-    }
-    
-    override func tearDown() {
-        drop = nil
-        productId = ""
-    }
-    
-    func testRetrieveProduct() throws {
-        do {
-            let product = try drop?.stripe?.products.retrieve(product: productId).serializedResponse()
-            
-            XCTAssertNotNil(product)
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testUpdateProduct() throws {
-        do {
-            let metadata = try Node(node:["hello":"world"])
-            let attributes = try Node(node:["size","color"])
-            let caption = "A super cool shirt"
-            let description = "A new Vapor Node"
-            let dimensions = Node([
-                "height": 1,
-                "length": 1,
-                "weight": 1,
-                "width": 1
-                ])
-            
-            let updatedProduct = try drop?.stripe?.products.update(product: productId,
-                                                               active: nil,
-                                                               attributes: attributes,
-                                                               caption: caption,
-                                                               deactivateOn: nil,
-                                                               description: description,
-                                                               images: nil,
-                                                               name: nil,
-                                                               packageDimensions: dimensions,
-                                                               shippable: nil,
-                                                               url: nil,
-                                                               metadata: metadata).serializedResponse()
-            XCTAssertNotNil(updatedProduct)
-            
-            XCTAssertEqual(updatedProduct?.metadata?["hello"], metadata["hello"])
-            
-            XCTAssertEqual(updatedProduct?.attributes, attributes)
-            
-            XCTAssertEqual(updatedProduct?.caption, caption)
-            
-            XCTAssertEqual(updatedProduct?.description, description)
-            
-            XCTAssertEqual(updatedProduct?.packageDimensions?.height, Decimal(dimensions["height"]?.int ?? 0))
-            
-            XCTAssertEqual(updatedProduct?.packageDimensions?.length, Decimal(dimensions["length"]?.int ?? 0))
-            
-            XCTAssertEqual(updatedProduct?.packageDimensions?.weight, Decimal(dimensions["weight"]?.int ?? 0))
-            
-            XCTAssertEqual(updatedProduct?.packageDimensions?.width, Decimal(dimensions["width"]?.int ?? 0))
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testDeleteProduct() throws {
-        do {
-            let deletedProduct = try drop?.stripe?.products.delete(product: productId).serializedResponse()
-            
-            XCTAssertNotNil(deletedProduct)
-            
-            XCTAssertTrue(deletedProduct?.deleted ?? false)
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testListAllProducts() throws {
-        do {
-            let products = try drop?.stripe?.products.listAll(filter: nil).serializedResponse()
-            
-            XCTAssertNotNil(products)
-            
-            if let productItems = products?.items {
-                XCTAssertGreaterThanOrEqual(productItems.count, 1)
-            } else {
-                XCTFail("Products are not present")
-            }
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testFilterProducts() throws {
-        do {
-            let filter = StripeFilter()
-            
-            filter.limit = 1
-            
-            let products = try drop?.stripe?.products.listAll(filter: filter).serializedResponse()
-            
-            XCTAssertNotNil(products)
-            
-            if let productItems = products?.items {
-                XCTAssertEqual(productItems.count, 1)
-            } else {
-                XCTFail("Products are not present")
-            }
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
+            XCTFail("\(error.localizedDescription)")
         }
     }
 }

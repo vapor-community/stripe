@@ -6,196 +6,103 @@ import XCTest
 
 extension AccountTests {
 static var allTests = [
-  ("testCreateAccount", testCreateAccount),
-  ("testRetrieveAccount", testRetrieveAccount),
-  ("testUpdateAccount", testUpdateAccount),
-  ("testDeleteAccount", testDeleteAccount),
-  ("testRejectAccount", testRejectAccount),
-  ("testListAllAccounts", testListAllAccounts),
-  ("testFilterAccounts", testFilterAccounts),
+  ("testAccountParsedProperll", testAccountParsedProperll),
 ]
 }
 
 extension BalanceTests {
 static var allTests = [
-  ("testBalance", testBalance),
-  ("testBalanceTransactionItem", testBalanceTransactionItem),
-  ("testBalanceHistory", testBalanceHistory),
-  ("testFilterBalanceHistory", testFilterBalanceHistory),
+  ("testBalanceParsedProperly", testBalanceParsedProperly),
+  ("testBalanceTransactionParsedProperly", testBalanceTransactionParsedProperly),
 ]
 }
 
 extension ChargeTests {
 static var allTests = [
-  ("testCharge", testCharge),
-  ("testRetrieveCharge", testRetrieveCharge),
-  ("testListAllCharges", testListAllCharges),
-  ("testFilterAllCharges", testFilterAllCharges),
-  ("testChargeUpdate", testChargeUpdate),
-  ("testChargeCapture", testChargeCapture),
-]
-}
-
-extension CouponTests {
-static var allTests = [
-  ("testCreateCoupon", testCreateCoupon),
-  ("testRetrieveCoupon", testRetrieveCoupon),
-  ("testUpdateCoupon", testUpdateCoupon),
-  ("testDeleteCoupon", testDeleteCoupon),
-  ("testListAllCoupons", testListAllCoupons),
-  ("testFilterCoupons", testFilterCoupons),
+  ("testChargeParsedProperly", testChargeParsedProperly),
 ]
 }
 
 extension CustomerTests {
 static var allTests = [
-  ("testCreateCustomer", testCreateCustomer),
-  ("testRetrieveCustomer", testRetrieveCustomer),
-  ("testUpdateCustomer", testUpdateCustomer),
-  ("testAddNewSourceForCustomer", testAddNewSourceForCustomer),
-  ("testAddNewCardSourceForCustomer", testAddNewCardSourceForCustomer),
-  ("testAddNewBankAccountSourceForCustomer", testAddNewBankAccountSourceForCustomer),
-  ("testDeleteDiscount", testDeleteDiscount),
-  ("testDeleteCustomer", testDeleteCustomer),
-  ("testRetrieveAllCustomers", testRetrieveAllCustomers),
-  ("testFilterCustomers", testFilterCustomers),
+  ("testCustomerParsedProperly", testCustomerParsedProperly),
 ]
 }
 
 extension DisputeTests {
 static var allTests = [
-  ("testRetrieveDispute", testRetrieveDispute),
-  ("testUpdateDispute", testUpdateDispute),
-  ("testCloseDispute", testCloseDispute),
-  ("testListAllDisputes", testListAllDisputes),
-  ("testFilterDisputes", testFilterDisputes),
+  ("testDisputeParsedProperly", testDisputeParsedProperly),
 ]
 }
 
 extension EphemeralKeyTests {
 static var allTests = [
-  ("testCreateEphemeralKey", testCreateEphemeralKey),
-  ("testDeleteEphemeralKey", testDeleteEphemeralKey),
+  ("testEphemeralKeyParsedProperly", testEphemeralKeyParsedProperly),
 ]
 }
 
-extension InvoiceItemTests {
+extension ErrorTests {
 static var allTests = [
-  ("testCreatingItem", testCreatingItem),
-  ("testFetchingItem", testFetchingItem),
-  ("testDeletingItem", testDeletingItem),
-  ("testUpdateItem", testUpdateItem),
-  ("testListAllItems", testListAllItems),
+  ("testErrorParsedProperly", testErrorParsedProperly),
 ]
 }
 
 extension InvoiceTests {
 static var allTests = [
-  ("testCreatingInvoice", testCreatingInvoice),
-  ("testFetchingInvoice", testFetchingInvoice),
-  ("testFetchingInvoiceItems", testFetchingInvoiceItems),
-  ("testFetchUpcomingInvoice", testFetchUpcomingInvoice),
-  ("testUpdateInvoice", testUpdateInvoice),
-  ("testListAllInvoices", testListAllInvoices),
-]
-}
-
-extension OrderReturnTests {
-static var allTests = [
-  ("testRetrieveOrderReturn", testRetrieveOrderReturn),
-  ("testListAllOrderReturns", testListAllOrderReturns),
-  ("testFilterOrderReturns", testFilterOrderReturns),
+  ("testInvoiceParsedProperly", testInvoiceParsedProperly),
+  ("testInvoiceItemParsedProperly", testInvoiceItemParsedProperly),
 ]
 }
 
 extension OrderTests {
 static var allTests = [
-  ("testRetrieveOrder", testRetrieveOrder),
-  ("testUpdateOrder", testUpdateOrder),
-  ("testPayOrder", testPayOrder),
-  ("testListAllOrders", testListAllOrders),
-  ("testFilterOrders", testFilterOrders),
-  ("testReturnOrder", testReturnOrder),
-]
-}
-
-extension PlanTests {
-static var allTests = [
-  ("testCreatePlan", testCreatePlan),
-  ("testRetrievePlan", testRetrievePlan),
-  ("testUpdatePlan", testUpdatePlan),
-  ("testDeletePlan", testDeletePlan),
-  ("testListAllPlans", testListAllPlans),
-  ("testFilterPlans", testFilterPlans),
+  ("testOrderIsProperlyParsed", testOrderIsProperlyParsed),
 ]
 }
 
 extension ProductTests {
 static var allTests = [
-  ("testRetrieveProduct", testRetrieveProduct),
-  ("testUpdateProduct", testUpdateProduct),
-  ("testDeleteProduct", testDeleteProduct),
-  ("testListAllProducts", testListAllProducts),
-  ("testFilterProducts", testFilterProducts),
-]
-}
-
-extension ProviderTests {
-static var allTests = [
-  ("testProvider", testProvider),
+  ("testProductParsedProperly", testProductParsedProperly),
 ]
 }
 
 extension RefundTests {
 static var allTests = [
-  ("testRefunding", testRefunding),
-  ("testUpdatingRefund", testUpdatingRefund),
-  ("testRetrievingRefund", testRetrievingRefund),
-  ("testListingAllRefunds", testListingAllRefunds),
+  ("testRefundParsedProperly", testRefundParsedProperly),
 ]
 }
 
 extension SKUTests {
 static var allTests = [
-  ("testRetrieveSKU", testRetrieveSKU),
-  ("testUpdateSKU", testUpdateSKU),
-  ("testDeleteSKU", testDeleteSKU),
-  ("testListAllSKUs", testListAllSKUs),
-  ("testFilterSKUs", testFilterSKUs),
+  ("testSkuParsedProperly", testSkuParsedProperly),
 ]
 }
 
 extension SourceTests {
 static var allTests = [
-  ("testRetrieveSource", testRetrieveSource),
-  ("testUpdateSource", testUpdateSource),
-]
-}
-
-extension SubscriptionItemTests {
-static var allTests = [
-  ("testRetrieveSubscriptionItem", testRetrieveSubscriptionItem),
-  ("testUpdateSubscriptionItem", testUpdateSubscriptionItem),
-  ("testDeleteSubscriptionItem", testDeleteSubscriptionItem),
-  ("testFilterSubscriptionItems", testFilterSubscriptionItems),
+  ("testCardSourceParsedProperly", testCardSourceParsedProperly),
+  ("testThreeDSecureSourceParsedProperly", testThreeDSecureSourceParsedProperly),
+  ("testSepaDebitSourceParsedProperly", testSepaDebitSourceParsedProperly),
+  ("testAlipaySourceParsedProperly", testAlipaySourceParsedProperly),
+  ("testGiropaySourceParsedProperly", testGiropaySourceParsedProperly),
+  ("testIdealSourceParsedProperly", testIdealSourceParsedProperly),
+  ("testP24SourceParsedProperly", testP24SourceParsedProperly),
+  ("testSofortSourceParsedProperly", testSofortSourceParsedProperly),
+  ("testBancontactSourceParsedProperly", testBancontactSourceParsedProperly),
+  ("testACHSourceParsedProperly", testACHSourceParsedProperly),
 ]
 }
 
 extension SubscriptionTests {
 static var allTests = [
-  ("testRetrieveSubscription", testRetrieveSubscription),
-  ("testUpdateSubscription", testUpdateSubscription),
-  ("testDeleteDiscount", testDeleteDiscount),
-  ("testCancelSubscription", testCancelSubscription),
-  ("testFilterSubscriptionItems", testFilterSubscriptionItems),
+  ("testSubscriptionParsedProperly", testSubscriptionParsedProperly),
 ]
 }
 
 extension TokenTests {
 static var allTests = [
-  ("testCardTokenCreation", testCardTokenCreation),
-  ("testTokenRetrieval", testTokenRetrieval),
-  ("testBankAccountTokenCreation", testBankAccountTokenCreation),
+  ("testCardTokenParsedProperly", testCardTokenParsedProperly),
+  ("testBankTokenParsedProperly", testBankTokenParsedProperly),
 ]
 }
 
@@ -204,21 +111,16 @@ XCTMain([
   testCase(AccountTests.allTests),
   testCase(BalanceTests.allTests),
   testCase(ChargeTests.allTests),
-  testCase(CouponTests.allTests),
   testCase(CustomerTests.allTests),
   testCase(DisputeTests.allTests),
   testCase(EphemeralKeyTests.allTests),
-  testCase(InvoiceItemTests.allTests),
+  testCase(ErrorTests.allTests),
   testCase(InvoiceTests.allTests),
-  testCase(OrderReturnTests.allTests),
   testCase(OrderTests.allTests),
-  testCase(PlanTests.allTests),
   testCase(ProductTests.allTests),
-  testCase(ProviderTests.allTests),
   testCase(RefundTests.allTests),
   testCase(SKUTests.allTests),
   testCase(SourceTests.allTests),
-  testCase(SubscriptionItemTests.allTests),
   testCase(SubscriptionTests.allTests),
   testCase(TokenTests.allTests),
 ])

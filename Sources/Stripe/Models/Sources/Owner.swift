@@ -6,34 +6,30 @@
 //
 //
 
-import Foundation
-import Vapor
+/**
+ Owner object
+ https://stripe.com/docs/api/curl#source_object-owner
+ */
 
-open class Owner: StripeModelProtocol {
-    public private(set) var address: ShippingAddress?
-    public private(set) var email: String?
-    public private(set) var name: String?
-    public private(set) var phone: String?
-    public private(set) var verifiedAddress: ShippingAddress?
-    public private(set) var verifiedEmail: String?
-    public private(set) var verifiedName: String?
-    public private(set) var verifiedPhone: String?
-    
-    public required init(node: Node) throws {
-        self.address = try node.get("address")
-        self.email = try node.get("email")
-        self.name = try node.get("name")
-        self.phone = try node.get("phone")
-        self.verifiedAddress = try node.get("verified_address")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String : Any?] = [
-            "address": self.address,
-            "email": self.email,
-            "name": self.name,
-            "phone": self.phone
-        ]
-        return try Node(node: object)
-    }
+public protocol Owner {
+    associatedtype A: Address
+    var address: A? { get }
+    var email: String? { get }
+    var name: String? { get }
+    var phone: String? { get }
+    var verifiedAddress: A? { get }
+    var verifiedEmail: String? { get }
+    var verifiedName: String? { get }
+    var verifiedPhone: String? { get }
+}
+
+public struct StripeOwner: Owner, StripeModel {
+    public var address: StripeAddress?
+    public var email: String?
+    public var name: String?
+    public var phone: String?
+    public var verifiedAddress: StripeAddress?
+    public var verifiedEmail: String?
+    public var verifiedName: String?
+    public var verifiedPhone: String?
 }

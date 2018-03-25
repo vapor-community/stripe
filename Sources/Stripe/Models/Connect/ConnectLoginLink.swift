@@ -7,27 +7,20 @@
 //
 
 import Foundation
-import Vapor
 
-open class ConnectLoginLink: StripeModelProtocol {
-    
-    public private(set) var object: String?
-    public private(set) var created: Date?
-    public private(set) var url: String?
-    
-    public required init(node: Node) throws {
-        self.object = try node.get("object")
-        self.created = try node.get("created")
-        self.url = try node.get("url")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String: Any?] = [
-            "object": self.object,
-            "created": self.created,
-            "url": self.url
-        ]
-        
-        return try Node(node: object)
-    }
+/**
+ Login link object
+ https://stripe.com/docs/api/curl#login_link_object
+ */
+
+public protocol ConnectLoginLink {
+    var object: String? { get }
+    var created: Date? { get }
+    var url: String? { get }
+}
+
+public struct StripeConnectLoginLink: ConnectLoginLink, StripeModel {
+    public var object: String?
+    public var created: Date?
+    public var url: String?
 }

@@ -6,148 +6,48 @@
 //
 
 import XCTest
-
 @testable import Stripe
 @testable import Vapor
 
 class EphemeralKeyTests: XCTestCase {
-    
-    var drop: Droplet?
-    var ephemeralKeyId: String = ""
-    
-    override func setUp() {
-        
-        do {
-            drop = try self.makeDroplet()
-            
-            let customerId = try drop?.stripe?.customer.create(description: "Vapor test Account",
-                                                               email: "vapor@stripetest.com").serializedResponse().id ?? ""
-            
-            ephemeralKeyId = try drop?.stripe?.ephemeralKeys.create(customerId: customerId).serializedResponse().id ?? ""
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            fatalError("Setup failed: \(error.localizedDescription)")
-        }
+    let emphkeyString = """
+    {
+        "id": "eph_123456",
+        "object": "ephemeral_key",
+        "associated_objects": {
+            "hello": "world"
+        },
+        "created": 1234567890,
+        "expires": 1234567890,
+        "livemode": true,
+        "secret": "imasecret"
     }
+"""
     
-    func testCreateEphemeralKey() throws {
-        
+    func testEphemeralKeyParsedProperly() throws {
         do {
-            let customerId = try drop?.stripe?.customer.create(description: "Vapor test Account",
-                                                               email: "vapor@stripetest.com").serializedResponse().id ?? ""
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
-            let ephemeralKey = try drop?.stripe?.ephemeralKeys.create(customerId: customerId).serializedResponse()
+            let body = HTTPBody(string: emphkeyString)
+            let futureKey = try decoder.decode(StripeEphemeralKey.self, from: body, on: EmbeddedEventLoop())
             
-            XCTAssertNotNil(ephemeralKey)
-            
-            XCTAssertNotNil(ephemeralKey?.associatedObjects?.array)
-            
-            XCTAssertNotNil(ephemeralKey?.associatedObjects?.array?.first)
-            
-            XCTAssertNotNil(ephemeralKey?.associatedObjects?.array?.first?.object)
-            
-            XCTAssertNotNil(ephemeralKey?.associatedObjects?.array?.first?.object?["type"]?.string)
-            
-            XCTAssertNotNil(ephemeralKey?.associatedObjects?.array?.first?.object?["id"]?.string)
-            
-            XCTAssertNotNil(ephemeralKey?.secret)
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
+            futureKey.do { (key) in
+                XCTAssertEqual(key.id, "eph_123456")
+                XCTAssertEqual(key.object, "ephemeral_key")
+                XCTAssertEqual(key.associatedObjects?["hello"], "world")
+                XCTAssertEqual(key.created, Date(timeIntervalSince1970: 1234567890))
+                XCTAssertEqual(key.expires, Date(timeIntervalSince1970: 1234567890))
+                XCTAssertEqual(key.livemode, true)
+                XCTAssertEqual(key.secret, "imasecret")
+                
+                }.catch { (error) in
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testDeleteEphemeralKey() throws {
-        
-        do {
-            
-            let ephemeralKey = try drop?.stripe?.ephemeralKeys.delete(ephemeralKeyId: ephemeralKeyId).serializedResponse()
-            
-            XCTAssertNotNil(ephemeralKey)
-            
-            XCTAssertNotNil(ephemeralKey?.associatedObjects?.array)
-            
-            XCTAssertNotNil(ephemeralKey?.associatedObjects?.array?.first)
-            
-            XCTAssertNotNil(ephemeralKey?.associatedObjects?.array?.first?.object)
-            
-            XCTAssertNotNil(ephemeralKey?.associatedObjects?.array?.first?.object?["type"]?.string)
-            
-            XCTAssertNotNil(ephemeralKey?.associatedObjects?.array?.first?.object?["id"]?.string)
-            
-            XCTAssertNil(ephemeralKey?.secret)
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
+            XCTFail("\(error.localizedDescription)")
         }
     }
 }

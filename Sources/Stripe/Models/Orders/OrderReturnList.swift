@@ -6,29 +6,15 @@
 //
 //
 
-import Foundation
-import Vapor
+/**
+ Order return List
+ https://stripe.com/docs/api#list_order_returns
+ */
 
-open class OrderReturnList: StripeModelProtocol {
-    public private(set) var object: String?
-    public private(set) var url: String?
-    public private(set) var hasMore: Bool?
-    public private(set) var items: [OrderReturn]?
-    
-    public required init(node: Node) throws {
-        self.object = try node.get("object")
-        self.url = try node.get("url")
-        self.hasMore = try node.get("has_more")
-        self.items = try node.get("data")
-    }
-    
-    public func makeNode(in context: Context?) throws -> Node {
-        let object: [String : Any?] = [
-            "object": self.object,
-            "url": self.url,
-            "has_more": self.hasMore,
-            "data": self.items
-        ]
-        return try Node(node: object)
-    }
+public struct OrderReturnList: List, StripeModel {
+    public var object: String?
+    public var hasMore: Bool?
+    public var totalCount: Int?
+    public var url: String?
+    public var data: [StripeOrderReturn]?
 }

@@ -7,297 +7,124 @@
 //
 
 import XCTest
-
 @testable import Stripe
 @testable import Vapor
 
-
-
-
-
 class DisputeTests: XCTestCase {
-
-    var drop: Droplet?
-    var disputeId: String = ""
+    let disputeString = """
+{
+    "amount": 1000,
+    "balance_transactions": [],
+    "charge": "ch_1BoJ2MKrZ43eBVAbDNoY8Anc",
+    "created": 1234567890,
+    "currency": "usd",
+    "evidence": {
+        "access_activity_log": "Rasengan",
+        "billing_address": "Rasengan",
+        "cancellation_policy": "Rasengan",
+        "cancellation_policy_disclosure": "Rasengan",
+        "cancellation_rebuttal": "Rasengan",
+        "customer_communication": "Rasengan",
+        "customer_email_address": "Rasengan",
+        "customer_name": "Rasengan",
+        "customer_purchase_ip": "Rasengan",
+        "customer_signature": "Rasengan",
+        "duplicate_charge_documentation": "Rasengan",
+        "duplicate_charge_explanation": "Rasengan",
+        "duplicate_charge_id": "Rasengan",
+        "product_description": "Rasengan",
+        "receipt": "Rasengan",
+        "refund_policy": "Rasengan",
+        "refund_policy_disclosure": "Rasengan",
+        "refund_refusal_explanation": "Rasengan",
+        "service_date": "Rasengan",
+        "service_documentation": "Rasengan",
+        "shipping_address": "Rasengan",
+        "shipping_carrier": "Rasengan",
+        "shipping_date": "Rasengan",
+        "shipping_documentation": "Rasengan",
+        "shipping_tracking_number": "Rasengan",
+        "uncategorized_file": "Rasengan",
+        "uncategorized_text": "Rasengan"
+    },
+    "evidence_details": {
+        "due_by": 1518566399,
+        "has_evidence": false,
+        "past_due": false,
+        "submission_count": 0
+    },
+    "id": "dp_1BoJ2MKrZ43eBVAbjyK5qAWL",
+    "is_charge_refundable": false,
+    "livemode": false,
+    "metadata": {},
+    "object": "dispute",
+    "reason": "general",
+    "status": "needs_response"
+}
+"""
     
-    override func setUp() {
+    func testDisputeParsedProperly() throws {
         do {
-            drop = try self.makeDroplet()
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
-            let customer = try drop?.stripe?.customer.create(accountBalance: nil,
-                                                           businessVATId: nil,
-                                                           coupon: nil,
-                                                           defaultSource: nil,
-                                                           description: "Vapor test Account",
-                                                           email: "vapor@stripetest.com",
-                                                           shipping: nil,
-                                                           source: nil,
-                                                           metadata: nil).serializedResponse()
+            let body = HTTPBody(string: disputeString)
+            let futureDispute = try decoder.decode(StripeDispute.self, from: body, on: EmbeddedEventLoop())
             
-            let card = Node(["number":"4000 0000 0000 0259", "cvc":123,"exp_month":10, "exp_year":2020])
-            
-            let sourceId = try drop?.stripe?.sources.createNewSource(sourceType: .card,
-                                                                 source: card,
-                                                                 amount: nil,
-                                                                 currency: .usd,
-                                                                 flow: nil,
-                                                                 owner: nil,
-                                                                 redirectReturnUrl: nil,
-                                                                 token: nil,
-                                                                 usage: nil,
-                                                                 metadata: nil).serializedResponse().id ?? ""
-            
-            _ = try drop?.stripe?.customer.addNewSource(forCustomer: customer?.id ?? "",
-                                                        inConnectAccount: nil,
-                                                        source: sourceId).serializedResponse()
-            
-            let chargeId = try drop?.stripe?.charge.create(amount: 10_00,
-                                                         in: .usd,
-                                                         withFee: nil,
-                                                         toAccount: nil,
-                                                         capture: true,
-                                                         description: "Vapor Stripe: Test Description",
-                                                         destinationAccountId: nil,
-                                                         destinationAmount: nil,
-                                                         transferGroup: nil,
-                                                         onBehalfOf: nil,
-                                                         receiptEmail: nil,
-                                                         shippingLabel: nil,
-                                                         customer: customer?.id ?? "",
-                                                         statementDescriptor: nil,
-                                                         source: nil,
-                                                         metadata: nil).serializedResponse().id ?? ""
-            
-            disputeId = try drop?.stripe?.charge.retrieve(charge: chargeId).serializedResponse().dispute ?? ""
-            
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
+            futureDispute.do { (dispute) in
+                XCTAssertEqual(dispute.amount, 1000)
+                XCTAssertEqual(dispute.charge, "ch_1BoJ2MKrZ43eBVAbDNoY8Anc")
+                XCTAssertEqual(dispute.created, Date(timeIntervalSince1970: 1234567890))
+                XCTAssertEqual(dispute.currency, .usd)
+                XCTAssertEqual(dispute.id, "dp_1BoJ2MKrZ43eBVAbjyK5qAWL")
+                XCTAssertEqual(dispute.isChargeRefundable, false)
+                XCTAssertEqual(dispute.livemode, false)
+                XCTAssertEqual(dispute.object, "dispute")
+                XCTAssertEqual(dispute.reason, .general)
+                XCTAssertEqual(dispute.status, .needsResponse)
+                
+                // Evidence Datails
+                XCTAssertEqual(dispute.evidenceDetails?.dueBy, Date(timeIntervalSince1970: 1518566399))
+                XCTAssertEqual(dispute.evidenceDetails?.hasEvidence, false)
+                XCTAssertEqual(dispute.evidenceDetails?.pastDue, false)
+                XCTAssertEqual(dispute.evidenceDetails?.submissionCount, 0)
+                
+                // Evidence
+                XCTAssertEqual(dispute.evidence?.accessActivityLog, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.billingAddress, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.cancellationPolicy, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.cancellationPolicyDisclosure, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.cancellationRebuttal, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.customerCommunication, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.customerEmailAddress, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.customerName, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.customerPurchaseIp, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.customerSignature, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.duplicateChargeDocumentation, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.duplicateChargeExplanation, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.duplicateChargeId, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.productDescription, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.receipt, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.refundPolicy, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.refundPolicyDisclosure, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.refundRefusalExplanation, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.serviceDate, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.serviceDocumentation, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.shippingAddress, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.shippingCarrier, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.shippingDate, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.shippingDocumentation, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.shippingTrackingNumber, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.uncategorizedFile, "Rasengan")
+                XCTAssertEqual(dispute.evidence?.uncategorizedText, "Rasengan")
+                
+                }.catch { (error) in
+                    XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
-            fatalError("Setup failed: \(error.localizedDescription)")
-        }
-    }
-    
-    override func tearDown() {
-        drop = nil
-        disputeId = ""
-    }
-
-    func testRetrieveDispute() throws {
-        do {
-            let dispute = try drop?.stripe?.disputes.retrieve(dispute: disputeId).serializedResponse()
-            XCTAssertNotNil(dispute)
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testUpdateDispute() throws {
-        do {
-            let evidence = Node([
-                "customer_name": "Mr. Vapor",
-                "refund_refusal_explanation": "Because we need the money",
-                "cancellation_rebuttal": "I have no further comments",
-            ])
-            
-            let updatedDispute = try drop?.stripe?.disputes.update(dispute: disputeId, evidence: evidence, submit: true).serializedResponse()
-            
-            XCTAssertNotNil(updatedDispute)
-            
-            XCTAssertEqual(updatedDispute?.evidence?.customerName, "Mr. Vapor")
-            XCTAssertEqual(updatedDispute?.evidence?.refundRefusalExplination, "Because we need the money")
-            XCTAssertEqual(updatedDispute?.evidence?.cancellationRebuttal, "I have no further comments")
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testCloseDispute() throws {
-        do {
-            let closedDispute = try drop?.stripe?.disputes.close(dispute: disputeId).serializedResponse()
-            
-            XCTAssertNotNil(closedDispute)
-            
-            XCTAssertEqual(closedDispute?.disputeStatus, .lost)
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testListAllDisputes() throws {
-        do {
-            let disputes = try drop?.stripe?.account.listAll().serializedResponse()
-            
-            XCTAssertNotNil(disputes)
-            
-            if let disputeItems = disputes?.items {
-                XCTAssertGreaterThanOrEqual(disputeItems.count, 1)
-            } else {
-                XCTFail("Disputes are not present")
-            }
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testFilterDisputes() throws {
-        do {
-            let filter = StripeFilter()
-            
-            filter.limit = 1
-            
-            let disputes = try drop?.stripe?.account.listAll(filter: filter).serializedResponse()
-            
-            XCTAssertNotNil(disputes)
-            
-            if let disputeItems = disputes?.items {
-                XCTAssertEqual(disputeItems.count, 1)
-            } else {
-                XCTFail("Disputes are not present")
-            }
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
+            XCTFail("\(error.localizedDescription)")
         }
     }
 }

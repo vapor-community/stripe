@@ -1,14 +1,16 @@
-// swift-tools-version:3.1
-
+// swift-tools-version:4.0
 import PackageDescription
 
 let package = Package(
     name: "Stripe",
-    targets: [
-        Target(name: "Stripe"),
+    products: [
+        .library(name: "Stripe", targets: ["Stripe"])
     ],
     dependencies: [
-        .Package(url: "https://github.com/vapor/vapor.git", majorVersion: 2),
-        .Package(url: "https://github.com/vapor/random.git", majorVersion: 1),
+        .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0-rc"),
+    ],
+    targets: [
+        .target(name: "Stripe", dependencies: ["Vapor"]),
+        .testTarget(name: "StripeTests", dependencies: ["Vapor", "Stripe"])
     ]
 )

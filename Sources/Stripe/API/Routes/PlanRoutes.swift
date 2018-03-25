@@ -6,156 +6,109 @@
 //
 //
 
-import Node
-import HTTP
+import Vapor
 
-open class PlanRoutes {
-    let client: StripeClient
+public protocol PlanRoutes {
+    associatedtype P: Plan
+    associatedtype DO: DeletedObject
+    associatedtype L: List
     
-    init(client: StripeClient) {
-        self.client = client
+    func create(id: String?, currency: StripeCurrency, interval: StripePlanInterval, product: String, amount: Int?, intervalCount: Int?, metadata: [String: String]?, nickname: String?) throws -> Future<P>
+    func retrieve(plan: String) throws -> Future<P>
+    func update(plan: String, metadata: [String: String]?, nickname: String?, product: String?) throws -> Future<P>
+    func delete(plan: String) throws -> Future<DO>
+    func listAll(filter: [String: Any]?) throws -> Future<L>
+}
+
+public struct StripePlanRoutes: PlanRoutes {
+    private let request: StripeRequest
+    
+    init(request: StripeRequest) {
+        self.request = request
     }
     
-    /**
-     Create a plan
-     Creates a new plan object.
-     
-     - parameter id:                    Unique string of your choice that will be used to identify this plan when subscribing a customer.
-                                        This could be an identifier like “gold” or a primary key from your own database.
-     
-     - parameter amount:                A positive integer in cents (or 0 for a free plan) representing how much to charge (on a recurring basis).
-     
-     - parameter currency:              The currency in which the charge will be under. (required if amount_off passed).
-     
-     - parameter interval:              Specifies billing frequency. Either day, week, month or year.
-     
-     - parameter name:                  Name of the plan, to be displayed on invoices and in the web interface.
-     
-     - parameter intervalCount:         The number of intervals between each subscription billing.
-     
-     - parameter statementDescriptor:   An arbitrary string to be displayed on your customer’s credit card statement.
-                                        This may be up to 22 characters.
-     
-     - parameter trialPeriodDays:       Specifies a trial period in (an integer number of) days.
-     
-     - parameter metaData:              A set of key/value pairs that you can attach to a plan object.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node.
-     */
-    public func create(id: String, amount: Int, currency: StripeCurrency, interval: StripeInterval, name: String, intervalCount: Int? = nil, statementDescriptor: String? = nil, trialPeriodDays: Int? = nil, metadata: Node? = nil) throws -> StripeRequest<Plan> {
-        var body = Node([:])
+    /// Create a plan
+    /// [Learn More →](https://stripe.com/docs/api/curl#create_plan)
+    public func create(id: String? = nil,
+                       currency: StripeCurrency,
+                       interval: StripePlanInterval,
+                       product: String,
+                       amount: Int? = nil,
+                       intervalCount: Int? = nil,
+                       metadata: [String : String]? = nil,
+                       nickname: String? = nil) throws -> Future<StripePlan> {
+        var body: [String: Any] = [:]
         
-        body["id"] = Node(id)
+        body["currency"] = currency.rawValue
+        body["interval"] = interval.rawValue
+        body["product"] = product
         
-        body["amount"] = Node(amount)
+        if let id = id {
+            body["id"] = id
+        }
         
-        body["currency"] = Node(currency.rawValue)
-        
-        body["interval"] = Node(interval.rawValue)
-        
-        body["name"] = Node(name)
+        if let amount = amount {
+            body["amount"] = amount
+        }
         
         if let intervalCount = intervalCount {
-            body["interval_count"] = Node(intervalCount)
+            body["interval_count"] = intervalCount
         }
         
-        if let metadata = metadata?.object {
-            for (key, value) in metadata {
-                body["metadata[\(key)]"] = value
-            }
+        if let metadata = metadata {
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
-        if let statementDescriptor = statementDescriptor {
-            body["statement_descriptor"] = Node(statementDescriptor)
+        if let nickname = nickname {
+            body["nickname"] = nickname
         }
         
-        if let trialPeriodDays = trialPeriodDays {
-            body["trial_period_days"] = Node(trialPeriodDays)
-        }
-        
-        return try StripeRequest(client: self.client, method: .post, route: .plans, query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.plans.endpoint, body: body.queryParameters)
     }
     
-    /**
-     Retrieve a plan
-     Retrieves the plan with the given ID.
-     
-     - parameter planId: The ID of the desired plan.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func retrieve(plan planId: String) throws -> StripeRequest<Plan> {
-        return try StripeRequest(client: self.client, method: .get, route: .plan(planId), query: [:], body: nil, headers: nil)
+    /// Retrieve a plan
+    /// [Learn More →](https://stripe.com/docs/api/curl#retrieve_plan)
+    public func retrieve(plan: String) throws -> Future<StripePlan> {
+        return try request.send(method: .GET, path: StripeAPIEndpoint.plan(plan).endpoint)
     }
     
-    /**
-     Update a plan
-     Updates the name or other attributes of a plan. Other plan details (price, interval, etc.) are, by design, not editable.
-     
-     - parameter name:                  Name of the plan, to be displayed on invoices and in the web interface.
-     
-     - parameter statementDescriptor:   An arbitrary string to be displayed on your customer’s credit card statement.
-     
-     - parameter trialPeriodDays:       Specifies a trial period in (an integer number of) days.
-     
-     - parameter metaData:              A set of key/value pairs that you can attach to a plan object.
-     
-     - parameter planId:                The identifier of the plan to be updated.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func update(name: String? = nil, statementDescriptor: String? = nil, trialPeriodDays: Int? = nil, metadata: Node? = nil, forPlanId planId: String) throws -> StripeRequest<Plan> {
-        var body = Node([:])
+    /// Update a plan
+    /// [Learn More →](https://stripe.com/docs/api/curl#update_plan)
+    public func update(plan: String,
+                       metadata: [String : String]? = nil,
+                       nickname: String? = nil,
+                       product: String? = nil) throws -> Future<StripePlan> {
+        var body: [String: Any] = [:]
         
-        if let metadata = metadata?.object {
-            for (key, value) in metadata {
-                body["metadata[\(key)]"] = value
-            }
+        if let metadata = metadata {
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
+        }
+
+        if let nickname = nickname {
+            body["nickname"] = nickname
         }
         
-        if let name = name {
-            body["name"] = Node(name)
+        if let product = product {
+            body["product"] = product
         }
         
-        if let statementDescriptor = statementDescriptor {
-            body["statement_descriptor"] = Node(statementDescriptor)
-        }
-        
-        if let trialPeriodDays = trialPeriodDays {
-            body["trial_period_days"] = Node(trialPeriodDays)
-        }
-        
-        return try StripeRequest(client: self.client, method: .post, route: .plan(planId), query: [:], body: Body.data(body.formURLEncoded()), headers: nil)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.plan(plan).endpoint, body: body.queryParameters)
     }
     
-    /**
-     Delete a plan
-     Deleting a plan does not affect any current subscribers to the plan; it merely means that new subscribers can’t be added to that plan.
-     
-     - parameter couponId: The identifier of the plan to be deleted.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func delete(plan planId: String) throws -> StripeRequest<DeletedObject> {
-        return try StripeRequest(client: self.client, method: .delete, route: .plan(planId), query: [:], body: nil, headers: nil)
+    /// Delete a plan
+    /// [Learn More →](https://stripe.com/docs/api/curl#delete_plan)
+    public func delete(plan: String) throws -> Future<StripeDeletedObject> {
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.plan(plan).endpoint)
     }
     
-    /**
-     List all plans
-     Returns a list of your plans. The plans are returned sorted by creation date, with the
-     most recent plans appearing first.
-     
-     - parameter filter: A Filter item to pass query parameters when fetching results.
-     
-     - returns: A StripeRequest<> item which you can then use to convert to the corresponding node
-     */
-    public func listAll(filter: StripeFilter? = nil) throws -> StripeRequest<PlansList> {
-        var query = [String : NodeRepresentable]()
-        
-        if let data = try filter?.createQuery() {
-            query = data
+    /// List all plans
+    /// [Learn More →](https://stripe.com/docs/api/curl#list_plans)
+    public func listAll(filter: [String : Any]? = nil) throws -> Future<PlansList> {
+        var queryParams = ""
+        if let filter = filter {
+            queryParams = filter.queryParameters
         }
         
-        return try StripeRequest(client: self.client, method: .get, route: .plans, query: query, body: nil, headers: nil)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.plans.endpoint, query: queryParams)
     }
 }

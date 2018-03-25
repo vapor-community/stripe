@@ -7,361 +7,150 @@
 //
 
 import XCTest
-
 @testable import Stripe
 @testable import Vapor
 
-
-
-
-
 class OrderTests: XCTestCase {
+    let orderString = """
+{
+    "amount": 1500,
+    "created": 1234567890,
+    "currency": "usd",
+    "id": "or_1BoJ2NKrZ43eBVAbFf4SZyvD",
+    "items": [
+        {
+            "amount": 1500,
+            "currency": "usd",
+            "description": "Gold Special",
+            "object": "order_item",
+            "parent": "sk_1BoJ2KKrZ43eBVAbu7ioKR0i",
+            "quantity": null,
+            "type": "sku"
+        }
+    ],
+    "livemode": false,
+    "metadata": {
+        "hello": "world"
+    },
+    "object": "order",
+    "returns": {
+        "data": [
+            {
+                "amount": 1500,
+                "created": 1234567890,
+                "currency": "usd",
+                "id": "orret_1BoJ2NKrZ43eBVAb8r8dx0GO",
+                "items": [
+                    {
+                        "amount": 1500,
+                        "currency": "usd",
+                        "description": "Gold Special",
+                        "object": "order_item",
+                        "parent": "sk_1BoJ2NKrZ43eBVAb4RD4HHuH",
+                        "quantity": null,
+                        "type": "sku"
+                    }
+                ],
+                "livemode": false,
+                "object": "order_return",
+                "order": "or_1BoJ2NKrZ43eBVAbSnN443id",
+                "refund": "re_1BoJ2NKrZ43eBVAbop3rb4h1"
+            }
+        ],
+        "has_more": false,
+        "object": "list",
+        "url": "/v1/order_returns?order=or_1BoJ2NKrZ43eBVAbFf4SZyvD"
+    },
+    "shipping": {
+        "address": {
+            "city": "Anytown",
+            "country": "US",
+            "line1": "1234 Main street",
+            "line2": null,
+            "postal_code": "123456",
+            "state": null
+        },
+        "carrier": null,
+        "name": "Jenny Rosen",
+        "phone": null,
+        "tracking_number": null
+    },
+    "status": "created",
+    "status_transitions": {
+        "canceled": 1515290550,
+        "fulfiled": 1507690550,
+        "paid": 1517688550,
+        "returned": 1927690550
+    },
+    "updated": 1234567890
+}
+"""
     
-    var drop: Droplet?
-    var orderId: String = ""
-    
-    override func setUp() {
+    func testOrderIsProperlyParsed() throws {
         do {
-            drop = try makeDroplet()
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+            let body = HTTPBody(string: orderString)
+            let futureOrder = try decoder.decode(StripeOrder.self, from: body, on: EmbeddedEventLoop())
             
-            let productId = try drop?.stripe?.products.create(name: "Vapor Node",
-                                                              id: nil,
-                                                              active: nil,
-                                                              attributes: try Node(node:["size"]),
-                                                              caption: nil,
-                                                              deactivateOn: nil,
-                                                              description: "A Vapor Node",
-                                                              images: nil,
-                                                              packageDimensions: nil,
-                                                              shippable: true,
-                                                              url: nil)
-                                                              .serializedResponse().id ?? ""
-            
-            let inventory = try Node(node:[
-                "quantity":55,
-                "type":InventoryType.finite.rawValue,])
-            
-            
-            let attributes = try Node(node:["size": "xl"])
-            
-            let skuId = try drop?.stripe?.skus.create(currency: .usd,
-                                                      inventory: inventory,
-                                                      price: 2500,
-                                                      product: productId,
-                                                      id: nil,
-                                                      active: nil,
-                                                      attributes: attributes,
-                                                      image: nil,
-                                                      packageDimensions: nil)
-                                                      .serializedResponse().id ?? ""
-            
-            let items = try Node(node: [["parent": skuId]])
-            
-            let shippingInfo = Node([
-                "name": "Mr. Vapor",
-                             "address": ["line1": "123 main street"]
-                ])
-            
-            orderId = try drop?.stripe?.orders.create(currency: .usd,
-                                                      coupon: nil,
-                                                      customer: nil,
-                                                      email: nil,
-                                                      items: items,
-                                                      shipping: shippingInfo).serializedResponse().id ?? ""
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
+            futureOrder.do { (order) in
+                XCTAssertEqual(order.id, "or_1BoJ2NKrZ43eBVAbFf4SZyvD")
+                XCTAssertEqual(order.amount, 1500)
+                XCTAssertEqual(order.created, Date(timeIntervalSince1970: 1234567890))
+                XCTAssertEqual(order.currency, .usd)
+                XCTAssertEqual(order.livemode, false)
+                XCTAssertEqual(order.metadata?["hello"], "world")
+                XCTAssertEqual(order.object, "order")
+                XCTAssertEqual(order.status, .created)
+                
+                // This test covers the Order Item object
+                XCTAssertEqual(order.statusTransitions?.canceled, Date(timeIntervalSince1970: 1515290550))
+                XCTAssertEqual(order.statusTransitions?.fulfiled, Date(timeIntervalSince1970: 1507690550))
+                XCTAssertEqual(order.statusTransitions?.paid, Date(timeIntervalSince1970: 1517688550))
+                XCTAssertEqual(order.statusTransitions?.returned, Date(timeIntervalSince1970: 1927690550))
+                XCTAssertEqual(order.updated, Date(timeIntervalSince1970: 1234567890))
+                
+                XCTAssertEqual(order.items?[0].amount, 1500)
+                XCTAssertEqual(order.items?[0].currency, .usd)
+                XCTAssertEqual(order.items?[0].description, "Gold Special")
+                XCTAssertEqual(order.items?[0].object, "order_item")
+                XCTAssertEqual(order.items?[0].parent, "sk_1BoJ2KKrZ43eBVAbu7ioKR0i")
+                XCTAssertEqual(order.items?[0].quantity, nil)
+                XCTAssertEqual(order.items?[0].type, .sku)
+                
+                XCTAssertEqual(order.returns?.hasMore, false)
+                XCTAssertEqual(order.returns?.object, "list")
+                XCTAssertEqual(order.returns?.url, "/v1/order_returns?order=or_1BoJ2NKrZ43eBVAbFf4SZyvD")
+                
+                // This test covers the OrderItem Return object
+                XCTAssertEqual(order.returns?.data?[0].amount, 1500)
+                XCTAssertEqual(order.returns?.data?[0].created, Date(timeIntervalSince1970: 1234567890))
+                XCTAssertEqual(order.returns?.data?[0].currency, .usd)
+                XCTAssertEqual(order.returns?.data?[0].id, "orret_1BoJ2NKrZ43eBVAb8r8dx0GO")
+                XCTAssertEqual(order.returns?.data?[0].livemode, false)
+                XCTAssertEqual(order.returns?.data?[0].object, "order_return")
+                XCTAssertEqual(order.returns?.data?[0].order, "or_1BoJ2NKrZ43eBVAbSnN443id")
+                XCTAssertEqual(order.returns?.data?[0].refund, "re_1BoJ2NKrZ43eBVAbop3rb4h1")
+                
+                XCTAssertEqual(order.shipping?.address?.city, "Anytown")
+                XCTAssertEqual(order.shipping?.address?.country, "US")
+                XCTAssertEqual(order.shipping?.address?.line1, "1234 Main street")
+                XCTAssertEqual(order.shipping?.address?.line2, nil)
+                XCTAssertEqual(order.shipping?.address?.postalCode, "123456")
+                XCTAssertEqual(order.shipping?.address?.state, nil)
+                XCTAssertEqual(order.shipping?.carrier, nil)
+                XCTAssertEqual(order.shipping?.name, "Jenny Rosen")
+                XCTAssertEqual(order.shipping?.phone, nil)
+                XCTAssertEqual(order.shipping?.trackingNumber, nil)
+                
+                }.catch { (error) in
+                    XCTFail("\(error.localizedDescription)")
             }
         }
-        catch {
-            fatalError("Setup failed: \(error.localizedDescription)")
-        }
-    }
-    
-    override func tearDown() {
-        drop = nil
-        orderId = ""
-    }
-    
-    func testRetrieveOrder() throws {
-        do {
-            let order = try drop?.stripe?.orders.retrieve(order: orderId).serializedResponse()
-            
-            XCTAssertNotNil(order)
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testUpdateOrder() throws {
-        do {
-            let metadata = try Node(node:["hello":"world"])
-            
-            let updatedOrder = try drop?.stripe?.orders.update(order: orderId,
-                                                               coupon: nil,
-                                                               selectedShippingMethod: nil,
-                                                               shippingInformation: nil,
-                                                               status: nil,
-                                                               metadata: metadata).serializedResponse()
-            
-            XCTAssertNotNil(updatedOrder)
-            
-            XCTAssertEqual(updatedOrder?.metadata?["hello"], metadata["hello"])
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testPayOrder() throws {
-        do {
-            
-            let source = Node([
-                "exp_month": 12,
-                "exp_year": 2020,
-                "number": "4242424242424242",
-                "object": "card",
-                "cvc": 123
-                ])
-            
-            let paidOrder = try drop?.stripe?.orders.pay(order: orderId,
-                                                              customer: nil,
-                                                              source: source,
-                                                              applicationFee: nil,
-                                                              email: "john@sno.com").serializedResponse()
-            
-            XCTAssertNotNil(paidOrder)
-            
-            XCTAssertEqual(paidOrder?.status, .paid)
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testListAllOrders() throws {
-        do {
-            let orders = try drop?.stripe?.orders.listAll(filter: nil).serializedResponse()
-            
-            XCTAssertNotNil(orders)
-            
-            if let orderItems = orders?.items {
-                XCTAssertGreaterThanOrEqual(orderItems.count, 1)
-            } else {
-                XCTFail("Orders are not present")
-            }
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testFilterOrders() throws {
-        do {
-            let filter = StripeFilter()
-            
-            filter.limit = 1
-            
-            let orders = try drop?.stripe?.orders.listAll(filter: filter).serializedResponse()
-            
-            XCTAssertNotNil(orders)
-            
-            if let orderItems = orders?.items {
-                XCTAssertEqual(orderItems.count, 1)
-            } else {
-                XCTFail("Orders are not present")
-            }
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-    
-    func testReturnOrder() throws {
-        do {
-            
-            let source = Node([
-                "exp_month": 12,
-                "exp_year": 2020,
-                "number": "4242424242424242",
-                "object": "card",
-                "cvc": 123
-                ])
-            
-            let paidOrder = try drop?.stripe?.orders.pay(order: orderId,
-                                                         customer: nil,
-                                                         source: source,
-                                                         applicationFee: nil,
-                                                         email: "john@sno.com").serializedResponse()
-            
-            XCTAssertNotNil(paidOrder)
-            
-            XCTAssertEqual(paidOrder?.status, .paid)
-            
-            let returnedOrder = try drop?.stripe?.orders.return(order: orderId, items: nil).serializedResponse()
-            
-            XCTAssertNotNil(returnedOrder)
-        }
-        catch let error as StripeError {
-            
-            switch error {
-            case .apiConnectionError:
-                XCTFail(error.localizedDescription)
-            case .apiError:
-                XCTFail(error.localizedDescription)
-            case .authenticationError:
-                XCTFail(error.localizedDescription)
-            case .cardError:
-                XCTFail(error.localizedDescription)
-            case .invalidRequestError:
-                XCTFail(error.localizedDescription)
-            case .rateLimitError:
-                XCTFail(error.localizedDescription)
-            case .validationError:
-                XCTFail(error.localizedDescription)
-            case .invalidSourceType:
-                XCTFail(error.localizedDescription)
-            default:
-                XCTFail(error.localizedDescription)
-            }
-        }
-        catch {
-            XCTFail(error.localizedDescription)
+        catch  {
+            XCTFail("\(error.localizedDescription)")
         }
     }
 }

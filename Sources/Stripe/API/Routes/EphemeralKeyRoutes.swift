@@ -5,25 +5,29 @@
 //  Created by Andrew Edwards on 10/17/17.
 //
 
-import HTTP
-import Node
 
-open class EphemeralKeyRoutes {
-    let client: StripeClient
+import Vapor
+
+public protocol EphemeralKeyRoutes {
+    associatedtype EK: EphemeralKey
     
-    init(client: StripeClient) {
-        self.client = client
+    func create(customer: String) throws -> Future<EK>
+    func delete(ephemeralKey: String) throws -> Future<EK>
+}
+
+public struct StripeEphemeralKeyRoutes: EphemeralKeyRoutes {
+    private let request: StripeRequest
+    
+    init(request: StripeRequest) {
+        self.request = request
     }
     
-    public func create(customerId: String) throws -> StripeRequest<EphemeralKey> {
-        
-        let node = try Node(node: ["customer": customerId])
-        
-        return try StripeRequest(client: self.client, method: .post, route: .ephemeralKeys, query: [:], body: Body.data(node.formURLEncoded()), headers: nil)
+    public func create(customer: String) throws -> Future<StripeEphemeralKey> {
+        let body = ["customer": customer]
+        return try request.send(method: .POST, path: StripeAPIEndpoint.ephemeralKeys.endpoint, body: body.queryParameters)
     }
     
-    public func delete(ephemeralKeyId: String) throws -> StripeRequest<EphemeralKey> {
-        
-        return try StripeRequest(client: self.client, method: .delete, route: .ephemeralKey(ephemeralKeyId), query: [:], body: nil, headers: nil)
+    public func delete(ephemeralKey: String) throws -> Future<StripeEphemeralKey> {
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.ephemeralKey(ephemeralKey).endpoint)
     }
 }
