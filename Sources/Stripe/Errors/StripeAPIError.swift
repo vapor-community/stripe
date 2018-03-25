@@ -20,11 +20,15 @@ public protocol APIError {
     var param: String? { get }
 }
 
-public struct StripeAPIError: APIError, StripeModel {
+public struct StripeAPIErrorBody: APIError, StripeModel {
     public var type: StripeAPIErrorType?
     public var charge: String?
     public var message: String?
     public var code: StripeAPICardErrorType?
     public var declineCode: StripeAPIDeclineCode?
     public var param: String?
+}
+
+public struct StripeAPIError: StripeModel {
+    public var error: StripeAPIErrorBody
 }
