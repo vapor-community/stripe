@@ -18,7 +18,7 @@ public enum StripeError: Error {
         case .malformedEncodedQuery:
             return "The query for the request was malformed"
         case .apiError(let apiError):
-            return apiError.message ?? "Unknown Error"
+            return apiError.error.message ?? "Unknown Error"
         }
     }
 }

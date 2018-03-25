@@ -18,6 +18,7 @@ public struct StripeConfig: Service {
 public final class StripeProvider: Provider {
     public static let repositoryName = "stripe-provider"
     
+    public init(){}
     public func boot(_ worker: Container) throws {}
     
     public func didBoot(_ worker: Container) throws -> EventLoopFuture<Void> {
