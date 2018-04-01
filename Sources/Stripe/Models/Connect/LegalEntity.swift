@@ -55,4 +55,24 @@ public struct StripeConnectAccountLegalEntity: LegalEntity, StripeModel {
     public var taxIdRegistrar: String?
     public var type: String?
     public var verification: StripeLegalEntityVerification?
+    
+    public enum CodingKeys: CodingKey, String {
+        case additionalOwners = "additional_owners"
+        case address
+        case businessName = "business_name"
+        case businessTaxIdProvided = "business_tax_id_provided"
+        case businessVATIdProvided = "business_vat_id_provided"
+        case dob
+        case firstName = "first_name"
+        case lastName = "last_name"
+        case gender
+        case maidenName = "maiden_name"
+        case personalIdNumberProvided = "personal_id_number_provided"
+        case personalAddress = "personal_address"
+        case phoneNumber = "phone_number"
+        case ssnLast4Provided = "ssn_last_4_provided"
+        case taxIdRegistrar = "tax_id_registrar"
+        case type
+        case verification
+    }
 }

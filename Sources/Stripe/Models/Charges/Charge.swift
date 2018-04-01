@@ -94,4 +94,43 @@ public struct StripeCharge: Charge, StripeModel {
     public var status: StripeStatus?
     public var transfer: String?
     public var transferGroup: String?
+    
+    public enum CodingKeys: CodingKey, String {
+        case id
+        case object
+        case amount
+        case amountRefunded = "amount_refunded"
+        case application
+        case applicationFee = "application_fee"
+        case balanceTransaction = "balance_transaction"
+        case captured
+        case created
+        case currency
+        case customer
+        case description
+        case destination
+        case dispute
+        case failureCode = "failure_code"
+        case failureMessage = "failure_message"
+        case fraudDetails = "fraud_details"
+        case invoice
+        case livemode
+        case metadata
+        case onBehalfOf = "on_behalf_of"
+        case order
+        case outcome
+        case paid
+        case receiptEmail = "receipt_email"
+        case receiptNumber = "receipt_number"
+        case refunded
+        case refunds
+        case review
+        case shipping
+        case source
+        case sourceTransfer = "source_transfer"
+        case statementDescriptor = "statement_descriptor"
+        case status
+        case transfer
+        case transferGroup = "transfer_group"
+    }
 }

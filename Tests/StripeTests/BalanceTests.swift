@@ -69,10 +69,9 @@ class BalanceTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: balanceString)
-            let futureBalance = try decoder.decode(StripeBalance.self, from: body, on: EmbeddedEventLoop())
+            let futureBalance = try decoder.decode(StripeBalance.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureBalance.do { (balance) in
                 XCTAssertEqual(balance.object, "balance")
@@ -83,7 +82,7 @@ class BalanceTests: XCTestCase {
                 XCTAssertEqual(balance.available?[0].amount, 32147287853)
                 XCTAssertEqual(balance.available?[0].sourceTypes?["card"], 32026441972)
                 // TODO: - Seeif this camel case is resolved in future versions of swift 4.1 snapshot
-                XCTAssertEqual(balance.available?[0].sourceTypes?["bankAccount"], 119300699)
+                XCTAssertEqual(balance.available?[0].sourceTypes?["bank_account"], 119300699)
                 
                 XCTAssertEqual(balance.connectReserved?[0].currency, .eur)
                 XCTAssertEqual(balance.connectReserved?[0].amount, 0)
@@ -140,10 +139,9 @@ class BalanceTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: balanceTransactionString)
-            let futureBalanceTransaction = try decoder.decode(StripeBalanceTransactionItem.self, from: body, on: EmbeddedEventLoop())
+            let futureBalanceTransaction = try decoder.decode(StripeBalanceTransactionItem.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureBalanceTransaction.do { (balancetransaction) in
                 XCTAssertEqual(balancetransaction.id, "txn_19XJJ02eZvKYlo2ClwuJ1rbA")
@@ -164,8 +162,6 @@ class BalanceTests: XCTestCase {
                 XCTAssertEqual(balancetransaction.feeDetails?[0].currency, .usd)
                 XCTAssertEqual(balancetransaction.feeDetails?[0].description, "Stripe processing fees")
                 XCTAssertEqual(balancetransaction.feeDetails?[0].type, .stripeFee)
-                
-                
                 
                 }.catch { (error) in
                     XCTFail("\(error.localizedDescription)")

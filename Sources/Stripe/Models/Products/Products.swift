@@ -58,4 +58,26 @@ public struct StripeProduct: Product, StripeModel {
     public var type: String?
     public var updated: Date?
     public var url: String?
+    
+    public enum CodingKeys: CodingKey, String {
+        case id
+        case object
+        case active
+        case attributes
+        case caption
+        case created
+        case deactivateOn = "deactivate_on"
+        case description
+        case images
+        case livemode
+        case metadata
+        case name
+        case packageDimensions = "package_dimensions"
+        case shippable
+        case skus
+        case statementDescriptor = "statement_descriptor"
+        case type
+        case updated
+        case url
+    }
 }

@@ -41,4 +41,19 @@ public struct StripeRefund: Refund, StripeModel {
     public var reason: RefundReason?
     public var receiptNumber: String?
     public var status: StripeStatus?
+    
+    public enum CodingKeys: CodingKey, String {
+        case id
+        case object
+        case amount
+        case balanceTransaction = "balance_transaction"
+        case charge
+        case created
+        case currency
+        case description
+        case metadata
+        case reason
+        case receiptNumber = "receipt_number"
+        case status
+    }
 }

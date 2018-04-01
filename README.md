@@ -47,10 +47,6 @@ futureCharge.do({ (charge) in
 
 And you can always check the documentation to see the required paramaters for specific API calls.
 
-## Linux compatibility
-Currently the project won't compile for linux.
-You can track this issue [here](https://bugs.swift.org/browse/SR-7180) and [here](https://github.com/apple/swift-corelibs-foundation/pull/1347)
-
 ## Whats Implemented
 
 ### Core Resources

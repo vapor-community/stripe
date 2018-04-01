@@ -32,4 +32,15 @@ public struct StripeOwner: Owner, StripeModel {
     public var verifiedEmail: String?
     public var verifiedName: String?
     public var verifiedPhone: String?
+    
+    public enum CodingKeys: String, CodingKey {
+        case address
+        case email
+        case name
+        case phone
+        case verifiedAddress = "verified_address"
+        case verifiedEmail = "verified_email"
+        case verifiedName = "verified_name"
+        case verifiedPhone = "verified_phone"
+    }
 }

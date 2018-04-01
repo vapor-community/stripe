@@ -33,4 +33,14 @@ public struct StripeSubscriptionItem: SubscriptionItem, StripeModel {
     public var plan: StripePlan?
     public var quantity: Int?
     public var subscription: String?
+    
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case object
+        case created
+        case metadata
+        case plan
+        case quantity
+        case subscription
+    }
 }

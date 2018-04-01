@@ -66,11 +66,11 @@ class OrderTests: XCTestCase {
             "city": "Anytown",
             "country": "US",
             "line1": "1234 Main street",
-            "line2": null,
+            "line2": "suite 123",
             "postal_code": "123456",
-            "state": null
+            "state": "AL"
         },
-        "carrier": null,
+        "carrier": "UPS",
         "name": "Jenny Rosen",
         "phone": null,
         "tracking_number": null
@@ -90,10 +90,9 @@ class OrderTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
 
             let body = HTTPBody(string: orderString)
-            let futureOrder = try decoder.decode(StripeOrder.self, from: body, on: EmbeddedEventLoop())
+            let futureOrder = try decoder.decode(StripeOrder.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureOrder.do { (order) in
                 XCTAssertEqual(order.id, "or_1BoJ2NKrZ43eBVAbFf4SZyvD")
@@ -137,10 +136,10 @@ class OrderTests: XCTestCase {
                 XCTAssertEqual(order.shipping?.address?.city, "Anytown")
                 XCTAssertEqual(order.shipping?.address?.country, "US")
                 XCTAssertEqual(order.shipping?.address?.line1, "1234 Main street")
-                XCTAssertEqual(order.shipping?.address?.line2, nil)
+                XCTAssertEqual(order.shipping?.address?.line2, "suite 123")
                 XCTAssertEqual(order.shipping?.address?.postalCode, "123456")
-                XCTAssertEqual(order.shipping?.address?.state, nil)
-                XCTAssertEqual(order.shipping?.carrier, nil)
+                XCTAssertEqual(order.shipping?.address?.state, "AL")
+                XCTAssertEqual(order.shipping?.carrier, "UPS")
                 XCTAssertEqual(order.shipping?.name, "Jenny Rosen")
                 XCTAssertEqual(order.shipping?.phone, nil)
                 XCTAssertEqual(order.shipping?.trackingNumber, nil)

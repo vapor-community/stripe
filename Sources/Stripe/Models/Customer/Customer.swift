@@ -54,4 +54,23 @@ public struct StripeCustomer: Customer, StripeModel {
     public var shipping: ShippingLabel?
     public var sources: StripeSourcesList?
     public var subscriptions: SubscriptionList?
+    
+    public enum CodingKeys: CodingKey, String {
+        case id
+        case object
+        case accountBalance = "account_balance"
+        case bussinessVATId = "bussiness_vat_id"
+        case created
+        case currency
+        case defaultSource = "default_source"
+        case delinquent
+        case description
+        case discount
+        case email
+        case livemode
+        case metadata
+        case shipping
+        case sources
+        case subscriptions
+    }
 }

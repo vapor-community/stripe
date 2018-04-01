@@ -16,7 +16,7 @@ public struct ExternalAccountsList: StripeModel {
     public var hasMore: Bool?
     public var totalCount: Int?
     public var url: String?
-    private var data: String?
+    public var data: String?
     public var cardAccounts: [StripeCard]?
     public var bankAccounts: [StripeBankAccount]?
     
@@ -28,6 +28,16 @@ public struct ExternalAccountsList: StripeModel {
         url = try container.decodeIfPresent(String.self, forKey: .url)
         cardAccounts = try container.decodeIfPresent([StripeCard].self, forKey: .data)?.filter{ $0.object == "card" }
         bankAccounts = try container.decodeIfPresent([StripeBankAccount].self, forKey: .data)?.filter{ $0.object == "bank_account" }
+    }
+    
+    public enum CodingKeys: String, CodingKey {
+        case object
+        case hasMore = "has_more"
+        case totalCount = "total_count"
+        case url
+        case data
+        case cardAccounts
+        case bankAccounts
     }
 }
 

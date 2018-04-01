@@ -47,4 +47,21 @@ public struct StripeBalanceTransactionItem: BalanceTransactionItem, StripeModel 
     public var source: String?
     public var status: StripeStatus?
     public var type: BalanceTransactionType?
+    
+    public enum CodingKeys: CodingKey, String {
+        case id
+        case object
+        case amount
+        case availableOn = "available_on"
+        case created
+        case currency
+        case exchangeRate = "exchange_rate"
+        case description
+        case fee
+        case feeDetails = "fee_details"
+        case net
+        case source
+        case status
+        case type
+    }
 }

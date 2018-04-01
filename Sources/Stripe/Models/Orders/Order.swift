@@ -69,4 +69,30 @@ public struct StripeOrder: Order, StripeModel {
     public var statusTransitions: StripeOrderStatusTransitions?
     public var updated: Date?
     public var upstreamId: String?
+    
+    public enum CodingKeys: CodingKey, String {
+        case id
+        case object
+        case amount
+        case amountReturned = "amount_returned"
+        case application
+        case applicationFee = "application_fee"
+        case charge
+        case created
+        case currency
+        case customer
+        case email
+        case externalCouponCode = "external_coupon_code"
+        case items
+        case livemode
+        case metadata
+        case returns
+        case selectedShippingMethod = "selected_shipping_method"
+        case shipping
+        case shippingMethods = "shipping_methods"
+        case status
+        case statusTransitions = "status_transitions"
+        case updated
+        case upstreamId = "upstream_id"
+    }
 }

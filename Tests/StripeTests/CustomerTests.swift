@@ -36,10 +36,9 @@ class CustomerTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: customerString)
-            let futureCustomer = try decoder.decode(StripeCustomer.self, from: body, on: EmbeddedEventLoop())
+            let futureCustomer = try decoder.decode(StripeCustomer.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
 
             futureCustomer.do { (customer) in
                 XCTAssertEqual(customer.id, "cus_CG7FIUH6U4JTkB")

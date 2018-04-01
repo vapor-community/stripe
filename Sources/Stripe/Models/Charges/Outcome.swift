@@ -50,4 +50,13 @@ public struct StripeOutcome: Outcome, StripeModel {
     public var rule: String?
     public var sellerMessage: String?
     public var type: OutcomeType?
+    
+    public enum CodingKeys: CodingKey, String {
+        case networkStatus = "network_status"
+        case reason
+        case riskLevel = "risk_level"
+        case rule
+        case sellerMessage = "seller_message"
+        case type
+    }
 }

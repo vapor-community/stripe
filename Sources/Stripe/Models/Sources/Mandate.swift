@@ -20,4 +20,9 @@ public protocol Mandate {
 public struct StripeMandate: Mandate, StripeModel {
     public var acceptance: StripeTOSAcceptance?
     public var notificationMethod: String?
+    
+    public enum CodingKeys: String, CodingKey {
+        case acceptance
+        case notificationMethod = "notification_method"
+    }
 }
