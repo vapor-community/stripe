@@ -10,4 +10,11 @@ public struct SourceRedirect: StripeModel {
     public var returnUrl: String?
     public var status: String?
     public var url: String?
+    
+    public enum CodingKeys: String, CodingKey {
+        case failureReason = "failure_reason"
+        case returnUrl = "return_url"
+        case status
+        case url
+    }
 }

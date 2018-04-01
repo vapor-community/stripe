@@ -2,7 +2,7 @@
 
 ![Swift](http://img.shields.io/badge/swift-4.1-brightgreen.svg)
 ![Vapor](http://img.shields.io/badge/vapor-3.0-brightgreen.svg)
-[![CircleCI](https://circleci.com/gh/vapor-community/stripe-provider/tree/beta.svg?style=svg)](https://circleci.com/gh/vapor-community/stripe-provider/tree/beta)
+[![CircleCI](https://circleci.com/gh/vapor-community/stripe-provider/tree/beta.svg?style=svg)](https://circleci.com/gh/vapor-community/stripe-provider)
 
 [Stripe][stripe_home] is a payment platform that handles credit cards, bitcoin and ACH transfers. They have become one of the best platforms for handling payments for projects, services or products.
 
@@ -46,10 +46,6 @@ futureCharge.do({ (charge) in
 ~~~~
 
 And you can always check the documentation to see the required paramaters for specific API calls.
-
-## Linux compatibility
-Currently the project won't compile for linux.
-You can track this issue [here](https://bugs.swift.org/browse/SR-7180) and [here](https://github.com/apple/swift-corelibs-foundation/pull/1347)
 
 ## Whats Implemented
 

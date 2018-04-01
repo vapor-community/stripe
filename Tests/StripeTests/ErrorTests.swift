@@ -27,10 +27,9 @@ class ErrorTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: errorString)
-            let futureError = try decoder.decode(StripeAPIError.self, from: body, on: EmbeddedEventLoop())
+            let futureError = try decoder.decode(StripeAPIError.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureError.do { (stripeError) in
                 XCTAssertEqual(stripeError.error.type, .cardError)

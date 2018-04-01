@@ -23,4 +23,10 @@ public struct StripeTOSAcceptance: TOSAcceptance, StripeModel {
     public var date: Date?
     public var ip: String?
     public var userAgent: String?
+    
+    public enum CodingKeys: CodingKey, String {
+        case date
+        case ip
+        case userAgent = "user_agent"
+    }
 }

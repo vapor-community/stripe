@@ -25,4 +25,14 @@ public struct StripeEphemeralKey: EphemeralKey, StripeModel {
     public var expires: Date?
     public var livemode: Bool?
     public var secret: String?
+    
+    public enum CodingKeys: CodingKey, String {
+        case id
+        case object
+        case associatedObjects = "associated_objects"
+        case created
+        case expires
+        case livemode
+        case secret
+    }
 }

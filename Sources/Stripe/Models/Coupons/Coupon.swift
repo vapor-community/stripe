@@ -45,4 +45,21 @@ public struct StripeCoupon: Coupon, StripeModel {
     public var redeemBy: Date?
     public var timesRedeemed: Int?
     public var valid: Bool?
+    
+    public enum CodingKeys: CodingKey, String {
+        case id
+        case object
+        case amountOff = "amount_off"
+        case created
+        case currency
+        case duration
+        case durationInMonths = "duration_in_months"
+        case livemode
+        case maxRedemptions = "max_redemptions"
+        case metadata
+        case percentOff = "percent_off"
+        case redeemBy = "redeem_by"
+        case timesRedeemed = "times_redeemed"
+        case valid
+    }
 }

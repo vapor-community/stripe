@@ -38,4 +38,16 @@ public struct StripeToken: Token, StripeModel {
     public var used: Bool?
     public var card: StripeCard?
     public var bankAccount: StripeBankAccount?
+    
+    public enum CodingKeys: CodingKey, String {
+        case id
+        case object
+        case type
+        case clientIp = "client_ip"
+        case created
+        case livemode
+        case used
+        case card
+        case bankAccount = "bank_account"
+    }
 }

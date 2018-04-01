@@ -67,10 +67,9 @@ class DisputeTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: disputeString)
-            let futureDispute = try decoder.decode(StripeDispute.self, from: body, on: EmbeddedEventLoop())
+            let futureDispute = try decoder.decode(StripeDispute.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureDispute.do { (dispute) in
                 XCTAssertEqual(dispute.amount, 1000)

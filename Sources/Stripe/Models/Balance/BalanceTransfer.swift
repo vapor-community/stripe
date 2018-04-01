@@ -21,4 +21,10 @@ public struct StripeBalanceTransfer: BalanceTransfer, StripeModel {
     public var currency: StripeCurrency?
     public var amount: Int?
     public var sourceTypes: [String: Int]?
+    
+    public enum CodingKeys: CodingKey, String {
+        case currency
+        case amount
+        case sourceTypes = "source_types"
+    }
 }

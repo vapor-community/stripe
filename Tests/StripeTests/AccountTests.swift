@@ -73,9 +73,9 @@ class AccountTests: XCTestCase {
             "maiden_name": "old",
             "personal_id_number_provided": true,
             "verification": {
-              "details": null,
+              "details": "Nothing to see here",
               "details_code": "failed_other",
-              "document": null,
+              "document": "thestuff.pdf",
               "status": "verified"
             },
             "dob": {
@@ -130,8 +130,8 @@ class AccountTests: XCTestCase {
   "payouts_enabled": false,
   "product_description": "Vapor",
   "statement_descriptor": "",
-  "support_email": null,
-  "support_phone": null,
+  "support_email": "a@b.com",
+  "support_phone": "1234567",
   "timezone": "US/Pacific",
   "tos_acceptance": {
     "date": 1385798567,
@@ -168,10 +168,9 @@ class AccountTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: accountString)
-            let futureAccount = try decoder.decode(StripeConnectAccount.self, from: body, on: EmbeddedEventLoop())
+            let futureAccount = try decoder.decode(StripeConnectAccount.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureAccount.do { (account) in
                 XCTAssertEqual(account.id, "acct_1032D82eZvKYlo2C")
@@ -183,8 +182,8 @@ class AccountTests: XCTestCase {
                 XCTAssertEqual(account.country, "US")
                 XCTAssertEqual(account.created, Date(timeIntervalSince1970: 1385798567))
                 XCTAssertEqual(account.debitNegativeBalances, true)
-                XCTAssertEqual(account.declineChargeOn?["avsFailure"], true)
-                XCTAssertEqual(account.declineChargeOn?["cvcFailure"], false)
+                XCTAssertEqual(account.declineChargeOn?["avs_failure"], true)
+                XCTAssertEqual(account.declineChargeOn?["cvc_failure"], false)
                 XCTAssertEqual(account.defaultCurrency, .usd)
                 XCTAssertEqual(account.detailsSubmitted, false)
                 XCTAssertEqual(account.displayName, "Stripe.com")
@@ -198,8 +197,8 @@ class AccountTests: XCTestCase {
                 XCTAssertEqual(account.payoutsEnabled, false)
                 XCTAssertEqual(account.productDescription, "Vapor")
                 XCTAssertEqual(account.statementDescriptor, "")
-                XCTAssertEqual(account.supportEmail, nil)
-                XCTAssertEqual(account.supportPhone, nil)
+                XCTAssertEqual(account.supportEmail, "a@b.com")
+                XCTAssertEqual(account.supportPhone, "1234567")
                 XCTAssertEqual(account.timezone, "US/Pacific")
                 
                 // TOS acceptance
@@ -261,9 +260,9 @@ class AccountTests: XCTestCase {
                 XCTAssertEqual(account.legalEntity?.additionalOwners?[0].lastName, "X")
                 XCTAssertEqual(account.legalEntity?.additionalOwners?[0].maidenName, "old")
                 XCTAssertEqual(account.legalEntity?.additionalOwners?[0].personalIdNumberProvided, true)
-                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].verification?.details, nil)
+                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].verification?.details, "Nothing to see here")
                 XCTAssertEqual(account.legalEntity?.additionalOwners?[0].verification?.detailsCode, .failedOther)
-                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].verification?.document, nil)
+                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].verification?.document, "thestuff.pdf")
                 XCTAssertEqual(account.legalEntity?.additionalOwners?[0].verification?.status, .verified)
                 XCTAssertEqual(account.legalEntity?.additionalOwners?[0].dob?["day"], 10)
                 XCTAssertEqual(account.legalEntity?.additionalOwners?[0].dob?["month"], 10)

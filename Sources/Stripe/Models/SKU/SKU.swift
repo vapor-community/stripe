@@ -48,4 +48,21 @@ public struct StripeSKU: SKU, StripeModel {
     public var price: Int?
     public var product: String?
     public var updated: Date?
+    
+    public enum CodingKeys: CodingKey, String {
+        case id
+        case object
+        case active
+        case attributes
+        case created
+        case currency
+        case image
+        case inventory
+        case livemode
+        case metadata
+        case packageDimensions = "package_dimensions"
+        case price
+        case product
+        case updated
+    }
 }

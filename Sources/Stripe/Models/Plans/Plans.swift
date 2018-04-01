@@ -41,4 +41,19 @@ public struct StripePlan: Plan, StripeModel {
     public var nickname: String?
     public var product: String?
     public var trialPeriodDays: Int?
+    
+    public enum CodingKeys: CodingKey, String {
+        case id
+        case object
+        case amount
+        case created
+        case currency
+        case interval
+        case intervalCount = "interval_count"
+        case livemode
+        case metadata
+        case nickname
+        case product
+        case trialPeriodDays = "trial_period_days"
+    }
 }

@@ -49,4 +49,21 @@ public struct StripeDispute: Dispute, StripeModel {
     public var metadata: [String: String]?
     public var reason: DisputeReason?
     public var status: DisputeStatus?
+    
+    public enum CodingKeys: CodingKey, String {
+        case id
+        case object
+        case amount
+        case balanceTransactions = "balance_transactions"
+        case charge
+        case created
+        case currency
+        case evidence
+        case evidenceDetails = "evidence_details"
+        case isChargeRefundable = "is_charge_refundable"
+        case livemode
+        case metadata
+        case reason
+        case status
+    }
 }

@@ -23,4 +23,11 @@ public struct StripeLegalEntityVerification: LegalEntityVerification, StripeMode
     public var detailsCode: LegalEntityVerificationState?
     public var document: String?
     public var status: LegalEntityVerificationStatus?
+    
+    public enum CodingKeys: CodingKey, String {
+        case details
+        case detailsCode = "details_code"
+        case document
+        case status
+    }
 }

@@ -27,6 +27,15 @@ public struct StripeAPIErrorBody: APIError, StripeModel {
     public var code: StripeAPICardErrorType?
     public var declineCode: StripeAPIDeclineCode?
     public var param: String?
+    
+    public enum CodingKeys: CodingKey, String {
+        case type
+        case charge
+        case message
+        case code
+        case declineCode = "decline_code"
+        case param
+    }
 }
 
 public struct StripeAPIError: StripeModel {

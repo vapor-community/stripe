@@ -66,10 +66,9 @@ class InvoiceTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: invoiceString)
-            let futureInvoice = try decoder.decode(StripeInvoice.self, from: body, on: EmbeddedEventLoop())
+            let futureInvoice = try decoder.decode(StripeInvoice.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureInvoice.do { (invoice) in
                 XCTAssertEqual(invoice.id, "in_1BoJ2NKrZ43eBVAbQ8jb0Xfj")
@@ -149,10 +148,9 @@ class InvoiceTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: invoiceItemString)
-            let futureInvoiceItem = try decoder.decode(StripeInvoiceItem.self, from: body, on: EmbeddedEventLoop())
+            let futureInvoiceItem = try decoder.decode(StripeInvoiceItem.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureInvoiceItem.do { (invoiceItem) in
                 XCTAssertEqual(invoiceItem.id, "ii_1BtydB2eZvKYlo2CzeKs27EC")

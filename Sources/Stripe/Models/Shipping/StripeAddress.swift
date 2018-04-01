@@ -27,4 +27,13 @@ public struct StripeAddress: Address, StripeModel {
     public var line2: String?
     public var postalCode: String?
     public var state: String?
+    
+    public enum CodingKeys: CodingKey, String {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+    }
 }

@@ -47,10 +47,9 @@ class SKUTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: skuString)
-            let futureSku = try decoder.decode(StripeSKU.self, from: body, on: EmbeddedEventLoop())
+            let futureSku = try decoder.decode(StripeSKU.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureSku.do { (sku) in
                 XCTAssertEqual(sku.id, "sku_CG2zw7j7H8NEQq")

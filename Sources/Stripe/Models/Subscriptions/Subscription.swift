@@ -69,4 +69,31 @@ public struct StripeSubscription: Subscription, StripeModel {
     public var taxPercent: Decimal?
     public var trialEnd: Date?
     public var trialStart: Date?
+    
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case object
+        case applicationFeePercent = "application_fee_percent"
+        case billing
+        case billingCycleAnchor = "billing_cycle_anchor"
+        case cancelAtPeriodEnd = "cancel_at_period_end"
+        case canceledAt = "canceled_at"
+        case created
+        case currentPeriodEnd = "current_period_end"
+        case currentPeriodStart = "current_period_start"
+        case customer
+        case daysUntilDue = "days_until_due"
+        case discount
+        case endedAt = "ended_at"
+        case items
+        case livemode
+        case metadata
+        case plan
+        case quantity
+        case start
+        case status
+        case taxPercent = "tax_percent"
+        case trialEnd = "trial_end"
+        case trialStart = "trial_start"
+    }
 }

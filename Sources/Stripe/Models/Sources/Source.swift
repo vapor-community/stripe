@@ -131,4 +131,34 @@ public struct StripeSource: Source, StripeModel {
             achCreditTransfer = try container.decodeIfPresent(ACHCreditTransfer.self, forKey: .achCreditTransfer)
         }
     }
+    
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case object
+        case amount
+        case clientSecret = "client_secret"
+        case codeVerification = "code_verification"
+        case created
+        case currency
+        case flow
+        case livemode
+        case metadata
+        case owner
+        case receiver
+        case redirect
+        case statementDescriptor = "statement_descriptor"
+        case status
+        case usage
+        case type
+        case card
+        case threeDSecure = "three_d_secure"
+        case giropay
+        case sepaDebit = "sepa_debit"
+        case ideal
+        case sofort
+        case bancontact
+        case alipay
+        case p24
+        case achCreditTransfer = "ach_credit_transfer"
+    }
 }

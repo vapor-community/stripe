@@ -49,4 +49,22 @@ public struct StripeInvoiceLineItem: InvoiceLineItem, StripeModel {
     public var subscription: String?
     public var subscriptionItem: String?
     public var type: String?
+    
+    public enum CodingKeys: CodingKey, String {
+        case id
+        case object
+        case amount
+        case currency
+        case description
+        case discountable
+        case livemode
+        case metadata
+        case period
+        case plan
+        case proration
+        case quantity
+        case subscription
+        case subscriptionItem = "subscription_item"
+        case type
+    }
 }

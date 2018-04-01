@@ -23,4 +23,21 @@ public struct StripeExternalCardAccount: ExternalAccount, StripeModel {
     public var cvc: String?
     public var metadata: [String: String]?
     public var name: String?
+    
+    public enum CodingKeys: CodingKey, String {
+        case object
+        case defaultForCurrency = "default_for_currency"
+        case expMonth = "exp_month"
+        case expYear = "exp_year"
+        case number
+        case addressCity = "address_city"
+        case addressCountry = "address_country"
+        case addressLine1 = "address_line1"
+        case addressLine2 = "address_line2"
+        case addressState = "address_state"
+        case addressZip = "address_zip"
+        case cvc
+        case metadata
+        case name
+    }
 }

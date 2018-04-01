@@ -29,34 +29,34 @@ public final class StripeProvider: Provider {
         services.register { (container) -> StripeClient in
             let httpClient = try container.make(Client.self)
             let config = try container.make(StripeConfig.self)
-            return StripeClient(config: config, client: httpClient)
+            return StripeClient(apiKey: config.apiKey, client: httpClient)
         }
     }
 }
 
 public struct StripeClient: Service {
-    public let balance: StripeBalanceRoutes
-    public let charge: StripeChargeRoutes
-    public let connectAccount: StripeConnectAccountRoutes
-    public let coupon: StripeCouponRoutes
-    public let customer: StripeCustomerRoutes
-    public let dispute: StripeDisputeRoutes
-    public let ephemeralKey: StripeEphemeralKeyRoutes
-    public let invoiceItem: StripeInvoiceItemRoutes
-    public let invoice: StripeInvoiceRoutes
-    public let orderReturn: StripeOrderReturnRoutes
-    public let order: StripeOrderRoutes
-    public let plan: StripePlanRoutes
-    public let product: StripeProductRoutes
-    public let refund: StripeRefundRoutes
-    public let sku: StripeSKURoutes
-    public let source: StripeSourceRoutes
-    public let subscriptionItem: StripeSubscriptionItemRoutes
-    public let subscription: StripeSubscriptionRoutes
-    public let token: StripeTokenRoutes
+    public var balance: StripeBalanceRoutes
+    public var charge: StripeChargeRoutes
+    public var connectAccount: StripeConnectAccountRoutes
+    public var coupon: StripeCouponRoutes
+    public var customer: StripeCustomerRoutes
+    public var dispute: StripeDisputeRoutes
+    public var ephemeralKey: StripeEphemeralKeyRoutes
+    public var invoiceItem: StripeInvoiceItemRoutes
+    public var invoice: StripeInvoiceRoutes
+    public var orderReturn: StripeOrderReturnRoutes
+    public var order: StripeOrderRoutes
+    public var plan: StripePlanRoutes
+    public var product: StripeProductRoutes
+    public var refund: StripeRefundRoutes
+    public var sku: StripeSKURoutes
+    public var source: StripeSourceRoutes
+    public var subscriptionItem: StripeSubscriptionItemRoutes
+    public var subscription: StripeSubscriptionRoutes
+    public var token: StripeTokenRoutes
 
-    internal init(config: StripeConfig, client: Client) {
-        let apiRequest = StripeAPIRequest(httpClient: client, apiKey: config.apiKey)
+    internal init(apiKey: String, client: Client) {
+        let apiRequest = StripeAPIRequest(httpClient: client, apiKey: apiKey)
         
         balance = StripeBalanceRoutes(request: apiRequest)
         charge = StripeChargeRoutes(request: apiRequest)

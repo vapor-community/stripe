@@ -15,10 +15,9 @@ class TokenTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: cardTokenString)
-            let cardToken = try decoder.decode(StripeToken.self, from: body, on: EmbeddedEventLoop())
+            let cardToken = try decoder.decode(StripeToken.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
             
             cardToken.do { (token) in
                 XCTAssertNil(token.bankAccount)
@@ -68,10 +67,9 @@ class TokenTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: bankAccountTokenString)
-            let bankToken = try decoder.decode(StripeToken.self, from: body, on: EmbeddedEventLoop())
+            let bankToken = try decoder.decode(StripeToken.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
             
             bankToken.do { (token) in
                 XCTAssertNil(token.card)

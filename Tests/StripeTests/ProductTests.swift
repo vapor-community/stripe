@@ -82,10 +82,9 @@ class ProductTests: XCTestCase {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             
             let body = HTTPBody(string: productString)
-            let futureProduct = try decoder.decode(StripeProduct.self, from: body, on: EmbeddedEventLoop())
+            let futureProduct = try decoder.decode(StripeProduct.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureProduct.do { (product) in
                 XCTAssertEqual(product.id, "prod_BosWT9EsdzgjPn")

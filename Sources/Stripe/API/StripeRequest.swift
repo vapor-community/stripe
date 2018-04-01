@@ -23,15 +23,14 @@ public extension StripeRequest {
     public func serializedResponse<SM: StripeModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<SM> {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
         
         guard response.status == .ok else {
-            return try decoder.decode(StripeAPIError.self, from: response.body, on: worker).map(to: SM.self) { error in
+            return try decoder.decode(StripeAPIError.self, from: response.body, maxSize: 65_536, on: worker).map(to: SM.self) { error in
                 throw StripeError.apiError(error)
             }
         }
         
-        return try decoder.decode(SM.self, from: response.body, on: worker)
+        return try decoder.decode(SM.self, from: response.body, maxSize: 65_536, on: worker)
     }
 }
 
