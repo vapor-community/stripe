@@ -11,7 +11,7 @@ In your `Package.swift` file, add a Package
 
 For Swift 4
 ~~~~swift
-.package(url: "https://github.com/vapor-community/stripe-provider.git", from: "2.0.0-rc.2")
+.package(url: "https://github.com/vapor-community/stripe-provider.git", from: "2.0.0-rc.1.2")
 ~~~~
 
 Register the config and the provider to your Application
