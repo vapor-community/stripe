@@ -182,6 +182,15 @@ internal enum StripeAPIEndpoint {
     case ephemeralKeys
     case ephemeralKey(String)
     
+    /**
+     TRANSFERS
+     A Transfer object is created when you move funds between Stripe accounts as part of Connect.
+     */
+    case transfer
+    case transfers(String)
+    case transferReversal(String)
+    case transfersReversal(String,String)
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -199,7 +208,7 @@ internal enum StripeAPIEndpoint {
         case .customerDiscount(let id): return APIBase + APIVersion + "customers/\(id)/discount"
             
         case .tokens: return APIBase + APIVersion + "tokens"
-        case .token(let token): return APIBase + APIVersion + "tokens/\(token)"
+        case .token(let id): return APIBase + APIVersion + "tokens/\(id)"
             
         case .refunds: return APIBase + APIVersion + "refunds"
         case .refund(let id): return APIBase + APIVersion + "refunds/\(id)"
@@ -254,6 +263,11 @@ internal enum StripeAPIEndpoint {
         
         case .ephemeralKeys: return APIBase + APIVersion + "ephemeral_keys"
         case .ephemeralKey(let id): return APIBase + APIVersion + "ephemeral_keys/\(id)"
+            
+        case .transfer: return APIBase + APIVersion + "transfers"
+        case .transfers(let id): return APIBase + APIVersion + "transfers/\(id)"
+        case .transferReversal(let id): return APIBase + APIVersion + "transfers/\(id)/reversals"
+        case .transfersReversal(let transfer, let reversal): return APIBase + APIVersion + "transfers/\(transfer)/reversals/\(reversal)"
         }
     }
 }
