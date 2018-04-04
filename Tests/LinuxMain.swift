@@ -106,6 +106,12 @@ static var allTests = [
 ]
 }
 
+extension TransferTests {
+static var allTests = [
+  ("testTransferParsedProperly", testTransferParsedProperly),
+]
+}
+
 
 XCTMain([
   testCase(AccountTests.allTests),
@@ -123,4 +129,5 @@ XCTMain([
   testCase(SourceTests.allTests),
   testCase(SubscriptionTests.allTests),
   testCase(TokenTests.allTests),
+  testCase(TransferTests.allTests),
 ])

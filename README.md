@@ -7,9 +7,8 @@
 [Stripe][stripe_home] is a payment platform that handles credit cards, bitcoin and ACH transfers. They have become one of the best platforms for handling payments for projects, services or products.
 
 ## Getting Started
-In your `Package.swift` file, add a Package
+In your `Package.swift` file, add the following
 
-For Swift 4
 ~~~~swift
 .package(url: "https://github.com/vapor-community/stripe-provider.git", from: "2.0.0")
 ~~~~
@@ -80,8 +79,8 @@ And you can always check the documentation to see the required paramaters for sp
 * [ ] Application Fees
 * [ ] Country Specs
 * [x] External Accounts
-* [ ] Transfers
-* [ ] Transfer Reversals
+* [x] Transfers
+* [x] Transfer Reversals
 ---
 ### Relay
 * [x] Orders

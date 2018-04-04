@@ -54,6 +54,8 @@ public struct StripeClient: Service {
     public var subscriptionItem: StripeSubscriptionItemRoutes
     public var subscription: StripeSubscriptionRoutes
     public var token: StripeTokenRoutes
+    public var transfer: StripeTransferRoutes
+    public var transferReversals: StripeTransferReversalRoutes
 
     internal init(apiKey: String, client: Client) {
         let apiRequest = StripeAPIRequest(httpClient: client, apiKey: apiKey)
@@ -77,5 +79,7 @@ public struct StripeClient: Service {
         subscriptionItem = StripeSubscriptionItemRoutes(request: apiRequest)
         subscription = StripeSubscriptionRoutes(request: apiRequest)
         token = StripeTokenRoutes(request: apiRequest)
+        transfer = StripeTransferRoutes(request: apiRequest)
+        transferReversals = StripeTransferReversalRoutes(request: apiRequest)
     }
 }
