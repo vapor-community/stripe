@@ -9,7 +9,7 @@
 import Vapor
 
 public struct StripeConfig: Service {
-    let apiKey: String
+    public let apiKey: String
     public init(apiKey: String) {
         self.apiKey = apiKey
     }
