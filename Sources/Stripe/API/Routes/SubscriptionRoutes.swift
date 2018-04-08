@@ -37,7 +37,7 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
                        billingCycleAnchor: Date? = nil,
                        coupon: String? = nil,
                        daysUntilDue: Int? = nil,
-                       items: [String : Any]? = nil,
+                       items: [[String : Any]]? = nil,
                        metadata: [String : String]? = nil,
                        source: Any? = nil,
                        taxPercent: Decimal? = nil,
@@ -68,7 +68,9 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
         }
         
         if let items = items {
-            items.forEach { body["items[\($0)]"] = $1 }
+            for (index, item) in items.enumerated() {
+                item.forEach { body["items[\(index)][\($0)]"] = $1 }
+            }
         }
         
         if let metadata = metadata {
@@ -116,7 +118,7 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
                        billingCycleAnchor: String? = nil,
                        coupon: String? = nil,
                        daysUntilDue: Int? = nil,
-                       items: [String : Any]? = nil,
+                       items: [[String : Any]]? = nil,
                        metadata: [String : String]? = nil,
                        prorate: Bool? = nil,
                        prorationDate: Date? = nil,
@@ -146,7 +148,9 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
         }
         
         if let items = items {
-            items.forEach { body["items[\($0)]"] = $1 }
+            for (index, item) in items.enumerated() {
+                item.forEach { body["items[\(index)][\($0)]"] = $1 }
+            }
         }
         
         if let metadata = metadata {
