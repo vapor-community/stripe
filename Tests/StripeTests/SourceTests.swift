@@ -84,7 +84,10 @@ class SourceTests: XCTestCase {
     func testCardSourceParsedProperly() throws {
         do {
             let body = HTTPBody(string: cardSourceString)
-            let source = try decoder.decode(StripeSource.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let source = try decoder.decode(StripeSource.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             source.do { (source) in
                 XCTAssertNil(source.threeDSecure)
@@ -193,7 +196,10 @@ class SourceTests: XCTestCase {
     func testThreeDSecureSourceParsedProperly() throws {
         do {
             let body = HTTPBody(string: threeDSecureSourceString)
-            let source = try decoder.decode(StripeSource.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let source = try decoder.decode(StripeSource.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             source.do { (source) in
                 XCTAssertNil(source.card)
@@ -257,7 +263,10 @@ class SourceTests: XCTestCase {
     func testSepaDebitSourceParsedProperly() throws {
         do {
             let body = HTTPBody(string: sepaDebitSourceString)
-            let source = try decoder.decode(StripeSource.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let source = try decoder.decode(StripeSource.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             source.do { (source) in
                 XCTAssertNil(source.card)
@@ -326,7 +335,10 @@ class SourceTests: XCTestCase {
     func testAlipaySourceParsedProperly() throws {
         do {
             let body = HTTPBody(string: alipaySourceString)
-            let source = try decoder.decode(StripeSource.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let source = try decoder.decode(StripeSource.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             source.do { (source) in
                 XCTAssertNil(source.card)
@@ -394,7 +406,10 @@ class SourceTests: XCTestCase {
     func testGiropaySourceParsedProperly() throws {
         do {
             let body = HTTPBody(string: giroPaySourceString)
-            let source = try decoder.decode(StripeSource.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let source = try decoder.decode(StripeSource.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             source.do { (source) in
                 XCTAssertNil(source.card)
@@ -464,7 +479,10 @@ class SourceTests: XCTestCase {
     func testIdealSourceParsedProperly() throws {
         do {
             let body = HTTPBody(string: idealSourceString)
-            let source = try decoder.decode(StripeSource.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let source = try decoder.decode(StripeSource.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             source.do { (source) in
                 XCTAssertNil(source.card)
@@ -531,7 +549,10 @@ class SourceTests: XCTestCase {
     func testP24SourceParsedProperly() throws {
         do {
             let body = HTTPBody(string: p24SourceString)
-            let source = try decoder.decode(StripeSource.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let source = try decoder.decode(StripeSource.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             source.do { (source) in
                 XCTAssertNil(source.card)
@@ -601,7 +622,10 @@ class SourceTests: XCTestCase {
     func testSofortSourceParsedProperly() throws {
         do {
             let body = HTTPBody(string: sofortSourceString)
-            let source = try decoder.decode(StripeSource.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let source = try decoder.decode(StripeSource.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             source.do { (source) in
                 XCTAssertNil(source.card)
@@ -675,7 +699,10 @@ class SourceTests: XCTestCase {
     func testBancontactSourceParsedProperly() throws {
         do {
             let body = HTTPBody(string: bancontactSourceString)
-            let source = try decoder.decode(StripeSource.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let source = try decoder.decode(StripeSource.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             source.do { (source) in
                 XCTAssertNil(source.card)
@@ -745,7 +772,10 @@ class SourceTests: XCTestCase {
     func testACHSourceParsedProperly() throws {
         do {
             let body = HTTPBody(string: achSourceString)
-            let source = try decoder.decode(StripeSource.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let source = try decoder.decode(StripeSource.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             source.do { (source) in
                 XCTAssertNil(source.card)

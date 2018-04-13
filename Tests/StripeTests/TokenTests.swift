@@ -17,7 +17,10 @@ class TokenTests: XCTestCase {
             decoder.dateDecodingStrategy = .secondsSince1970
             
             let body = HTTPBody(string: cardTokenString)
-            let cardToken = try decoder.decode(StripeToken.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let cardToken = try decoder.decode(StripeToken.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             cardToken.do { (token) in
                 XCTAssertNil(token.bankAccount)
@@ -69,7 +72,10 @@ class TokenTests: XCTestCase {
             decoder.dateDecodingStrategy = .secondsSince1970
             
             let body = HTTPBody(string: bankAccountTokenString)
-            let bankToken = try decoder.decode(StripeToken.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let bankToken = try decoder.decode(StripeToken.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             bankToken.do { (token) in
                 XCTAssertNil(token.card)

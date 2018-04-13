@@ -71,7 +71,10 @@ class BalanceTests: XCTestCase {
             decoder.dateDecodingStrategy = .secondsSince1970
             
             let body = HTTPBody(string: balanceString)
-            let futureBalance = try decoder.decode(StripeBalance.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let futureBalance = try decoder.decode(StripeBalance.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureBalance.do { (balance) in
                 XCTAssertEqual(balance.object, "balance")
@@ -141,7 +144,10 @@ class BalanceTests: XCTestCase {
             decoder.dateDecodingStrategy = .secondsSince1970
             
             let body = HTTPBody(string: balanceTransactionString)
-            let futureBalanceTransaction = try decoder.decode(StripeBalanceTransactionItem.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let futureBalanceTransaction = try decoder.decode(StripeBalanceTransactionItem.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureBalanceTransaction.do { (balancetransaction) in
                 XCTAssertEqual(balancetransaction.id, "txn_19XJJ02eZvKYlo2ClwuJ1rbA")

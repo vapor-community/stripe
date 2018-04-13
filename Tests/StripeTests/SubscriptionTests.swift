@@ -17,7 +17,10 @@ class SubscriptionTests: XCTestCase {
             decoder.dateDecodingStrategy = .secondsSince1970
             
             let body = HTTPBody(string: subscriptionString)
-            let subscription = try decoder.decode(StripeSubscription.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let subscription = try decoder.decode(StripeSubscription.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
 
             subscription.do({ (sub) in
                 
