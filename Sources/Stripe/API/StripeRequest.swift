@@ -25,12 +25,12 @@ public extension StripeRequest {
         decoder.dateDecodingStrategy = .secondsSince1970
         
         guard response.status == .ok else {
-            return try decoder.decode(StripeAPIError.self, from: response.body, maxSize: 65_536, on: worker).map(to: SM.self) { error in
+            return try decoder.decode(StripeAPIError.self, from: response, maxSize: 65_536, on: worker).map(to: SM.self) { error in
                 throw StripeError.apiError(error)
             }
         }
         
-        return try decoder.decode(SM.self, from: response.body, maxSize: 65_536, on: worker)
+        return try decoder.decode(SM.self, from: response, maxSize: 65_536, on: worker)
     }
 }
 

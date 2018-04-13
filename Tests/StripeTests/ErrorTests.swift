@@ -29,7 +29,10 @@ class ErrorTests: XCTestCase {
             decoder.dateDecodingStrategy = .secondsSince1970
             
             let body = HTTPBody(string: errorString)
-            let futureError = try decoder.decode(StripeAPIError.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let futureError = try decoder.decode(StripeAPIError.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureError.do { (stripeError) in
                 XCTAssertEqual(stripeError.error.type, .cardError)

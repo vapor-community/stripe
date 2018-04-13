@@ -65,7 +65,10 @@ class ChargeTests: XCTestCase {
             decoder.dateDecodingStrategy = .secondsSince1970
             
             let body = HTTPBody(string: chargeString)
-            let futureCharge = try decoder.decode(StripeCharge.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let futureCharge = try decoder.decode(StripeCharge.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
 
             futureCharge.do { (charge) in
                 XCTAssertEqual(charge.id, "ch_1BrbM42eZvKYlo2CIu7qiNPF")

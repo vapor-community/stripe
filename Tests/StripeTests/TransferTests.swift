@@ -59,7 +59,10 @@ class TransferTests: XCTestCase {
             decoder.dateDecodingStrategy = .secondsSince1970
             
             let body = HTTPBody(string: transferString)
-            let transfer = try decoder.decode(StripeTransfer.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let transfer = try decoder.decode(StripeTransfer.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             transfer.do { (tran) in
                 

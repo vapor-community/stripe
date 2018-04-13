@@ -35,7 +35,10 @@ class RefundTests: XCTestCase {
             decoder.dateDecodingStrategy = .secondsSince1970
             
             let body = HTTPBody(string: refundString)
-            let futureRefund = try decoder.decode(StripeRefund.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let futureRefund = try decoder.decode(StripeRefund.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureRefund.do { (refund) in
                 XCTAssertEqual(refund.id, "re_1BrXqE2eZvKYlo2Cfa7NO6GF")

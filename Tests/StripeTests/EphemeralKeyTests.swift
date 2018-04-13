@@ -30,7 +30,10 @@ class EphemeralKeyTests: XCTestCase {
             decoder.dateDecodingStrategy = .secondsSince1970
             
             let body = HTTPBody(string: emphkeyString)
-            let futureKey = try decoder.decode(StripeEphemeralKey.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let futureKey = try decoder.decode(StripeEphemeralKey.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureKey.do { (key) in
                 XCTAssertEqual(key.id, "eph_123456")

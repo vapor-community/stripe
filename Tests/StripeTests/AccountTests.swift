@@ -170,7 +170,10 @@ class AccountTests: XCTestCase {
             decoder.dateDecodingStrategy = .secondsSince1970
             
             let body = HTTPBody(string: accountString)
-            let futureAccount = try decoder.decode(StripeConnectAccount.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let futureAccount = try decoder.decode(StripeConnectAccount.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureAccount.do { (account) in
                 XCTAssertEqual(account.id, "acct_1032D82eZvKYlo2C")

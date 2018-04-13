@@ -92,7 +92,10 @@ class OrderTests: XCTestCase {
             decoder.dateDecodingStrategy = .secondsSince1970
 
             let body = HTTPBody(string: orderString)
-            let futureOrder = try decoder.decode(StripeOrder.self, from: body, maxSize: 65_536, on: EmbeddedEventLoop())
+            var headers: HTTPHeaders = [:]
+            headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
+            let request = HTTPRequest(headers: headers, body: body)
+            let futureOrder = try decoder.decode(StripeOrder.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
             
             futureOrder.do { (order) in
                 XCTAssertEqual(order.id, "or_1BoJ2NKrZ43eBVAbFf4SZyvD")
