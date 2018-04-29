@@ -70,6 +70,7 @@ public class StripeAPIRequest: StripeRequest {
         
         headers.forEach { finalHeaders.add(name: $0.name, value: $0.value) }
         
+        // Get the appropiate API key based on the environment and if the test key is present
         let apiKey = self.httpClient.container.environment == .development ? (self.testApiKey ?? self.apiKey) : self.apiKey
         finalHeaders.add(name: .authorization, value: "Bearer \(apiKey)")
         
