@@ -39,7 +39,7 @@ extension HTTPHeaderName {
         return .init("Stripe-Version")
     }
     public static var stripeAccount: HTTPHeaderName {
-        return .init("Stripe-Version")
+        return .init("Stripe-Account")
     }
 }
 
