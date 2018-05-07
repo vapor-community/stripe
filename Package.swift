@@ -7,7 +7,7 @@ let package = Package(
         .library(name: "Stripe", targets: ["Stripe"])
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0-rc"),
+        .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0"),
     ],
     targets: [
         .target(name: "Stripe", dependencies: ["Vapor"]),
