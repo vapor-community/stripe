@@ -64,8 +64,6 @@ public class StripeAPIRequest: StripeRequest {
     }
     
     public func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: String, headers: HTTPHeaders) throws -> Future<SM> {
-        let encodedHTTPBody = HTTPBody(string: body)
-        
         var finalHeaders: HTTPHeaders = .stripeDefault
         
         headers.forEach { finalHeaders.add(name: $0.name, value: $0.value) }
@@ -74,10 +72,10 @@ public class StripeAPIRequest: StripeRequest {
         let apiKey = self.httpClient.container.environment == .development ? (self.testApiKey ?? self.apiKey) : self.apiKey
         finalHeaders.add(name: .authorization, value: "Bearer \(apiKey)")
         
-        let request = HTTPRequest(method: method, url: URL(string: "\(path)?\(query)") ?? .root, headers: finalHeaders, body: encodedHTTPBody)
-        
-        return try httpClient.respond(to: Request(http: request, using: httpClient.container)).flatMap(to: SM.self) { (response) -> Future<SM> in
-            return try self.serializedResponse(response: response.http, worker: self.httpClient.container.eventLoop)
+       return httpClient.post("\(path)?\(query)", headers: finalHeaders) { (request) in
+            try request.content.encode(body)
+            }.flatMap(to: SM.self) { (response) -> Future<SM> in
+                return try self.serializedResponse(response: response.http, worker: self.httpClient.container.eventLoop)
         }
     }
 }
