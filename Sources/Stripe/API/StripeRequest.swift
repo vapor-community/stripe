@@ -73,7 +73,7 @@ public class StripeAPIRequest: StripeRequest {
         finalHeaders.add(name: .authorization, value: "Bearer \(apiKey)")
         
        return httpClient.post("\(path)?\(query)", headers: finalHeaders) { (request) in
-            try request.content.encode(body)
+            request.http.body = HTTPBody(string: body)            
             }.flatMap(to: SM.self) { (response) -> Future<SM> in
                 return try self.serializedResponse(response: response.http, worker: self.httpClient.container.eventLoop)
         }
