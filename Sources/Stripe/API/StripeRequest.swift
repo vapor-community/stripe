@@ -71,8 +71,8 @@ public class StripeAPIRequest: StripeRequest {
         // Get the appropiate API key based on the environment and if the test key is present
         let apiKey = self.httpClient.container.environment == .development ? (self.testApiKey ?? self.apiKey) : self.apiKey
         finalHeaders.add(name: .authorization, value: "Bearer \(apiKey)")
-        
-       return httpClient.post("\(path)?\(query)", headers: finalHeaders) { (request) in
+
+        return httpClient.send(method, headers: finalHeaders, to: "\(path)?\(query)") { (request) in
             request.http.body = HTTPBody(string: body)            
             }.flatMap(to: SM.self) { (response) -> Future<SM> in
                 return try self.serializedResponse(response: response.http, worker: self.httpClient.container.eventLoop)
