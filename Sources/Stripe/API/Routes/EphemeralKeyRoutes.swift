@@ -23,8 +23,11 @@ public struct StripeEphemeralKeyRoutes: EphemeralKeyRoutes {
     }
     
     public func create(customer: String, apiVersion: String) throws -> Future<StripeEphemeralKey> {
-        let body = ["customer": customer, "stripe_version": apiVersion]
-        return try request.send(method: .POST, path: StripeAPIEndpoint.ephemeralKeys.endpoint, body: body.queryParameters)
+		var headers = HTTPHeaders()
+		headers.add(name: "stripe_version", value: apiVersion)
+		
+		let body = ["customer": customer]
+		return try request.send(method: .POST, path: StripeAPIEndpoint.ephemeralKeys.endpoint, body: body.queryParameters, headers: headers)
     }
     
     public func delete(ephemeralKey: String) throws -> Future<StripeEphemeralKey> {
