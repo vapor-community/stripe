@@ -22,8 +22,8 @@ public struct StripeEphemeralKeyRoutes: EphemeralKeyRoutes {
         self.request = request
     }
     
-    public func create(customer: String) throws -> Future<StripeEphemeralKey> {
-        let body = ["customer": customer]
+    public func create(customer: String, apiVersion: String) throws -> Future<StripeEphemeralKey> {
+        let body = ["customer": customer, "stripe_version": apiVersion]
         return try request.send(method: .POST, path: StripeAPIEndpoint.ephemeralKeys.endpoint, body: body.queryParameters)
     }
     
