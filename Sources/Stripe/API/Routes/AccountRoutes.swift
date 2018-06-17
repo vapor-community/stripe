@@ -9,20 +9,13 @@
 import Vapor
 
 public protocol AccountRoutes {
-    associatedtype AC: ConnectAccount
-    associatedtype LE: LegalEntity
-    associatedtype TOS: TOSAcceptance
-    associatedtype DO: DeletedObject
-    associatedtype L: List
-    associatedtype CLL: ConnectLoginLink
-    
-    func create(type: ConnectedAccountType, email: String?, country: String?, metadata: [String: String]?) throws -> Future<AC>
-    func retrieve(account: String) throws -> Future<AC>
-    func update(account: String, businessName: String?, businessPrimaryColor: String?, businessUrl: String?, debitNegativeBalances: Bool?, declineChargeOn: [String: Bool]?, defaultCurrency: StripeCurrency?, email: String?, externalAccount: Any?, legalEntity: LE?, metadata: [String: String]?, payoutSchedule: [String: String]?, payoutStatementDescriptor: String?, productDescription: String?, statementDescriptor: String?, supportEmail: String?, supportPhone: String?, supportUrl: String?, tosAcceptance: TOS?) throws -> Future<AC>
-    func delete(account: String) throws -> Future<DO>
-    func reject(account: String, for: AccountRejectReason) throws -> Future<AC>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
-    func createLoginLink(for: String) throws -> Future<CLL>
+    func create(type: ConnectedAccountType, email: String?, country: String?, metadata: [String: String]?) throws -> Future<StripeConnectAccount>
+    func retrieve(account: String) throws -> Future<StripeConnectAccount>
+    func update(account: String, businessName: String?, businessPrimaryColor: String?, businessUrl: String?, debitNegativeBalances: Bool?, declineChargeOn: [String: Bool]?, defaultCurrency: StripeCurrency?, email: String?, externalAccount: Any?, legalEntity: StripeConnectAccountLegalEntity?, metadata: [String: String]?, payoutSchedule: [String: String]?, payoutStatementDescriptor: String?, productDescription: String?, statementDescriptor: String?, supportEmail: String?, supportPhone: String?, supportUrl: String?, tosAcceptance: StripeTOSAcceptance?) throws -> Future<StripeConnectAccount>
+    func delete(account: String) throws -> Future<StripeDeletedObject>
+    func reject(account: String, for: AccountRejectReason) throws -> Future<StripeConnectAccount>
+    func listAll(filter: [String: Any]?) throws -> Future<ConnectedAccountsList>
+    func createLoginLink(for: String) throws -> Future<StripeConnectLoginLink>
 }
 
 public struct StripeConnectAccountRoutes: AccountRoutes {

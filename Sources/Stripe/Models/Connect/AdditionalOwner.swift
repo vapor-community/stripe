@@ -11,20 +11,7 @@
  https://stripe.com/docs/api/curl#account_object-legal_entity-additional_owners
  */
 
-public protocol LegalEntityAdditionalOwner {
-    associatedtype SA: Address
-    associatedtype LEV: LegalEntityVerification
-    
-    var firstName: String? { get }
-    var lastName: String? { get }
-    var dob: [String: Int]? { get }
-    var maidenName: String? { get }
-    var personalIdNumberProvided: Bool? { get }
-    var address: SA? { get }
-    var verification: LEV? { get }
-}
-
-public struct StripeLegalEntityAdditionalOwner: LegalEntityAdditionalOwner, StripeModel {
+public struct StripeLegalEntityAdditionalOwner: StripeModel {
     public var firstName: String?
     public var lastName: String?
     public var dob: [String: Int]?

@@ -59,6 +59,7 @@ class OrderTests: XCTestCase {
         ],
         "has_more": false,
         "object": "list",
+        "total_count": 1,
         "url": "/v1/order_returns?order=or_1BoJ2NKrZ43eBVAbFf4SZyvD"
     },
     "shipping": {
@@ -75,6 +76,7 @@ class OrderTests: XCTestCase {
         "phone": null,
         "tracking_number": null
     },
+    "shipping_methods": [],
     "status": "created",
     "status_transitions": {
         "canceled": 1515290550,
@@ -103,38 +105,38 @@ class OrderTests: XCTestCase {
                 XCTAssertEqual(order.created, Date(timeIntervalSince1970: 1234567890))
                 XCTAssertEqual(order.currency, .usd)
                 XCTAssertEqual(order.livemode, false)
-                XCTAssertEqual(order.metadata?["hello"], "world")
+                XCTAssertEqual(order.metadata["hello"], "world")
                 XCTAssertEqual(order.object, "order")
                 XCTAssertEqual(order.status, .created)
                 
                 // This test covers the Order Item object
-                XCTAssertEqual(order.statusTransitions?.canceled, Date(timeIntervalSince1970: 1515290550))
-                XCTAssertEqual(order.statusTransitions?.fulfiled, Date(timeIntervalSince1970: 1507690550))
-                XCTAssertEqual(order.statusTransitions?.paid, Date(timeIntervalSince1970: 1517688550))
-                XCTAssertEqual(order.statusTransitions?.returned, Date(timeIntervalSince1970: 1927690550))
+                XCTAssertEqual(order.statusTransitions.canceled, Date(timeIntervalSince1970: 1515290550))
+                XCTAssertEqual(order.statusTransitions.fulfiled, Date(timeIntervalSince1970: 1507690550))
+                XCTAssertEqual(order.statusTransitions.paid, Date(timeIntervalSince1970: 1517688550))
+                XCTAssertEqual(order.statusTransitions.returned, Date(timeIntervalSince1970: 1927690550))
                 XCTAssertEqual(order.updated, Date(timeIntervalSince1970: 1234567890))
                 
-                XCTAssertEqual(order.items?[0].amount, 1500)
-                XCTAssertEqual(order.items?[0].currency, .usd)
-                XCTAssertEqual(order.items?[0].description, "Gold Special")
-                XCTAssertEqual(order.items?[0].object, "order_item")
-                XCTAssertEqual(order.items?[0].parent, "sk_1BoJ2KKrZ43eBVAbu7ioKR0i")
-                XCTAssertEqual(order.items?[0].quantity, nil)
-                XCTAssertEqual(order.items?[0].type, .sku)
+                XCTAssertEqual(order.items[0].amount, 1500)
+                XCTAssertEqual(order.items[0].currency, .usd)
+                XCTAssertEqual(order.items[0].description, "Gold Special")
+                XCTAssertEqual(order.items[0].object, "order_item")
+                XCTAssertEqual(order.items[0].parent, "sk_1BoJ2KKrZ43eBVAbu7ioKR0i")
+                XCTAssertEqual(order.items[0].quantity, nil)
+                XCTAssertEqual(order.items[0].type, .sku)
                 
-                XCTAssertEqual(order.returns?.hasMore, false)
-                XCTAssertEqual(order.returns?.object, "list")
-                XCTAssertEqual(order.returns?.url, "/v1/order_returns?order=or_1BoJ2NKrZ43eBVAbFf4SZyvD")
+                XCTAssertEqual(order.returns.hasMore, false)
+                XCTAssertEqual(order.returns.object, "list")
+                XCTAssertEqual(order.returns.url, "/v1/order_returns?order=or_1BoJ2NKrZ43eBVAbFf4SZyvD")
                 
                 // This test covers the OrderItem Return object
-                XCTAssertEqual(order.returns?.data?[0].amount, 1500)
-                XCTAssertEqual(order.returns?.data?[0].created, Date(timeIntervalSince1970: 1234567890))
-                XCTAssertEqual(order.returns?.data?[0].currency, .usd)
-                XCTAssertEqual(order.returns?.data?[0].id, "orret_1BoJ2NKrZ43eBVAb8r8dx0GO")
-                XCTAssertEqual(order.returns?.data?[0].livemode, false)
-                XCTAssertEqual(order.returns?.data?[0].object, "order_return")
-                XCTAssertEqual(order.returns?.data?[0].order, "or_1BoJ2NKrZ43eBVAbSnN443id")
-                XCTAssertEqual(order.returns?.data?[0].refund, "re_1BoJ2NKrZ43eBVAbop3rb4h1")
+                XCTAssertEqual(order.returns.data[0].amount, 1500)
+                XCTAssertEqual(order.returns.data[0].created, Date(timeIntervalSince1970: 1234567890))
+                XCTAssertEqual(order.returns.data[0].currency, .usd)
+                XCTAssertEqual(order.returns.data[0].id, "orret_1BoJ2NKrZ43eBVAb8r8dx0GO")
+                XCTAssertEqual(order.returns.data[0].livemode, false)
+                XCTAssertEqual(order.returns.data[0].object, "order_return")
+                XCTAssertEqual(order.returns.data[0].order, "or_1BoJ2NKrZ43eBVAbSnN443id")
+                XCTAssertEqual(order.returns.data[0].refund, "re_1BoJ2NKrZ43eBVAbop3rb4h1")
                 
                 XCTAssertEqual(order.shipping?.address?.city, "Anytown")
                 XCTAssertEqual(order.shipping?.address?.country, "US")
@@ -148,11 +150,11 @@ class OrderTests: XCTestCase {
                 XCTAssertEqual(order.shipping?.trackingNumber, nil)
                 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch  {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
 }

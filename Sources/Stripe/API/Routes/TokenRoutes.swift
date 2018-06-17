@@ -9,12 +9,10 @@
 import Vapor
 
 public protocol TokenRoutes {
-    associatedtype T: Token
-    
-    func createCard(card: [String: Any]?, customer: String?, connectAccount: String?) throws -> Future<T>
-    func createBankAccount(bankAcocunt: [String: Any]?, customer: String?, connectAccount: String?) throws -> Future<T>
-    func createPII(personalId: String?) throws -> Future<T>
-    func retrieve(token: String) throws -> Future<T>
+    func createCard(card: [String: Any]?, customer: String?, connectAccount: String?) throws -> Future<StripeToken>
+    func createBankAccount(bankAcocunt: [String: Any]?, customer: String?, connectAccount: String?) throws -> Future<StripeToken>
+    func createPII(personalId: String?) throws -> Future<StripeToken>
+    func retrieve(token: String) throws -> Future<StripeToken>
 }
 
 public struct StripeTokenRoutes: TokenRoutes {
@@ -26,7 +24,7 @@ public struct StripeTokenRoutes: TokenRoutes {
 
     /// Create a card token
     /// [Learn More →](https://stripe.com/docs/api/curl#create_card_token)
-    public func createCard(card: [String : Any]? = nil,
+    public func createCard(card: [String: Any]? = nil,
                            customer: String? = nil,
                            connectAccount: String? = nil) throws -> Future<StripeToken> {
         var body: [String: Any] = [:]
@@ -49,7 +47,7 @@ public struct StripeTokenRoutes: TokenRoutes {
     
     /// Create a bank account token
     /// [Learn More →](https://stripe.com/docs/api/curl#create_bank_account_token)
-    public func createBankAccount(bankAcocunt: [String : Any]? = nil,
+    public func createBankAccount(bankAcocunt: [String: Any]? = nil,
                                   customer: String? = nil,
                                   connectAccount: String? = nil) throws -> Future<StripeToken> {
         var body: [String: Any] = [:]

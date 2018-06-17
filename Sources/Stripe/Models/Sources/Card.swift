@@ -12,41 +12,9 @@
  https://stripe.com/docs/sources/cards
  */
 
-public protocol Card {
-    var id: String? { get }
-    var object: String? { get }
-    var account: String? { get }
-    var addressCity: String? { get }
-    var addressCountry: String? { get }
-    var addressLine1: String? { get }
-    var addressLine1Check: CardValidationCheck? { get }
-    var addressLine2: String? { get }
-    var addressState: String? { get }
-    var addressZip: String? { get }
-    var addressZipCheck: CardValidationCheck? { get }
-    var availablePayoutMethods: [String]? { get }
-    var brand: String? { get }
-    var country: String? { get }
-    var currency: StripeCurrency? { get }
-    var customer: String? { get }
-    var cvcCheck: CardValidationCheck? { get }
-    var defaultForCurrency: Bool? { get }
-    var dynamicLast4: String? { get }
-    var expMonth: Int? { get}
-    var expYear: Int? { get}
-    var fingerprint: String? { get }
-    var funding: FundingType? { get }
-    var last4: String? { get }
-    var metadata: [String: String]? { get }
-    var name: String? { get }
-    var recipient: String? { get }
-    var tokenizationMethod: TokenizedMethod? { get }
-    var threeDSecure: String? { get }
-}
-
-public struct StripeCard: Card, StripeModel {
-    public var id: String?
-    public var object: String?
+public struct StripeCard: StripeModel {
+    public var id: String
+    public var object: String
     public var account: String?
     public var addressCity: String?
     public var addressCountry: String?
@@ -58,7 +26,7 @@ public struct StripeCard: Card, StripeModel {
     public var addressZipCheck: CardValidationCheck?
     public var availablePayoutMethods: [String]?
     public var brand: String?
-    public var country: String?
+    public var country: String
     public var currency: StripeCurrency?
     public var customer: String?
     public var cvcCheck: CardValidationCheck?
@@ -66,16 +34,16 @@ public struct StripeCard: Card, StripeModel {
     public var dynamicLast4: String?
     public var expMonth: Int?
     public var expYear: Int?
-    public var fingerprint: String?
+    public var fingerprint: String
     public var funding: FundingType?
-    public var last4: String?
-    public var metadata: [String : String]?
+    public var last4: String
+    public var metadata: [String: String]
     public var name: String?
     public var recipient: String?
     public var tokenizationMethod: TokenizedMethod?
     public var threeDSecure: String?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case account

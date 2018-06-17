@@ -13,41 +13,21 @@ import Foundation
  https://stripe.com/docs/api#skus
  */
 
-public protocol SKU {
-    associatedtype PD: PackageDimensions
-    associatedtype I: Inventory
-    
-    var id: String? { get }
-    var object: String? { get }
-    var active: Bool? { get }
-    var attributes: [String: String]? { get }
-    var created: Date? { get }
-    var currency: StripeCurrency? { get }
-    var image: String? { get }
-    var inventory: I? { get }
-    var livemode: Bool? { get }
-    var metadata: [String: String]? { get }
-    var packageDimensions: PD? { get }
-    var price: Int? { get }
-    var product: String? { get }
-    var updated: Date? { get }
-}
-
-public struct StripeSKU: SKU, StripeModel {
-    public var id: String?
-    public var object: String?
-    public var active: Bool?
-    public var attributes: [String: String]?
-    public var created: Date?
-    public var currency: StripeCurrency?
+public struct StripeSKU: StripeModel {
+    public var id: String
+    public var object: String
+    public var active: Bool
+    public var attributes: [String: String]
+    public var created: Date
+    public var currency: StripeCurrency
     public var image: String?
-    public var inventory: StripeInventory?
-    public var livemode: Bool?
-    public var metadata: [String: String]?
+    public var inventory: StripeInventory
+    public var livemode: Bool
+    public var metadata: [String: String]
     public var packageDimensions: StripePackageDimensions?
-    public var price: Int?
-    public var product: String?
-    public var updated: Date?
+    public var price: Int
+    public var product: String
+    public var updated: Date
     
     public enum CodingKeys: CodingKey, String {
         case id

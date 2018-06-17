@@ -9,24 +9,16 @@
 import Vapor
 
 public protocol CustomerRoutes {
-    associatedtype C: Customer
-    associatedtype SH: Shipping
-    associatedtype DO: DeletedObject
-    associatedtype L: List
-    associatedtype SRC: Source
-    associatedtype BNK: BankAccount
-    associatedtype CRD: Card
-    
-    func create(accountBalance: Int?, businessVatId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, metadata: [String: String]?, shipping: SH?, source: Any?) throws -> Future<C>
-    func retrieve(customer: String) throws -> Future<C>
-    func update(customer: String, accountBalance: Int?, businessVatId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, metadata: [String: String]?, shipping: SH?, source: Any?) throws -> Future<C>
-    func delete(customer: String) throws -> Future<DO>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
-    func addNewSource(customer: String, source: String, toConnectedAccount: String?) throws -> Future<SRC>
-    func addNewBankAccountSource(customer: String, source: Any, toConnectedAccount: String?, metadata: [String: String]?) throws -> Future<BNK>
-    func addNewCardSource(customer: String, source: Any, toConnectedAccount: String?, metadata: [String : String]?) throws -> Future<CRD>
-    func deleteSource(customer: String, source: String) throws -> Future<SRC>
-    func deleteDiscount(customer: String) throws -> Future<DO>
+    func create(accountBalance: Int?, businessVatId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, metadata: [String: String]?, shipping: ShippingLabel?, source: Any?) throws -> Future<StripeCustomer>
+    func retrieve(customer: String) throws -> Future<StripeCustomer>
+    func update(customer: String, accountBalance: Int?, businessVatId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, metadata: [String: String]?, shipping: ShippingLabel?, source: Any?) throws -> Future<StripeCustomer>
+    func delete(customer: String) throws -> Future<StripeDeletedObject>
+    func listAll(filter: [String: Any]?) throws -> Future<StripeCustomersList>
+    func addNewSource(customer: String, source: String, toConnectedAccount: String?) throws -> Future<StripeSource>
+    func addNewBankAccountSource(customer: String, source: Any, toConnectedAccount: String?, metadata: [String: String]?) throws -> Future<StripeBankAccount>
+    func addNewCardSource(customer: String, source: Any, toConnectedAccount: String?, metadata: [String : String]?) throws -> Future<StripeCard>
+    func deleteSource(customer: String, source: String) throws -> Future<StripeSource>
+    func deleteDiscount(customer: String) throws -> Future<StripeDeletedObject>
 }
 
 public struct StripeCustomerRoutes: CustomerRoutes {
@@ -163,7 +155,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
     
     /// List all customers
     /// [Learn More →](https://stripe.com/docs/api/curl#list_customers)
-    public func listAll(filter: [String: Any]? = nil) throws -> Future<CustomersList> {
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<StripeCustomersList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

@@ -13,59 +13,28 @@ import Foundation
  https://stripe.com/docs/api/curl#subscription_object
  */
 
-public protocol Subscription {
-    associatedtype D: Discount
-    associatedtype L: List
-    associatedtype P: Plan
-    
-    var id: String? { get }
-    var object: String? { get }
-    var applicationFeePercent: Decimal? { get }
-    var billing: String? { get }
-    var billingCycleAnchor: Date? { get }
-    var cancelAtPeriodEnd: Bool? { get }
-    var canceledAt: Date? { get }
-    var created: Date? { get }
-    var currentPeriodEnd: Date? { get }
-    var currentPeriodStart: Date? { get }
-    var customer: String? { get }
-    var daysUntilDue: Int? { get }
-    var discount: D? { get }
-    var endedAt: Date? { get }
-    var items: L? { get }
-    var livemode: Bool? { get }
-    var metadata: [String: String]? { get }
-    var plan: P? { get }
-    var quantity: Int? { get }
-    var start: Date? { get }
-    var status: StripeSubscriptionStatus? { get }
-    var taxPercent: Decimal? { get }
-    var trialEnd: Date? { get }
-    var trialStart: Date? { get }
-}
-
-public struct StripeSubscription: Subscription, StripeModel {
-    public var id: String?
-    public var object: String?
+public struct StripeSubscription: StripeModel {
+    public var id: String
+    public var object: String
     public var applicationFeePercent: Decimal?
     public var billing: String?
     public var billingCycleAnchor: Date?
     public var cancelAtPeriodEnd: Bool?
     public var canceledAt: Date?
-    public var created: Date?
+    public var created: Date
     public var currentPeriodEnd: Date?
     public var currentPeriodStart: Date?
-    public var customer: String?
+    public var customer: String
     public var daysUntilDue: Int?
     public var discount: StripeDiscount?
     public var endedAt: Date?
-    public var items: SubscriptionItemList?
-    public var livemode: Bool?
-    public var metadata: [String : String]?
+    public var items: SubscriptionItemsList
+    public var livemode: Bool
+    public var metadata: [String: String]
     public var plan: StripePlan?
-    public var quantity: Int?
+    public var quantity: Int
     public var start: Date?
-    public var status: StripeSubscriptionStatus?
+    public var status: StripeSubscriptionStatus
     public var taxPercent: Decimal?
     public var trialEnd: Date?
     public var trialStart: Date?

@@ -9,10 +9,8 @@
 import Vapor
 
 public protocol EphemeralKeyRoutes {
-    associatedtype EK: EphemeralKey
-    
-    func create(customer: String) throws -> Future<EK>
-    func delete(ephemeralKey: String) throws -> Future<EK>
+    func create(customer: String) throws -> Future<StripeEphemeralKey>
+    func delete(ephemeralKey: String) throws -> Future<StripeEphemeralKey>
 }
 
 public struct StripeEphemeralKeyRoutes: EphemeralKeyRoutes {

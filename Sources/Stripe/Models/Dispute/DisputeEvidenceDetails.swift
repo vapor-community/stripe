@@ -12,18 +12,11 @@ import Foundation
  https://stripe.com/docs/api#dispute_object-evidence_details
  */
 
-public protocol DisputeEvidenceDetails {
-    var dueBy: Date? { get }
-    var hasEvidence: Bool? { get }
-    var pastDue: Bool? { get }
-    var submissionCount: Int? { get }
-}
-
-public struct StripeDisputeEvidenceDetails: DisputeEvidenceDetails, StripeModel {
-    public var dueBy: Date?
-    public var hasEvidence: Bool?
-    public var pastDue: Bool?
-    public var submissionCount: Int?
+public struct StripeDisputeEvidenceDetails: StripeModel {
+    public var dueBy: Date
+    public var hasEvidence: Bool
+    public var pastDue: Bool
+    public var submissionCount: Int
     
     public enum CodingKeys: CodingKey, String {
         case dueBy = "due_by"

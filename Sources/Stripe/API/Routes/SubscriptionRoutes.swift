@@ -10,16 +10,12 @@ import Vapor
 import Foundation
 // TODO: Support sources being different objects
 public protocol SubscriptionRoutes {
-    associatedtype SB: Subscription
-    associatedtype L: List
-    associatedtype DO: DeletedObject
-    
-    func create(customer: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: Date?, coupon: String?, daysUntilDue: Int?, items: [[String : Any]]?, metadata: [String: String]?, source: Any?, taxPercent: Decimal?, trialEnd: Any?, trialPeriodDays: Int?) throws -> Future<SB>
-    func retrieve(id: String) throws -> Future<SB>
-    func update(subscription: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: String?, coupon: String?, daysUntilDue: Int?, items: [[String : Any]]?, metadata: [String: String]?, prorate: Bool?, prorationDate: Date?, source: Any?, taxPercent: Decimal?, trialEnd: Any?) throws -> Future<SB>
-    func cancel(subscription: String, atPeriodEnd: Bool?) throws -> Future<SB>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
-    func deleteDiscount(subscription: String) throws -> Future<DO>
+    func create(customer: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: Date?, coupon: String?, daysUntilDue: Int?, items: [[String : Any]]?, metadata: [String: String]?, source: Any?, taxPercent: Decimal?, trialEnd: Any?, trialPeriodDays: Int?) throws -> Future<StripeSubscription>
+    func retrieve(id: String) throws -> Future<StripeSubscription>
+    func update(subscription: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: String?, coupon: String?, daysUntilDue: Int?, items: [[String : Any]]?, metadata: [String: String]?, prorate: Bool?, prorationDate: Date?, source: Any?, taxPercent: Decimal?, trialEnd: Any?) throws -> Future<StripeSubscription>
+    func cancel(subscription: String, atPeriodEnd: Bool?) throws -> Future<StripeSubscription>
+    func listAll(filter: [String: Any]?) throws -> Future<StripeSubscriptionsList>
+    func deleteDiscount(subscription: String) throws -> Future<StripeDeletedObject>
 }
 
 public struct StripeSubscriptionRoutes: SubscriptionRoutes {
@@ -202,7 +198,7 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
     
     /// List subscriptions
     /// [Learn More →](https://stripe.com/docs/api/curl#list_subscriptions)
-    public func listAll(filter: [String : Any]? = nil) throws -> Future<SubscriptionList> {
+    public func listAll(filter: [String : Any]? = nil) throws -> Future<StripeSubscriptionsList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

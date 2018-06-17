@@ -9,13 +9,10 @@
 import Vapor
 
 public protocol RefundRoutes {
-    associatedtype R: Refund
-    associatedtype L: List
-    
-    func create(charge: String, amount: Int?, metadata: [String: String]?, reason: RefundReason?, refundApplicationFee: Bool?, reverseTransfer: Bool?) throws -> Future<R>
-    func retrieve(refund: String) throws -> Future<R>
-    func update(refund: String, metadata: [String: String]?) throws -> Future<R>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
+    func create(charge: String, amount: Int?, metadata: [String: String]?, reason: RefundReason?, refundApplicationFee: Bool?, reverseTransfer: Bool?) throws -> Future<StripeRefund>
+    func retrieve(refund: String) throws -> Future<StripeRefund>
+    func update(refund: String, metadata: [String: String]?) throws -> Future<StripeRefund>
+    func listAll(filter: [String: Any]?) throws -> Future<RefundsList>
 }
 
 public struct StripeRefundRoutes: RefundRoutes {

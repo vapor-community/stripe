@@ -8,12 +8,9 @@
 
 import Vapor
 
-public protocol OrderReturnRoutes {
-    associatedtype OR: OrderReturn
-    associatedtype L: List
-    
-    func retrieve(order: String) throws -> Future<OR>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
+public protocol OrderReturnRoutes {    
+    func retrieve(order: String) throws -> Future<StripeOrderReturn>
+    func listAll(filter: [String: Any]?) throws -> Future<OrderReturnList>
 }
 
 public struct StripeOrderReturnRoutes: OrderReturnRoutes {

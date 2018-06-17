@@ -27,11 +27,23 @@ class CustomerTests: XCTestCase {
   "metadata": {
   },
   "shipping": null,
-  "sources": null,
-  "subscriptions": null
+  "sources": {
+        "has_more": false,
+        "object": "list",
+        "data": [],
+        "total_count": 0,
+        "url": "/v1/customers/cus_D3t6eeIn7f2nYi/sources"
+    },
+  "subscriptions": {
+        "has_more": false,
+        "object": "list",
+        "data": [],
+        "total_count": 0,
+        "url": "/v1/customers/cus_D3t6eeIn7f2nYi/subscriptions"
+    }
 }
 """
-    
+    // TODO: Add tests for non optional values
     func testCustomerParsedProperly() throws {
         do {
             let decoder = JSONDecoder()

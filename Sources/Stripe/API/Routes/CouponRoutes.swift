@@ -10,15 +10,11 @@ import Foundation
 import Vapor
 
 public protocol CouponRoutes {
-    associatedtype CP: Coupon
-    associatedtype DO: DeletedObject
-    associatedtype L: List
-    
-    func create(id: String?, duration: StripeDuration, amountOff: Int?, currency: StripeCurrency?, durationInMonths: Int?, maxRedemptions: Int?, metadata: [String: String]?, percentOff: Int?, redeemBy: Date?) throws -> Future<CP>
-    func retrieve(coupon: String) throws -> Future<CP>
-    func update(coupon: String, metadata: [String: String]?) throws -> Future<CP>
-    func delete(coupon: String) throws -> Future<DO>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
+    func create(id: String?, duration: StripeDuration, amountOff: Int?, currency: StripeCurrency?, durationInMonths: Int?, maxRedemptions: Int?, metadata: [String: String]?, percentOff: Int?, redeemBy: Date?) throws -> Future<StripeCoupon>
+    func retrieve(coupon: String) throws -> Future<StripeCoupon>
+    func update(coupon: String, metadata: [String: String]?) throws -> Future<StripeCoupon>
+    func delete(coupon: String) throws -> Future<StripeDeletedObject>
+    func listAll(filter: [String: Any]?) throws -> Future<CouponsList>
 }
 
 public struct StripeCouponRoutes: CouponRoutes {

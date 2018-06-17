@@ -13,14 +13,7 @@ import Foundation
  https://stripe.com/docs/api/curl#order_object-status_transitions
  */
 
-public protocol OrderStatusTransitions {
-    var canceled: Date? { get }
-    var fulfiled: Date? { get }
-    var paid: Date? { get }
-    var returned: Date? { get }
-}
-
-public struct StripeOrderStatusTransitions: OrderStatusTransitions, StripeModel {
+public struct StripeOrderStatusTransitions: StripeModel {
     public var canceled: Date?
     public var fulfiled: Date?
     public var paid: Date?

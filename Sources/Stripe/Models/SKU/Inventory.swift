@@ -11,14 +11,8 @@
  https://stripe.com/docs/api/curl#sku_object-inventory
  */
 
-public protocol Inventory {
-    var quantity: Int? { get }
-    var type: InventoryType? { get }
-    var value: InventoryTypeValue? { get }
-}
-
-public struct StripeInventory: Inventory, StripeModel {
+public struct StripeInventory: StripeModel {
     public var quantity: Int?
-    public var type: InventoryType?
+    public var type: InventoryType
     public var value: InventoryTypeValue?
 }

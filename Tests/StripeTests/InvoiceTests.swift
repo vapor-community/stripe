@@ -40,11 +40,14 @@ class InvoiceTests: XCTestCase {
                     "start": 1516918659
                 },
                 "proration": false,
-                "type": "invoiceitem"
+                "type": "invoiceitem",
+                "quantity": 1,
+                "unit_amount": 2500
             }
         ],
         "has_more": false,
         "object": "list",
+        "total_count": 1,
         "url": "/v1/invoices/in_1BoJ2NKrZ43eBVAbQ8jb0Xfj/lines"
     },
     "livemode": false,
@@ -98,27 +101,27 @@ class InvoiceTests: XCTestCase {
                 XCTAssertEqual(invoice.webhooksDeliveredAt, Date(timeIntervalSince1970: 1234567890))
                 
                 // Test for invoice lineItem
-                XCTAssertEqual(invoice.lines?.hasMore, false)
-                XCTAssertEqual(invoice.lines?.object, "list")
-                XCTAssertEqual(invoice.lines?.url, "/v1/invoices/in_1BoJ2NKrZ43eBVAbQ8jb0Xfj/lines")
-                XCTAssertEqual(invoice.lines?.data?[0].amount, 1000)
-                XCTAssertEqual(invoice.lines?.data?[0].currency, .usd)
-                XCTAssertEqual(invoice.lines?.data?[0].description, "My First Invoice Item (created for API docs)")
-                XCTAssertEqual(invoice.lines?.data?[0].discountable, true)
-                XCTAssertEqual(invoice.lines?.data?[0].id, "ii_1BoJ2NKrZ43eBVAby2HbDsY5")
-                XCTAssertEqual(invoice.lines?.data?[0].livemode, false)
-                XCTAssertEqual(invoice.lines?.data?[0].object, "line_item")
-                XCTAssertEqual(invoice.lines?.data?[0].proration, false)
-                XCTAssertEqual(invoice.lines?.data?[0].type, "invoiceitem")
-                XCTAssertEqual(invoice.lines?.data?[0].period?.start, Date(timeIntervalSince1970: 1516918659))
-                XCTAssertEqual(invoice.lines?.data?[0].period?.end, Date(timeIntervalSince1970: 1516918659))
+                XCTAssertEqual(invoice.lines.hasMore, false)
+                XCTAssertEqual(invoice.lines.object, "list")
+                XCTAssertEqual(invoice.lines.url, "/v1/invoices/in_1BoJ2NKrZ43eBVAbQ8jb0Xfj/lines")
+                XCTAssertEqual(invoice.lines.data[0].amount, 1000)
+                XCTAssertEqual(invoice.lines.data[0].currency, .usd)
+                XCTAssertEqual(invoice.lines.data[0].description, "My First Invoice Item (created for API docs)")
+                XCTAssertEqual(invoice.lines.data[0].discountable, true)
+                XCTAssertEqual(invoice.lines.data[0].id, "ii_1BoJ2NKrZ43eBVAby2HbDsY5")
+                XCTAssertEqual(invoice.lines.data[0].livemode, false)
+                XCTAssertEqual(invoice.lines.data[0].object, "line_item")
+                XCTAssertEqual(invoice.lines.data[0].proration, false)
+                XCTAssertEqual(invoice.lines.data[0].type, "invoiceitem")
+                XCTAssertEqual(invoice.lines.data[0].period?.start, Date(timeIntervalSince1970: 1516918659))
+                XCTAssertEqual(invoice.lines.data[0].period?.end, Date(timeIntervalSince1970: 1516918659))
                 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
     
@@ -143,7 +146,8 @@ class InvoiceTests: XCTestCase {
   "plan": null,
   "proration": false,
   "quantity": null,
-  "subscription": null
+  "subscription": null,
+  "unit_amount": 2500
 }
 """
     
@@ -174,11 +178,11 @@ class InvoiceTests: XCTestCase {
                 XCTAssertEqual(invoiceItem.subscription, nil)
                 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
 }

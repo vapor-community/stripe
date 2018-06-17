@@ -9,15 +9,11 @@
 import Vapor
 
 public protocol InvoiceItemRoutes {
-    associatedtype II: InvoiceItem
-    associatedtype DO: DeletedObject
-    associatedtype L: List
-    
-    func create(amount: Int, currency: StripeCurrency, customer: String, description: String?, discountable: Bool?, invoice: String?, metadata: [String: String]?, subscription: String?) throws -> Future<II>
-    func retrieve(invoiceItem: String) throws -> Future<II>
-    func update(invoiceItem: String, amount: Int?, description: String?, discountable: Bool?, metadata: [String: String]?) throws -> Future<II>
-    func delete(invoiceItem: String) throws -> Future<DO>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
+    func create(amount: Int, currency: StripeCurrency, customer: String, description: String?, discountable: Bool?, invoice: String?, metadata: [String: String]?, subscription: String?) throws -> Future<StripeInvoiceItem>
+    func retrieve(invoiceItem: String) throws -> Future<StripeInvoiceItem>
+    func update(invoiceItem: String, amount: Int?, description: String?, discountable: Bool?, metadata: [String: String]?) throws -> Future<StripeInvoiceItem>
+    func delete(invoiceItem: String) throws -> Future<StripeDeletedObject>
+    func listAll(filter: [String: Any]?) throws -> Future<InvoiceItemsList>
 }
 
 public struct StripeInvoiceItemRoutes: InvoiceItemRoutes {

@@ -9,18 +9,15 @@
 import Vapor
 import Foundation
 
-public protocol InvoiceRoutes {
-    associatedtype I: Invoice
-    associatedtype L: List
-    
-    func create(customer: String, applicationFee: Int?, connectAccount: String?, billing: String?, daysUntilDue: Int?, description: String?, dueDate: Date?, metadata: [String: String]?, statementDescriptor: String?, subscription: String?, taxPercent: Decimal?) throws -> Future<I>
-    func retrieve(invoice: String) throws -> Future<I>
-    func retrieveLineItems(invoice: String, filter: [String: Any]?) throws -> Future<L>
-    func retrieveUpcomingInvoice(customer: String, filter: [String: Any]?) throws -> Future<I>
+public protocol InvoiceRoutes {    
+    func create(customer: String, applicationFee: Int?, connectAccount: String?, billing: String?, daysUntilDue: Int?, description: String?, dueDate: Date?, metadata: [String: String]?, statementDescriptor: String?, subscription: String?, taxPercent: Decimal?) throws -> Future<StripeInvoice>
+    func retrieve(invoice: String) throws -> Future<StripeInvoice>
+    func retrieveLineItems(invoice: String, filter: [String: Any]?) throws -> Future<InvoiceLineGroup>
+    func retrieveUpcomingInvoice(customer: String, filter: [String: Any]?) throws -> Future<StripeInvoice>
     func update(invoice: String, applicationFee: Int?,
-    connectAccount: String?, closed: Bool?, description: String?, forgiven: Bool?, metadata: [String: String]?, paid: Bool?, statementDescriptor: String?, taxPercent: Decimal?) throws -> Future<I>
-    func pay(invoice: String, source: String?) throws -> Future<I>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
+    connectAccount: String?, closed: Bool?, description: String?, forgiven: Bool?, metadata: [String: String]?, paid: Bool?, statementDescriptor: String?, taxPercent: Decimal?) throws -> Future<StripeInvoice>
+    func pay(invoice: String, source: String?) throws -> Future<StripeInvoice>
+    func listAll(filter: [String: Any]?) throws -> Future<InvoiceLineGroup>
 }
 
 public struct StripeInvoiceRoutes: InvoiceRoutes {

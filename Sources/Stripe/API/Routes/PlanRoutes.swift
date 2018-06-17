@@ -9,15 +9,11 @@
 import Vapor
 
 public protocol PlanRoutes {
-    associatedtype P: Plan
-    associatedtype DO: DeletedObject
-    associatedtype L: List
-    
-    func create(id: String?, currency: StripeCurrency, interval: StripePlanInterval, product: String, amount: Int?, intervalCount: Int?, metadata: [String: String]?, nickname: String?) throws -> Future<P>
-    func retrieve(plan: String) throws -> Future<P>
-    func update(plan: String, metadata: [String: String]?, nickname: String?, product: String?) throws -> Future<P>
-    func delete(plan: String) throws -> Future<DO>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
+    func create(id: String?, currency: StripeCurrency, interval: StripePlanInterval, product: String, amount: Int?, intervalCount: Int?, metadata: [String: String]?, nickname: String?) throws -> Future<StripePlan>
+    func retrieve(plan: String) throws -> Future<StripePlan>
+    func update(plan: String, metadata: [String: String]?, nickname: String?, product: String?) throws -> Future<StripePlan>
+    func delete(plan: String) throws -> Future<StripeDeletedObject>
+    func listAll(filter: [String: Any]?) throws -> Future<PlansList>
 }
 
 public struct StripePlanRoutes: PlanRoutes {
@@ -35,7 +31,7 @@ public struct StripePlanRoutes: PlanRoutes {
                        product: String,
                        amount: Int? = nil,
                        intervalCount: Int? = nil,
-                       metadata: [String : String]? = nil,
+                       metadata: [String: String]? = nil,
                        nickname: String? = nil) throws -> Future<StripePlan> {
         var body: [String: Any] = [:]
         

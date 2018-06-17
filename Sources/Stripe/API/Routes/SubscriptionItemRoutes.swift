@@ -10,14 +10,11 @@ import Vapor
 import Foundation
 
 public protocol SubscriptionItemRoutes {
-    associatedtype SI: SubscriptionItem
-    associatedtype L: List
-    
-    func create(plan: String, subscription: String, metadata: [String: String]?, prorate: Bool?, prorationDate: Date?, quantity: Int?) throws -> Future<SI>
-    func retrieve(item: String) throws -> Future<SI>
-    func update(item: String, metadata: [String: String]?, plan: String?, prorate: Bool?, prorationDate: Date?, quantity: Int?) throws -> Future<SI>
-    func delete(item: String, prorate: Bool?, prorationDate: Date?) throws -> Future<SI>
-    func listAll(subscription: String, filter: [String: Any]?) throws -> Future<L>
+    func create(plan: String, subscription: String, metadata: [String: String]?, prorate: Bool?, prorationDate: Date?, quantity: Int?) throws -> Future<StripeSubscriptionItem>
+    func retrieve(item: String) throws -> Future<StripeSubscriptionItem>
+    func update(item: String, metadata: [String: String]?, plan: String?, prorate: Bool?, prorationDate: Date?, quantity: Int?) throws -> Future<StripeSubscriptionItem>
+    func delete(item: String, prorate: Bool?, prorationDate: Date?) throws -> Future<StripeSubscriptionItem>
+    func listAll(subscription: String, filter: [String: Any]?) throws -> Future<SubscriptionItemsList>
 }
 
 public struct StripeSubscriptionItemRoutes: SubscriptionItemRoutes {
@@ -118,7 +115,7 @@ public struct StripeSubscriptionItemRoutes: SubscriptionItemRoutes {
     
     /// List all subscription items
     /// [Learn More →](https://stripe.com/docs/api/curl#list_subscription_item)
-    public func listAll(subscription: String, filter: [String : Any]? = nil) throws -> Future<SubscriptionItemList> {
+    public func listAll(subscription: String, filter: [String : Any]? = nil) throws -> Future<SubscriptionItemsList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

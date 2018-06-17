@@ -46,7 +46,7 @@ class TokenTests: XCTestCase {
                 XCTAssertEqual(token.card?.fingerprint, "Xt5EWLLDS7FJjR1c")
                 XCTAssertEqual(token.card?.funding, .credit)
                 XCTAssertEqual(token.card?.last4, "4242")
-                XCTAssertEqual(token.card?.metadata?["hello"], "world")
+                XCTAssertEqual(token.card?.metadata["hello"], "world")
                 XCTAssertEqual(token.card?.name, "Vapor")
                 XCTAssertEqual(token.card?.tokenizationMethod, .applePay)
                 
@@ -55,14 +55,14 @@ class TokenTests: XCTestCase {
                 XCTAssertEqual(token.clientIp, "0.0.0.0")
                 XCTAssertEqual(token.created, Date(timeIntervalSince1970: 1516836636))
                 XCTAssertEqual(token.livemode, false)
-                XCTAssertEqual(token.type, "card")
+                XCTAssertEqual(token.type, .card)
                 XCTAssertEqual(token.used, false)
             }.catch { (error) in
-                XCTFail("\(error.localizedDescription)")
+                XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
 
@@ -93,22 +93,22 @@ class TokenTests: XCTestCase {
                 XCTAssertEqual(token.bankAccount?.last4, "6789")
                 XCTAssertEqual(token.bankAccount?.metadata?["hello"], "world")
                 XCTAssertEqual(token.bankAccount?.routingNumber, "110000000")
-                XCTAssertEqual(token.bankAccount?.status, "new")
+                XCTAssertEqual(token.bankAccount?.status, .new)
                 
                 XCTAssertEqual(token.id, "btok_1BnxhQ2eZvKYlo2CbYrQL91x")
                 XCTAssertEqual(token.object, "token")
                 XCTAssertEqual(token.clientIp, "0.0.0.0")
                 XCTAssertEqual(token.created, Date(timeIntervalSince1970: 1516836636))
                 XCTAssertEqual(token.livemode, false)
-                XCTAssertEqual(token.type, "bank_account")
+                XCTAssertEqual(token.type, .bankAccount)
                 XCTAssertEqual(token.used, false)
                 
             }.catch { (error) in
-                XCTFail("\(error.localizedDescription)")
+                XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
     

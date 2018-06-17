@@ -9,16 +9,11 @@
 import Vapor
 
 public protocol ChargeRoutes {
-    associatedtype CH: Charge
-    associatedtype SH: Shipping
-    associatedtype FD: FraudDetails
-    associatedtype CHL: List
-    
-    func create(amount: Int, currency: StripeCurrency, applicationFee: Int?, capture: Bool?, description: String?, destinationAccount: String?, destinationAmount: Int?, transferGroup: String?, onBehalfOf: String?, metadata: [String: String]?, receiptEmail: String?, shipping: SH?, customer: String?, source: Any?, statementDescriptor: String?) throws -> Future<CH>
-    func retrieve(charge: String) throws -> Future<CH>
-    func update(charge: String, customer: String?, description: String?, fraudDetails: FD?, metadata: [String: String]?, receiptEmail: String?, shipping: SH?, transferGroup: String?) throws -> Future<CH>
-    func capture(charge: String, amount: Int?, applicationFee: Int?, destinationAmount: Int?, receiptEmail: String?, statementDescriptor: String?) throws -> Future<CH>
-    func listAll(filter: [String: Any]?) throws -> Future<CHL>
+    func create(amount: Int, currency: StripeCurrency, applicationFee: Int?, capture: Bool?, description: String?, destinationAccount: String?, destinationAmount: Int?, transferGroup: String?, onBehalfOf: String?, metadata: [String: String]?, receiptEmail: String?, shipping: ShippingLabel?, customer: String?, source: Any?, statementDescriptor: String?) throws -> Future<StripeCharge>
+    func retrieve(charge: String) throws -> Future<StripeCharge>
+    func update(charge: String, customer: String?, description: String?, fraudDetails: StripeFraudDetails?, metadata: [String: String]?, receiptEmail: String?, shipping: ShippingLabel?, transferGroup: String?) throws -> Future<StripeCharge>
+    func capture(charge: String, amount: Int?, applicationFee: Int?, destinationAmount: Int?, receiptEmail: String?, statementDescriptor: String?) throws -> Future<StripeCharge>
+    func listAll(filter: [String: Any]?) throws -> Future<ChargesList>
 }
 
 public struct StripeChargeRoutes: ChargeRoutes {

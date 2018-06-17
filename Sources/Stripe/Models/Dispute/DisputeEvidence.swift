@@ -10,37 +10,7 @@
  https://stripe.com/docs/api#dispute_evidence_object
  */
 
-public protocol DisputeEvidence {
-    var accessActivityLog: String? { get }
-    var billingAddress: String? { get }
-    var cancellationPolicy: String? { get }
-    var cancellationPolicyDisclosure: String? { get }
-    var cancellationRebuttal: String? { get }
-    var customerCommunication: String? { get }
-    var customerEmailAddress: String? { get }
-    var customerName: String? { get }
-    var customerPurchaseIp: String? { get }
-    var customerSignature: String? { get }
-    var duplicateChargeDocumentation: String? { get }
-    var duplicateChargeExplanation: String? { get }
-    var duplicateChargeId: String? { get }
-    var productDescription: String? { get }
-    var receipt: String? { get }
-    var refundPolicy: String? { get }
-    var refundPolicyDisclosure: String? { get }
-    var refundRefusalExplanation: String? { get }
-    var serviceDate: String? { get }
-    var serviceDocumentation: String? { get }
-    var shippingAddress: String? { get }
-    var shippingCarrier: String? { get }
-    var shippingDate: String? { get }
-    var shippingDocumentation: String? { get }
-    var shippingTrackingNumber: String? { get }
-    var uncategorizedFile: String? { get }
-    var uncategorizedText: String? { get }
-}
-
-public struct StripeDisputeEvidence: DisputeEvidence, StripeModel {
+public struct StripeDisputeEvidence: StripeModel {
     public var accessActivityLog: String?
     public var billingAddress: String?
     public var cancellationPolicy: String?

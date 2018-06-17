@@ -8,13 +8,10 @@
 import Vapor
 
 public protocol TransferRoutes {
-    associatedtype TR: Transfer
-    associatedtype L: List
-    
-    func create(amount: Int, currency: StripeCurrency, destination: String, metadata: [String: String]?, sourceTransaction: String?, transferGroup: String?) throws -> Future<TR>
-    func retrieve(transfer: String) throws -> Future<TR>
-    func update(transfer: String, metadata: [String: String]?) throws -> Future<TR>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
+    func create(amount: Int, currency: StripeCurrency, destination: String, metadata: [String: String]?, sourceTransaction: String?, transferGroup: String?) throws -> Future<StripeTransfer>
+    func retrieve(transfer: String) throws -> Future<StripeTransfer>
+    func update(transfer: String, metadata: [String: String]?) throws -> Future<StripeTransfer>
+    func listAll(filter: [String: Any]?) throws -> Future<TransferList>
 }
 
 public struct StripeTransferRoutes: TransferRoutes {
@@ -29,7 +26,7 @@ public struct StripeTransferRoutes: TransferRoutes {
     public func create(amount: Int,
                        currency: StripeCurrency,
                        destination: String,
-                       metadata: [String : String]? = nil,
+                       metadata: [String: String]? = nil,
                        sourceTransaction: String? = nil,
                        transferGroup: String? = nil) throws -> EventLoopFuture<StripeTransfer> {
         var body: [String: Any] = [:]
@@ -61,7 +58,7 @@ public struct StripeTransferRoutes: TransferRoutes {
     /// Update a transfer
     /// [Learn More →](https://stripe.com/docs/api/curl#update_transfer)
     public func update(transfer: String,
-                       metadata: [String : String]? = nil) throws -> EventLoopFuture<StripeTransfer> {
+                       metadata: [String: String]? = nil) throws -> EventLoopFuture<StripeTransfer> {
         var body: [String: Any] = [:]
         if let metadata = metadata {
             metadata.forEach { body["metadata[\($0)]"] = $1 }

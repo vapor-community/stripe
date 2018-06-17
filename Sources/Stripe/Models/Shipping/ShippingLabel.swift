@@ -8,19 +8,10 @@
 
 /**
  Shipping
- https://stripe.com/docs/api/curl#charge_object-shipping
+ https://stripe.com/docs/api/curl#order_object-shipping
  */
 
-public protocol Shipping {
-    associatedtype T: Address
-    var address: T? { get }
-    var carrier: String? { get }
-    var name: String? { get }
-    var phone: String? { get }
-    var trackingNumber: String? { get }
-}
-
-public struct ShippingLabel: Shipping, StripeModel {
+public struct ShippingLabel: StripeModel {
     public var address: StripeAddress?
     public var carrier: String?
     public var name: String?

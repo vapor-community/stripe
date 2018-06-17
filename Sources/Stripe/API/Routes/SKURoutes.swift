@@ -9,17 +9,11 @@
 import Vapor
 
 public protocol SKURoutes {
-    associatedtype SK: SKU
-    associatedtype DO: DeletedObject
-    associatedtype L: List
-    associatedtype IN: Inventory
-    associatedtype PD: PackageDimensions
-    
-    func create(id: String?, currency: StripeCurrency, inventory: IN, price: Int, product: String, active: Bool?, attributes: [String]?, image: String?, metadata: [String: String]?, packageDimensions: PD?) throws -> Future<SK>
-    func retrieve(id: String) throws -> Future<SK>
-    func update(sku: String, active: Bool?, attributes: [String]?, currency: StripeCurrency?, image: String?, inventory: IN?, metadata: [String: String]?, packageDimensions: PD?, price: Int?, product: String?) throws -> Future<SK>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
-    func delete(sku: String) throws -> Future<DO>
+    func create(id: String?, currency: StripeCurrency, inventory: StripeInventory, price: Int, product: String, active: Bool?, attributes: [String]?, image: String?, metadata: [String: String]?, packageDimensions: StripePackageDimensions?) throws -> Future<StripeSKU>
+    func retrieve(id: String) throws -> Future<StripeSKU>
+    func update(sku: String, active: Bool?, attributes: [String]?, currency: StripeCurrency?, image: String?, inventory: StripeInventory?, metadata: [String: String]?, packageDimensions: StripePackageDimensions?, price: Int?, product: String?) throws -> Future<StripeSKU>
+    func listAll(filter: [String: Any]?) throws -> Future<SKUList>
+    func delete(sku: String) throws -> Future<StripeDeletedObject>
 }
 
 public struct StripeSKURoutes: SKURoutes {
@@ -39,7 +33,7 @@ public struct StripeSKURoutes: SKURoutes {
                        active: Bool? = nil,
                        attributes: [String]? = nil,
                        image: String? = nil,
-                       metadata: [String : String]? = nil,
+                       metadata: [String: String]? = nil,
                        packageDimensions: StripePackageDimensions? = nil) throws -> Future<StripeSKU> {
         var body: [String: Any] = [:]
         
@@ -89,7 +83,7 @@ public struct StripeSKURoutes: SKURoutes {
                        currency: StripeCurrency? = nil,
                        image: String? = nil,
                        inventory: StripeInventory? = nil,
-                       metadata: [String : String]? = nil,
+                       metadata: [String: String]? = nil,
                        packageDimensions: StripePackageDimensions? = nil,
                        price: Int? = nil,
                        product: String? = nil) throws -> Future<StripeSKU> {
@@ -136,7 +130,7 @@ public struct StripeSKURoutes: SKURoutes {
     
     /// List all SKUs
     /// [Learn More →](https://stripe.com/docs/api/curl#list_skus)
-    public func listAll(filter: [String : Any]? = nil) throws -> Future<SKUList> {
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<SKUList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

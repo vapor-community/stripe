@@ -53,6 +53,7 @@ class AccountTests: XCTestCase {
                 "brand": "Visa",
                 "exp_month": 8,
                 "exp_year": 2019,
+                "country": "US",
                 "fingerprint": "H5flqusa75kgwmml",
                 "funding": "unknown",
                 "id": "card_1BoJ2IKrZ43eBVAbSXsWRMXT",
@@ -164,7 +165,7 @@ class AccountTests: XCTestCase {
 }
 """
     
-    func testAccountParsedProperll() throws {
+    func testAccountParsedProperly() throws {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
@@ -183,6 +184,7 @@ class AccountTests: XCTestCase {
                 XCTAssertEqual(account.businessUrl, "https://www.stripe.com")
                 XCTAssertEqual(account.chargesEnabled, false)
                 XCTAssertEqual(account.country, "US")
+                XCTAssertEqual(account.metadata, [:])
                 XCTAssertEqual(account.created, Date(timeIntervalSince1970: 1385798567))
                 XCTAssertEqual(account.debitNegativeBalances, true)
                 XCTAssertEqual(account.declineChargeOn?["avs_failure"], true)
@@ -272,11 +274,11 @@ class AccountTests: XCTestCase {
                 XCTAssertEqual(account.legalEntity?.additionalOwners?[0].dob?["year"], 2016)
                 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
 }

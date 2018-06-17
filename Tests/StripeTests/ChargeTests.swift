@@ -48,7 +48,13 @@ class ChargeTests: XCTestCase {
   "receipt_email": "a@b.com",
   "receipt_number": "some number",
   "refunded": false,
-  "refunds": {},
+  "refunds": {
+        "data": [],
+        "total_count": 1,
+        "has_more": false,
+        "object": "list",
+        "url": "/v1/charges/ch_1CatgjJrybuur7n4xgpcPVuL/refunds"
+},
   "review": "prv_123456",
   "shipping": null,
   "source": null,
@@ -107,11 +113,11 @@ class ChargeTests: XCTestCase {
                 XCTAssertEqual(charge.transferGroup, "group a")
                 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
 }

@@ -48,7 +48,7 @@ class RefundTests: XCTestCase {
                 XCTAssertEqual(refund.charge, "ch_1BrXqD2eZvKYlo2Ce1sYPCDd")
                 XCTAssertEqual(refund.created, Date(timeIntervalSince1970: 1517690550))
                 XCTAssertEqual(refund.currency, .usd)
-                XCTAssertEqual(refund.metadata?["hello"], "world")
+                XCTAssertEqual(refund.metadata["hello"], "world")
                 XCTAssertEqual(refund.reason, .requestedByCustomer)
                 XCTAssertEqual(refund.receiptNumber, "23760348")
                 XCTAssertEqual(refund.status, .succeeded)
