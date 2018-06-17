@@ -6,7 +6,7 @@ import XCTest
 
 extension AccountTests {
 static var allTests = [
-  ("testAccountParsedProperll", testAccountParsedProperll),
+  ("testAccountParsedProperly", testAccountParsedProperly),
 ]
 }
 
