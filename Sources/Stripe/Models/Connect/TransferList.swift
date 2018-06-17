@@ -12,12 +12,12 @@ import Foundation
  https://stripe.com/docs/api/curl#list_transfers
  */
 
-public struct TransferList: List, StripeModel {
-    public var object: String?
-    public var hasMore: Bool?
-    public var totalCount: Int?
-    public var url: String?
-    public var data: [StripeTransfer]?
+public struct TransferList: StripeModel {
+    public var object: String
+    public var hasMore: Bool
+    public var totalCount: Int
+    public var url: String
+    public var data: [StripeTransfer]
     
     public enum CodingKeys: CodingKey, String {
         case object

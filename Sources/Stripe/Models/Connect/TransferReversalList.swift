@@ -10,12 +10,12 @@
  https://stripe.com/docs/api/curl#transfer_object-reversals
  */
 
-public struct TransferReversalList: List, StripeModel {
-    public var object: String?
-    public var hasMore: Bool?
-    public var totalCount: Int?
-    public var url: String?
-    public var data: [StripeTransferReversal]?
+public struct TransferReversalList: StripeModel {
+    public var object: String
+    public var hasMore: Bool
+    public var totalCount: Int
+    public var url: String
+    public var data: [StripeTransferReversal]
     
     public enum CodingKeys: CodingKey, String {
         case object

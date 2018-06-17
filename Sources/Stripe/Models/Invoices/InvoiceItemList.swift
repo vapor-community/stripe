@@ -10,12 +10,12 @@
  https://stripe.com/docs/api#list_invoiceitems
  */
 
-public struct InvoiceItemsList: List, StripeModel {
-    public var object: String?
-    public var hasMore: Bool?
-    public var totalCount: Int?
-    public var url: String?
-    public var data: [StripeInvoiceItem]?
+public struct InvoiceItemsList: StripeModel {
+    public var object: String
+    public var hasMore: Bool
+    public var totalCount: Int
+    public var url: String
+    public var data: [StripeInvoiceItem]
     
     public enum CodingKeys: CodingKey, String {
         case object

@@ -1,5 +1,5 @@
 //
-//  SubscriptionList.swift
+//  StripeSubscriptionsList.swift
 //  Stripe
 //
 //  Created by Anthony Castelli on 4/20/17.
@@ -11,12 +11,12 @@
  https://stripe.com/docs/api/curl#list_subscriptions
  */
 
-public struct SubscriptionList: List, StripeModel {
-    public var object: String?
-    public var hasMore: Bool?
-    public var totalCount: Int?
-    public var url: String?
-    public var data: [StripeSubscription]?
+public struct StripeSubscriptionsList: StripeModel {
+    public var object: String
+    public var hasMore: Bool
+    public var totalCount: Int
+    public var url: String
+    public var data: [StripeSubscription]
     
     public enum CodingKeys: CodingKey, String {
         case object

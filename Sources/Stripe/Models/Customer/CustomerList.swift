@@ -11,12 +11,12 @@
  https://stripe.com/docs/api/curl#list_customers
  */
 
-public struct CustomersList: List, StripeModel {
-    public var object: String?
-    public var hasMore: Bool?
-    public var totalCount: Int?
-    public var url: String?
-    public var data: [StripeCustomer]?
+public struct StripeCustomersList: StripeModel {
+    public var object: String
+    public var hasMore: Bool
+    public var totalCount: Int
+    public var url: String
+    public var data: [StripeCustomer]
     
     public enum CodingKeys: CodingKey, String {
         case object
