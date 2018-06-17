@@ -26,7 +26,7 @@ public struct StripeBankAccount: StripeModel {
     public var last4: String
     public var metadata: [String: String]?
     public var routingNumber: String?
-    public var status: String?
+    public var status: BankAccountStatus?
     
     public enum CodingKeys: CodingKey, String {
         case id
@@ -45,4 +45,12 @@ public struct StripeBankAccount: StripeModel {
         case routingNumber = "routing_number"
         case status
     }
+}
+
+public enum BankAccountStatus: String, Codable {
+    case new
+    case validated
+    case verified
+    case verificationFailed = "verification_failed"
+    case errored
 }

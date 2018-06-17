@@ -7,7 +7,7 @@
 //
 
 public enum ActionType: String, Codable {
-    case charge
+    case applicationFee = "application_fee"
     case stripeFee = "stripe_fee"
-    case none
+    case tax
 }
