@@ -9,13 +9,9 @@
 import Vapor
 
 public protocol SourceRoutes {
-    associatedtype S: Source
-    associatedtype M: Mandate
-    associatedtype O: Owner
-    
-    func create(type: SourceType, amount: Int?, currency: StripeCurrency?, flow: Flow?, mandate: M?, metadata: [String: String]?, owner: O?, receiver: [String: String]?, redirect: [String: String]?, statementDescriptor: String?, token: String?, usage: String?) throws -> Future<S>
-    func retrieve(source: String, clientSecret: String?) throws -> Future<S>
-    func update(source: String, mandate: M?, metadata: [String: String]?, owner: O?) throws -> Future<S>
+    func create(type: SourceType, amount: Int?, currency: StripeCurrency?, flow: Flow?, mandate: StripeMandate?, metadata: [String: String]?, owner: StripeOwner?, receiver: [String: String]?, redirect: [String: String]?, statementDescriptor: String?, token: String?, usage: String?) throws -> Future<StripeSource>
+    func retrieve(source: String, clientSecret: String?) throws -> Future<StripeSource>
+    func update(source: String, mandate: StripeMandate?, metadata: [String: String]?, owner: StripeOwner?) throws -> Future<StripeSource>
 }
 
 public struct StripeSourceRoutes: SourceRoutes {
@@ -32,10 +28,10 @@ public struct StripeSourceRoutes: SourceRoutes {
                        currency: StripeCurrency? = nil,
                        flow: Flow? = nil,
                        mandate: StripeMandate? = nil,
-                       metadata: [String : String]? = nil,
+                       metadata: [String: String]? = nil,
                        owner: StripeOwner? = nil,
-                       receiver: [String : String]? = nil,
-                       redirect: [String : String]? = nil,
+                       receiver: [String: String]? = nil,
+                       redirect: [String: String]? = nil,
                        statementDescriptor: String? = nil,
                        token: String? = nil,
                        usage: String? = nil) throws -> Future<StripeSource> {
@@ -101,7 +97,7 @@ public struct StripeSourceRoutes: SourceRoutes {
     /// [Learn More →](https://stripe.com/docs/api/curl#update_source)
     public func update(source: String,
                        mandate: StripeMandate? = nil,
-                       metadata: [String : String]? = nil,
+                       metadata: [String: String]? = nil,
                        owner: StripeOwner? = nil) throws -> Future<StripeSource> {
         var body: [String: Any] = [:]
         

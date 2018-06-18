@@ -9,16 +9,12 @@
 import Vapor
 
 public protocol OrderRoutes {
-    associatedtype O: Order
-    associatedtype L: List
-    associatedtype SH: Shipping
-    
-    func create(currency: StripeCurrency, coupon: String?, customer: String?, email: String?, items: [[String: Any]]?, metadata: [String: String]?, shipping: SH?) throws -> Future<O>
-    func retrieve(order: String) throws -> Future<O>
-    func update(order: String, coupon: String?, metadata: [String: String]?, selectedShippingMethod: String?, shipping: SH?, status: String?) throws -> Future<O>
-    func pay(order: String, customer: String?, source: Any?, applicationFee: Int?, connectAccount: String?, email: String?, metadata: [String: String]?) throws -> Future<O>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
-    func `return`(order: String, items: [[String: Any]]?) throws -> Future<O>
+    func create(currency: StripeCurrency, coupon: String?, customer: String?, email: String?, items: [[String: Any]]?, metadata: [String: String]?, shipping: ShippingLabel?) throws -> Future<StripeOrder>
+    func retrieve(order: String) throws -> Future<StripeOrder>
+    func update(order: String, coupon: String?, metadata: [String: String]?, selectedShippingMethod: String?, shipping: ShippingLabel?, status: String?) throws -> Future<StripeOrder>
+    func pay(order: String, customer: String?, source: Any?, applicationFee: Int?, connectAccount: String?, email: String?, metadata: [String: String]?) throws -> Future<StripeOrder>
+    func listAll(filter: [String: Any]?) throws -> Future<OrdersList>
+    func `return`(order: String, items: [[String: Any]]?) throws -> Future<StripeOrder>
 }
 
 public struct StripeOrderRoutes: OrderRoutes {
@@ -34,9 +30,9 @@ public struct StripeOrderRoutes: OrderRoutes {
                        coupon: String? = nil,
                        customer: String? = nil,
                        email: String? = nil,
-                       items: [[String : Any]]? = nil,
-                       metadata: [String : String]? = nil,
-                       shipping: ShippingLabel?) throws -> Future<StripeOrder> {
+                       items: [[String: Any]]? = nil,
+                       metadata: [String: String]? = nil,
+                       shipping: ShippingLabel? = nil) throws -> Future<StripeOrder> {
         var body: [String: Any] = [:]
         
         if let coupon = coupon {
@@ -78,7 +74,7 @@ public struct StripeOrderRoutes: OrderRoutes {
     /// [Learn More →](https://stripe.com/docs/api/curl#update_order)
     public func update(order: String,
                        coupon: String? = nil,
-                       metadata: [String : String]? = nil,
+                       metadata: [String: String]? = nil,
                        selectedShippingMethod: String? = nil,
                        shipping: ShippingLabel? = nil,
                        status: String? = nil) throws -> Future<StripeOrder> {
@@ -115,7 +111,7 @@ public struct StripeOrderRoutes: OrderRoutes {
                     applicationFee: Int? = nil,
                     connectAccount: String? = nil,
                     email: String? = nil,
-                    metadata: [String : String]? = nil) throws -> Future<StripeOrder> {
+                    metadata: [String: String]? = nil) throws -> Future<StripeOrder> {
         var body: [String: Any] = [:]
         var headers: HTTPHeaders = [:]
         
@@ -163,7 +159,7 @@ public struct StripeOrderRoutes: OrderRoutes {
 
     /// Return an order
     /// [Learn More →](https://stripe.com/docs/api/curl#return_order)
-    public func `return`(order: String, items: [[String : Any]]? = nil) throws -> Future<StripeOrder> {
+    public func `return`(order: String, items: [[String: Any]]? = nil) throws -> Future<StripeOrder> {
         var body: [String: Any] = [:]
         
         if let items = items {

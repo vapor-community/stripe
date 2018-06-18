@@ -12,45 +12,23 @@ import Foundation
  https://stripe.com/docs/api/curl#transfer_object
  */
 
-public protocol Transfer {
-    associatedtype L: List
-    
-    var id: String? { get }
-    var object: String? { get }
-    var amount: Int? { get }
-    var amountReversed: Int? { get }
-    var balanceTransaction: String? { get }
-    var created: Date? { get }
-    var currency: StripeCurrency? { get }
-    var description: String? { get }
-    var destination: String? { get }
-    var destinationPayment: String? { get }
-    var livemode: Bool? { get }
-    var metadata: [String: String]? { get }
-    var reversals: L? { get }
-    var reversed: Bool? { get }
-    var sourceTransaction: String? { get }
-    var sourceType: String? { get }
-    var transferGroup: String? { get }
-}
-
-public struct StripeTransfer: Transfer, StripeModel {
-    public var id: String?
-    public var object: String?
-    public var amount: Int?
-    public var amountReversed: Int?
-    public var balanceTransaction: String?
-    public var created: Date?
-    public var currency: StripeCurrency?
+public struct StripeTransfer: StripeModel {
+    public var id: String
+    public var object: String
+    public var amount: Int
+    public var amountReversed: Int
+    public var balanceTransaction: String
+    public var created: Date
+    public var currency: StripeCurrency
     public var description: String?
-    public var destination: String?
-    public var destinationPayment: String?
-    public var livemode: Bool?
-    public var metadata: [String : String]?
-    public var reversals: TransferReversalList?
-    public var reversed: Bool?
+    public var destination: String
+    public var destinationPayment: String
+    public var livemode: Bool
+    public var metadata: [String: String]
+    public var reversals: TransferReversalList
+    public var reversed: Bool
     public var sourceTransaction: String?
-    public var sourceType: String?
+    public var sourceType: String
     public var transferGroup: String?
     
     public enum CodingKeys: CodingKey, String {

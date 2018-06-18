@@ -8,13 +8,10 @@
 import Vapor
 
 public protocol TransferReversalRoutes {
-    associatedtype TRV: TransferReversal
-    associatedtype L: List
-    
-    func create(id: String, amount: Int?, description: String?, metadata: [String: String]?, refundApplicationFee: Bool?) throws -> Future<TRV>
-    func retrieve(transfer: String, reversal: String) throws -> Future<TRV>
-    func update(transfer: String, reversal: String, metadata: [String: String]?) throws -> Future<TRV>
-    func listAll(reversal: String, filter: [String: Any]?) throws -> Future<L>
+    func create(id: String, amount: Int?, description: String?, metadata: [String: String]?, refundApplicationFee: Bool?) throws -> Future<StripeTransferReversal>
+    func retrieve(transfer: String, reversal: String) throws -> Future<StripeTransferReversal>
+    func update(transfer: String, reversal: String, metadata: [String: String]?) throws -> Future<StripeTransferReversal>
+    func listAll(reversal: String, filter: [String: Any]?) throws -> Future<TransferReversalList>
 }
 
 public struct StripeTransferReversalRoutes: TransferReversalRoutes {
@@ -29,7 +26,7 @@ public struct StripeTransferReversalRoutes: TransferReversalRoutes {
     public func create(id: String,
                        amount: Int? = nil,
                        description: String? = nil,
-                       metadata: [String : String]? = nil,
+                       metadata: [String: String]? = nil,
                        refundApplicationFee: Bool? = nil) throws -> EventLoopFuture<StripeTransferReversal> {
         var body: [String: Any] = [:]
         
@@ -62,7 +59,7 @@ public struct StripeTransferReversalRoutes: TransferReversalRoutes {
     /// [Learn More →](https://stripe.com/docs/api/curl#update_transfer_reversal)
     public func update(transfer: String,
                        reversal: String,
-                       metadata: [String : String]? = nil) throws -> EventLoopFuture<StripeTransferReversal> {
+                       metadata: [String: String]? = nil) throws -> EventLoopFuture<StripeTransferReversal> {
         var body: [String: Any] = [:]
         if let metadata = metadata {
             metadata.forEach { body["metadata[\($0)]"] = $1 }

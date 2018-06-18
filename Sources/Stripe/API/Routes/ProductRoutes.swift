@@ -9,16 +9,11 @@
 import Vapor
 
 public protocol ProductRoutes {
-    associatedtype PR: Product
-    associatedtype DO: DeletedObject
-    associatedtype L: List
-    associatedtype PD: PackageDimensions
-    
-    func create(id: String?, name: String, type: String, active: Bool?, attributes: [String]?, caption: String?, deactivateOn: [String]?, description: String?, images: [String]?, metadata: [String: String]?, packageDimensions: PD?, shippable: Bool?, statementDescriptor: String?, url: String?) throws -> Future<PR>
-    func retrieve(id: String) throws -> Future<PR>
-    func update(product: String, active: Bool?, attributes: [String]?, caption: String?, deactivateOn: [String]?, description: String?, images: [String]?, metadata: [String: String]?, name: String?, packageDimensions: PD?, shippable: Bool?, statementDescriptor: String?, url: String?) throws -> Future<PR>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
-    func delete(id: String) throws -> Future<DO>
+    func create(id: String?, name: String, type: String, active: Bool?, attributes: [String]?, caption: String?, deactivateOn: [String]?, description: String?, images: [String]?, metadata: [String: String]?, packageDimensions: StripePackageDimensions?, shippable: Bool?, statementDescriptor: String?, url: String?) throws -> Future<StripeProduct>
+    func retrieve(id: String) throws -> Future<StripeProduct>
+    func update(product: String, active: Bool?, attributes: [String]?, caption: String?, deactivateOn: [String]?, description: String?, images: [String]?, metadata: [String: String]?, name: String?, packageDimensions: StripePackageDimensions?, shippable: Bool?, statementDescriptor: String?, url: String?) throws -> Future<StripeProduct>
+    func listAll(filter: [String: Any]?) throws -> Future<ProductsList>
+    func delete(id: String) throws -> Future<StripeDeletedObject>
 }
 
 public struct StripeProductRoutes: ProductRoutes {

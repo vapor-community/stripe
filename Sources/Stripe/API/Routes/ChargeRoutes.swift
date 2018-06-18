@@ -9,16 +9,11 @@
 import Vapor
 
 public protocol ChargeRoutes {
-    associatedtype CH: Charge
-    associatedtype SH: Shipping
-    associatedtype FD: FraudDetails
-    associatedtype CHL: List
-    
-    func create(amount: Int, currency: StripeCurrency, applicationFee: Int?, capture: Bool?, description: String?, destinationAccount: String?, destinationAmount: Int?, transferGroup: String?, onBehalfOf: String?, metadata: [String: String]?, receiptEmail: String?, shipping: SH?, customer: String?, source: Any?, statementDescriptor: String?) throws -> Future<CH>
-    func retrieve(charge: String) throws -> Future<CH>
-    func update(charge: String, customer: String?, description: String?, fraudDetails: FD?, metadata: [String: String]?, receiptEmail: String?, shipping: SH?, transferGroup: String?) throws -> Future<CH>
-    func capture(charge: String, amount: Int?, applicationFee: Int?, destinationAmount: Int?, receiptEmail: String?, statementDescriptor: String?) throws -> Future<CH>
-    func listAll(filter: [String: Any]?) throws -> Future<CHL>
+    func create(amount: Int, currency: StripeCurrency, applicationFee: Int?, capture: Bool?, description: String?, directAccountHeader: String?, destinationAccount: String?, destinationAmount: Int?, transferGroup: String?, onBehalfOf: String?, metadata: [String: String]?, receiptEmail: String?, shipping: ShippingLabel?, customer: String?, source: Any?, statementDescriptor: String?) throws -> Future<StripeCharge>
+    func retrieve(charge: String) throws -> Future<StripeCharge>
+    func update(charge: String, customer: String?, description: String?, fraudDetails: StripeFraudDetails?, metadata: [String: String]?, receiptEmail: String?, shipping: ShippingLabel?, transferGroup: String?) throws -> Future<StripeCharge>
+    func capture(charge: String, amount: Int?, applicationFee: Int?, destinationAmount: Int?, receiptEmail: String?, statementDescriptor: String?) throws -> Future<StripeCharge>
+    func listAll(filter: [String: Any]?) throws -> Future<ChargesList>
 }
 
 public struct StripeChargeRoutes: ChargeRoutes {
@@ -35,6 +30,7 @@ public struct StripeChargeRoutes: ChargeRoutes {
                        applicationFee: Int? = nil,
                        capture: Bool? = nil,
                        description: String? = nil,
+                       directAccountHeader: String? = nil,
                        destinationAccount: String? = nil,
                        destinationAmount: Int? = nil,
                        transferGroup: String? = nil,
@@ -46,13 +42,17 @@ public struct StripeChargeRoutes: ChargeRoutes {
                        source: Any? = nil,
                        statementDescriptor: String? = nil) throws -> Future<StripeCharge> {
         var body: [String: Any] = ["amount": amount, "currency": currency.rawValue]
-        
+        var headers: HTTPHeaders = [:]
         if let applicationFee = applicationFee {
             body["application_fee"] = applicationFee
         }
         
         if let capture = capture {
             body["capture"] = capture
+        }
+        
+        if let directAccountHeader = directAccountHeader {
+            headers.replaceOrAdd(name: HTTPHeaderName.stripeAccount, value: directAccountHeader)
         }
         
         if let description = description {
@@ -103,7 +103,7 @@ public struct StripeChargeRoutes: ChargeRoutes {
             body["statement_descriptor"] = statementDescriptor
         }
         
-        return try request.send(method: .POST, path: StripeAPIEndpoint.charges.endpoint, body: body.queryParameters)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.charges.endpoint, body: body.queryParameters, headers: headers)
     }
     
     /// Retrieve a charge
@@ -111,7 +111,7 @@ public struct StripeChargeRoutes: ChargeRoutes {
     public func retrieve(charge: String) throws -> Future<StripeCharge> {
         return try request.send(method: .GET, path: StripeAPIEndpoint.charge(charge).endpoint)
     }
-
+    
     /// Update a charge
     /// [Learn More →](https://stripe.com/docs/api/curl#update_charge)
     public func update(charge chargeId: String,
@@ -203,7 +203,7 @@ public struct StripeChargeRoutes: ChargeRoutes {
         if let filter = filter {
             queryParams = filter.queryParameters
         }
-
+        
         return try request.send(method: .GET, path: StripeAPIEndpoint.account.endpoint, query: queryParams)
     }
 }

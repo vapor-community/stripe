@@ -136,3 +136,26 @@ public struct ACHCreditTransfer: StripeModel {
         case swiftCode = "swift_code"
     }
 }
+
+// MARK: - Basic Card
+public struct StripeBasicCard: StripeModel {
+    public var funding: FundingType
+    public var expMonth: Int
+    public var country: String
+    public var threeDSecure: String
+    public var fingerprint: String
+    public var last4: String
+    public var brand: String
+    public var expYear: Int
+    
+    public enum CodingKeys: String, CodingKey {
+        case funding
+        case expMonth = "exp_month"
+        case country
+        case threeDSecure = "three_d_secure"
+        case fingerprint
+        case last4
+        case brand
+        case expYear = "exp_year"
+    }
+}

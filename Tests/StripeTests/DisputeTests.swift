@@ -87,10 +87,10 @@ class DisputeTests: XCTestCase {
                 XCTAssertEqual(dispute.status, .needsResponse)
                 
                 // Evidence Datails
-                XCTAssertEqual(dispute.evidenceDetails?.dueBy, Date(timeIntervalSince1970: 1518566399))
-                XCTAssertEqual(dispute.evidenceDetails?.hasEvidence, false)
-                XCTAssertEqual(dispute.evidenceDetails?.pastDue, false)
-                XCTAssertEqual(dispute.evidenceDetails?.submissionCount, 0)
+                XCTAssertEqual(dispute.evidenceDetails.dueBy, Date(timeIntervalSince1970: 1518566399))
+                XCTAssertEqual(dispute.evidenceDetails.hasEvidence, false)
+                XCTAssertEqual(dispute.evidenceDetails.pastDue, false)
+                XCTAssertEqual(dispute.evidenceDetails.submissionCount, 0)
                 
                 // Evidence
                 XCTAssertEqual(dispute.evidence?.accessActivityLog, "Rasengan")

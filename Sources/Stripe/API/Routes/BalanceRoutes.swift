@@ -9,13 +9,9 @@
 import Vapor
 
 public protocol BalanceRoutes {
-    associatedtype B: Balance
-    associatedtype BT: BalanceTransactionItem
-    associatedtype BHL: List
-    
-    func retrieve() throws -> Future<B>
-    func retrieve(forTransaction: String) throws -> Future<BT>
-    func listAll(filter: [String: Any]?) throws -> Future<BHL>
+    func retrieve() throws -> Future<StripeBalance>
+    func retrieve(forTransaction: String) throws -> Future<StripeBalanceTransactionItem>
+    func listAll(filter: [String: Any]?) throws -> Future<BalanceHistoryList>
 }
 
 public struct StripeBalanceRoutes: BalanceRoutes {

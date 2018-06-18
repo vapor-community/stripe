@@ -13,31 +13,7 @@ import Foundation
  https://stripe.com/docs/api/curl#account_object-legal_entity
  */
 
-public protocol LegalEntity {
-    associatedtype AO: LegalEntityAdditionalOwner
-    associatedtype A: Address
-    associatedtype LEA: LegalEntityVerification
-    
-    var additionalOwners: [AO]?  { get }
-    var address: A?  { get }
-    var businessName: String?  { get }
-    var businessTaxIdProvided: Bool?  { get }
-    var businessVATIdProvided: Bool?  { get }
-    var dob: [String: Int]? { get }
-    var firstName: String? { get }
-    var lastName: String? { get }
-    var gender: String? { get }
-    var maidenName: String? { get }
-    var personalAddress: A? { get }
-    var phoneNumber: String? { get }
-    var personalIdNumberProvided: Bool? { get }
-    var ssnLast4Provided: Bool? { get }
-    var taxIdRegistrar: String? { get }
-    var type: String? { get }
-    var verification: LEA? { get }
-}
-
-public struct StripeConnectAccountLegalEntity: LegalEntity, StripeModel {
+public struct StripeConnectAccountLegalEntity: StripeModel {
     public var additionalOwners: [StripeLegalEntityAdditionalOwner]?
     public var address: StripeAddress?
     public var businessName: String?

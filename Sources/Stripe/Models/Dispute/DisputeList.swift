@@ -11,12 +11,12 @@
  https://stripe.com/docs/api#list_disputes
  */
 
-public struct DisputesList: List, StripeModel {
-    public var object: String?
-    public var hasMore: Bool?
-    public var totalCount: Int?
-    public var url: String?
-    public var data: [StripeDispute]?
+public struct DisputesList: StripeModel {
+    public var object: String
+    public var hasMore: Bool
+    public var totalCount: Int
+    public var url: String
+    public var data: [StripeDispute]
     
     public enum CodingKeys: CodingKey, String {
         case object

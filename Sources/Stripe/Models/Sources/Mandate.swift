@@ -10,14 +10,7 @@
  https://stripe.com/docs/api/curl#create_source-mandate
  */
 
-public protocol Mandate {
-    associatedtype TOS: TOSAcceptance
-    
-    var acceptance: TOS? { get }
-    var notificationMethod: String? { get}
-}
-
-public struct StripeMandate: Mandate, StripeModel {
+public struct StripeMandate: StripeModel {
     public var acceptance: StripeTOSAcceptance?
     public var notificationMethod: String?
     

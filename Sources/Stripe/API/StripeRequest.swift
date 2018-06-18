@@ -25,8 +25,8 @@ public extension StripeRequest {
         decoder.dateDecodingStrategy = .secondsSince1970
         
         guard response.status == .ok else {
-            return try decoder.decode(StripeAPIError.self, from: response, maxSize: 65_536, on: worker).map(to: SM.self) { error in
-                throw StripeError.apiError(error)
+            return try decoder.decode(StripeError.self, from: response, maxSize: 65_536, on: worker).map(to: SM.self){ error in
+                throw error
             }
         }
         
@@ -66,9 +66,7 @@ public class StripeAPIRequest: StripeRequest {
     public func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: String, headers: HTTPHeaders) throws -> Future<SM> {
         var finalHeaders: HTTPHeaders = .stripeDefault
         
-        headers.forEach {
-			finalHeaders.replaceOrAdd(name: $0.name, value: $0.value)
-		}
+        headers.forEach { finalHeaders.replaceOrAdd(name: $0.name, value: $0.value) }
         
         // Get the appropiate API key based on the environment and if the test key is present
         let apiKey = self.httpClient.container.environment == .development ? (self.testApiKey ?? self.apiKey) : self.apiKey

@@ -34,64 +34,67 @@ class SubscriptionTests: XCTestCase {
                 
                 // This test covers the Coupon object
                 XCTAssertNotNil(sub.discount?.coupon)
-                XCTAssertEqual(sub.discount?.coupon?.id, "35OFF")
-                XCTAssertEqual(sub.discount?.coupon?.object, "coupon")
-                XCTAssertEqual(sub.discount?.coupon?.amountOff, 5)
-                XCTAssertEqual(sub.discount?.coupon?.created, Date(timeIntervalSince1970: 1391694467))
-                XCTAssertEqual(sub.discount?.coupon?.currency, .usd)
-                XCTAssertEqual(sub.discount?.coupon?.duration, .repeating)
-                XCTAssertEqual(sub.discount?.coupon?.durationInMonths, 3)
-                XCTAssertEqual(sub.discount?.coupon?.livemode, false)
-                XCTAssertEqual(sub.discount?.coupon?.maxRedemptions, 22)
-                XCTAssertEqual(sub.discount?.coupon?.metadata?["hello"], "world")
-                XCTAssertEqual(sub.discount?.coupon?.percentOff, 25)
-                XCTAssertEqual(sub.discount?.coupon?.redeemBy, Date(timeIntervalSince1970: 1489793908))
-                XCTAssertEqual(sub.discount?.coupon?.timesRedeemed, 1)
-                XCTAssertEqual(sub.discount?.coupon?.valid, true)
+                XCTAssertEqual(sub.discount?.coupon.id, "35OFF")
+                XCTAssertEqual(sub.discount?.coupon.object, "coupon")
+                XCTAssertEqual(sub.discount?.coupon.amountOff, 5)
+                XCTAssertEqual(sub.discount?.coupon.created, Date(timeIntervalSince1970: 1391694467))
+                XCTAssertEqual(sub.discount?.coupon.currency, .usd)
+                XCTAssertEqual(sub.discount?.coupon.duration, .repeating)
+                XCTAssertEqual(sub.discount?.coupon.durationInMonths, 3)
+                XCTAssertEqual(sub.discount?.coupon.livemode, false)
+                XCTAssertEqual(sub.discount?.coupon.maxRedemptions, 22)
+                XCTAssertEqual(sub.discount?.coupon.metadata["hello"], "world")
+                XCTAssertEqual(sub.discount?.coupon.percentOff, 25)
+                XCTAssertEqual(sub.discount?.coupon.redeemBy, Date(timeIntervalSince1970: 1489793908))
+                XCTAssertEqual(sub.discount?.coupon.timesRedeemed, 1)
+                XCTAssertEqual(sub.discount?.coupon.valid, true)
                 
                 // This test covers the Subscription item list object
                 XCTAssertNotNil(sub.items)
-                XCTAssertEqual(sub.items?.object, "list")
-                XCTAssertEqual(sub.items?.hasMore, false)
-                XCTAssertEqual(sub.items?.totalCount, 1)
-                XCTAssertEqual(sub.items?.url, "/v1/subscription_items?subscription=sub_AJ6s2Iy65K3RxN")
+                XCTAssertEqual(sub.items.object, "list")
+                XCTAssertEqual(sub.items.hasMore, false)
+                XCTAssertEqual(sub.items.totalCount, 1)
+                XCTAssertEqual(sub.items.url, "/v1/subscription_items?subscription=sub_AJ6s2Iy65K3RxN")
                 
                 // This test covers the SubscriptionItem  object
-                XCTAssertNotNil(sub.items?.data)
-                XCTAssertNotNil(sub.items?.data?[0])
-                XCTAssertEqual(sub.items?.data?[0].id, "si_19yUeQ2eZvKYlo2CnJwkz3pK")
-                XCTAssertEqual(sub.items?.data?[0].object, "subscription_item")
-                XCTAssertEqual(sub.items?.data?[0].created, Date(timeIntervalSince1970: 1489793911))
-                XCTAssertEqual(sub.items?.data?[0].metadata?["hello"], "world")
-                XCTAssertEqual(sub.items?.data?[0].quantity, 1)
-                XCTAssertEqual(sub.items?.data?[0].subscription, "sub_AJ6s2Iy65K3RxN")
+                XCTAssertNotNil(sub.items.data)
+                XCTAssertNotNil(sub.items.data[0])
+                XCTAssertEqual(sub.items.data[0].id, "si_19yUeQ2eZvKYlo2CnJwkz3pK")
+                XCTAssertEqual(sub.items.data[0].object, "subscription_item")
+                XCTAssertEqual(sub.items.data[0].created, Date(timeIntervalSince1970: 1489793911))
+                XCTAssertEqual(sub.items.data[0].metadata["hello"], "world")
+                XCTAssertEqual(sub.items.data[0].quantity, 1)
+                XCTAssertEqual(sub.items.data[0].subscription, "sub_AJ6s2Iy65K3RxN")
                 
                 // These cover the Plan object
-                XCTAssertNotNil(sub.items?.data?[0].plan)
-                XCTAssertEqual(sub.items?.data?[0].plan?.id, "30990foo1489793903")
-                XCTAssertEqual(sub.items?.data?[0].plan?.object, "plan")
-                XCTAssertEqual(sub.items?.data?[0].plan?.amount, 100)
-                XCTAssertEqual(sub.items?.data?[0].plan?.created, Date(timeIntervalSince1970: 1489793908))
-                XCTAssertEqual(sub.items?.data?[0].plan?.currency, .usd)
-                XCTAssertEqual(sub.items?.data?[0].plan?.interval, .week)
-                XCTAssertEqual(sub.items?.data?[0].plan?.intervalCount, 1)
-                XCTAssertEqual(sub.items?.data?[0].plan?.livemode, false)
-                XCTAssertEqual(sub.items?.data?[0].plan?.metadata?["hello"], "world")
-                XCTAssertEqual(sub.items?.data?[0].plan?.nickname, "Foo")
-                XCTAssertEqual(sub.items?.data?[0].plan?.product, "prod_1234")
-                XCTAssertEqual(sub.items?.data?[0].plan?.trialPeriodDays, 3)
+                XCTAssertNotNil(sub.items.data[0].plan)
+                XCTAssertEqual(sub.items.data[0].plan.id, "30990foo1489793903")
+                XCTAssertEqual(sub.items.data[0].plan.object, "plan")
+                XCTAssertEqual(sub.items.data[0].plan.amount, 100)
+                XCTAssertEqual(sub.items.data[0].plan.created, Date(timeIntervalSince1970: 1489793908))
+                XCTAssertEqual(sub.items.data[0].plan.currency, .usd)
+                XCTAssertEqual(sub.items.data[0].plan.interval, .week)
+                XCTAssertEqual(sub.items.data[0].plan.intervalCount, 1)
+                XCTAssertEqual(sub.items.data[0].plan.livemode, false)
+                XCTAssertEqual(sub.items.data[0].plan.metadata["hello"], "world")
+                XCTAssertEqual(sub.items.data[0].plan.nickname, "Foo")
+                XCTAssertEqual(sub.items.data[0].plan.product, "prod_1234")
+                XCTAssertEqual(sub.items.data[0].plan.trialPeriodDays, 3)
                 
                 // These cover the Plan object
                 XCTAssertNotNil(sub.plan)
                 XCTAssertEqual(sub.plan?.id, "30990foo1489793903")
                 XCTAssertEqual(sub.plan?.object, "plan")
+                XCTAssertEqual(sub.plan?.billingScheme, .perUnit)
+                XCTAssertEqual(sub.plan?.usageType, .metered)
+                XCTAssertEqual(sub.plan?.active, false)
                 XCTAssertEqual(sub.plan?.amount, 100)
                 XCTAssertEqual(sub.plan?.created, Date(timeIntervalSince1970: 1489793908))
                 XCTAssertEqual(sub.plan?.currency, .usd)
                 XCTAssertEqual(sub.plan?.interval, .week)
                 XCTAssertEqual(sub.plan?.intervalCount, 1)
                 XCTAssertEqual(sub.plan?.livemode, false)
-                XCTAssertEqual(sub.plan?.metadata?["hello"], "world")
+                XCTAssertEqual(sub.plan?.metadata["hello"], "world")
                 XCTAssertEqual(sub.plan?.nickname, "Foo")
                 XCTAssertEqual(sub.plan?.product, "prod_1234")
                 XCTAssertEqual(sub.plan?.trialPeriodDays, 14)
@@ -110,7 +113,7 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.daysUntilDue, 4)
                 XCTAssertEqual(sub.endedAt, Date(timeIntervalSince1970: 1489793914))
                 XCTAssertEqual(sub.livemode, true)
-                XCTAssertEqual(sub.metadata?["foo"], "bar")
+                XCTAssertEqual(sub.metadata["foo"], "bar")
                 XCTAssertEqual(sub.quantity, 1)
                 XCTAssertEqual(sub.start, Date(timeIntervalSince1970: 1489793910))
                 XCTAssertEqual(sub.status, StripeSubscriptionStatus.pastDue)
@@ -118,11 +121,11 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.trialEnd, Date(timeIntervalSince1970: 1489793910))
                 XCTAssertEqual(sub.trialStart, Date(timeIntervalSince1970: 1489793910))
             }).catch({ (error) in
-                XCTFail("\(error.localizedDescription)")
+                XCTFail("\(error)")
             })
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
     
@@ -180,6 +183,9 @@ class SubscriptionTests: XCTestCase {
           "id": "30990foo1489793903",
           "object": "plan",
           "amount": 100,
+          "active": false,
+          "billing_scheme": "per_unit",
+          "usage_type": "metered",
           "created": 1489793908,
           "currency": "usd",
           "interval": "week",
@@ -208,6 +214,9 @@ class SubscriptionTests: XCTestCase {
     "id": "30990foo1489793903",
     "object": "plan",
     "amount": 100,
+    "active": false,
+    "billing_scheme": "per_unit",
+    "usage_type": "metered",
     "created": 1489793908,
     "currency": "usd",
     "interval": "week",

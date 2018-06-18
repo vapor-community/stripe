@@ -11,12 +11,12 @@
  https://stripe.com/docs/api#balance_history
  */
 
-public struct BalanceHistoryList: List, StripeModel {
-    public var object: String?
-    public var hasMore: Bool?
-    public var totalCount: Int?
-    public var url: String?
-    public var data: [StripeBalance]?
+public struct BalanceHistoryList: StripeModel {
+    public var object: String
+    public var hasMore: Bool
+    public var totalCount: Int
+    public var url: String
+    public var data: [StripeBalance]
     
     public enum CodingKeys: CodingKey, String {
         case object

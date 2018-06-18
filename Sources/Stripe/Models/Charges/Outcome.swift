@@ -34,22 +34,13 @@ public enum OutcomeType: String, Codable {
     case invalid
 }
 
-public protocol Outcome {
-    var networkStatus: NetworkStatus? { get }
-    var reason: String? { get }
-    var riskLevel: RiskLevel? { get }
-    var rule: String? { get }
-    var sellerMessage: String? { get }
-    var type: OutcomeType? { get }
-}
-
-public struct StripeOutcome: Outcome, StripeModel {
-    public var networkStatus: NetworkStatus?
+public struct StripeOutcome: StripeModel {
+    public var networkStatus: NetworkStatus
     public var reason: String?
-    public var riskLevel: RiskLevel?
+    public var riskLevel: RiskLevel
     public var rule: String?
     public var sellerMessage: String?
-    public var type: OutcomeType?
+    public var type: OutcomeType
     
     public enum CodingKeys: CodingKey, String {
         case networkStatus = "network_status"

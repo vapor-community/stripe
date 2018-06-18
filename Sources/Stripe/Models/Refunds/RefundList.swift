@@ -11,12 +11,12 @@
  https://stripe.com/docs/api/curl#charge_object-refunds
  */
 
-public struct RefundsList: List, StripeModel {
-    public var object: String?
-    public var hasMore: Bool?
-    public var totalCount: Int?
-    public var url: String?
-    public var data: [StripeRefund]?
+public struct RefundsList: StripeModel {
+    public var object: String
+    public var hasMore: Bool
+    public var totalCount: Int
+    public var url: String
+    public var data: [StripeRefund]
     
     public enum CodingKeys: CodingKey, String {
         case object

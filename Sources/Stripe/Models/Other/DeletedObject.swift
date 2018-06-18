@@ -13,12 +13,7 @@ import Vapor
  https://stripe.com/docs/api/curl#delete_customer
  */
 
-public protocol DeletedObject {
-    var deleted: Bool? { get }
-    var id: String? { get }
-}
-
-public struct StripeDeletedObject: DeletedObject, StripeModel {
-    public var deleted: Bool?
-    public var id: String?
+public struct StripeDeletedObject: StripeModel {
+    public var deleted: Bool
+    public var id: String
 }

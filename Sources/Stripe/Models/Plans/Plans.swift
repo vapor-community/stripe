@@ -13,39 +13,34 @@ import Foundation
  https://stripe.com/docs/api/curl#plan_object
  */
 
-public protocol Plan {
-    var id: String? { get }
-    var object: String? { get }
-    var amount: Int? { get }
-    var created: Date? { get }
-    var currency: StripeCurrency? { get }
-    var interval: StripePlanInterval? { get }
-    var intervalCount: Int? { get }
-    var livemode: Bool? { get }
-    var metadata: [String: String]? { get }
-    var nickname: String? { get }
-    var product: String? { get }
-    var trialPeriodDays: Int? { get }
-}
-
-public struct StripePlan: Plan, StripeModel {
-    public var id: String?
-    public var object: String?
-    public var amount: Int?
-    public var created: Date?
-    public var currency: StripeCurrency?
-    public var interval: StripePlanInterval?
-    public var intervalCount: Int?
-    public var livemode: Bool?
-    public var metadata: [String: String]?
+public struct StripePlan: StripeModel {
+    public var id: String
+    public var object: String
+    public var active: Bool
+    public var aggregateUsage: String?
+    public var amount: Int
+    public var billingScheme: BillingScheme
+    public var created: Date
+    public var currency: StripeCurrency
+    public var interval: StripePlanInterval
+    public var intervalCount: Int
+    public var livemode: Bool
+    public var metadata: [String: String]
     public var nickname: String?
-    public var product: String?
+    public var product: String
+    public var tiers: [String: Int]?
+    public var tiersMode: TiersMode?
+    public var transformUsage: [String: Int]?
     public var trialPeriodDays: Int?
+    public var usageType: PlanUsageType
     
     public enum CodingKeys: CodingKey, String {
         case id
         case object
+        case active
+        case aggregateUsage = "aggregate_usage"
         case amount
+        case billingScheme = "billing_scheme"
         case created
         case currency
         case interval
@@ -54,6 +49,10 @@ public struct StripePlan: Plan, StripeModel {
         case metadata
         case nickname
         case product
+        case tiers
+        case tiersMode = "tiers_mode"
+        case transformUsage = "transform_usage"
         case trialPeriodDays = "trial_period_days"
+        case usageType = "usage_type"
     }
 }

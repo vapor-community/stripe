@@ -61,23 +61,19 @@ class SourceTests: XCTestCase {
     "status": "pending",
     "url": "https://www.apple.com"
   },
-  "status": "chargeable",
-  "type": "card",
-  "usage": "reusable",
-  "card": {
-    "exp_month": 4,
-    "exp_year": 2024,
-    "address_line1_check": "unchecked",
-    "address_zip_check": "unchecked",
-    "brand": "Visa",
-    "country": "US",
-    "cvc_check": "unchecked",
-    "funding": "credit",
-    "last4": "4242",
-    "three_d_secure": "optional",
-    "tokenization_method": null,
-    "dynamic_last4": "9876"
-  }
+"status": "chargeable",
+"type": "card",
+"usage": "reusable",
+"card": {
+        "funding": "credit",
+        "exp_month": 6,
+        "country": "US",
+        "three_d_secure": "optional",
+        "fingerprint": "6iB9myGBwx04f4XT",
+        "last4": "4242",
+        "brand": "Visa",
+        "exp_year": 2019
+    }
 }
 """
     
@@ -111,7 +107,7 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.currency, .usd)
                 XCTAssertEqual(source.flow, Flow.redirect)
                 XCTAssertEqual(source.livemode, false)
-                XCTAssertEqual(source.metadata?["hello"], "world")
+                XCTAssertEqual(source.metadata["hello"], "world")
                 XCTAssertEqual(source.status, .chargeable)
                 XCTAssertEqual(source.type, .card)
                 XCTAssertEqual(source.usage, "reusable")
@@ -148,11 +144,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.redirect?.url, "https://www.apple.com")
                 
             }.catch { (error) in
-                XCTFail("\(error.localizedDescription)")
+                XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
     
@@ -218,11 +214,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.threeDSecure?.authenticated, false)
 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
     
@@ -235,6 +231,7 @@ class SourceTests: XCTestCase {
   "created": 1464803577,
   "currency": "eur",
   "flow": "none",
+  "metadata": {},
   "livemode": false,
   "owner": {
     "address": null,
@@ -288,11 +285,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.sepaDebit?.mandateUrl, "https://hooks.stripe.com/adapter/sepa_debit/file/src_18HgGjHNCLa1Vra6Y9TIP6tU/src_client_secret_XcBmS94nTg5o0xc9MSliSlDW")
                 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
     
@@ -305,6 +302,7 @@ class SourceTests: XCTestCase {
   "created": 1445277809,
   "currency": "usd",
   "flow": "redirect",
+  "metadata": {},
   "livemode": true,
   "owner": {
     "address": null,
@@ -356,11 +354,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.alipay?.nativeUrl, "https://www.vapor.codes")
                 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
     
@@ -374,6 +372,7 @@ class SourceTests: XCTestCase {
   "created": 1445277809,
   "currency": "eur",
   "flow": "redirect",
+  "metadata": {},
   "livemode": true,
   "owner": {
     "address": null,
@@ -429,11 +428,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.giropay?.statementDescriptor, "Buy more Vapor Cloud")
                 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
 
@@ -447,6 +446,7 @@ class SourceTests: XCTestCase {
   "created": 1445277809,
   "currency": "eur",
   "flow": "redirect",
+  "metadata": {},
   "livemode": true,
   "owner": {
     "address": null,
@@ -502,11 +502,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.ideal?.statementDescriptor, "Buy more Vapor Cloud")
                 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
     
@@ -520,6 +520,7 @@ class SourceTests: XCTestCase {
   "created": 1445277809,
   "currency": "eur",
   "flow": "redirect",
+  "metadata": {},
   "livemode": true,
   "owner": {
     "address": null,
@@ -569,11 +570,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.p24?.reference, "P24-000-111-222")
                 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
     
@@ -587,6 +588,7 @@ class SourceTests: XCTestCase {
   "created": 1445277809,
   "currency": "eur",
   "flow": "redirect",
+  "metadata": {},
   "livemode": true,
   "owner": {
     "address": null,
@@ -648,11 +650,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.sofort?.statementDescriptor, "Henlo friend")
                 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
     
@@ -667,6 +669,7 @@ class SourceTests: XCTestCase {
   "currency": "eur",
   "statement_descriptor": null,
   "flow": "redirect",
+  "metadata": {},
   "livemode": true,
   "owner": {
     "address": null,
@@ -723,11 +726,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.bancontact?.preferredLanguage, "English")
                 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
     
@@ -741,6 +744,7 @@ class SourceTests: XCTestCase {
   "currency": "eur",
   "statement_descriptor": null,
   "flow": "code_verification",
+  "metadata": {},
   "livemode": true,
   "owner": {
     "address": null,
@@ -800,11 +804,11 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.codeVerification?.status, .pending)
                 
                 }.catch { (error) in
-                    XCTFail("\(error.localizedDescription)")
+                    XCTFail("\(error)")
             }
         }
         catch {
-            XCTFail("\(error.localizedDescription)")
+            XCTFail("\(error)")
         }
     }
 }

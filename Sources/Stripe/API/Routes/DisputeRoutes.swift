@@ -9,14 +9,10 @@
 import Vapor
 
 public protocol DisputeRoutes {
-    associatedtype D: Dispute
-    associatedtype DE: DisputeEvidence
-    associatedtype L: List
-    
-    func retrieve(dispute: String) throws -> Future<D>
-    func update(dispute: String, disputeEvidence: DE?, metadata: [String: String]?, submit: Bool?) throws -> Future<D>
-    func close(dispute: String) throws -> Future<D>
-    func listAll(filter: [String: Any]?) throws -> Future<L>
+    func retrieve(dispute: String) throws -> Future<StripeDispute>
+    func update(dispute: String, disputeEvidence: StripeDisputeEvidence?, metadata: [String: String]?, submit: Bool?) throws -> Future<StripeDispute>
+    func close(dispute: String) throws -> Future<StripeDispute>
+    func listAll(filter: [String: Any]?) throws -> Future<DisputesList>
 }
 
 public struct StripeDisputeRoutes: DisputeRoutes {

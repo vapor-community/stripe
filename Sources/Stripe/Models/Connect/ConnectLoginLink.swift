@@ -13,14 +13,8 @@ import Foundation
  https://stripe.com/docs/api/curl#login_link_object
  */
 
-public protocol ConnectLoginLink {
-    var object: String? { get }
-    var created: Date? { get }
-    var url: String? { get }
-}
-
-public struct StripeConnectLoginLink: ConnectLoginLink, StripeModel {
-    public var object: String?
-    public var created: Date?
-    public var url: String?
+public struct StripeConnectLoginLink: StripeModel {
+    public var object: String
+    public var created: Date
+    public var url: String
 }
