@@ -28,7 +28,7 @@ public struct StripeRefund: StripeModel {
     public var receiptNumber: String?
     public var status: StripeStatus
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case amount

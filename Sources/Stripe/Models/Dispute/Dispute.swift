@@ -28,7 +28,7 @@ public struct StripeDispute: StripeModel {
     public var reason: DisputeReason
     public var status: DisputeStatus
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case amount

@@ -18,7 +18,7 @@ public struct SKUList: StripeModel {
     public var url: String
     public var data: [StripeSKU]
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case object
         case hasMore = "has_more"
         case totalCount = "total_count"

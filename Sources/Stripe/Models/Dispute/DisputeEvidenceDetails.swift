@@ -18,7 +18,7 @@ public struct StripeDisputeEvidenceDetails: StripeModel {
     public var pastDue: Bool
     public var submissionCount: Int
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case dueBy = "due_by"
         case hasEvidence = "has_evidence"
         case pastDue = "past_due"

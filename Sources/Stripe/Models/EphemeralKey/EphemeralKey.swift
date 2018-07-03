@@ -16,7 +16,7 @@ public struct StripeEphemeralKey: StripeModel {
     public var livemode: Bool
     public var secret: String?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case associatedObjects = "associated_objects"

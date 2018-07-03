@@ -19,7 +19,7 @@ public struct TransferList: StripeModel {
     public var url: String
     public var data: [StripeTransfer]
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case object
         case hasMore = "has_more"
         case totalCount = "total_count"

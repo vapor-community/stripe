@@ -18,7 +18,7 @@ public struct StripeShippingMethod: StripeModel {
     public var deliveryEstimate: StripeDeliveryEstimate?
     public var description: String?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case amount
         case currency

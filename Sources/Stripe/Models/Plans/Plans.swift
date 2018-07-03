@@ -34,7 +34,7 @@ public struct StripePlan: StripeModel {
     public var trialPeriodDays: Int?
     public var usageType: PlanUsageType
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case active

@@ -17,7 +17,7 @@ public struct StripePayoutSchedule: StripeModel {
     public var monthlyAnchor: Int?
     public var weeklyAnchor: StripeWeeklyAnchor?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case delayDays = "delay_days"
         case interval
         case monthlyAnchor = "monthly_anchor"

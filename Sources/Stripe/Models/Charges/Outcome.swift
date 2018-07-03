@@ -42,7 +42,7 @@ public struct StripeOutcome: StripeModel {
     public var sellerMessage: String?
     public var type: OutcomeType
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case networkStatus = "network_status"
         case reason
         case riskLevel = "risk_level"

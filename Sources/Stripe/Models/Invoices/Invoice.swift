@@ -50,7 +50,7 @@ public struct StripeInvoice: StripeModel {
     public var taxPercent: Decimal?
     public var webhooksDeliveredAt: Date
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case amountDue = "amount_due"

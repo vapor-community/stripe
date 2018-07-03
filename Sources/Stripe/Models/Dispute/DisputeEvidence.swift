@@ -39,7 +39,7 @@ public struct StripeDisputeEvidence: StripeModel {
     public var uncategorizedFile: String?
     public var uncategorizedText: String?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case accessActivityLog = "access_activity_log"
         case billingAddress = "billing_address"
         case cancellationPolicy = "cancellation_policy"
