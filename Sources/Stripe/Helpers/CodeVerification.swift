@@ -9,7 +9,7 @@ public struct CodeVerification: StripeModel {
     public var attemptsRemaining: Int?
     public var status: StripeStatus?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case attemptsRemaining = "attempts_remaining"
         case status
     }
