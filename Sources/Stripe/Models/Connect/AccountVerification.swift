@@ -17,7 +17,7 @@ public struct StripeAccountVerification: StripeModel {
     public var dueBy: Date?
     public var fieldsNeeded: [String]?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case disabledReason = "disabled_reason"
         case dueBy = "due_by"
         case fieldsNeeded = "fields_needed"

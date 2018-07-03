@@ -31,7 +31,7 @@ public struct StripeAPIError: StripeModel {
     public var message: String
     public var param: String?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case type
         case charge
         case code

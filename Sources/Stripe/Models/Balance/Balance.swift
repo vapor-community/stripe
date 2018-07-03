@@ -18,7 +18,7 @@ public struct StripeBalance: StripeModel {
     public var livemode: Bool
     public var pending: [StripeBalanceTransfer]
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case object
         case available
         case connectReserved = "connect_reserved"

@@ -28,7 +28,7 @@ public struct StripeBankAccount: StripeModel {
     public var routingNumber: String?
     public var status: BankAccountStatus?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case account

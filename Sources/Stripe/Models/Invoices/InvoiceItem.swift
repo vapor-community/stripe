@@ -33,7 +33,7 @@ public struct StripeInvoiceItem: StripeModel {
     public var subscriptionItem: String?
     public var unitAmount: Int
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case amount

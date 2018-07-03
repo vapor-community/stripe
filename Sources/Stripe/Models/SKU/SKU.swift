@@ -29,7 +29,7 @@ public struct StripeSKU: StripeModel {
     public var product: String
     public var updated: Date
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case active

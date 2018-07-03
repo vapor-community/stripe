@@ -19,7 +19,7 @@ public struct StripeAddress: StripeModel {
     public var postalCode: String?
     public var state: String?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case city
         case country
         case line1

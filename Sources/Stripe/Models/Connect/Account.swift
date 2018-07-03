@@ -44,7 +44,7 @@ public struct StripeConnectAccount: StripeModel {
     public var verification: StripeAccountVerification?
     public var transfersEnabled: Bool?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case businessLogo = "business_logo"

@@ -51,7 +51,7 @@ public struct StripeCharge: StripeModel {
     public var transfer: String?
     public var transferGroup: String?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case amount

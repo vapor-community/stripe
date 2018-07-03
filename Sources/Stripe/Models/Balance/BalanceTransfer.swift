@@ -16,7 +16,7 @@ public struct StripeBalanceTransfer: StripeModel {
     public var amount: Int
     public var sourceTypes: [String: Int]?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case currency
         case amount
         case sourceTypes = "source_types"

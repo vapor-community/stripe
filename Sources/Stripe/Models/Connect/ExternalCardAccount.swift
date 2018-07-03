@@ -24,7 +24,7 @@ public struct StripeExternalCardAccount: ExternalAccount, StripeModel {
     public var metadata: [String: String]?
     public var name: String?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case object
         case defaultForCurrency = "default_for_currency"
         case expMonth = "exp_month"

@@ -18,7 +18,7 @@ public struct ShippingLabel: StripeModel {
     public var phone: String?
     public var trackingNumber: String?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case address
         case carrier
         case name

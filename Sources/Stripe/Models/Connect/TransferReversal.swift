@@ -22,7 +22,7 @@ public struct StripeTransferReversal: StripeModel {
     public var metadata: [String: String]
     public var transfer: String
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case amount

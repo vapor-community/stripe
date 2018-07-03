@@ -38,7 +38,7 @@ public struct StripeOrder: StripeModel {
     public var updated: Date
     public var upstreamId: String?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case amount

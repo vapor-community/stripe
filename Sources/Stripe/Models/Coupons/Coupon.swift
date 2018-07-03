@@ -29,7 +29,7 @@ public struct StripeCoupon: StripeModel {
     public var timesRedeemed: Int
     public var valid: Bool
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case amountOff = "amount_off"

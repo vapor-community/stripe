@@ -24,7 +24,7 @@ public struct StripeToken: StripeModel {
     public var card: StripeCard?
     public var bankAccount: StripeBankAccount?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case type
