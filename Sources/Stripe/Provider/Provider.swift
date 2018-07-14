@@ -44,26 +44,26 @@ public final class StripeProvider: Provider {
 }
 
 public struct StripeClient: Service {
-    public var balance: StripeBalanceRoutes
-    public var charge: StripeChargeRoutes
-    public var connectAccount: StripeConnectAccountRoutes
-    public var coupon: StripeCouponRoutes
-    public var customer: StripeCustomerRoutes
-    public var dispute: StripeDisputeRoutes
-    public var ephemeralKey: StripeEphemeralKeyRoutes
-    public var invoiceItem: StripeInvoiceItemRoutes
-    public var invoice: StripeInvoiceRoutes
-    public var orderReturn: StripeOrderReturnRoutes
-    public var order: StripeOrderRoutes
-    public var plan: StripePlanRoutes
-    public var product: StripeProductRoutes
-    public var refund: StripeRefundRoutes
-    public var sku: StripeSKURoutes
-    public var source: StripeSourceRoutes
-    public var subscriptionItem: StripeSubscriptionItemRoutes
-    public var subscription: StripeSubscriptionRoutes
-    public var token: StripeTokenRoutes
-    public var transfer: StripeTransferRoutes
+    public var balance: BalanceRoutes
+    public var charge: ChargeRoutes
+    public var connectAccount: AccountRoutes
+    public var coupon: CouponRoutes
+    public var customer: CustomerRoutes
+    public var dispute: DisputeRoutes
+    public var ephemeralKey: EphemeralKeyRoutes
+    public var invoiceItem: InvoiceItemRoutes
+    public var invoice: InvoiceRoutes
+    public var orderReturn: OrderReturnRoutes
+    public var order: OrderRoutes
+    public var plan: PlanRoutes
+    public var product: ProductRoutes
+    public var refund: RefundRoutes
+    public var sku: SKURoutes
+    public var source: SourceRoutes
+    public var subscriptionItem: SubscriptionItemRoutes
+    public var subscription: SubscriptionRoutes
+    public var token: TokenRoutes
+    public var transfer: TransferRoutes
     public var transferReversals: StripeTransferReversalRoutes
 
     internal init(apiKey: String, testKey: String?, client: Client) {
