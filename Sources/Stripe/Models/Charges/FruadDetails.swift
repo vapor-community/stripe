@@ -25,7 +25,7 @@ public struct StripeFraudDetails: FraudDetails, StripeModel {
     public var userReport: FraudReport?
     public var stripeReport: FraudReport?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case userReport = "user_report"
         case stripeReport = "stripe_report"
     }

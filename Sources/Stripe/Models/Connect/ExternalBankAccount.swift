@@ -16,7 +16,7 @@ public struct StripeExternalBankAccount: ExternalAccount, StripeModel {
     public var accountHolderType: String?
     public var routingNumber: String?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case object
         case accountNumber = "account_number"
         case country

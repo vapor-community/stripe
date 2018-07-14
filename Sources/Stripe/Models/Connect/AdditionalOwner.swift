@@ -20,7 +20,7 @@ public struct StripeLegalEntityAdditionalOwner: StripeModel {
     public var address: StripeAddress?
     public var verification: StripeLegalEntityVerification?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case firstName = "first_name"
         case lastName = "last_name"
         case dob

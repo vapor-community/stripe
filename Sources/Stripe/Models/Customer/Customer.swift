@@ -31,7 +31,7 @@ public struct StripeCustomer: StripeModel {
     public var sources: StripeSourcesList
     public var subscriptions: StripeSubscriptionsList
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case accountBalance = "account_balance"

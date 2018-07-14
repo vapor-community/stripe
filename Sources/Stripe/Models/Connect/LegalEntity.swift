@@ -32,7 +32,7 @@ public struct StripeConnectAccountLegalEntity: StripeModel {
     public var type: String?
     public var verification: StripeLegalEntityVerification?
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case additionalOwners = "additional_owners"
         case address
         case businessName = "business_name"

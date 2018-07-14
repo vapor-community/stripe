@@ -29,7 +29,7 @@ public struct StripeBalanceTransactionItem: StripeModel {
     public var status: StripeStatus
     public var type: BalanceTransactionType
     
-    public enum CodingKeys: CodingKey, String {
+    public enum CodingKeys: String, CodingKey {
         case id
         case object
         case amount
