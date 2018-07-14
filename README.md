@@ -10,7 +10,7 @@
 In your `Package.swift` file, add the following
 
 ~~~~swift
-.package(url: "https://github.com/vapor-community/stripe-provider.git", from: "2.0.0")
+.package(url: "https://github.com/vapor-community/stripe-provider.git", from: "2.1.1")
 ~~~~
 
 Register the config and the provider to your Application
