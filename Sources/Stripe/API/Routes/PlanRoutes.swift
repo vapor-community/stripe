@@ -16,6 +16,50 @@ public protocol PlanRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<PlansList>
 }
 
+extension PlanRoutes {
+    public func create(id: String? = nil,
+                       currency: StripeCurrency,
+                       interval: StripePlanInterval,
+                       product: String,
+                       amount: Int? = nil,
+                       intervalCount: Int? = nil,
+                       metadata: [String: String]? = nil,
+                       nickname: String? = nil) throws -> Future<StripePlan> {
+        return try create(id: id,
+                          currency: currency,
+                          interval: interval,
+                          product: product,
+                          amount: amount,
+                          intervalCount: intervalCount,
+                          metadata: metadata,
+                          nickname: nickname)
+    }
+    
+    public func retrieve(plan: String) throws -> Future<StripePlan> {
+        return try retrieve(plan: plan)
+    }
+    
+    public func update(plan: String,
+                       metadata: [String : String]? = nil,
+                       nickname: String? = nil,
+                       product: String? = nil) throws -> Future<StripePlan> {
+        return try update(plan: plan,
+                          metadata: metadata,
+                          nickname: nickname,
+                          product: product)
+    }
+    
+    public func delete(plan: String) throws -> Future<StripeDeletedObject> {
+        return try delete(plan: plan)
+    }
+    
+    public func listAll(filter: [String : Any]? = nil) throws -> Future<PlansList> {
+        return try listAll(filter: filter)
+    }
+    
+    
+}
+
 public struct StripePlanRoutes: PlanRoutes {
     private let request: StripeRequest
     
@@ -25,14 +69,14 @@ public struct StripePlanRoutes: PlanRoutes {
     
     /// Create a plan
     /// [Learn More →](https://stripe.com/docs/api/curl#create_plan)
-    public func create(id: String? = nil,
+    public func create(id: String?,
                        currency: StripeCurrency,
                        interval: StripePlanInterval,
                        product: String,
-                       amount: Int? = nil,
-                       intervalCount: Int? = nil,
-                       metadata: [String: String]? = nil,
-                       nickname: String? = nil) throws -> Future<StripePlan> {
+                       amount: Int?,
+                       intervalCount: Int?,
+                       metadata: [String: String]?,
+                       nickname: String?) throws -> Future<StripePlan> {
         var body: [String: Any] = [:]
         
         body["currency"] = currency.rawValue
@@ -71,9 +115,9 @@ public struct StripePlanRoutes: PlanRoutes {
     /// Update a plan
     /// [Learn More →](https://stripe.com/docs/api/curl#update_plan)
     public func update(plan: String,
-                       metadata: [String : String]? = nil,
-                       nickname: String? = nil,
-                       product: String? = nil) throws -> Future<StripePlan> {
+                       metadata: [String : String]?,
+                       nickname: String?,
+                       product: String?) throws -> Future<StripePlan> {
         var body: [String: Any] = [:]
         
         if let metadata = metadata {
@@ -99,7 +143,7 @@ public struct StripePlanRoutes: PlanRoutes {
     
     /// List all plans
     /// [Learn More →](https://stripe.com/docs/api/curl#list_plans)
-    public func listAll(filter: [String : Any]? = nil) throws -> Future<PlansList> {
+    public func listAll(filter: [String : Any]?) throws -> Future<PlansList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

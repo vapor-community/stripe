@@ -17,15 +17,7 @@ public protocol CouponRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<CouponsList>
 }
 
-public struct StripeCouponRoutes: CouponRoutes {
-    private let request: StripeRequest
-    
-    init(request: StripeRequest) {
-        self.request = request
-    }
-
-    /// Create a coupon
-    /// [Learn More →](https://stripe.com/docs/api/curl#create_coupon)
+extension CouponRoutes {
     public func create(id: String? = nil,
                        duration: StripeDuration,
                        amountOff: Int? = nil,
@@ -35,6 +27,52 @@ public struct StripeCouponRoutes: CouponRoutes {
                        metadata: [String : String]? = nil,
                        percentOff: Int? = nil,
                        redeemBy: Date? = nil) throws -> Future<StripeCoupon> {
+        return try create(id: id,
+                          duration: duration,
+                          amountOff: amountOff,
+                          currency: currency,
+                          durationInMonths: durationInMonths,
+                          maxRedemptions: maxRedemptions,
+                          metadata: metadata,
+                          percentOff: percentOff,
+                          redeemBy: redeemBy)
+    }
+    
+    public func retrieve(coupon: String) throws -> Future<StripeCoupon> {
+        return try retrieve(coupon: coupon)
+    }
+    
+    public func update(coupon: String, metadata: [String : String]? = nil) throws -> Future<StripeCoupon> {
+        return try update(coupon: coupon, metadata: metadata)
+    }
+    
+    public func delete(coupon: String) throws -> Future<StripeDeletedObject> {
+        return try delete(coupon: coupon)
+    }
+    
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<CouponsList> {
+        return try listAll(filter: filter)
+    }
+}
+
+public struct StripeCouponRoutes: CouponRoutes {
+    private let request: StripeRequest
+    
+    init(request: StripeRequest) {
+        self.request = request
+    }
+
+    /// Create a coupon
+    /// [Learn More →](https://stripe.com/docs/api/curl#create_coupon)
+    public func create(id: String?,
+                       duration: StripeDuration,
+                       amountOff: Int?,
+                       currency: StripeCurrency?,
+                       durationInMonths: Int?,
+                       maxRedemptions: Int?,
+                       metadata: [String : String]?,
+                       percentOff: Int?,
+                       redeemBy: Date?) throws -> Future<StripeCoupon> {
         var body: [String: Any] = [:]
         
         body["duration"] = duration.rawValue
@@ -78,7 +116,7 @@ public struct StripeCouponRoutes: CouponRoutes {
     
     /// Update coupon
     /// [Learn More →](https://stripe.com/docs/api/curl#update_coupon)
-    public func update(coupon: String, metadata: [String : String]? = nil) throws -> Future<StripeCoupon> {
+    public func update(coupon: String, metadata: [String : String]?) throws -> Future<StripeCoupon> {
         var body: [String: Any] = [:]
         
         if let metadata = metadata {
@@ -96,7 +134,7 @@ public struct StripeCouponRoutes: CouponRoutes {
     
     /// List all coupons
     /// [Learn More →](https://stripe.com/docs/api/curl#list_coupons)
-    public func listAll(filter: [String: Any]? = nil) throws -> Future<CouponsList> {
+    public func listAll(filter: [String: Any]?) throws -> Future<CouponsList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

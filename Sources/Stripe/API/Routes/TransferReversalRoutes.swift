@@ -14,6 +14,37 @@ public protocol TransferReversalRoutes {
     func listAll(reversal: String, filter: [String: Any]?) throws -> Future<TransferReversalList>
 }
 
+extension TransferReversalRoutes {
+    public func create(id: String,
+                       amount: Int? = nil,
+                       description: String? = nil,
+                       metadata: [String: String]? = nil,
+                       refundApplicationFee: Bool? = nil) throws -> Future<StripeTransferReversal> {
+        return try create(id: id,
+                          amount: amount,
+                          description: description,
+                          metadata: metadata,
+                          refundApplicationFee: refundApplicationFee)
+    }
+    
+    public func retrieve(transfer: String, reversal: String) throws -> Future<StripeTransferReversal> {
+        return try retrieve(transfer: transfer, reversal: reversal)
+    }
+    
+    public func update(transfer: String,
+                       reversal: String,
+                       metadata: [String: String]? = nil) throws -> Future<StripeTransferReversal> {
+        return try update(transfer: transfer,
+                           reversal: reversal,
+                           metadata: metadata)
+    }
+    
+    public func listAll(reversal: String, filter: [String: Any]? = nil) throws -> Future<TransferReversalList> {
+        return try listAll(reversal: reversal, filter: filter)
+    }
+    
+}
+
 public struct StripeTransferReversalRoutes: TransferReversalRoutes {
     private let request: StripeRequest
     
@@ -24,10 +55,10 @@ public struct StripeTransferReversalRoutes: TransferReversalRoutes {
     /// Create a transfer reversal
     /// [Learn More →](https://stripe.com/docs/api/curl#create_transfer_reversal)
     public func create(id: String,
-                       amount: Int? = nil,
-                       description: String? = nil,
-                       metadata: [String: String]? = nil,
-                       refundApplicationFee: Bool? = nil) throws -> EventLoopFuture<StripeTransferReversal> {
+                       amount: Int?,
+                       description: String?,
+                       metadata: [String: String]?,
+                       refundApplicationFee: Bool?) throws -> Future<StripeTransferReversal> {
         var body: [String: Any] = [:]
         
         if let amount = amount {
@@ -59,7 +90,7 @@ public struct StripeTransferReversalRoutes: TransferReversalRoutes {
     /// [Learn More →](https://stripe.com/docs/api/curl#update_transfer_reversal)
     public func update(transfer: String,
                        reversal: String,
-                       metadata: [String: String]? = nil) throws -> EventLoopFuture<StripeTransferReversal> {
+                       metadata: [String: String]?) throws -> Future<StripeTransferReversal> {
         var body: [String: Any] = [:]
         if let metadata = metadata {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
@@ -70,7 +101,7 @@ public struct StripeTransferReversalRoutes: TransferReversalRoutes {
     
     /// List all reversals
     /// [Learn More →](https://stripe.com/docs/api/curl#list_transfer_reversals)
-    public func listAll(reversal: String, filter: [String: Any]? = nil) throws -> Future<TransferReversalList> {
+    public func listAll(reversal: String, filter: [String: Any]?) throws -> Future<TransferReversalList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

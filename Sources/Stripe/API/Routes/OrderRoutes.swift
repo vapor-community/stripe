@@ -17,6 +17,66 @@ public protocol OrderRoutes {
     func `return`(order: String, items: [[String: Any]]?) throws -> Future<StripeOrder>
 }
 
+extension OrderRoutes {
+    public func create(currency: StripeCurrency,
+                       coupon: String? = nil,
+                       customer: String? = nil,
+                       email: String? = nil,
+                       items: [[String: Any]]? = nil,
+                       metadata: [String: String]? = nil,
+                       shipping: ShippingLabel? = nil) throws -> Future<StripeOrder> {
+        return try create(currency: currency,
+                          coupon: coupon,
+                          customer: customer,
+                          email: email,
+                          items: items,
+                          metadata: metadata,
+                          shipping: shipping)
+    }
+    
+    public func retrieve(order: String) throws -> Future<StripeOrder> {
+        return try retrieve(order: order)
+    }
+    
+    public func update(order: String,
+                       coupon: String? = nil,
+                       metadata: [String: String]? = nil,
+                       selectedShippingMethod: String? = nil,
+                       shipping: ShippingLabel? = nil,
+                       status: String? = nil) throws -> Future<StripeOrder> {
+        return try update(order: order,
+                          coupon: coupon,
+                          metadata: metadata,
+                          selectedShippingMethod: selectedShippingMethod,
+                          shipping: shipping,
+                          status: status)
+    }
+    
+    public func pay(order: String,
+                    customer: String? = nil,
+                    source: Any? = nil,
+                    applicationFee: Int? = nil,
+                    connectAccount: String? = nil,
+                    email: String? = nil,
+                    metadata: [String: String]? = nil) throws -> Future<StripeOrder> {
+        return try pay(order: order,
+                       customer: customer,
+                       source: source,
+                       applicationFee: applicationFee,
+                       connectAccount: connectAccount,
+                       email: email,
+                       metadata: metadata)
+    }
+    
+    public func listAll(filter: [String : Any]? = nil) throws -> Future<OrdersList> {
+        return try listAll(filter: filter)
+    }
+    
+    public func `return`(order: String, items: [[String: Any]]? = nil) throws -> Future<StripeOrder> {
+        return try `return`(order: order, items: items)
+    }
+}
+
 public struct StripeOrderRoutes: OrderRoutes {
     private let request: StripeRequest
     
@@ -27,12 +87,12 @@ public struct StripeOrderRoutes: OrderRoutes {
     /// Creating a new order
     /// [Learn More →](https://stripe.com/docs/api/curl#create_order)
     public func create(currency: StripeCurrency,
-                       coupon: String? = nil,
-                       customer: String? = nil,
-                       email: String? = nil,
-                       items: [[String: Any]]? = nil,
-                       metadata: [String: String]? = nil,
-                       shipping: ShippingLabel? = nil) throws -> Future<StripeOrder> {
+                       coupon: String?,
+                       customer: String?,
+                       email: String?,
+                       items: [[String: Any]]?,
+                       metadata: [String: String]?,
+                       shipping: ShippingLabel?) throws -> Future<StripeOrder> {
         var body: [String: Any] = [:]
         
         if let coupon = coupon {
@@ -73,11 +133,11 @@ public struct StripeOrderRoutes: OrderRoutes {
     /// Update an order
     /// [Learn More →](https://stripe.com/docs/api/curl#update_order)
     public func update(order: String,
-                       coupon: String? = nil,
-                       metadata: [String: String]? = nil,
-                       selectedShippingMethod: String? = nil,
-                       shipping: ShippingLabel? = nil,
-                       status: String? = nil) throws -> Future<StripeOrder> {
+                       coupon: String?,
+                       metadata: [String: String]?,
+                       selectedShippingMethod: String?,
+                       shipping: ShippingLabel?,
+                       status: String?) throws -> Future<StripeOrder> {
         var body: [String: Any] = [:]
         
         if let coupon = coupon {
@@ -106,12 +166,12 @@ public struct StripeOrderRoutes: OrderRoutes {
     /// Pay an order
     /// [Learn More →](https://stripe.com/docs/api/curl#pay_order)
     public func pay(order: String,
-                    customer: String? = nil,
-                    source: Any? = nil,
-                    applicationFee: Int? = nil,
-                    connectAccount: String? = nil,
-                    email: String? = nil,
-                    metadata: [String: String]? = nil) throws -> Future<StripeOrder> {
+                    customer: String?,
+                    source: Any?,
+                    applicationFee: Int?,
+                    connectAccount: String?,
+                    email: String?,
+                    metadata: [String: String]?) throws -> Future<StripeOrder> {
         var body: [String: Any] = [:]
         var headers: HTTPHeaders = [:]
         
@@ -148,7 +208,7 @@ public struct StripeOrderRoutes: OrderRoutes {
     
     /// List all orders
     /// [Learn More →](https://stripe.com/docs/api/curl#list_orders)
-    public func listAll(filter: [String : Any]? = nil) throws -> Future<OrdersList> {
+    public func listAll(filter: [String : Any]?) throws -> Future<OrdersList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters
@@ -159,7 +219,7 @@ public struct StripeOrderRoutes: OrderRoutes {
 
     /// Return an order
     /// [Learn More →](https://stripe.com/docs/api/curl#return_order)
-    public func `return`(order: String, items: [[String: Any]]? = nil) throws -> Future<StripeOrder> {
+    public func `return`(order: String, items: [[String: Any]]?) throws -> Future<StripeOrder> {
         var body: [String: Any] = [:]
         
         if let items = items {

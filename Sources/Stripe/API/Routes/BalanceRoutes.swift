@@ -14,6 +14,20 @@ public protocol BalanceRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<BalanceHistoryList>
 }
 
+extension BalanceRoutes {
+    public func retrieve() throws -> Future<StripeBalance> {
+        return try retrieve()
+    }
+    
+    public func retrieve(forTransaction: String) throws -> Future<StripeBalanceTransactionItem> {
+        return try retrieve(forTransaction: forTransaction)
+    }
+    
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<BalanceHistoryList> {
+        return try listAll(filter: filter)
+    }
+}
+
 public struct StripeBalanceRoutes: BalanceRoutes {
     private let request: StripeRequest
     
@@ -35,7 +49,7 @@ public struct StripeBalanceRoutes: BalanceRoutes {
     
     /// List all balance history
     /// [Learn More →](https://stripe.com/docs/api/curl#balance_history)
-    public func listAll(filter: [String: Any]? = nil) throws -> Future<BalanceHistoryList> {
+    public func listAll(filter: [String: Any]?) throws -> Future<BalanceHistoryList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

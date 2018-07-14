@@ -13,6 +13,16 @@ public protocol EphemeralKeyRoutes {
     func delete(ephemeralKey: String) throws -> Future<StripeEphemeralKey>
 }
 
+extension EphemeralKeyRoutes {
+    public func create(customer: String, apiVersion: String? = nil) throws -> Future<StripeEphemeralKey> {
+        return try create(customer: customer, apiVersion: apiVersion)
+    }
+    
+    public func delete(ephemeralKey: String) throws -> Future<StripeEphemeralKey> {
+        return try delete(ephemeralKey: ephemeralKey)
+    }
+}
+
 public struct StripeEphemeralKeyRoutes: EphemeralKeyRoutes {
     private let request: StripeRequest
     
@@ -20,7 +30,7 @@ public struct StripeEphemeralKeyRoutes: EphemeralKeyRoutes {
         self.request = request
     }
     
-    public func create(customer: String, apiVersion: String? = nil) throws -> Future<StripeEphemeralKey> {
+    public func create(customer: String, apiVersion: String?) throws -> Future<StripeEphemeralKey> {
         var headers: HTTPHeaders = [:]
         
         if let otherApiVersion = apiVersion {

@@ -15,6 +15,32 @@ public protocol TokenRoutes {
     func retrieve(token: String) throws -> Future<StripeToken>
 }
 
+extension TokenRoutes {
+    public func createCard(card: [String: Any]? = nil,
+                           customer: String? = nil,
+                           connectAccount: String? = nil) throws -> Future<StripeToken> {
+        return try createCard(card: card,
+                              customer: customer,
+                              connectAccount: connectAccount)
+    }
+    
+    public func createBankAccount(bankAcocunt: [String: Any]? = nil,
+                                  customer: String? = nil,
+                                  connectAccount: String? = nil) throws -> Future<StripeToken> {
+        return try createBankAccount(bankAcocunt: bankAcocunt,
+                                     customer: customer,
+                                     connectAccount: connectAccount)
+    }
+    
+    public func createPII(personalId: String? = nil) throws -> Future<StripeToken> {
+        return try createPII(personalId: personalId)
+    }
+    
+    public func retrieve(token: String) throws -> Future<StripeToken> {
+        return try retrieve(token: token)
+    }
+}
+
 public struct StripeTokenRoutes: TokenRoutes {
     private let request: StripeRequest
     
@@ -24,9 +50,9 @@ public struct StripeTokenRoutes: TokenRoutes {
 
     /// Create a card token
     /// [Learn More →](https://stripe.com/docs/api/curl#create_card_token)
-    public func createCard(card: [String: Any]? = nil,
-                           customer: String? = nil,
-                           connectAccount: String? = nil) throws -> Future<StripeToken> {
+    public func createCard(card: [String: Any]?,
+                           customer: String?,
+                           connectAccount: String?) throws -> Future<StripeToken> {
         var body: [String: Any] = [:]
         var headers: HTTPHeaders = [:]
         
@@ -47,9 +73,9 @@ public struct StripeTokenRoutes: TokenRoutes {
     
     /// Create a bank account token
     /// [Learn More →](https://stripe.com/docs/api/curl#create_bank_account_token)
-    public func createBankAccount(bankAcocunt: [String: Any]? = nil,
-                                  customer: String? = nil,
-                                  connectAccount: String? = nil) throws -> Future<StripeToken> {
+    public func createBankAccount(bankAcocunt: [String: Any]?,
+                                  customer: String?,
+                                  connectAccount: String?) throws -> Future<StripeToken> {
         var body: [String: Any] = [:]
         var headers: HTTPHeaders = [:]
         
@@ -70,7 +96,7 @@ public struct StripeTokenRoutes: TokenRoutes {
     
     /// Create a PII token
     /// [Learn More →](https://stripe.com/docs/api/curl#create_pii_token)
-    public func createPII(personalId: String? = nil) throws -> Future<StripeToken> {
+    public func createPII(personalId: String?) throws -> Future<StripeToken> {
         var body: [String: Any] = [:]
         
         if let personalId = personalId {

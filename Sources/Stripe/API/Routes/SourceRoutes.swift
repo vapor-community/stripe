@@ -14,15 +14,7 @@ public protocol SourceRoutes {
     func update(source: String, mandate: StripeMandate?, metadata: [String: String]?, owner: StripeOwner?) throws -> Future<StripeSource>
 }
 
-public struct StripeSourceRoutes: SourceRoutes {
-    private let request: StripeRequest
-    
-    init(request: StripeRequest) {
-        self.request = request
-    }
-
-    /// Create a source
-    /// [Learn More →](https://stripe.com/docs/api/curl#create_source)
+extension SourceRoutes {
     public func create(type: SourceType,
                        amount: Int? = nil,
                        currency: StripeCurrency? = nil,
@@ -35,6 +27,57 @@ public struct StripeSourceRoutes: SourceRoutes {
                        statementDescriptor: String? = nil,
                        token: String? = nil,
                        usage: String? = nil) throws -> Future<StripeSource> {
+        return try create(type: type,
+                          amount: amount,
+                          currency: currency,
+                          flow: flow,
+                          mandate: mandate,
+                          metadata: metadata,
+                          owner: owner,
+                          receiver: receiver,
+                          redirect: redirect,
+                          statementDescriptor: statementDescriptor,
+                          token: token,
+                          usage: usage)
+    }
+    
+    public func retrieve(source: String, clientSecret: String? = nil) throws -> Future<StripeSource> {
+        return try retrieve(source: source, clientSecret: clientSecret)
+    }
+    
+    public func update(source: String,
+                       mandate: StripeMandate? = nil,
+                       metadata: [String: String]? = nil,
+                       owner: StripeOwner? = nil) throws -> Future<StripeSource> {
+        return try update(source: source,
+                          mandate: mandate,
+                          metadata: metadata,
+                          owner: owner)
+    }
+    
+}
+
+public struct StripeSourceRoutes: SourceRoutes {
+    private let request: StripeRequest
+    
+    init(request: StripeRequest) {
+        self.request = request
+    }
+
+    /// Create a source
+    /// [Learn More →](https://stripe.com/docs/api/curl#create_source)
+    public func create(type: SourceType,
+                       amount: Int?,
+                       currency: StripeCurrency?,
+                       flow: Flow?,
+                       mandate: StripeMandate?,
+                       metadata: [String: String]?,
+                       owner: StripeOwner?,
+                       receiver: [String: String]?,
+                       redirect: [String: String]?,
+                       statementDescriptor: String?,
+                       token: String?,
+                       usage: String?) throws -> Future<StripeSource> {
         var body: [String: Any] = [:]
         
         body["type"] = type.rawValue
@@ -96,9 +139,9 @@ public struct StripeSourceRoutes: SourceRoutes {
     /// Update a source
     /// [Learn More →](https://stripe.com/docs/api/curl#update_source)
     public func update(source: String,
-                       mandate: StripeMandate? = nil,
-                       metadata: [String: String]? = nil,
-                       owner: StripeOwner? = nil) throws -> Future<StripeSource> {
+                       mandate: StripeMandate?,
+                       metadata: [String: String]?,
+                       owner: StripeOwner?) throws -> Future<StripeSource> {
         var body: [String: Any] = [:]
         
         if let mandate = mandate {

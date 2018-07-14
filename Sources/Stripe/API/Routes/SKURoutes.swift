@@ -16,15 +16,7 @@ public protocol SKURoutes {
     func delete(sku: String) throws -> Future<StripeDeletedObject>
 }
 
-public struct StripeSKURoutes: SKURoutes {
-    private let request: StripeRequest
-    
-    init(request: StripeRequest) {
-        self.request = request
-    }
-
-    /// Create a SKU
-    /// [Learn More →](https://stripe.com/docs/api/curl#create_sku)
+extension SKURoutes {
     public func create(id: String? = nil,
                        currency: StripeCurrency,
                        inventory: StripeInventory,
@@ -35,6 +27,72 @@ public struct StripeSKURoutes: SKURoutes {
                        image: String? = nil,
                        metadata: [String: String]? = nil,
                        packageDimensions: StripePackageDimensions? = nil) throws -> Future<StripeSKU> {
+        return try create(id: id,
+                          currency: currency,
+                          inventory: inventory,
+                          price: price,
+                          product: product,
+                          active: active,
+                          attributes: attributes,
+                          image: image,
+                          metadata: metadata,
+                          packageDimensions: packageDimensions)
+    }
+    
+    public func retrieve(id: String) throws -> Future<StripeSKU> {
+        return try retrieve(id: id)
+    }
+    
+    public func update(sku: String,
+                       active: Bool? = nil,
+                       attributes: [String]? = nil,
+                       currency: StripeCurrency? = nil,
+                       image: String? = nil,
+                       inventory: StripeInventory? = nil,
+                       metadata: [String: String]? = nil,
+                       packageDimensions: StripePackageDimensions? = nil,
+                       price: Int? = nil,
+                       product: String? = nil) throws -> Future<StripeSKU> {
+        return try update(sku: sku,
+                          active: active,
+                          attributes: attributes,
+                          currency: currency,
+                          image: image,
+                          inventory: inventory,
+                          metadata: metadata,
+                          packageDimensions: packageDimensions,
+                          price: price,
+                          product: product)
+    }
+    
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<SKUList> {
+        return try listAll(filter: filter)
+    }
+    
+    public func delete(sku: String) throws -> Future<StripeDeletedObject> {
+        return try delete(sku: sku)
+    }
+}
+
+public struct StripeSKURoutes: SKURoutes {
+    private let request: StripeRequest
+    
+    init(request: StripeRequest) {
+        self.request = request
+    }
+
+    /// Create a SKU
+    /// [Learn More →](https://stripe.com/docs/api/curl#create_sku)
+    public func create(id: String?,
+                       currency: StripeCurrency,
+                       inventory: StripeInventory,
+                       price: Int,
+                       product: String,
+                       active: Bool?,
+                       attributes: [String]?,
+                       image: String?,
+                       metadata: [String: String]?,
+                       packageDimensions: StripePackageDimensions?) throws -> Future<StripeSKU> {
         var body: [String: Any] = [:]
         
         body["currency"] = currency.rawValue
@@ -78,15 +136,15 @@ public struct StripeSKURoutes: SKURoutes {
     /// Update a SKU
     /// [Learn More →](https://stripe.com/docs/api/curl#update_sku)
     public func update(sku: String,
-                       active: Bool? = nil,
-                       attributes: [String]? = nil,
-                       currency: StripeCurrency? = nil,
-                       image: String? = nil,
-                       inventory: StripeInventory? = nil,
-                       metadata: [String: String]? = nil,
-                       packageDimensions: StripePackageDimensions? = nil,
-                       price: Int? = nil,
-                       product: String? = nil) throws -> Future<StripeSKU> {
+                       active: Bool?,
+                       attributes: [String]?,
+                       currency: StripeCurrency?,
+                       image: String?,
+                       inventory: StripeInventory?,
+                       metadata: [String: String]?,
+                       packageDimensions: StripePackageDimensions?,
+                       price: Int?,
+                       product: String?) throws -> Future<StripeSKU> {
         var body: [String: Any] = [:]
         
         if let active = active {
@@ -130,7 +188,7 @@ public struct StripeSKURoutes: SKURoutes {
     
     /// List all SKUs
     /// [Learn More →](https://stripe.com/docs/api/curl#list_skus)
-    public func listAll(filter: [String: Any]? = nil) throws -> Future<SKUList> {
+    public func listAll(filter: [String: Any]?) throws -> Future<SKUList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

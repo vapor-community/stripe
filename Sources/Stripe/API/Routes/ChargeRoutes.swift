@@ -16,15 +16,7 @@ public protocol ChargeRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<ChargesList>
 }
 
-public struct StripeChargeRoutes: ChargeRoutes {
-    private let request: StripeRequest
-    
-    init(request: StripeRequest) {
-        self.request = request
-    }
-    
-    /// Create a charge
-    /// [Learn More →](https://stripe.com/docs/api/curl#create_charge)
+extension ChargeRoutes {
     public func create(amount: Int,
                        currency: StripeCurrency,
                        applicationFee: Int? = nil,
@@ -41,6 +33,90 @@ public struct StripeChargeRoutes: ChargeRoutes {
                        customer: String? = nil,
                        source: Any? = nil,
                        statementDescriptor: String? = nil) throws -> Future<StripeCharge> {
+        return try create(amount: amount,
+                          currency: currency,
+                          applicationFee: applicationFee,
+                          capture: capture,
+                          description: description,
+                          directAccountHeader: directAccountHeader,
+                          destinationAccount: destinationAccount,
+                          destinationAmount: destinationAmount,
+                          transferGroup: transferGroup,
+                          onBehalfOf: onBehalfOf,
+                          metadata: metadata,
+                          receiptEmail: receiptEmail,
+                          shipping: shipping,
+                          customer: customer,
+                          source: source,
+                          statementDescriptor: statementDescriptor)
+    }
+    
+    public func retrieve(charge: String) throws -> Future<StripeCharge> {
+        return try retrieve(charge: charge)
+    }
+    
+    public func update(charge chargeId: String,
+                       customer: String? = nil,
+                       description: String? = nil,
+                       fraudDetails: StripeFraudDetails? = nil,
+                       metadata: [String: String]? = nil,
+                       receiptEmail: String? = nil,
+                       shipping: ShippingLabel? = nil,
+                       transferGroup: String? = nil) throws -> Future<StripeCharge> {
+        return try update(charge: chargeId,
+                          customer: customer,
+                          description: description,
+                          fraudDetails: fraudDetails,
+                          metadata: metadata,
+                          receiptEmail: receiptEmail,
+                          shipping: shipping,
+                          transferGroup: transferGroup)
+    }
+    
+    public func capture(charge: String,
+                        amount: Int? = nil,
+                        applicationFee: Int? = nil,
+                        destinationAmount: Int? = nil,
+                        receiptEmail: String? = nil,
+                        statementDescriptor: String? = nil) throws -> Future<StripeCharge> {
+        return try capture(charge: charge,
+                           amount: amount,
+                           applicationFee: applicationFee,
+                           destinationAmount: destinationAmount,
+                           receiptEmail: receiptEmail,
+                           statementDescriptor: statementDescriptor)
+    }
+    
+    public func listAll(filter: [String : Any]? = nil) throws -> Future<ChargesList> {
+        return try listAll(filter: filter)
+    }
+}
+
+public struct StripeChargeRoutes: ChargeRoutes {
+    private let request: StripeRequest
+    
+    init(request: StripeRequest) {
+        self.request = request
+    }
+    
+    /// Create a charge
+    /// [Learn More →](https://stripe.com/docs/api/curl#create_charge)
+    public func create(amount: Int,
+                       currency: StripeCurrency,
+                       applicationFee: Int?,
+                       capture: Bool?,
+                       description: String?,
+                       directAccountHeader: String?,
+                       destinationAccount: String?,
+                       destinationAmount: Int?,
+                       transferGroup: String?,
+                       onBehalfOf: String?,
+                       metadata: [String : String]?,
+                       receiptEmail: String?,
+                       shipping: ShippingLabel?,
+                       customer: String?,
+                       source: Any?,
+                       statementDescriptor: String?) throws -> Future<StripeCharge> {
         var body: [String: Any] = ["amount": amount, "currency": currency.rawValue]
         var headers: HTTPHeaders = [:]
         if let applicationFee = applicationFee {
@@ -115,13 +191,13 @@ public struct StripeChargeRoutes: ChargeRoutes {
     /// Update a charge
     /// [Learn More →](https://stripe.com/docs/api/curl#update_charge)
     public func update(charge chargeId: String,
-                       customer: String? = nil,
-                       description: String? = nil,
-                       fraudDetails: StripeFraudDetails? = nil,
-                       metadata: [String: String]? = nil,
-                       receiptEmail: String? = nil,
-                       shipping: ShippingLabel? = nil,
-                       transferGroup: String? = nil) throws -> Future<StripeCharge> {
+                       customer: String?,
+                       description: String?,
+                       fraudDetails: StripeFraudDetails?,
+                       metadata: [String: String]?,
+                       receiptEmail: String?,
+                       shipping: ShippingLabel?,
+                       transferGroup: String?) throws -> Future<StripeCharge> {
         var body: [String: Any] = [:]
         
         if let customer = customer {
@@ -166,11 +242,11 @@ public struct StripeChargeRoutes: ChargeRoutes {
     /// Capture a charge
     /// [Learn More →](https://stripe.com/docs/api/curl#capture_charge)
     public func capture(charge: String,
-                        amount: Int? = nil,
-                        applicationFee: Int? = nil,
-                        destinationAmount: Int? = nil,
-                        receiptEmail: String? = nil,
-                        statementDescriptor: String? = nil) throws -> Future<StripeCharge> {
+                        amount: Int?,
+                        applicationFee: Int?,
+                        destinationAmount: Int?,
+                        receiptEmail: String?,
+                        statementDescriptor: String?) throws -> Future<StripeCharge> {
         var body: [String: Any] = [:]
         
         if let amount = amount {
@@ -198,7 +274,7 @@ public struct StripeChargeRoutes: ChargeRoutes {
     
     /// List all charges
     /// [Learn More →](https://stripe.com/docs/api/curl#list_charges)
-    public func listAll(filter: [String : Any]? = nil) throws -> Future<ChargesList> {
+    public func listAll(filter: [String : Any]?) throws -> Future<ChargesList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

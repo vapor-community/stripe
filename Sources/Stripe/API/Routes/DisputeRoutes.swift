@@ -15,6 +15,24 @@ public protocol DisputeRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<DisputesList>
 }
 
+extension DisputeRoutes {
+    public func retrieve(dispute: String) throws -> Future<StripeDispute> {
+        return try retrieve(dispute: dispute)
+    }
+    
+    public func update(dispute: String, disputeEvidence: StripeDisputeEvidence? = nil, metadata: [String : String]? = nil, submit: Bool? = nil) throws -> Future<StripeDispute> {
+        return try update(dispute: dispute, disputeEvidence: disputeEvidence, metadata: metadata, submit: submit)
+    }
+    
+    public func close(dispute: String) throws -> Future<StripeDispute> {
+        return try close(dispute: dispute)
+    }
+    
+    public func listAll(filter: [String : Any]? = nil) throws -> Future<DisputesList> {
+        return try listAll(filter: filter)
+    }
+}
+
 public struct StripeDisputeRoutes: DisputeRoutes {
     private let request: StripeRequest
     
