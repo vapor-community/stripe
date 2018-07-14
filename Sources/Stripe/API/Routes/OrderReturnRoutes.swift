@@ -13,6 +13,16 @@ public protocol OrderReturnRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<OrderReturnList>
 }
 
+extension OrderReturnRoutes {
+    public func retrieve(order: String) throws -> Future<StripeOrderReturn> {
+        return try retrieve(order: order)
+    }
+    
+    public func listAll(filter: [String : Any]? = nil) throws -> Future<OrderReturnList> {
+        return try listAll(filter: filter)
+    }
+}
+
 public struct StripeOrderReturnRoutes: OrderReturnRoutes {
     private let request: StripeRequest
     

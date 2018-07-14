@@ -18,6 +18,72 @@ public protocol AccountRoutes {
     func createLoginLink(for: String) throws -> Future<StripeConnectLoginLink>
 }
 
+extension AccountRoutes {
+    public func create(type: ConnectedAccountType, email: String? = nil, country: String? = nil, metadata: [String: String]? = nil) throws -> Future<StripeConnectAccount> {
+        return try create(type: type, email: email, country: country, metadata: metadata)
+    }
+    
+    public func retrieve(account: String) throws -> Future<StripeConnectAccount> {
+        return try retrieve(account: account)
+    }
+    
+    public func update(account accountId: String,
+                       businessName: String? = nil,
+                       businessPrimaryColor: String? = nil,
+                       businessUrl: String? = nil,
+                       debitNegativeBalances: Bool? = nil,
+                       declineChargeOn: [String : Bool]? = nil,
+                       defaultCurrency: StripeCurrency? = nil,
+                       email: String? = nil,
+                       externalAccount: Any? = nil,
+                       legalEntity: StripeConnectAccountLegalEntity? = nil,
+                       metadata: [String : String]? = nil,
+                       payoutSchedule: [String : String]? = nil,
+                       payoutStatementDescriptor: String? = nil,
+                       productDescription: String? = nil,
+                       statementDescriptor: String? = nil,
+                       supportEmail: String? = nil,
+                       supportPhone: String? = nil,
+                       supportUrl: String? = nil,
+                       tosAcceptance: StripeTOSAcceptance? = nil) throws -> Future<StripeConnectAccount> {
+        return try update(account: accountId,
+                          businessName: businessName,
+                          businessPrimaryColor: businessPrimaryColor,
+                          businessUrl: businessUrl,
+                          debitNegativeBalances: debitNegativeBalances,
+                          declineChargeOn: declineChargeOn,
+                          defaultCurrency: defaultCurrency,
+                          email: email,
+                          externalAccount: externalAccount,
+                          legalEntity: legalEntity,
+                          metadata: metadata,
+                          payoutSchedule: payoutSchedule,
+                          payoutStatementDescriptor: payoutStatementDescriptor,
+                          productDescription: productDescription,
+                          statementDescriptor: statementDescriptor,
+                          supportEmail: supportEmail,
+                          supportPhone: supportPhone,
+                          supportUrl: supportUrl,
+                          tosAcceptance: tosAcceptance)
+    }
+    
+    public func delete(account: String) throws -> Future<StripeDeletedObject> {
+        return try delete(account: account)
+    }
+    
+    public func reject(account: String, for: AccountRejectReason) throws -> Future<StripeConnectAccount> {
+        return try reject(account: account, for: `for`)
+    }
+    
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<ConnectedAccountsList> {
+        return try listAll(filter: filter)
+    }
+    
+    public func createLoginLink(for: String) throws -> Future<StripeConnectLoginLink> {
+        return try createLoginLink(for: `for`)
+    }
+}
+
 public struct StripeConnectAccountRoutes: AccountRoutes {
     private let request: StripeRequest
     
@@ -28,9 +94,9 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
     /// Create an account
     /// [Learn More →](https://stripe.com/docs/api/curl#create_account)
     public func create(type: ConnectedAccountType,
-                       email: String? = nil,
-                       country: String? = nil,
-                       metadata: [String: String]? = nil) throws -> Future<StripeConnectAccount> {
+                       email: String?,
+                       country: String?,
+                       metadata: [String: String]?) throws -> Future<StripeConnectAccount> {
         var body: [String: String] = [:]
         body["type"] = type.rawValue
         
@@ -58,24 +124,24 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
     /// Update an account
     /// [Learn More →](https://stripe.com/docs/api/curl#update_account)
     public func update(account accountId: String,
-                       businessName: String? = nil,
-                       businessPrimaryColor: String? = nil,
-                       businessUrl: String? = nil,
-                       debitNegativeBalances: Bool? = nil,
-                       declineChargeOn: [String : Bool]? = nil,
-                       defaultCurrency: StripeCurrency? = nil,
-                       email: String? = nil,
-                       externalAccount: Any? = nil,
-                       legalEntity: StripeConnectAccountLegalEntity? = nil,
-                       metadata: [String : String]? = nil,
-                       payoutSchedule: [String : String]? = nil,
-                       payoutStatementDescriptor: String? = nil,
-                       productDescription: String? = nil,
-                       statementDescriptor: String? = nil,
-                       supportEmail: String? = nil,
-                       supportPhone: String? = nil,
-                       supportUrl: String? = nil,
-                       tosAcceptance: StripeTOSAcceptance? = nil) throws -> Future<StripeConnectAccount> {
+                       businessName: String?,
+                       businessPrimaryColor: String?,
+                       businessUrl: String?,
+                       debitNegativeBalances: Bool?,
+                       declineChargeOn: [String : Bool]?,
+                       defaultCurrency: StripeCurrency?,
+                       email: String?,
+                       externalAccount: Any?,
+                       legalEntity: StripeConnectAccountLegalEntity?,
+                       metadata: [String : String]?,
+                       payoutSchedule: [String : String]?,
+                       payoutStatementDescriptor: String?,
+                       productDescription: String?,
+                       statementDescriptor: String?,
+                       supportEmail: String?,
+                       supportPhone: String?,
+                       supportUrl: String?,
+                       tosAcceptance: StripeTOSAcceptance?) throws -> Future<StripeConnectAccount> {
         var body: [String: Any] = [:]
         
         if let businessname = businessName {
@@ -172,7 +238,7 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
     
     /// List all connected accounts
     /// [Learn More →](https://stripe.com/docs/api/curl#list_accounts)
-    public func listAll(filter: [String: Any]? = nil) throws -> Future<ConnectedAccountsList> {
+    public func listAll(filter: [String: Any]?) throws -> Future<ConnectedAccountsList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

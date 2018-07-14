@@ -14,6 +14,34 @@ public protocol TransferRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<TransferList>
 }
 
+extension TransferRoutes {
+    public func create(amount: Int,
+                       currency: StripeCurrency,
+                       destination: String,
+                       metadata: [String: String]? = nil,
+                       sourceTransaction: String? = nil,
+                       transferGroup: String? = nil) throws -> EventLoopFuture<StripeTransfer> {
+        return try create(amount: amount,
+                           currency: currency,
+                           destination: destination,
+                           metadata: metadata,
+                           sourceTransaction: sourceTransaction,
+                           transferGroup: transferGroup)
+    }
+    
+    public func retrieve(transfer: String) throws -> Future<StripeTransfer> {
+        return try retrieve(transfer: transfer)
+    }
+    
+    public func update(transfer: String, metadata: [String: String]? = nil) throws -> Future<StripeTransfer> {
+        return try update(transfer: transfer, metadata: metadata)
+    }
+    
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<TransferList> {
+        return try listAll(filter: filter)
+    }
+}
+
 public struct StripeTransferRoutes: TransferRoutes {
     private let request: StripeRequest
     
@@ -26,9 +54,9 @@ public struct StripeTransferRoutes: TransferRoutes {
     public func create(amount: Int,
                        currency: StripeCurrency,
                        destination: String,
-                       metadata: [String: String]? = nil,
-                       sourceTransaction: String? = nil,
-                       transferGroup: String? = nil) throws -> EventLoopFuture<StripeTransfer> {
+                       metadata: [String: String]?,
+                       sourceTransaction: String?,
+                       transferGroup: String?) throws -> Future<StripeTransfer> {
         var body: [String: Any] = [:]
         body["amount"] = amount
         body["currency"] = currency.rawValue
@@ -57,8 +85,7 @@ public struct StripeTransferRoutes: TransferRoutes {
     
     /// Update a transfer
     /// [Learn More →](https://stripe.com/docs/api/curl#update_transfer)
-    public func update(transfer: String,
-                       metadata: [String: String]? = nil) throws -> EventLoopFuture<StripeTransfer> {
+    public func update(transfer: String, metadata: [String: String]?) throws -> Future<StripeTransfer> {
         var body: [String: Any] = [:]
         if let metadata = metadata {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
@@ -69,7 +96,7 @@ public struct StripeTransferRoutes: TransferRoutes {
     
     /// List all transfers
     /// [Learn More →](https://stripe.com/docs/api/curl#list_transfers)
-    public func listAll(filter: [String: Any]? = nil) throws -> Future<TransferList> {
+    public func listAll(filter: [String: Any]?) throws -> Future<TransferList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

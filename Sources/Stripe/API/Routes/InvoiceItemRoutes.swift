@@ -16,6 +16,50 @@ public protocol InvoiceItemRoutes {
     func listAll(filter: [String: Any]?) throws -> Future<InvoiceItemsList>
 }
 
+extension InvoiceItemRoutes {
+    public func create(amount: Int,
+                       currency: StripeCurrency,
+                       customer: String,
+                       description: String? = nil,
+                       discountable: Bool? = nil,
+                       invoice: String? = nil,
+                       metadata: [String : String]? = nil,
+                       subscription: String? = nil) throws -> Future<StripeInvoiceItem> {
+        return try create(amount: amount,
+                          currency: currency,
+                          customer: customer,
+                          description: description,
+                          discountable: discountable,
+                          invoice: invoice,
+                          metadata: metadata,
+                          subscription: subscription)
+    }
+    
+    public func retrieve(invoiceItem: String) throws -> Future<StripeInvoiceItem> {
+        return try retrieve(invoiceItem: invoiceItem)
+    }
+    
+    public func update(invoiceItem: String,
+                       amount: Int? = nil,
+                       description: String? = nil,
+                       discountable: Bool? = nil,
+                       metadata: [String : String]? = nil) throws -> Future<StripeInvoiceItem> {
+        return try update(invoiceItem: invoiceItem,
+                          amount: amount,
+                          description: description,
+                          discountable: discountable,
+                          metadata: metadata)
+    }
+    
+    public func delete(invoiceItem: String) throws -> Future<StripeDeletedObject> {
+        return try delete(invoiceItem: invoiceItem)
+    }
+    
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<InvoiceItemsList> {
+        return try listAll(filter: filter)
+    }
+}
+
 public struct StripeInvoiceItemRoutes: InvoiceItemRoutes {
     private let request: StripeRequest
     
@@ -28,11 +72,11 @@ public struct StripeInvoiceItemRoutes: InvoiceItemRoutes {
     public func create(amount: Int,
                        currency: StripeCurrency,
                        customer: String,
-                       description: String? = nil,
-                       discountable: Bool? = nil,
-                       invoice: String? = nil,
-                       metadata: [String : String]? = nil,
-                       subscription: String? = nil) throws -> Future<StripeInvoiceItem> {
+                       description: String?,
+                       discountable: Bool?,
+                       invoice: String?,
+                       metadata: [String : String]?,
+                       subscription: String?) throws -> Future<StripeInvoiceItem> {
         var body: [String: Any] = [:]
         
         body["amount"] = amount
@@ -71,10 +115,10 @@ public struct StripeInvoiceItemRoutes: InvoiceItemRoutes {
     /// Update an invoice item
     /// [Learn More →](https://stripe.com/docs/api/curl#update_invoiceitem)
     public func update(invoiceItem: String,
-                       amount: Int? = nil,
-                       description: String? = nil,
-                       discountable: Bool? = nil,
-                       metadata: [String : String]? = nil) throws -> Future<StripeInvoiceItem> {
+                       amount: Int?,
+                       description: String?,
+                       discountable: Bool?,
+                       metadata: [String : String]?) throws -> Future<StripeInvoiceItem> {
         var body: [String: Any] = [:]
         
         if let amount = amount {

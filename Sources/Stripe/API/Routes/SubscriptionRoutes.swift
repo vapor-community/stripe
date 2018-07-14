@@ -18,15 +18,7 @@ public protocol SubscriptionRoutes {
     func deleteDiscount(subscription: String) throws -> Future<StripeDeletedObject>
 }
 
-public struct StripeSubscriptionRoutes: SubscriptionRoutes {
-    private let request: StripeRequest
-    
-    init(request: StripeRequest) {
-        self.request = request
-    }
-
-    /// Create a subscription
-    /// [Learn More →](https://stripe.com/docs/api/curl#create_subscription)
+extension SubscriptionRoutes {
     public func create(customer: String,
                        applicationFeePercent: Decimal? = nil,
                        billing: String? = nil,
@@ -39,6 +31,86 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
                        taxPercent: Decimal? = nil,
                        trialEnd: Any? = nil,
                        trialPeriodDays: Int? = nil) throws -> Future<StripeSubscription> {
+        return try create(customer: customer,
+                          applicationFeePercent: applicationFeePercent,
+                          billing: billing,
+                          billingCycleAnchor: billingCycleAnchor,
+                          coupon: coupon,
+                          daysUntilDue: daysUntilDue,
+                          items: items,
+                          metadata: metadata,
+                          source: source,
+                          taxPercent: taxPercent,
+                          trialEnd: trialEnd,
+                          trialPeriodDays: trialPeriodDays)
+    }
+    
+    public func retrieve(id: String) throws -> Future<StripeSubscription> {
+        return try retrieve(id: id)
+    }
+    
+    public func update(subscription: String,
+                       applicationFeePercent: Decimal? = nil,
+                       billing: String? = nil,
+                       billingCycleAnchor: String? = nil,
+                       coupon: String? = nil,
+                       daysUntilDue: Int? = nil,
+                       items: [[String : Any]]? = nil,
+                       metadata: [String : String]? = nil,
+                       prorate: Bool? = nil,
+                       prorationDate: Date? = nil,
+                       source: Any? = nil,
+                       taxPercent: Decimal? = nil,
+                       trialEnd: Any? = nil) throws -> Future<StripeSubscription> {
+        return try update(subscription: subscription,
+                          applicationFeePercent: applicationFeePercent,
+                          billing: billing,
+                          billingCycleAnchor: billingCycleAnchor,
+                          coupon: coupon,
+                          daysUntilDue: daysUntilDue,
+                          items: items,
+                          metadata: metadata,
+                          prorate: prorate,
+                          prorationDate: prorationDate,
+                          source: source,
+                          taxPercent: taxPercent,
+                          trialEnd: trialEnd)
+    }
+    
+    public func cancel(subscription: String, atPeriodEnd: Bool? = nil) throws -> Future<StripeSubscription> {
+        return try cancel(subscription: subscription, atPeriodEnd: atPeriodEnd)
+    }
+    
+    public func listAll(filter: [String : Any]? = nil) throws -> Future<StripeSubscriptionsList> {
+        return try listAll(filter: filter)
+    }
+    
+    public func deleteDiscount(subscription: String) throws -> Future<StripeDeletedObject> {
+        return try deleteDiscount(subscription: subscription)
+    }
+}
+
+public struct StripeSubscriptionRoutes: SubscriptionRoutes {
+    private let request: StripeRequest
+    
+    init(request: StripeRequest) {
+        self.request = request
+    }
+
+    /// Create a subscription
+    /// [Learn More →](https://stripe.com/docs/api/curl#create_subscription)
+    public func create(customer: String,
+                       applicationFeePercent: Decimal?,
+                       billing: String?,
+                       billingCycleAnchor: Date?,
+                       coupon: String?,
+                       daysUntilDue: Int?,
+                       items: [[String : Any]]?,
+                       metadata: [String : String]?,
+                       source: Any?,
+                       taxPercent: Decimal?,
+                       trialEnd: Any?,
+                       trialPeriodDays: Int?) throws -> Future<StripeSubscription> {
         var body: [String: Any] = [:]
         
         body["customer"] = customer
@@ -109,18 +181,18 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
     /// Update a subscription
     /// [Learn More →](https://stripe.com/docs/api/curl#update_subscription)
     public func update(subscription: String,
-                       applicationFeePercent: Decimal? = nil,
-                       billing: String? = nil,
-                       billingCycleAnchor: String? = nil,
-                       coupon: String? = nil,
-                       daysUntilDue: Int? = nil,
-                       items: [[String : Any]]? = nil,
-                       metadata: [String : String]? = nil,
-                       prorate: Bool? = nil,
-                       prorationDate: Date? = nil,
-                       source: Any? = nil,
-                       taxPercent: Decimal? = nil,
-                       trialEnd: Any? = nil) throws -> Future<StripeSubscription> {
+                       applicationFeePercent: Decimal?,
+                       billing: String?,
+                       billingCycleAnchor: String?,
+                       coupon: String?,
+                       daysUntilDue: Int?,
+                       items: [[String : Any]]?,
+                       metadata: [String : String]?,
+                       prorate: Bool?,
+                       prorationDate: Date?,
+                       source: Any?,
+                       taxPercent: Decimal?,
+                       trialEnd: Any?) throws -> Future<StripeSubscription> {
         var body: [String: Any] = [:]
         
         if let applicationFeePercent = applicationFeePercent {
@@ -186,7 +258,7 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
     
     /// Cancel a subscription
     /// [Learn More →](https://stripe.com/docs/api/curl#cancel_subscription)
-    public func cancel(subscription: String, atPeriodEnd: Bool? = nil) throws -> Future<StripeSubscription> {
+    public func cancel(subscription: String, atPeriodEnd: Bool?) throws -> Future<StripeSubscription> {
         var body: [String: Any] = [:]
         
         if let atPeriodEnd = atPeriodEnd {
@@ -198,7 +270,7 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
     
     /// List subscriptions
     /// [Learn More →](https://stripe.com/docs/api/curl#list_subscriptions)
-    public func listAll(filter: [String : Any]? = nil) throws -> Future<StripeSubscriptionsList> {
+    public func listAll(filter: [String : Any]?) throws -> Future<StripeSubscriptionsList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

@@ -17,6 +17,53 @@ public protocol SubscriptionItemRoutes {
     func listAll(subscription: String, filter: [String: Any]?) throws -> Future<SubscriptionItemsList>
 }
 
+extension SubscriptionItemRoutes {
+    public func create(plan: String,
+                       subscription: String,
+                       metadata: [String : String]? = nil,
+                       prorate: Bool? = nil,
+                       prorationDate: Date? = nil,
+                       quantity: Int? = nil) throws -> Future<StripeSubscriptionItem> {
+        return try create(plan: plan,
+                          subscription: subscription,
+                          metadata: metadata,
+                          prorate: prorate,
+                          prorationDate: prorationDate,
+                          quantity: quantity)
+    }
+    
+    public func retrieve(item: String) throws -> Future<StripeSubscriptionItem> {
+        return try retrieve(item: item)
+    }
+    
+    public func update(item: String,
+                       metadata: [String : String]? = nil,
+                       plan: String? = nil,
+                       prorate: Bool? = nil,
+                       prorationDate: Date? = nil,
+                       quantity: Int? = nil) throws -> Future<StripeSubscriptionItem> {
+        return try update(item: item,
+                          metadata: metadata,
+                          plan: plan,
+                          prorate: prorate,
+                          prorationDate: prorationDate,
+                          quantity: quantity)
+    }
+    
+    public func delete(item: String,
+                       prorate: Bool? = nil,
+                       prorationDate: Date? = nil) throws -> Future<StripeSubscriptionItem> {
+        return try delete(item: item,
+                          prorate: prorate,
+                          prorationDate: prorationDate)
+    }
+    
+    public func listAll(subscription: String, filter: [String : Any]? = nil) throws -> Future<SubscriptionItemsList> {
+        return try listAll(subscription: subscription, filter: filter)
+    }
+    
+}
+
 public struct StripeSubscriptionItemRoutes: SubscriptionItemRoutes {
     private let request: StripeRequest
     
@@ -28,10 +75,10 @@ public struct StripeSubscriptionItemRoutes: SubscriptionItemRoutes {
     /// [Learn More →](https://stripe.com/docs/api/curl#create_subscription_item)
     public func create(plan: String,
                        subscription: String,
-                       metadata: [String : String]? = nil,
-                       prorate: Bool? = nil,
-                       prorationDate: Date? = nil,
-                       quantity: Int? = nil) throws -> Future<StripeSubscriptionItem> {
+                       metadata: [String : String]?,
+                       prorate: Bool?,
+                       prorationDate: Date?,
+                       quantity: Int?) throws -> Future<StripeSubscriptionItem> {
         var body: [String: Any] = [:]
         
         body["plan"] = plan
@@ -65,11 +112,11 @@ public struct StripeSubscriptionItemRoutes: SubscriptionItemRoutes {
     /// Update a subscription item
     /// [Learn More →](https://stripe.com/docs/api/curl#update_subscription_item)
     public func update(item: String,
-                       metadata: [String : String]? = nil,
-                       plan: String? = nil,
-                       prorate: Bool? = nil,
-                       prorationDate: Date? = nil,
-                       quantity: Int? = nil) throws -> Future<StripeSubscriptionItem> {
+                       metadata: [String : String]?,
+                       plan: String?,
+                       prorate: Bool?,
+                       prorationDate: Date?,
+                       quantity: Int?) throws -> Future<StripeSubscriptionItem> {
         var body: [String: Any] = [:]
         
         if let metadata = metadata {
@@ -98,8 +145,8 @@ public struct StripeSubscriptionItemRoutes: SubscriptionItemRoutes {
     /// Delete a subscription item
     /// [Learn More →](https://stripe.com/docs/api/curl#delete_subscription_item)
     public func delete(item: String,
-                       prorate: Bool? = nil,
-                       prorationDate: Date? = nil) throws -> Future<StripeSubscriptionItem> {
+                       prorate: Bool?,
+                       prorationDate: Date?) throws -> Future<StripeSubscriptionItem> {
         var body: [String: Any] = [:]
 
         if let prorate = prorate {
@@ -115,7 +162,7 @@ public struct StripeSubscriptionItemRoutes: SubscriptionItemRoutes {
     
     /// List all subscription items
     /// [Learn More →](https://stripe.com/docs/api/curl#list_subscription_item)
-    public func listAll(subscription: String, filter: [String : Any]? = nil) throws -> Future<SubscriptionItemsList> {
+    public func listAll(subscription: String, filter: [String : Any]?) throws -> Future<SubscriptionItemsList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

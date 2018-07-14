@@ -16,15 +16,7 @@ public protocol ProductRoutes {
     func delete(id: String) throws -> Future<StripeDeletedObject>
 }
 
-public struct StripeProductRoutes: ProductRoutes {
-    private let request: StripeRequest
-    
-    init(request: StripeRequest) {
-        self.request = request
-    }
-
-    /// Create a product
-    /// [Learn More →](https://stripe.com/docs/api/curl#create_product)
+extension ProductRoutes {
     public func create(id: String? = nil,
                        name: String,
                        type: String,
@@ -39,6 +31,86 @@ public struct StripeProductRoutes: ProductRoutes {
                        shippable: Bool? = nil,
                        statementDescriptor: String? = nil,
                        url: String? = nil) throws -> Future<StripeProduct> {
+        return try create(id: id,
+                          name: name,
+                          type: type,
+                          active: active,
+                          attributes: attributes,
+                          caption: caption,
+                          deactivateOn: deactivateOn,
+                          description: description,
+                          images: images,
+                          metadata: metadata,
+                          packageDimensions: packageDimensions,
+                          shippable: shippable,
+                          statementDescriptor: statementDescriptor,
+                          url: url)
+    }
+    
+    public func retrieve(id: String) throws -> Future<StripeProduct> {
+        return try retrieve(id: id)
+    }
+    
+    public func update(product: String,
+                       active: Bool? = nil,
+                       attributes: [String]? = nil,
+                       caption: String? = nil,
+                       deactivateOn: [String]? = nil,
+                       description: String? = nil,
+                       images: [String]? = nil,
+                       metadata: [String : String]? = nil,
+                       name: String? = nil,
+                       packageDimensions: StripePackageDimensions? = nil,
+                       shippable: Bool? = nil,
+                       statementDescriptor: String? = nil,
+                       url: String? = nil) throws -> Future<StripeProduct> {
+        return try update(product: product,
+                          active: active,
+                          attributes: attributes,
+                          caption: caption,
+                          deactivateOn: deactivateOn,
+                          description: description,
+                          images: images,
+                          metadata: metadata,
+                          name: name,
+                          packageDimensions: packageDimensions,
+                          shippable: shippable,
+                          statementDescriptor: statementDescriptor,
+                          url: url)
+    }
+    
+    public func listAll(filter: [String : Any]? = nil) throws -> Future<ProductsList> {
+        return try listAll(filter: filter)
+    }
+    
+    public func delete(id: String) throws -> Future<StripeDeletedObject> {
+        return try delete(id: id)
+    }
+}
+
+public struct StripeProductRoutes: ProductRoutes {
+    private let request: StripeRequest
+    
+    init(request: StripeRequest) {
+        self.request = request
+    }
+
+    /// Create a product
+    /// [Learn More →](https://stripe.com/docs/api/curl#create_product)
+    public func create(id: String?,
+                       name: String,
+                       type: String,
+                       active: Bool?,
+                       attributes: [String]?,
+                       caption: String?,
+                       deactivateOn: [String]?,
+                       description: String?,
+                       images: [String]?,
+                       metadata: [String : String]?,
+                       packageDimensions: StripePackageDimensions?,
+                       shippable: Bool?,
+                       statementDescriptor: String?,
+                       url: String?) throws -> Future<StripeProduct> {
         var body: [String: Any] = [:]
         
         body["name"] = name
@@ -111,18 +183,18 @@ public struct StripeProductRoutes: ProductRoutes {
     /// Update a product
     /// [Learn More →](https://stripe.com/docs/api/curl#update_product)
     public func update(product: String,
-                       active: Bool? = nil,
-                       attributes: [String]? = nil,
-                       caption: String? = nil,
-                       deactivateOn: [String]? = nil,
-                       description: String? = nil,
-                       images: [String]? = nil,
-                       metadata: [String : String]? = nil,
-                       name: String? = nil,
-                       packageDimensions: StripePackageDimensions? = nil,
-                       shippable: Bool? = nil,
-                       statementDescriptor: String? = nil,
-                       url: String? = nil) throws -> Future<StripeProduct> {
+                       active: Bool?,
+                       attributes: [String]?,
+                       caption: String?,
+                       deactivateOn: [String]?,
+                       description: String?,
+                       images: [String]?,
+                       metadata: [String : String]?,
+                       name: String?,
+                       packageDimensions: StripePackageDimensions?,
+                       shippable: Bool?,
+                       statementDescriptor: String?,
+                       url: String?) throws -> Future<StripeProduct> {
         var body: [String: Any] = [:]
         
         if let active = active {
@@ -184,7 +256,7 @@ public struct StripeProductRoutes: ProductRoutes {
     
     /// List all products
     /// [Learn More →](https://stripe.com/docs/api/curl#list_products)
-    public func listAll(filter: [String : Any]? = nil) throws -> Future<ProductsList> {
+    public func listAll(filter: [String : Any]?) throws -> Future<ProductsList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

@@ -21,15 +21,7 @@ public protocol CustomerRoutes {
     func deleteDiscount(customer: String) throws -> Future<StripeDeletedObject>
 }
 
-public struct StripeCustomerRoutes: CustomerRoutes {
-    private let request: StripeRequest
-    
-    init(request: StripeRequest) {
-        self.request = request
-    }
-    
-    /// Create a customer
-    /// [Learn More →](https://stripe.com/docs/api/curl#create_customer)
+extension CustomerRoutes {
     public func create(accountBalance: Int? = nil,
                        businessVatId: String? = nil,
                        coupon: String? = nil,
@@ -39,6 +31,91 @@ public struct StripeCustomerRoutes: CustomerRoutes {
                        metadata: [String: String]? = nil,
                        shipping: ShippingLabel? = nil,
                        source: Any? = nil) throws -> Future<StripeCustomer> {
+        return try create(accountBalance: accountBalance,
+                          businessVatId: businessVatId,
+                          coupon: coupon,
+                          defaultSource: defaultSource,
+                          description: description,
+                          email: email,
+                          metadata: metadata,
+                          shipping: shipping,
+                          source: source)
+    }
+    
+    public func retrieve(customer: String) throws -> Future<StripeCustomer> {
+        return try retrieve(customer: customer)
+    }
+    
+    public func update(customer: String,
+                       accountBalance: Int? = nil,
+                       businessVatId: String? = nil,
+                       coupon: String? = nil,
+                       defaultSource: String? = nil,
+                       description: String? = nil,
+                       email: String? = nil,
+                       metadata: [String: String]? = nil,
+                       shipping: ShippingLabel? = nil,
+                       source: Any? = nil) throws -> Future<StripeCustomer> {
+        return try update(customer: customer,
+                          accountBalance: accountBalance,
+                          businessVatId: businessVatId,
+                          coupon: coupon,
+                          defaultSource: defaultSource,
+                          description: description,
+                          email: email,
+                          metadata: metadata,
+                          shipping: shipping,
+                          source: source)
+    }
+    
+    public func delete(customer: String) throws -> Future<StripeDeletedObject> {
+        return try delete(customer: customer)
+    }
+    
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<StripeCustomersList> {
+        return try listAll(filter: filter)
+    }
+    
+    public func addNewSource(customer: String, source: String, toConnectedAccount: String? = nil) throws -> Future<StripeSource> {
+        return try addNewSource(customer: customer, source: source, toConnectedAccount: toConnectedAccount)
+    }
+    
+    public func addNewBankAccountSource(customer: String, source: Any, toConnectedAccount: String? = nil, metadata: [String : String]? = nil) throws -> Future<StripeBankAccount> {
+        return try addNewBankAccountSource(customer: customer, source: source, toConnectedAccount: toConnectedAccount, metadata: metadata)
+    }
+    
+    public func addNewCardSource(customer: String, source: Any, toConnectedAccount: String? = nil, metadata: [String : String]? = nil) throws -> Future<StripeCard> {
+        return try addNewCardSource(customer: customer, source: source, toConnectedAccount: toConnectedAccount, metadata: metadata)
+    }
+    
+    public func deleteSource(customer: String, source: String) throws -> Future<StripeSource> {
+        return try deleteSource(customer: customer, source: source)
+    }
+    
+    public func deleteDiscount(customer: String) throws -> Future<StripeDeletedObject> {
+        return try deleteDiscount(customer: customer)
+    }
+}
+
+
+public struct StripeCustomerRoutes: CustomerRoutes {
+    private let request: StripeRequest
+    
+    init(request: StripeRequest) {
+        self.request = request
+    }
+    
+    /// Create a customer
+    /// [Learn More →](https://stripe.com/docs/api/curl#create_customer)
+    public func create(accountBalance: Int?,
+                       businessVatId: String?,
+                       coupon: String?,
+                       defaultSource: String?,
+                       description: String?,
+                       email: String?,
+                       metadata: [String: String]?,
+                       shipping: ShippingLabel?,
+                       source: Any?) throws -> Future<StripeCustomer> {
         var body: [String: Any] = [:]
         
         if let accountBalance = accountBalance {
@@ -93,15 +170,15 @@ public struct StripeCustomerRoutes: CustomerRoutes {
     /// Update customer
     /// [Learn More →](https://stripe.com/docs/api/curl#update_customer)
     public func update(customer: String,
-                       accountBalance: Int? = nil,
-                       businessVatId: String? = nil,
-                       coupon: String? = nil,
-                       defaultSource: String? = nil,
-                       description: String? = nil,
-                       email: String? = nil,
-                       metadata: [String: String]? = nil,
-                       shipping: ShippingLabel? = nil,
-                       source: Any? = nil) throws -> Future<StripeCustomer> {
+                       accountBalance: Int?,
+                       businessVatId: String?,
+                       coupon: String?,
+                       defaultSource: String?,
+                       description: String?,
+                       email: String?,
+                       metadata: [String: String]?,
+                       shipping: ShippingLabel?,
+                       source: Any?) throws -> Future<StripeCustomer> {
         var body: [String: Any] = [:]
         
         if let accountBalance = accountBalance {
@@ -155,7 +232,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
     
     /// List all customers
     /// [Learn More →](https://stripe.com/docs/api/curl#list_customers)
-    public func listAll(filter: [String: Any]? = nil) throws -> Future<StripeCustomersList> {
+    public func listAll(filter: [String: Any]?) throws -> Future<StripeCustomersList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters
@@ -166,7 +243,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
     
     /// Attach a source
     /// [Learn More →](https://stripe.com/docs/api/curl#attach_source)
-    public func addNewSource(customer: String, source: String, toConnectedAccount: String? = nil) throws -> Future<StripeSource> {
+    public func addNewSource(customer: String, source: String, toConnectedAccount: String?) throws -> Future<StripeSource> {
         let body: [String: Any] = ["source": source]
         var headers: HTTPHeaders = [:]
         
@@ -179,7 +256,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
     
     /// Create a bank account
     /// [Learn More →](https://stripe.com/docs/api/curl#customer_create_bank_account)
-    public func addNewBankAccountSource(customer: String, source: Any, toConnectedAccount: String? = nil, metadata: [String : String]? = nil) throws -> Future<StripeBankAccount> {
+    public func addNewBankAccountSource(customer: String, source: Any, toConnectedAccount: String?, metadata: [String : String]?) throws -> Future<StripeBankAccount> {
         var body: [String: Any] = [:]
         var headers: HTTPHeaders = [:]
         
@@ -204,7 +281,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
     
     /// Create a card
     /// [Learn More →](https://stripe.com/docs/api/curl#create_card)
-    public func addNewCardSource(customer: String, source: Any, toConnectedAccount: String? = nil, metadata: [String : String]? = nil) throws -> Future<StripeCard> {
+    public func addNewCardSource(customer: String, source: Any, toConnectedAccount: String?, metadata: [String : String]?) throws -> Future<StripeCard> {
         var body: [String: Any] = [:]
         var headers: HTTPHeaders = [:]
         
