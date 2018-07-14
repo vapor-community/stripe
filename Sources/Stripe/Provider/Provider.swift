@@ -43,7 +43,7 @@ public final class StripeProvider: Provider {
     }
 }
 
-public struct StripeClient: Service {
+public final class StripeClient: Service {
     public var balance: BalanceRoutes
     public var charge: ChargeRoutes
     public var connectAccount: AccountRoutes
