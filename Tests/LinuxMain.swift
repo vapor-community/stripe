@@ -1,4 +1,4 @@
-// Generated using Sourcery 0.7.2 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 0.13.1 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 import XCTest
@@ -57,6 +57,12 @@ static var allTests = [
 extension OrderTests {
 static var allTests = [
   ("testOrderIsProperlyParsed", testOrderIsProperlyParsed),
+]
+}
+
+extension PaymentSourceTests {
+static var allTests = [
+  ("testSourceListIsProperlyParsed", testSourceListIsProperlyParsed),
 ]
 }
 
@@ -123,6 +129,7 @@ XCTMain([
   testCase(ErrorTests.allTests),
   testCase(InvoiceTests.allTests),
   testCase(OrderTests.allTests),
+  testCase(PaymentSourceTests.allTests),
   testCase(ProductTests.allTests),
   testCase(RefundTests.allTests),
   testCase(SKUTests.allTests),
