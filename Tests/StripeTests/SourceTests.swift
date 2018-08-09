@@ -22,7 +22,7 @@ class SourceTests: XCTestCase {
   "id": "src_1AhIN74iJb0CbkEwmbRYPsd4",
   "object": "source",
   "amount": 20,
-  "client_secret": "src_client_secret_sSPHZ17iQG6j9uKFdAYqPErO",
+  "client_secret": null,
   "created": 1500471469,
   "currency": "usd",
   "flow": "redirect",
@@ -102,7 +102,7 @@ class SourceTests: XCTestCase {
                 XCTAssertEqual(source.id, "src_1AhIN74iJb0CbkEwmbRYPsd4")
                 XCTAssertEqual(source.object, "source")
                 XCTAssertEqual(source.amount, 20)
-                XCTAssertEqual(source.clientSecret, "src_client_secret_sSPHZ17iQG6j9uKFdAYqPErO")
+                XCTAssertEqual(source.clientSecret, nil)
                 XCTAssertEqual(source.created, Date(timeIntervalSince1970: 1500471469))
                 XCTAssertEqual(source.currency, .usd)
                 XCTAssertEqual(source.flow, Flow.redirect)
