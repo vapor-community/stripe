@@ -20,7 +20,7 @@ public struct StripeSource: StripeModel {
     public var id: String
     public var object: String
     public var amount: Int?
-    public var clientSecret: String
+    public var clientSecret: String?
     public var codeVerification: CodeVerification?
     public var created: Date
     public var currency: StripeCurrency?
@@ -50,7 +50,7 @@ public struct StripeSource: StripeModel {
         id = try container.decode(String.self, forKey: .id)
         object = try container.decode(String.self, forKey: .object)
         amount = try container.decodeIfPresent(Int.self, forKey: .amount)
-        clientSecret = try container.decode(String.self, forKey: .clientSecret)
+        clientSecret = try container.decodeIfPresent(String.self, forKey: .clientSecret)
         codeVerification = try container.decodeIfPresent(CodeVerification.self, forKey: .codeVerification)
         created = try container.decode(Date.self, forKey: .created)
         currency = try container.decodeIfPresent(StripeCurrency.self, forKey: .currency)
