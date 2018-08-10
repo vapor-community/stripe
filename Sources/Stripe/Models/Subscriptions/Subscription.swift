@@ -32,7 +32,7 @@ public struct StripeSubscription: StripeModel {
     public var livemode: Bool
     public var metadata: [String: String]
     public var plan: StripePlan?
-    public var quantity: Int
+    public var quantity: Int?
     public var start: Date?
     public var status: StripeSubscriptionStatus
     public var taxPercent: Decimal?
