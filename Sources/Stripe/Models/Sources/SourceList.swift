@@ -16,7 +16,7 @@ public struct StripeSourcesList: StripeModel {
     public var hasMore: Bool
     public var totalCount: Int
     public var url: String
-    public var data: [StripeSource]
+    public var data: [StripePaymentSource]
     
     public enum CodingKeys: String, CodingKey {
         case object
@@ -24,5 +24,20 @@ public struct StripeSourcesList: StripeModel {
         case totalCount = "total_count"
         case url
         case data
+    }
+}
+
+extension StripeSourcesList {
+    
+    public var bankAccounts: [StripeBankAccount] {
+        return data.compactMap { $0.bankAccount }
+    }
+    
+    public var cards: [StripeCard] {
+        return data.compactMap { $0.card }
+    }
+    
+    public var sources: [StripeSource] {
+        return data.compactMap { $0.source }
     }
 }
