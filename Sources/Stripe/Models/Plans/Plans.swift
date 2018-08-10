@@ -18,7 +18,7 @@ public struct StripePlan: StripeModel {
     public var object: String
     public var active: Bool
     public var aggregateUsage: String?
-    public var amount: Int
+    public var amount: Int?
     public var billingScheme: BillingScheme
     public var created: Date
     public var currency: StripeCurrency
@@ -28,11 +28,11 @@ public struct StripePlan: StripeModel {
     public var metadata: [String: String]
     public var nickname: String?
     public var product: String
-    public var tiers: [String: Int]?
+    public var tiers: [Tier]?
     public var tiersMode: TiersMode?
-    public var transformUsage: [String: Int]?
+    public var transformUsage: UsageTransformation?
     public var trialPeriodDays: Int?
-    public var usageType: PlanUsageType
+    public var usageType: UsageType
     
     public enum CodingKeys: String, CodingKey {
         case id

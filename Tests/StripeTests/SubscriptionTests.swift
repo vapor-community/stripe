@@ -79,7 +79,18 @@ class SubscriptionTests: XCTestCase {
                 XCTAssertEqual(sub.items.data[0].plan.metadata["hello"], "world")
                 XCTAssertEqual(sub.items.data[0].plan.nickname, "Foo")
                 XCTAssertEqual(sub.items.data[0].plan.product, "prod_1234")
+                XCTAssertEqual(sub.items.data[0].plan.transformUsage?.divideBy, 5)
+                XCTAssertEqual(sub.items.data[0].plan.transformUsage?.round, .up)
                 XCTAssertEqual(sub.items.data[0].plan.trialPeriodDays, 3)
+
+                // These cover the Plan object
+                XCTAssertNotNil(sub.items.data[1].plan)
+                XCTAssertEqual(sub.items.data[1].plan.amount, nil)
+                XCTAssertEqual(sub.items.data[1].plan.tiers?[0].amount, 0)
+                XCTAssertEqual(sub.items.data[1].plan.tiers?[0].upTo, 1)
+                XCTAssertEqual(sub.items.data[1].plan.tiers?[1].amount, 200)
+                XCTAssertEqual(sub.items.data[1].plan.tiers?[1].upTo, nil)
+                XCTAssertEqual(sub.items.data[1].plan.tiersMode, .graduated)
                 
                 // These cover the Plan object
                 XCTAssertNotNil(sub.plan)
@@ -196,10 +207,54 @@ class SubscriptionTests: XCTestCase {
           },
           "nickname": "Foo",
           "product": "prod_1234",
+          "transform_usage": {
+            "divide_by": 5,
+            "round": "up"
+          },
           "trial_period_days": 3
         },
         "quantity": 1,
         "subscription": "sub_AJ6s2Iy65K3RxN"
+      },
+      {
+        "id": "si_DKeuh94LM6FNyn",
+        "object": "subscription_item",
+        "created": 1533050240,
+        "metadata": {
+        },
+        "plan": {
+          "id": "plan_DIkuyHGrZFW7DN",
+          "object": "plan",
+          "active": true,
+          "aggregate_usage": null,
+          "amount": null,
+          "billing_scheme": "tiered",
+          "created": 1532611277,
+          "currency": "usd",
+          "interval": "week",
+          "interval_count": 1,
+          "livemode": false,
+          "metadata": {
+          },
+          "nickname": "Bar",
+          "product": "prod_DIksc7vKNkuiw3",
+          "tiers": [
+            {
+              "amount": 0,
+              "up_to": 1
+            },
+            {
+              "amount": 200,
+              "up_to": null
+            }
+          ],
+          "tiers_mode": "graduated",
+          "transform_usage": null,
+          "trial_period_days": null,
+          "usage_type": "licensed"
+        },
+        "quantity": 8,
+        "subscription": "sub_DKeur6TMKSqZqB"
       }
     ],
     "has_more": false,
