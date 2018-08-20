@@ -46,7 +46,7 @@ extension HTTPHeaderName {
 extension HTTPHeaders {
     public static var stripeDefault: HTTPHeaders {
         var headers: HTTPHeaders = [:]
-        headers.replaceOrAdd(name: .stripeVersion, value: "2018-05-21")
+        headers.replaceOrAdd(name: .stripeVersion, value: "2018-07-27")
         headers.replaceOrAdd(name: .contentType, value: MediaType.urlEncodedForm.description)
         return headers
     }
