@@ -191,6 +191,14 @@ internal enum StripeAPIEndpoint {
     case transferReversal(String)
     case transfersReversal(String,String)
     
+    /**
+     PAYOUTS
+     A Payout object is created when you receive funds from Stripe, or when you initiate a payout to either a bank account or debit card of a connected Stripe account.
+     */
+    case payout
+    case payouts(String)
+    case payoutsCancel(String)
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -268,6 +276,10 @@ internal enum StripeAPIEndpoint {
         case .transfers(let id): return APIBase + APIVersion + "transfers/\(id)"
         case .transferReversal(let id): return APIBase + APIVersion + "transfers/\(id)/reversals"
         case .transfersReversal(let transfer, let reversal): return APIBase + APIVersion + "transfers/\(transfer)/reversals/\(reversal)"
+        
+        case .payout: return APIBase + APIVersion + "payouts"
+        case .payouts(let id): return APIBase + APIVersion + "payouts/\(id)"
+        case .payoutsCancel(let id): return APIBase + APIVersion + "payouts/\(id)/cancel"
         }
     }
 }
