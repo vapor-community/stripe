@@ -8,11 +8,11 @@
 
 import Vapor
 import Foundation
-// TODO: Support sources being different objects
+
 public protocol SubscriptionRoutes {
-    func create(customer: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: Date?, coupon: String?, daysUntilDue: Int?, items: [[String : Any]]?, metadata: [String: String]?, source: Any?, taxPercent: Decimal?, trialEnd: Any?, trialPeriodDays: Int?) throws -> Future<StripeSubscription>
+    func create(customer: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: Date?, coupon: String?, daysUntilDue: Int?, items: [[String : Any]]?, metadata: [String: String]?, prorate: Bool?, taxPercent: Decimal?, trialEnd: Any?, trialFromPlan: Bool?, trialPeriodDays: Int?) throws -> Future<StripeSubscription>
     func retrieve(id: String) throws -> Future<StripeSubscription>
-    func update(subscription: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: String?, coupon: String?, daysUntilDue: Int?, items: [[String : Any]]?, metadata: [String: String]?, prorate: Bool?, prorationDate: Date?, source: Any?, taxPercent: Decimal?, trialEnd: Any?) throws -> Future<StripeSubscription>
+    func update(subscription: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: String?, cancelAtPeriodEnd: Bool?, coupon: String?, daysUntilDue: Int?, items: [[String: Any]]?, metadata: [String: String]?, prorate: Bool?, prorationDate: Date?, taxPercent: Decimal?, trialEnd: Any?, trialFromPlan: Bool?) throws -> Future<StripeSubscription>
     func cancel(subscription: String, atPeriodEnd: Bool?) throws -> Future<StripeSubscription>
     func listAll(filter: [String: Any]?) throws -> Future<StripeSubscriptionsList>
     func deleteDiscount(subscription: String) throws -> Future<StripeDeletedObject>
@@ -25,11 +25,12 @@ extension SubscriptionRoutes {
                        billingCycleAnchor: Date? = nil,
                        coupon: String? = nil,
                        daysUntilDue: Int? = nil,
-                       items: [[String : Any]]? = nil,
-                       metadata: [String : String]? = nil,
-                       source: Any? = nil,
+                       items: [[String: Any]]? = nil,
+                       metadata: [String: String]? = nil,
+                       prorate: Bool? = nil,
                        taxPercent: Decimal? = nil,
                        trialEnd: Any? = nil,
+                       trialFromPlan: Bool? = nil,
                        trialPeriodDays: Int? = nil) throws -> Future<StripeSubscription> {
         return try create(customer: customer,
                           applicationFeePercent: applicationFeePercent,
@@ -39,9 +40,10 @@ extension SubscriptionRoutes {
                           daysUntilDue: daysUntilDue,
                           items: items,
                           metadata: metadata,
-                          source: source,
+                          prorate: prorate,
                           taxPercent: taxPercent,
                           trialEnd: trialEnd,
+                          trialFromPlan: trialFromPlan,
                           trialPeriodDays: trialPeriodDays)
     }
     
@@ -53,28 +55,30 @@ extension SubscriptionRoutes {
                        applicationFeePercent: Decimal? = nil,
                        billing: String? = nil,
                        billingCycleAnchor: String? = nil,
+                       cancelAtPeriodEnd: Bool? = nil,
                        coupon: String? = nil,
                        daysUntilDue: Int? = nil,
-                       items: [[String : Any]]? = nil,
-                       metadata: [String : String]? = nil,
+                       items: [[String: Any]]? = nil,
+                       metadata: [String: String]? = nil,
                        prorate: Bool? = nil,
                        prorationDate: Date? = nil,
-                       source: Any? = nil,
                        taxPercent: Decimal? = nil,
-                       trialEnd: Any? = nil) throws -> Future<StripeSubscription> {
+                       trialEnd: Any? = nil,
+                       trialFromPlan: Bool? = nil) throws -> Future<StripeSubscription> {
         return try update(subscription: subscription,
                           applicationFeePercent: applicationFeePercent,
                           billing: billing,
                           billingCycleAnchor: billingCycleAnchor,
+                          cancelAtPeriodEnd: cancelAtPeriodEnd,
                           coupon: coupon,
                           daysUntilDue: daysUntilDue,
                           items: items,
                           metadata: metadata,
                           prorate: prorate,
                           prorationDate: prorationDate,
-                          source: source,
                           taxPercent: taxPercent,
-                          trialEnd: trialEnd)
+                          trialEnd: trialEnd,
+                          trialFromPlan: trialFromPlan)
     }
     
     public func cancel(subscription: String, atPeriodEnd: Bool? = nil) throws -> Future<StripeSubscription> {
@@ -107,9 +111,10 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
                        daysUntilDue: Int?,
                        items: [[String : Any]]?,
                        metadata: [String : String]?,
-                       source: Any?,
+                       prorate: Bool?,
                        taxPercent: Decimal?,
                        trialEnd: Any?,
+                       trialFromPlan: Bool?,
                        trialPeriodDays: Int?) throws -> Future<StripeSubscription> {
         var body: [String: Any] = [:]
         
@@ -145,12 +150,8 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
-        if let source = source as? String {
-            body["source"] = source
-        }
-        
-        if let source = source as? [String: Any] {
-            source.forEach { body["source[\($0)]"] = $1 }
+        if let prorate = prorate {
+            body["prorate"] = prorate
         }
         
         if let taxPercent = taxPercent {
@@ -163,6 +164,10 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
         
         if let trialEnd = trialEnd as? String {
             body["trial_end"] = trialEnd
+        }
+        
+        if let trialFromPlan = trialFromPlan {
+            body["trial_from_plan"] = trialFromPlan
         }
         
         if let trialPeriodDays = trialPeriodDays {
@@ -184,15 +189,16 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
                        applicationFeePercent: Decimal?,
                        billing: String?,
                        billingCycleAnchor: String?,
+                       cancelAtPeriodEnd: Bool?,
                        coupon: String?,
                        daysUntilDue: Int?,
                        items: [[String : Any]]?,
                        metadata: [String : String]?,
                        prorate: Bool?,
                        prorationDate: Date?,
-                       source: Any?,
                        taxPercent: Decimal?,
-                       trialEnd: Any?) throws -> Future<StripeSubscription> {
+                       trialEnd: Any?,
+                       trialFromPlan: Bool?) throws -> Future<StripeSubscription> {
         var body: [String: Any] = [:]
         
         if let applicationFeePercent = applicationFeePercent {
@@ -205,6 +211,10 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
         
         if let billingCycleAnchor = billingCycleAnchor {
             body["billing_cycle_anchor"] = billingCycleAnchor
+        }
+        
+        if let cancelAtPeriodEnd = cancelAtPeriodEnd {
+            body["cancel_at_period_end"] = cancelAtPeriodEnd
         }
         
         if let coupon = coupon {
@@ -233,14 +243,6 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
             body["proration_date"] = Int(prorationDate.timeIntervalSince1970)
         }
         
-        if let source = source as? String {
-            body["source"] = source
-        }
-        
-        if let source = source as? [String: Any] {
-            source.forEach { body["source[\($0)]"] = $1 }
-        }
-        
         if let taxPercent = taxPercent {
             body["tax_percent"] = taxPercent
         }
@@ -251,6 +253,10 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
         
         if let trialEnd = trialEnd as? String {
             body["trial_end"] = trialEnd
+        }
+        
+        if let trialFromPlan = trialFromPlan {
+            body["trial_from_plan"] = trialFromPlan
         }
 
         return try request.send(method: .POST, path: StripeAPIEndpoint.subscriptions(subscription).endpoint, body: body.queryParameters)
