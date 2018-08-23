@@ -55,7 +55,7 @@ And you can always check the documentation to see the required paramaters for sp
 * [x] Disputes  
 * [ ] Events
 * [ ] File Uploads
-* [ ] Payouts
+* [x] Payouts
 * [x] Refunds
 * [x] Tokens
 ---

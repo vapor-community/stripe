@@ -17,6 +17,7 @@ public enum StripeStatus: String, Codable {
     case chargeable
 }
 
+// https://stripe.com/docs/api/curl#subscription_object-status
 public enum StripeSubscriptionStatus: String, Codable {
     case trailing
     case active
