@@ -22,7 +22,7 @@ public struct StripeSource: StripeModel {
     public var amount: Int?
     public var clientSecret: String?
     public var codeVerification: CodeVerification?
-    public var created: Date
+    public var created: Date?
     public var currency: StripeCurrency?
     public var flow: Flow
     public var livemode: Bool
@@ -52,7 +52,7 @@ public struct StripeSource: StripeModel {
         amount = try container.decodeIfPresent(Int.self, forKey: .amount)
         clientSecret = try container.decodeIfPresent(String.self, forKey: .clientSecret)
         codeVerification = try container.decodeIfPresent(CodeVerification.self, forKey: .codeVerification)
-        created = try container.decode(Date.self, forKey: .created)
+        created = try container.decodeIfPresent(Date.self, forKey: .created)
         currency = try container.decodeIfPresent(StripeCurrency.self, forKey: .currency)
         flow = try container.decode(Flow.self, forKey: .flow)
         livemode = try container.decode(Bool.self, forKey: .livemode)
