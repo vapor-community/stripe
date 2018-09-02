@@ -24,16 +24,16 @@ public struct StripeSource: StripeModel {
     public var codeVerification: CodeVerification?
     public var created: Date?
     public var currency: StripeCurrency?
-    public var flow: Flow
+    public var flow: Flow?
     public var livemode: Bool
     public var metadata: [String: String]
     public var owner: StripeOwner?
     public var receiver: StripeReceiver?
     public var redirect: SourceRedirect?
     public var statementDescriptor: String?
-    public var status: StripeStatus
+    public var status: StripeStatus?
     public var type: SourceType
-    public var usage: String
+    public var usage: String?
     public var card: StripeBasicCard?
     public var threeDSecure: ThreeDSecure?
     public var giropay: Giropay?
@@ -54,15 +54,15 @@ public struct StripeSource: StripeModel {
         codeVerification = try container.decodeIfPresent(CodeVerification.self, forKey: .codeVerification)
         created = try container.decodeIfPresent(Date.self, forKey: .created)
         currency = try container.decodeIfPresent(StripeCurrency.self, forKey: .currency)
-        flow = try container.decode(Flow.self, forKey: .flow)
+        flow = try container.decodeIfPresent(Flow.self, forKey: .flow)
         livemode = try container.decode(Bool.self, forKey: .livemode)
         metadata = try container.decode([String: String].self, forKey: .metadata)
         owner = try container.decodeIfPresent(StripeOwner.self, forKey: .owner)
         receiver = try container.decodeIfPresent(StripeReceiver.self, forKey: .receiver)
         redirect = try container.decodeIfPresent(SourceRedirect.self, forKey: .redirect)
         statementDescriptor = try container.decodeIfPresent(String.self, forKey: .statementDescriptor)
-        status = try container.decode(StripeStatus.self, forKey: .status)
-        usage = try container.decode(String.self, forKey: .usage)
+        status = try container.decodeIfPresent(StripeStatus.self, forKey: .status)
+        usage = try container.decodeIfPresent(String.self, forKey: .usage)
         type = try container.decode(SourceType.self, forKey: .type)
         
         switch type {
