@@ -26,7 +26,7 @@ public struct StripeCard: StripeModel {
     public var addressZipCheck: CardValidationCheck?
     public var availablePayoutMethods: [String]?
     public var brand: String?
-    public var country: String
+    public var country: String?
     public var currency: StripeCurrency?
     public var customer: String?
     public var cvcCheck: CardValidationCheck?
@@ -36,7 +36,7 @@ public struct StripeCard: StripeModel {
     public var expYear: Int?
     public var fingerprint: String
     public var funding: FundingType?
-    public var last4: String
+    public var last4: String?
     public var metadata: [String: String]
     public var name: String?
     public var recipient: String?
