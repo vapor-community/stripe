@@ -16,7 +16,7 @@ import Vapor
 
 public struct StripeDiscount: StripeModel {
     public var object: String
-    public var coupon: StripeCoupon
+    public var coupon: StripeCoupon?
     public var customer: String?
     public var end: Date?
     public var start: Date
