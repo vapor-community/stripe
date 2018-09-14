@@ -29,15 +29,15 @@ public struct StripeSourcesList: StripeModel {
 
 extension StripeSourcesList {
     
-    public var bankAccounts: [StripeBankAccount] {
-        return data.compactMap { $0.bankAccount }
+    public var bankAccounts: [StripeBankAccount]? {
+        return data?.compactMap { $0.bankAccount }
     }
     
-    public var cards: [StripeCard] {
-        return data.compactMap { $0.card }
+    public var cards: [StripeCard]? {
+        return data?.compactMap { $0.card }
     }
     
-    public var sources: [StripeSource] {
-        return data.compactMap { $0.source }
+    public var sources: [StripeSource]? {
+        return data?.compactMap { $0.source }
     }
 }
