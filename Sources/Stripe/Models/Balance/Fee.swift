@@ -14,8 +14,8 @@ import Vapor
  */
 
 public struct StripeFee: StripeModel {
-    public var amount: Int
-    public var currency: StripeCurrency
+    public var amount: Int?
+    public var currency: StripeCurrency?
     public var description: String?
-    public var type: ActionType
+    public var type: ActionType?
 }

@@ -16,18 +16,18 @@ import Foundation
 public struct StripeBalanceTransactionItem: StripeModel {
     public var id: String
     public var object: String
-    public var amount: Int
-    public var availableOn: Date
-    public var created: Date
-    public var currency: StripeCurrency
+    public var amount: Int?
+    public var availableOn: Date?
+    public var created: Date?
+    public var currency: StripeCurrency?
     public var exchangeRate: Decimal?
     public var description: String?
     public var fee: Int?
     public var feeDetails: [StripeFee]?
-    public var net: Int
+    public var net: Int?
     public var source: String?
-    public var status: StripeStatus
-    public var type: BalanceTransactionType
+    public var status: StripeStatus?
+    public var type: BalanceTransactionType?
     
     public enum CodingKeys: String, CodingKey {
         case id

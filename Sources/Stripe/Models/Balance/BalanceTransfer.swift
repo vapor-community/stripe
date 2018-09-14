@@ -12,8 +12,8 @@
  */
 // TODO: - Use BalanceTransfer SourceTypes enum
 public struct StripeBalanceTransfer: StripeModel {
-    public var currency: StripeCurrency
-    public var amount: Int
+    public var currency: StripeCurrency?
+    public var amount: Int?
     public var sourceTypes: [String: Int]?
     
     public enum CodingKeys: String, CodingKey {
