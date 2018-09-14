@@ -15,12 +15,12 @@ import Foundation
 public struct StripeTransferReversal: StripeModel {
     public var id: String
     public var object: String
-    public var amount: Int
-    public var balanceTransaction: String
-    public var created: Date
-    public var currency: StripeCurrency
+    public var amount: Int?
+    public var balanceTransaction: String?
+    public var created: Date?
+    public var currency: StripeCurrency?
     public var metadata: [String: String]
-    public var transfer: String
+    public var transfer: String?
     
     public enum CodingKeys: String, CodingKey {
         case id

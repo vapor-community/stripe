@@ -14,8 +14,8 @@
 public struct ExternalAccountsList: StripeModel {
     public var object: String
     public var hasMore: Bool
-    public var totalCount: Int
-    public var url: String
+    public var totalCount: Int?
+    public var url: String?
     // FIXME: - This is still quite hackey and i haven't come up with a great solution yet
     public var data: String?
     public var cardAccounts: [StripeCard]?

@@ -19,12 +19,12 @@ public struct StripeConnectAccount: StripeModel {
     public var businessLogo: String?
     public var businessName: String?
     public var businessUrl: String?
-    public var chargesEnabled: Bool
-    public var country: String
+    public var chargesEnabled: Bool?
+    public var country: String?
     public var created: Date?
     public var debitNegativeBalances: Bool?
     public var declineChargeOn: [String: Bool]?
-    public var defaultCurrency: StripeCurrency
+    public var defaultCurrency: StripeCurrency?
     public var detailsSubmitted: Bool?
     public var displayName: String?
     public var email: String?
@@ -33,14 +33,14 @@ public struct StripeConnectAccount: StripeModel {
     public var metadata: [String: String]
     public var payoutSchedule: StripePayoutSchedule?
     public var payoutStatementDescriptor: String?
-    public var payoutsEnabled: Bool
+    public var payoutsEnabled: Bool?
     public var productDescription: String?
     public var statementDescriptor: String?
     public var supportEmail: String?
     public var supportPhone: String?
-    public var timezone: String
+    public var timezone: String?
     public var tosAcceptance: StripeTOSAcceptance?
-    public var type: ConnectedAccountType
+    public var type: ConnectedAccountType?
     public var verification: StripeAccountVerification?
     public var transfersEnabled: Bool?
     

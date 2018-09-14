@@ -15,20 +15,20 @@ import Foundation
 public struct StripeTransfer: StripeModel {
     public var id: String
     public var object: String
-    public var amount: Int
-    public var amountReversed: Int
-    public var balanceTransaction: String
-    public var created: Date
-    public var currency: StripeCurrency
+    public var amount: Int?
+    public var amountReversed: Int?
+    public var balanceTransaction: String?
+    public var created: Date?
+    public var currency: StripeCurrency?
     public var description: String?
-    public var destination: String
-    public var destinationPayment: String
-    public var livemode: Bool
+    public var destination: String?
+    public var destinationPayment: String?
+    public var livemode: Bool?
     public var metadata: [String: String]
-    public var reversals: TransferReversalList
-    public var reversed: Bool
+    public var reversals: TransferReversalList?
+    public var reversed: Bool?
     public var sourceTransaction: String?
-    public var sourceType: String
+    public var sourceType: String?
     public var transferGroup: String?
     
     public enum CodingKeys: String, CodingKey {

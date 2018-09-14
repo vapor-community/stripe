@@ -14,9 +14,9 @@
 public struct ConnectedAccountsList: StripeModel {
     public var object: String
     public var hasMore: Bool
-    public var totalCount: Int
-    public var url: String
-    public var data: [StripeConnectAccount]
+    public var totalCount: Int?
+    public var url: String?
+    public var data: [StripeConnectAccount]?
     
     public enum CodingKeys: String, CodingKey {
         case object
