@@ -13,7 +13,7 @@
 
 public struct StripeAddress: StripeModel {
     public var city: String?
-    public var country: String
+    public var country: String?
     public var line1: String?
     public var line2: String?
     public var postalCode: String?
