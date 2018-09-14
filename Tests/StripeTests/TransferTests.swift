@@ -84,20 +84,19 @@ class TransferTests: XCTestCase {
                 XCTAssertEqual(tran.transferGroup, "group_ch_164xRv2eZvKYlo2Clu1sIJWB")
                 
                 // This test covers the transfer reversal
-                XCTAssertEqual(tran.reversals.object, "list")
-                XCTAssertEqual(tran.reversals.hasMore, false)
-                XCTAssertEqual(tran.reversals.totalCount, 2)
-                XCTAssertEqual(tran.reversals.url, "/v1/transfers/tr_164xRv2eZvKYlo2CZxJZWm1E/reversals")
-                XCTAssertEqual(tran.reversals.data[0].id, "trr_1BGmS02eZvKYlo2CklK9McmT")
-                XCTAssertEqual(tran.reversals.data[0].object, "transfer_reversal")
-                XCTAssertEqual(tran.reversals.data[0].amount, 100)
-                XCTAssertEqual(tran.reversals.data[0].balanceTransaction, "txn_1BGmS02eZvKYlo2C9f16WPBN")
-                XCTAssertEqual(tran.reversals.data[0].created, Date(timeIntervalSince1970: 1508928572))
-                XCTAssertEqual(tran.reversals.data[0].metadata["hello"], "world")
-                XCTAssertEqual(tran.reversals.data[0].transfer, "tr_164xRv2eZvKYlo2CZxJZWm1E")
-                
-                }.catch { (error) in
-                     XCTFail("\(error.localizedDescription)")
+                XCTAssertEqual(tran.reversals?.object, "list")
+                XCTAssertEqual(tran.reversals?.hasMore, false)
+                XCTAssertEqual(tran.reversals?.totalCount, 2)
+                XCTAssertEqual(tran.reversals?.url, "/v1/transfers/tr_164xRv2eZvKYlo2CZxJZWm1E/reversals")
+                XCTAssertEqual(tran.reversals?.data?[0].id, "trr_1BGmS02eZvKYlo2CklK9McmT")
+                XCTAssertEqual(tran.reversals?.data?[0].object, "transfer_reversal")
+                XCTAssertEqual(tran.reversals?.data?[0].amount, 100)
+                XCTAssertEqual(tran.reversals?.data?[0].balanceTransaction, "txn_1BGmS02eZvKYlo2C9f16WPBN")
+                XCTAssertEqual(tran.reversals?.data?[0].created, Date(timeIntervalSince1970: 1508928572))
+                XCTAssertEqual(tran.reversals?.data?[0].metadata["hello"], "world")
+                XCTAssertEqual(tran.reversals?.data?[0].transfer, "tr_164xRv2eZvKYlo2CZxJZWm1E")
+            }.catch { (error) in
+                 XCTFail("\(error.localizedDescription)")
             }
         }
         catch {
