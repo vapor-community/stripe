@@ -14,9 +14,9 @@
 public struct StripeOrderItem: StripeModel {
     public var object: String
     public var amount: Int
-    public var currency: StripeCurrency
+    public var currency: StripeCurrency?
     public var description: String?
     public var parent: String?
     public var quantity: Int?
-    public var type: OrderItemType
+    public var type: OrderItemType?
 }
