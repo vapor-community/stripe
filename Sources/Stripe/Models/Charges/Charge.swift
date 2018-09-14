@@ -17,12 +17,12 @@ public struct StripeCharge: StripeModel {
     public var id: String
     public var object: String
     public var amount: Int
-    public var amountRefunded: Int
+    public var amountRefunded: Int?
     public var application: String?
     public var applicationFee: String?
-    public var balanceTransaction: String
+    public var balanceTransaction: String?
     public var captured: Bool
-    public var created: Date
+    public var created: Date?
     public var currency: StripeCurrency
     public var customer: String?
     public var description: String?
@@ -32,22 +32,22 @@ public struct StripeCharge: StripeModel {
     public var failureMessage: String?
     public var fraudDetails: StripeFraudDetails?
     public var invoice: String?
-    public var livemode: Bool
+    public var livemode: Bool?
     public var metadata: [String: String]
     public var onBehalfOf: String?
     public var order: String?
     public var outcome: StripeOutcome?
-    public var paid: Bool
+    public var paid: Bool?
     public var receiptEmail: String?
     public var receiptNumber: String?
-    public var refunded: Bool
+    public var refunded: Bool?
     public var refunds: RefundsList
     public var review: String?
     public var shipping: ShippingLabel?
     public var source: StripeSource?
     public var sourceTransfer: String?
     public var statementDescriptor: String?
-    public var status: StripeStatus
+    public var status: StripeStatus?
     public var transfer: String?
     public var transferGroup: String?
     
