@@ -13,6 +13,6 @@
 
 public struct StripeInventory: StripeModel {
     public var quantity: Int?
-    public var type: InventoryType
+    public var type: InventoryType?
     public var value: InventoryTypeValue?
 }
