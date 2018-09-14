@@ -16,21 +16,21 @@ import Foundation
 public struct StripeProduct: StripeModel {
     public var id: String
     public var object: String
-    public var active: Bool
-    public var attributes: [String]
+    public var active: Bool?
+    public var attributes: [String]?
     public var caption: String?
-    public var created: Date
-    public var deactivateOn: [String]
+    public var created: Date?
+    public var deactivateOn: [String]?
     public var description: String?
-    public var images: [String]
-    public var livemode: Bool
+    public var images: [String]?
+    public var livemode: Bool?
     public var metadata: [String: String]
-    public var name: String
+    public var name: String?
     public var packageDimensions: StripePackageDimensions?
     public var shippable: Bool?
     public var statementDescriptor: String?
-    public var type: ProductType
-    public var updated: Date
+    public var type: ProductType?
+    public var updated: Date?
     public var url: String?
     
     public enum CodingKeys: String, CodingKey {
