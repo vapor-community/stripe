@@ -81,26 +81,26 @@ class BalanceTests: XCTestCase {
                 XCTAssertEqual(balance.livemode, false)
                 
                 // BalanceTransfer
-                XCTAssertEqual(balance.available[0].currency, .usd)
-                XCTAssertEqual(balance.available[0].amount, 32147287853)
-                XCTAssertEqual(balance.available[0].sourceTypes?["card"], 32026441972)
+                XCTAssertEqual(balance.available?[0].currency, .usd)
+                XCTAssertEqual(balance.available?[0].amount, 32147287853)
+                XCTAssertEqual(balance.available?[0].sourceTypes?["card"], 32026441972)
                 // TODO: - Seeif this camel case is resolved in future versions of swift 4.1 snapshot
-                XCTAssertEqual(balance.available[0].sourceTypes?["bank_account"], 119300699)
+                XCTAssertEqual(balance.available?[0].sourceTypes?["bank_account"], 119300699)
                 
-                XCTAssertEqual(balance.connectReserved[0].currency, .eur)
-                XCTAssertEqual(balance.connectReserved[0].amount, 0)
-                XCTAssertEqual(balance.connectReserved[1].currency, .nzd)
-                XCTAssertEqual(balance.connectReserved[1].amount, 0)
+                XCTAssertEqual(balance.connectReserved?[0].currency, .eur)
+                XCTAssertEqual(balance.connectReserved?[0].amount, 0)
+                XCTAssertEqual(balance.connectReserved?[1].currency, .nzd)
+                XCTAssertEqual(balance.connectReserved?[1].amount, 0)
                 
-                XCTAssertEqual(balance.pending[0].currency, .cad)
-                XCTAssertEqual(balance.pending[0].amount, -21092)
-                XCTAssertEqual(balance.pending[0].sourceTypes?["card"], -21092)
-                XCTAssertEqual(balance.pending[1].currency, .jpy)
-                XCTAssertEqual(balance.pending[1].amount, 0)
-                XCTAssertEqual(balance.pending[2].currency, .aud)
-                XCTAssertEqual(balance.pending[2].amount, -33)
-                XCTAssertEqual(balance.pending[3].currency, .gbp)
-                XCTAssertEqual(balance.pending[3].amount, -81045)
+                XCTAssertEqual(balance.pending?[0].currency, .cad)
+                XCTAssertEqual(balance.pending?[0].amount, -21092)
+                XCTAssertEqual(balance.pending?[0].sourceTypes?["card"], -21092)
+                XCTAssertEqual(balance.pending?[1].currency, .jpy)
+                XCTAssertEqual(balance.pending?[1].amount, 0)
+                XCTAssertEqual(balance.pending?[2].currency, .aud)
+                XCTAssertEqual(balance.pending?[2].amount, -33)
+                XCTAssertEqual(balance.pending?[3].currency, .gbp)
+                XCTAssertEqual(balance.pending?[3].amount, -81045)
                 
                 }.catch { (error) in
                     XCTFail("\(error)")
