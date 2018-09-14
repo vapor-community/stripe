@@ -14,9 +14,9 @@
 public struct InvoiceLineGroup: StripeModel {
     public var object: String
     public var hasMore: Bool
-    public var totalCount: Int
-    public var url: String
-    public var data: [StripeInvoiceLineItem]
+    public var totalCount: Int?
+    public var url: String?
+    public var data: [StripeInvoiceLineItem]?
     
     public enum CodingKeys: String, CodingKey {
         case object
