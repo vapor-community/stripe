@@ -16,23 +16,23 @@ import Foundation
 public struct StripePlan: StripeModel {
     public var id: String
     public var object: String
-    public var active: Bool
+    public var active: Bool?
     public var aggregateUsage: String?
     public var amount: Int?
-    public var billingScheme: BillingScheme
-    public var created: Date
-    public var currency: StripeCurrency
-    public var interval: StripePlanInterval
-    public var intervalCount: Int
-    public var livemode: Bool
+    public var billingScheme: BillingScheme?
+    public var created: Date?
+    public var currency: StripeCurrency?
+    public var interval: StripePlanInterval?
+    public var intervalCount: Int?
+    public var livemode: Bool?
     public var metadata: [String: String]
     public var nickname: String?
-    public var product: String
+    public var product: String?
     public var tiers: [Tier]?
     public var tiersMode: TiersMode?
     public var transformUsage: UsageTransformation?
     public var trialPeriodDays: Int?
-    public var usageType: UsageType
+    public var usageType: UsageType?
     
     public enum CodingKeys: String, CodingKey {
         case id
