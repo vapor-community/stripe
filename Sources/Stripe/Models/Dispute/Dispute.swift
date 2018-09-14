@@ -15,18 +15,18 @@ import Foundation
 public struct StripeDispute: StripeModel {
     public var id: String
     public var object: String
-    public var amount: Int
-    public var balanceTransactions: [StripeBalanceTransactionItem]
-    public var charge: String
-    public var created: Date
-    public var currency: StripeCurrency
+    public var amount: Int?
+    public var balanceTransactions: [StripeBalanceTransactionItem]?
+    public var charge: String?
+    public var created: Date?
+    public var currency: StripeCurrency?
     public var evidence: StripeDisputeEvidence?
-    public var evidenceDetails: StripeDisputeEvidenceDetails
-    public var isChargeRefundable: Bool
-    public var livemode: Bool
+    public var evidenceDetails: StripeDisputeEvidenceDetails?
+    public var isChargeRefundable: Bool?
+    public var livemode: Bool?
     public var metadata: [String: String]
-    public var reason: DisputeReason
-    public var status: DisputeStatus
+    public var reason: DisputeReason?
+    public var status: DisputeStatus?
     
     public enum CodingKeys: String, CodingKey {
         case id
