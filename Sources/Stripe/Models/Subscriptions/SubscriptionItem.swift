@@ -16,11 +16,11 @@ import Foundation
 public struct StripeSubscriptionItem: StripeModel {
     public var id: String
     public var object: String
-    public var created: Date
+    public var created: Date?
     public var metadata: [String: String]
-    public var plan: StripePlan
-    public var quantity: Int
-    public var subscription: String
+    public var plan: StripePlan?
+    public var quantity: Int?
+    public var subscription: String?
     
     public enum CodingKeys: String, CodingKey {
         case id
