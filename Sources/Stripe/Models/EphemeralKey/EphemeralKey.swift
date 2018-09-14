@@ -13,7 +13,7 @@ public struct StripeEphemeralKey: StripeModel {
     public var associatedObjects: [[String : String]]?
     public var created: Date?
     public var expires: Date?
-    public var livemode: Bool
+    public var livemode: Bool?
     public var secret: String?
     
     public enum CodingKeys: String, CodingKey {
