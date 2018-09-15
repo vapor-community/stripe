@@ -10,7 +10,7 @@
 In your `Package.swift` file, add the following
 
 ~~~~swift
-.package(url: "https://github.com/vapor-community/stripe-provider.git", from: "2.1.2")
+.package(url: "https://github.com/vapor-community/stripe-provider.git", from: "2.2.0")
 ~~~~
 
 Register the config and the provider to your Application
@@ -54,7 +54,8 @@ And you can always check the documentation to see the required paramaters for sp
 * [x] Customers
 * [x] Disputes  
 * [ ] Events
-* [ ] File Uploads
+* [x] File Links
+* [x] File Uploads
 * [x] Payouts
 * [x] Refunds
 * [x] Tokens

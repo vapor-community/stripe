@@ -9,6 +9,7 @@
 import Foundation
 
 internal let APIBase = "https://api.stripe.com/"
+internal let FilesAPIBase = "https://files.stripe.com/"
 internal let APIVersion = "v1/"
 
 internal enum StripeAPIEndpoint {
@@ -114,6 +115,14 @@ internal enum StripeAPIEndpoint {
     case payouts(String)
     case payoutsCancel(String)
     
+    // MARK: - FILE LINKS
+    case fileLink
+    case fileLinks(String)
+    
+    // MARK: - FILE UPLOAD
+    case file
+    case files(String)
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -195,6 +204,12 @@ internal enum StripeAPIEndpoint {
         case .payout: return APIBase + APIVersion + "payouts"
         case .payouts(let id): return APIBase + APIVersion + "payouts/\(id)"
         case .payoutsCancel(let id): return APIBase + APIVersion + "payouts/\(id)/cancel"
+            
+        case .fileLink: return APIBase + APIVersion + "file_links"
+        case .fileLinks(let id): return APIBase + APIVersion + "file_links/\(id)"
+        
+        case .file: return FilesAPIBase + APIVersion + "files"
+        case .files(let id): return FilesAPIBase + APIVersion + "files/\(id)"
         }
     }
 }
