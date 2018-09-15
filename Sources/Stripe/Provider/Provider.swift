@@ -66,6 +66,8 @@ public final class StripeClient: Service {
     public var transfer: TransferRoutes
     public var transferReversals: TransferReversalRoutes
     public var payouts: PayoutRoutes
+    public var fileLinks: FileLinkRoutes
+    public var files: FileRoutes
 
     internal init(apiKey: String, testKey: String?, client: Client) {
         let apiRequest = StripeAPIRequest(httpClient: client, apiKey: apiKey, testApiKey: testKey)
@@ -92,5 +94,7 @@ public final class StripeClient: Service {
         transfer = StripeTransferRoutes(request: apiRequest)
         transferReversals = StripeTransferReversalRoutes(request: apiRequest)
         payouts = StripePayoutRoutes(request: apiRequest)
+        fileLinks = StripeFileLinkRoutes(request: apiRequest)
+        files = StripeFileRoutes(request: apiRequest)
     }
 }

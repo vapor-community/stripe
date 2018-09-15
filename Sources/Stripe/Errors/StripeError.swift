@@ -12,6 +12,39 @@ import Vapor
  Error object
  https://stripe.com/docs/api#errors
  */
+
+public enum StripeUploadError: Error, Debuggable {
+    case unsupportedFileType
+    
+    public var localizedDescription: String {
+        return "Unsupported file type used for file upload."
+    }
+    
+    public var identifier: String {
+        return "file-upload-error"
+    }
+    
+    public var reason: String {
+        return localizedDescription
+    }
+    
+    public var possibleCauses: [String] {
+        return ["Unsupported file type used for file upload."]
+    }
+    
+    public var suggestedFixes: [String] {
+        return ["Use one of the following supported filetypes for uploads.",
+                "CSV",
+                "DOCX",
+                "GIF",
+                "JPEG",
+                "PDF",
+                "PNG",
+                "XLS",
+                "XLSX"]
+    }
+}
+
 public struct StripeError: StripeModel, Error, Debuggable {
     public var identifier: String {
         return self.error.type.rawValue
