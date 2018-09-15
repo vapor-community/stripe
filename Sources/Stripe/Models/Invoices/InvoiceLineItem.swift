@@ -16,19 +16,19 @@ import Foundation
 public struct StripeInvoiceLineItem: StripeModel {
     public var id: String
     public var object: String
-    public var amount: Int
-    public var currency: StripeCurrency
+    public var amount: Int?
+    public var currency: StripeCurrency?
     public var description: String?
-    public var discountable: Bool
-    public var livemode: Bool
+    public var discountable: Bool?
+    public var livemode: Bool?
     public var metadata: [String: String]
     public var period: Period?
     public var plan: StripePlan?
-    public var proration: Bool
+    public var proration: Bool?
     public var quantity: Int?
     public var subscription: String?
     public var subscriptionItem: String?
-    public var type: String
+    public var type: String?
     
     public enum CodingKeys: String, CodingKey {
         case id

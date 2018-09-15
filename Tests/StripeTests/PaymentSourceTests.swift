@@ -123,16 +123,16 @@ class PaymentSourceTests: XCTestCase {
             futureOrder.do { list in
                 XCTAssertEqual(list.object, "list")
                 XCTAssertEqual(list.hasMore, false)
-                XCTAssertEqual(list.data.count, 3)
-                XCTAssertEqual(list.bankAccounts.count, 1)
-                XCTAssertEqual(list.cards.count, 1)
-                XCTAssertEqual(list.sources.count, 1)
-                XCTAssertEqual(list.data.map { $0.id }, [
+                XCTAssertEqual(list.data?.count, 3)
+                XCTAssertEqual(list.bankAccounts?.count, 1)
+                XCTAssertEqual(list.cards?.count, 1)
+                XCTAssertEqual(list.sources?.count, 1)
+                XCTAssertEqual(list.data?.map { $0.id }, [
                     "card_1Cs8z3GaLcnLeFWiU9SDCez8",
                     "src_1CxF9xGaLcnLeFWif1vfiSkS",
                     "ba_1CxEzUGaLcnLeFWiz0fJrOVm",
                 ])
-                XCTAssertEqual(list.data.map { $0.object }, ["card", "source", "bank_account"])
+                XCTAssertEqual(list.data?.map { $0.object }, ["card", "source", "bank_account"])
 
             }.catch { (error) in
                 XCTFail("\(error)")

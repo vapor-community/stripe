@@ -16,11 +16,11 @@ import Foundation
 public struct StripeToken: StripeModel {
     public var id: String
     public var object: String
-    public var type: TokenType
+    public var type: TokenType?
     public var clientIp: String?
-    public var created: Date
-    public var livemode: Bool
-    public var used: Bool
+    public var created: Date?
+    public var livemode: Bool?
+    public var used: Bool?
     public var card: StripeCard?
     public var bankAccount: StripeBankAccount?
     

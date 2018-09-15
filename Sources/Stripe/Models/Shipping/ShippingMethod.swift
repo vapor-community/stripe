@@ -13,8 +13,8 @@
 
 public struct StripeShippingMethod: StripeModel {
     public var id: String
-    public var amount: Int
-    public var currency: StripeCurrency
+    public var amount: Int?
+    public var currency: StripeCurrency?
     public var deliveryEstimate: StripeDeliveryEstimate?
     public var description: String?
     

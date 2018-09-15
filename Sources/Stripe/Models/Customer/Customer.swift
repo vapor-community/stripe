@@ -16,20 +16,20 @@ import Foundation
 public struct StripeCustomer: StripeModel {
     public var id: String
     public var object: String
-    public var accountBalance: Int
+    public var accountBalance: Int?
     public var bussinessVATId: String?
-    public var created: Date
+    public var created: Date?
     public var currency: StripeCurrency?
     public var defaultSource: String?
-    public var delinquent: Bool
+    public var delinquent: Bool?
     public var description: String?
     public var discount: StripeDiscount?
     public var email: String?
-    public var livemode: Bool
+    public var livemode: Bool?
     public var metadata: [String: String]
     public var shipping: ShippingLabel?
-    public var sources: StripeSourcesList
-    public var subscriptions: StripeSubscriptionsList
+    public var sources: StripeSourcesList?
+    public var subscriptions: StripeSubscriptionsList?
     
     public enum CodingKeys: String, CodingKey {
         case id

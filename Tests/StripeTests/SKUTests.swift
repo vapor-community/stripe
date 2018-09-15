@@ -58,8 +58,8 @@ class SKUTests: XCTestCase {
                 XCTAssertEqual(sku.id, "sku_CG2zw7j7H8NEQq")
                 XCTAssertEqual(sku.object, "sku")
                 XCTAssertEqual(sku.active, true)
-                XCTAssertEqual(sku.attributes["size"], "Medium")
-                XCTAssertEqual(sku.attributes["gender"], "Unisex")
+                XCTAssertEqual(sku.attributes?["size"], "Medium")
+                XCTAssertEqual(sku.attributes?["gender"], "Unisex")
                 XCTAssertEqual(sku.created, Date(timeIntervalSince1970: 1517686889))
                 XCTAssertEqual(sku.currency, .usd)
                 XCTAssertEqual(sku.image, "https://www.example.com")
@@ -74,9 +74,9 @@ class SKUTests: XCTestCase {
                 XCTAssertEqual(sku.packageDimensions?.weight, 14.3)
                 XCTAssertEqual(sku.packageDimensions?.width, 15.3)
                 
-                XCTAssertEqual(sku.inventory.quantity, 499)
-                XCTAssertEqual(sku.inventory.type, .finite)
-                XCTAssertEqual(sku.inventory.value, .inStock)
+                XCTAssertEqual(sku.inventory?.quantity, 499)
+                XCTAssertEqual(sku.inventory?.type, .finite)
+                XCTAssertEqual(sku.inventory?.value, .inStock)
                 
                 }.catch { (error) in
                     XCTFail("\(error.localizedDescription)")

@@ -15,24 +15,24 @@ import Foundation
 public struct StripePayout: StripeModel {
     public var id: String
     public var object: String
-    public var amount: Int
-    public var arrivalDate: Date
-    public var automatic: Bool
-    public var balanceTransaction: String
-    public var created: Date
-    public var currency: StripeCurrency
+    public var amount: Int?
+    public var arrivalDate: Date?
+    public var automatic: Bool?
+    public var balanceTransaction: String?
+    public var created: Date?
+    public var currency: StripeCurrency?
     public var description: String?
-    public var destination: String
+    public var destination: String?
     public var failureBalanceTransaction: String?
     public var failureCode: StripePayoutFailureCode?
     public var failureMessage: String?
-    public var livemode: Bool
+    public var livemode: Bool?
     public var metadata: [String: String]
-    public var method: StripePayoutMethod
-    public var sourceType: StripePayoutSourceType
+    public var method: StripePayoutMethod?
+    public var sourceType: StripePayoutSourceType?
     public var statementDescriptor: String?
-    public var status: StripePayoutStatus
-    public var type: StripePayoutType
+    public var status: StripePayoutStatus?
+    public var type: StripePayoutType?
     
     public enum CodingKeys: String, CodingKey {
         case id

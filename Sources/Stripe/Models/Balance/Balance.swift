@@ -13,10 +13,10 @@
 
 public struct StripeBalance: StripeModel {
     public var object: String
-    public var available: [StripeBalanceTransfer]
-    public var connectReserved: [StripeBalanceTransfer]
-    public var livemode: Bool
-    public var pending: [StripeBalanceTransfer]
+    public var available: [StripeBalanceTransfer]?
+    public var connectReserved: [StripeBalanceTransfer]?
+    public var livemode: Bool?
+    public var pending: [StripeBalanceTransfer]?
     
     public enum CodingKeys: String, CodingKey {
         case object

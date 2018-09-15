@@ -16,17 +16,17 @@ import Foundation
 public struct StripeRefund: StripeModel {
     public var id: String
     public var object: String
-    public var amount: Int
-    public var balanceTransaction: String
-    public var charge: String
-    public var created: Date
-    public var currency: StripeCurrency
+    public var amount: Int?
+    public var balanceTransaction: String?
+    public var charge: String?
+    public var created: Date?
+    public var currency: StripeCurrency?
     public var failureBalanceTransaction: String?
     public var failureReason: String?
     public var metadata: [String: String]
     public var reason: RefundReason?
     public var receiptNumber: String?
-    public var status: StripeStatus
+    public var status: StripeStatus?
     
     public enum CodingKeys: String, CodingKey {
         case id

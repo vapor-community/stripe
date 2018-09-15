@@ -12,8 +12,8 @@
  */
 
 public struct StripePayoutSchedule: StripeModel {
-    public var delayDays: Int
-    public var interval: StripePayoutInterval
+    public var delayDays: Int?
+    public var interval: StripePayoutInterval?
     public var monthlyAnchor: Int?
     public var weeklyAnchor: StripeWeeklyAnchor?
     

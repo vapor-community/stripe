@@ -20,7 +20,7 @@ extension StripePlan {
     }
     
     public struct Tier: Codable {
-        var amount: Int
+        var amount: Int?
         var upTo: Int?
         
         public enum CodingKeys: String, CodingKey {
@@ -35,8 +35,8 @@ extension StripePlan {
     }
     
     public struct UsageTransformation: Codable {
-        var divideBy: Int
-        var round: RoundMode
+        var divideBy: Int?
+        var round: RoundMode?
         
         public enum CodingKeys: String, CodingKey {
             case divideBy = "divide_by"

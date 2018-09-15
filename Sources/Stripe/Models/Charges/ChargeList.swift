@@ -13,10 +13,10 @@
 
 public struct ChargesList: StripeModel {
     public var object: String
-    public var hasMore: Bool
-    public var totalCount: Int
-    public var url: String
-    public var data: [StripeCharge]
+    public var hasMore: Bool?
+    public var totalCount: Int?
+    public var url: String?
+    public var data: [StripeCharge]?
     
     public enum CodingKeys: String, CodingKey {
         case object

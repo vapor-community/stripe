@@ -15,9 +15,9 @@ import Foundation
 public struct TransferList: StripeModel {
     public var object: String
     public var hasMore: Bool
-    public var totalCount: Int
-    public var url: String
-    public var data: [StripeTransfer]
+    public var totalCount: Int?
+    public var url: String?
+    public var data: [StripeTransfer]?
     
     public enum CodingKeys: String, CodingKey {
         case object

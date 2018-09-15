@@ -16,26 +16,26 @@ import Foundation
 public struct StripeOrder: StripeModel {
     public var id: String
     public var object: String
-    public var amount: Int
+    public var amount: Int?
     public var amountReturned: Int?
     public var application: String?
     public var applicationFee: Int?
     public var charge: String?
-    public var created: Date
-    public var currency: StripeCurrency
+    public var created: Date?
+    public var currency: StripeCurrency?
     public var customer: String?
     public var email: String?
     public var externalCouponCode: String?
-    public var items: [StripeOrderItem]
-    public var livemode: Bool
+    public var items: [StripeOrderItem]?
+    public var livemode: Bool?
     public var metadata: [String: String]
-    public var returns: OrderReturnList
+    public var returns: OrderReturnList?
     public var selectedShippingMethod: String?
     public var shipping: ShippingLabel?
-    public var shippingMethods: [StripeShippingMethod]
-    public var status: OrderStatus
-    public var statusTransitions: StripeOrderStatusTransitions
-    public var updated: Date
+    public var shippingMethods: [StripeShippingMethod]?
+    public var status: OrderStatus?
+    public var statusTransitions: StripeOrderStatusTransitions?
+    public var updated: Date?
     public var upstreamId: String?
     
     public enum CodingKeys: String, CodingKey {

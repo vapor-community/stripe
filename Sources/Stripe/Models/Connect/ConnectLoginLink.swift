@@ -15,6 +15,6 @@ import Foundation
 
 public struct StripeConnectLoginLink: StripeModel {
     public var object: String
-    public var created: Date
-    public var url: String
+    public var created: Date?
+    public var url: String?
 }

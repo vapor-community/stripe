@@ -21,20 +21,20 @@ public struct StripeSubscription: StripeModel {
     public var billingCycleAnchor: Date?
     public var cancelAtPeriodEnd: Bool?
     public var canceledAt: Date?
-    public var created: Date
+    public var created: Date?
     public var currentPeriodEnd: Date?
     public var currentPeriodStart: Date?
-    public var customer: String
+    public var customer: String?
     public var daysUntilDue: Int?
     public var discount: StripeDiscount?
     public var endedAt: Date?
-    public var items: SubscriptionItemsList
-    public var livemode: Bool
+    public var items: SubscriptionItemsList?
+    public var livemode: Bool?
     public var metadata: [String: String]
     public var plan: StripePlan?
     public var quantity: Int?
     public var start: Date?
-    public var status: StripeSubscriptionStatus
+    public var status: StripeSubscriptionStatus?
     public var taxPercent: Decimal?
     public var trialEnd: Date?
     public var trialStart: Date?

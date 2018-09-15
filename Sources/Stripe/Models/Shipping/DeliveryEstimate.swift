@@ -15,5 +15,5 @@ public struct StripeDeliveryEstimate: StripeModel {
     public var date: String?
     public var earliest: String?
     public var latest: String?
-    public var type: DeliveryEstimateType
+    public var type: DeliveryEstimateType?
 }

@@ -14,9 +14,9 @@ import Foundation
  */
 
 public struct StripeTOSAcceptance: StripeModel {
-    public var date: Date
-    public var ip: String
-    public var userAgent: String
+    public var date: Date?
+    public var ip: String?
+    public var userAgent: String?
     
     public enum CodingKeys: String, CodingKey {
         case date

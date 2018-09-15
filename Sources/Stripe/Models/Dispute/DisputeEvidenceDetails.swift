@@ -13,10 +13,10 @@ import Foundation
  */
 
 public struct StripeDisputeEvidenceDetails: StripeModel {
-    public var dueBy: Date
-    public var hasEvidence: Bool
-    public var pastDue: Bool
-    public var submissionCount: Int
+    public var dueBy: Date?
+    public var hasEvidence: Bool?
+    public var pastDue: Bool?
+    public var submissionCount: Int?
     
     public enum CodingKeys: String, CodingKey {
         case dueBy = "due_by"

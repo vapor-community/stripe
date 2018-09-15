@@ -16,27 +16,27 @@ import Foundation
 public struct StripeInvoice: StripeModel {
     public var id: String
     public var object: String
-    public var amountDue: Int
+    public var amountDue: Int?
     public var applicationFee: Int?
-    public var attemptCount: Int
-    public var attempted: Bool
-    public var billing: String
+    public var attemptCount: Int?
+    public var attempted: Bool?
+    public var billing: String?
     public var charge: String?
-    public var closed: Bool
-    public var currency: StripeCurrency
-    public var customer: String
-    public var date: Date
+    public var closed: Bool?
+    public var currency: StripeCurrency?
+    public var customer: String?
+    public var date: Date?
     public var description: String?
     public var discount: StripeDiscount?
     public var dueDate: Date?
     public var endingBalance: Int?
     public var forgiven: Bool?
-    public var lines: InvoiceLineGroup
-    public var livemode: Bool
+    public var lines: InvoiceLineGroup?
+    public var livemode: Bool?
     public var metadata: [String: String]
     public var nextPaymentAttempt: Date?
     public var number: String?
-    public var paid: Bool
+    public var paid: Bool?
     public var periodEnd: Date?
     public var periodStart: Date?
     public var receiptNumber: String?
@@ -44,11 +44,11 @@ public struct StripeInvoice: StripeModel {
     public var statementDescriptor: String?
     public var subscription: String?
     public var subscriptionProrationDate: Int?
-    public var subtotal: Int
-    public var total: Int
+    public var subtotal: Int?
+    public var total: Int?
     public var tax: Int?
     public var taxPercent: Decimal?
-    public var webhooksDeliveredAt: Date
+    public var webhooksDeliveredAt: Date?
     
     public enum CodingKeys: String, CodingKey {
         case id

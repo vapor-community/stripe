@@ -16,18 +16,18 @@ import Foundation
 public struct StripeSKU: StripeModel {
     public var id: String
     public var object: String
-    public var active: Bool
-    public var attributes: [String: String]
-    public var created: Date
-    public var currency: StripeCurrency
+    public var active: Bool?
+    public var attributes: [String: String]?
+    public var created: Date?
+    public var currency: StripeCurrency?
     public var image: String?
-    public var inventory: StripeInventory
-    public var livemode: Bool
+    public var inventory: StripeInventory?
+    public var livemode: Bool?
     public var metadata: [String: String]
     public var packageDimensions: StripePackageDimensions?
-    public var price: Int
-    public var product: String
-    public var updated: Date
+    public var price: Int?
+    public var product: String?
+    public var updated: Date?
     
     public enum CodingKeys: String, CodingKey {
         case id

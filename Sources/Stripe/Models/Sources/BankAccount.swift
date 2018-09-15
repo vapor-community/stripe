@@ -18,12 +18,12 @@ public struct StripeBankAccount: StripeModel {
     public var accountHolderName: String?
     public var accountHolderType: String?
     public var bankName: String?
-    public var country: String
+    public var country: String?
     public var currency: StripeCurrency?
     public var customer: String?
     public var defaultForCurrency: Bool?
-    public var fingerprint: String
-    public var last4: String
+    public var fingerprint: String?
+    public var last4: String?
     public var metadata: [String: String]?
     public var routingNumber: String?
     public var status: BankAccountStatus?

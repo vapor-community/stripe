@@ -35,12 +35,12 @@ public enum OutcomeType: String, Codable {
 }
 
 public struct StripeOutcome: StripeModel {
-    public var networkStatus: NetworkStatus
+    public var networkStatus: NetworkStatus?
     public var reason: String?
-    public var riskLevel: RiskLevel
+    public var riskLevel: RiskLevel?
     public var rule: String?
     public var sellerMessage: String?
-    public var type: OutcomeType
+    public var type: OutcomeType?
     
     public enum CodingKeys: String, CodingKey {
         case networkStatus = "network_status"

@@ -17,17 +17,17 @@ public struct StripeCoupon: StripeModel {
     public var id: String
     public var object: String
     public var amountOff: Int?
-    public var created: Date
-    public var currency: StripeCurrency
-    public var duration: StripeDuration
+    public var created: Date?
+    public var currency: StripeCurrency?
+    public var duration: StripeDuration?
     public var durationInMonths: Int?
-    public var livemode: Bool
+    public var livemode: Bool?
     public var maxRedemptions: Int?
     public var metadata: [String: String]
     public var percentOff: Int?
     public var redeemBy: Date?
-    public var timesRedeemed: Int
-    public var valid: Bool
+    public var timesRedeemed: Int?
+    public var valid: Bool?
     
     public enum CodingKeys: String, CodingKey {
         case id
