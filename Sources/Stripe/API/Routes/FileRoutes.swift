@@ -67,21 +67,14 @@ public struct StripeFileRoutes: FileRoutes {
         headers.replaceOrAdd(name: .contentType, value: MediaType(type: "multipart",
                                                                   subType: "form-data",
                                                                   parameters: ["boundary": boundary]).description)
-        body.append(("\r\n--\(boundary)\r\n").data(using: .utf8)!)
-        
-        body.append(("Content-Disposition: form-data; name=\"purpose\"\"\r\n\r\n").data(using: .utf8)!)
-        
-        body.append(("\(purpose.rawValue)").data(using: .utf8)!)
-        
-        body.append(("\r\n--\(boundary)\r\n").data(using: .utf8)!)
-        
-        body.append(("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n").data(using: .utf8)!)
-        
-        body.append(("Content-Type: \(fileType.description)\r\n\r\n").data(using: .utf8)!)
-        
+        body.append("\r\n--\(boundary)\r\n")
+        body.append("Content-Disposition: form-data; name=\"purpose\"\"\r\n\r\n")
+        body.append("\(purpose.rawValue)")
+        body.append("\r\n--\(boundary)\r\n")
+        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\r\n")
+        body.append("Content-Type: \(fileType.description)\r\n\r\n")
         body.append(file)
-        
-        body.append(("\r\n--\(boundary)--").data(using: .utf8)!)
+        body.append("\r\n--\(boundary)--")
         
         return try request.send(method: .POST, path: StripeAPIEndpoint.file.endpoint, body: body, headers: headers)
     }
@@ -97,5 +90,15 @@ public struct StripeFileRoutes: FileRoutes {
         }
         
         return try request.send(method: .GET, path: StripeAPIEndpoint.file.endpoint, query: queryParams)
+    }
+}
+
+/// Thank you @vzsg for this nice little clean snippet
+private extension Data {
+    mutating func append(_ string: String) {
+        guard let data = string.data(using: .utf8) else {
+            return
+        }
+        self.append(data)
     }
 }
