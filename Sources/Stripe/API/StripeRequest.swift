@@ -66,11 +66,10 @@ public class StripeAPIRequest: StripeRequest {
     public func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: String, headers: HTTPHeaders) throws -> Future<SM> {
         var finalHeaders: HTTPHeaders = .stripeDefault
         
-        headers.forEach { finalHeaders.replaceOrAdd(name: $0.name, value: $0.value) }
-        
         // Get the appropiate API key based on the environment and if the test key is present
         let apiKey = self.httpClient.container.environment == .development ? (self.testApiKey ?? self.apiKey) : self.apiKey
         finalHeaders.add(name: .authorization, value: "Bearer \(apiKey)")
+        headers.forEach { finalHeaders.replaceOrAdd(name: $0.name, value: $0.value) }
 
         return httpClient.send(method, headers: finalHeaders, to: "\(path)?\(query)") { (request) in
             request.http.body = HTTPBody(string: body)            

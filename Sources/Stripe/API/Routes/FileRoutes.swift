@@ -69,7 +69,7 @@ public struct StripeFileRoutes: FileRoutes {
                                                                   parameters: ["boundary": boundary]).description)
         body.append(("\r\n--\(boundary)\r\n").data(using: .utf8)!)
         
-        body.append(("Content-Disposition: form-data; name=\"purpose\"\"\r\n").data(using: .utf8)!)
+        body.append(("Content-Disposition: form-data; name=\"purpose\"\"\r\n\r\n").data(using: .utf8)!)
         
         body.append(("\(purpose.rawValue)").data(using: .utf8)!)
         
