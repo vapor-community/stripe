@@ -12,11 +12,11 @@ import HTTP
 
 public protocol StripeRequest: class {
     func serializedResponse<SM: StripeModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<SM>
-    func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: String, headers: HTTPHeaders) throws -> Future<SM>
+    func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: LosslessHTTPBodyRepresentable, headers: HTTPHeaders) throws -> Future<SM>
 }
 
 public extension StripeRequest {
-    public func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String = "", body: String = "", headers: HTTPHeaders = [:]) throws -> Future<SM> {
+    public func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String = "", body: LosslessHTTPBodyRepresentable = HTTPBody(string: ""), headers: HTTPHeaders = [:]) throws -> Future<SM> {
         return try send(method: method, path: path, query: query, body: body, headers: headers)
     }
     
@@ -63,7 +63,7 @@ public class StripeAPIRequest: StripeRequest {
         self.testApiKey = testApiKey
     }
     
-    public func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: String, headers: HTTPHeaders) throws -> Future<SM> {
+    public func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String, body: LosslessHTTPBodyRepresentable, headers: HTTPHeaders) throws -> Future<SM> {
         var finalHeaders: HTTPHeaders = .stripeDefault
         
         // Get the appropiate API key based on the environment and if the test key is present
@@ -72,7 +72,7 @@ public class StripeAPIRequest: StripeRequest {
         headers.forEach { finalHeaders.replaceOrAdd(name: $0.name, value: $0.value) }
 
         return httpClient.send(method, headers: finalHeaders, to: "\(path)?\(query)") { (request) in
-            request.http.body = HTTPBody(string: body)            
+            request.http.body = body.convertToHTTPBody()
             }.flatMap(to: SM.self) { (response) -> Future<SM> in
                 return try self.serializedResponse(response: response.http, worker: self.httpClient.container.eventLoop)
         }

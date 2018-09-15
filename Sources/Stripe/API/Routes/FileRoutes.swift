@@ -83,7 +83,7 @@ public struct StripeFileRoutes: FileRoutes {
         
         body.append(("\r\n--\(boundary)--").data(using: .utf8)!)
         
-        return try request.send(method: .POST, path: StripeAPIEndpoint.file.endpoint, body: String(data: body, encoding: .utf8)!, headers: headers)
+        return try request.send(method: .POST, path: StripeAPIEndpoint.file.endpoint, body: body, headers: headers)
     }
     
     public func retrieve(id: String) throws -> Future<StripeFileUpload> {
