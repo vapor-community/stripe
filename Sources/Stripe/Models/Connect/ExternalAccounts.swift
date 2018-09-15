@@ -25,8 +25,8 @@ public struct ExternalAccountsList: StripeModel {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         object = try container.decode(String.self, forKey: .object)
         hasMore = try container.decode(Bool.self, forKey: .hasMore)
-        totalCount = try container.decode(Int.self, forKey: .totalCount)
-        url = try container.decode(String.self, forKey: .url)
+        totalCount = try container.decodeIfPresent(Int.self, forKey: .totalCount)
+        url = try container.decodeIfPresent(String.self, forKey: .url)
         
         cardAccounts = try container.decodeIfPresent([StripeCard].self, forKey: .data)?.filter{ $0.object == "card" }
         bankAccounts = try container.decodeIfPresent([StripeBankAccount].self, forKey: .data)?.filter{ $0.object == "bank_account" }
