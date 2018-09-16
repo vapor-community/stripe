@@ -96,9 +96,7 @@ public struct StripeFileRoutes: FileRoutes {
 /// Thank you @vzsg for this nice little clean snippet
 private extension Data {
     mutating func append(_ string: String) {
-        guard let data = string.data(using: .utf8) else {
-            return
-        }
+        guard let data = string.data(using: .utf8) else { return }
         self.append(data)
     }
 }
