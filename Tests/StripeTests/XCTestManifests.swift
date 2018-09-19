@@ -74,6 +74,14 @@ extension ProductTests {
     ]
 }
 
+extension QueryEncodingTests {
+    static let __allTests = [
+        ("testNestedArrayQueryEncodedProperly", testNestedArrayQueryEncodedProperly),
+        ("testNestedDictionaryQueryEncodedProperly", testNestedDictionaryQueryEncodedProperly),
+        ("testSimpleQueryEncodedProperly", testSimpleQueryEncodedProperly),
+    ]
+}
+
 extension RefundTests {
     static let __allTests = [
         ("testRefundParsedProperly", testRefundParsedProperly),
