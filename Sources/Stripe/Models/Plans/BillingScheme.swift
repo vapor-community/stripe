@@ -40,8 +40,8 @@ extension StripePlan {
     }
     
     public struct UsageTransformation: Codable {
-        public var divideBy: Int
-        public var round: RoundMode
+        public var divideBy: Int?
+        public var round: RoundMode?
         
         init(divideBy: Int, round: RoundMode) {
             self.divideBy = divideBy
