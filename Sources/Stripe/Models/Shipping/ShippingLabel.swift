@@ -18,18 +18,6 @@ public struct ShippingLabel: StripeModel {
     public var phone: String?
     public var trackingNumber: String?
     
-    public init(address: StripeAddress? = nil,
-                carrier: String? = nil,
-                name: String? = nil,
-                phone: String? = nil,
-                trackingNumber: String? = nil) {
-        self.address = address
-        self.carrier = carrier
-        self.name = name
-        self.phone = phone
-        self.trackingNumber = trackingNumber
-    }
-    
     public enum CodingKeys: String, CodingKey {
         case address
         case carrier
