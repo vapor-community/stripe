@@ -19,7 +19,7 @@ public enum StripeStatus: String, Codable {
 
 // https://stripe.com/docs/api/curl#subscription_object-status
 public enum StripeSubscriptionStatus: String, Codable {
-    case trailing
+    case trialing
     case active
     case pastDue = "past_due"
     case canceled
