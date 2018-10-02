@@ -17,7 +17,7 @@ public struct StripeCustomer: StripeModel {
     public var id: String
     public var object: String
     public var accountBalance: Int?
-    public var bussinessVATId: String?
+    public var businessVatId: String?
     public var created: Date?
     public var currency: StripeCurrency?
     public var defaultSource: String?
@@ -35,7 +35,7 @@ public struct StripeCustomer: StripeModel {
         case id
         case object
         case accountBalance = "account_balance"
-        case bussinessVATId = "bussiness_vat_id"
+        case businessVatId = "business_vat_id"
         case created
         case currency
         case defaultSource = "default_source"
