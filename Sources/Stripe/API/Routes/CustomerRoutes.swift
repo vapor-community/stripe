@@ -17,7 +17,7 @@ public protocol CustomerRoutes {
     func addNewSource(customer: String, source: String, toConnectedAccount: String?) throws -> Future<StripeSource>
     func addNewBankAccountSource(customer: String, source: Any, toConnectedAccount: String?, metadata: [String: String]?) throws -> Future<StripeBankAccount>
     func addNewCardSource(customer: String, source: Any, toConnectedAccount: String?, metadata: [String : String]?) throws -> Future<StripeCard>
-    func deleteSource(customer: String, source: String) throws -> Future<StripeSource>
+    func deleteSource(customer: String, source: String) throws -> Future<StripeDeletedObject>
     func deleteDiscount(customer: String) throws -> Future<StripeDeletedObject>
 }
 
@@ -88,7 +88,7 @@ extension CustomerRoutes {
         return try addNewCardSource(customer: customer, source: source, toConnectedAccount: toConnectedAccount, metadata: metadata)
     }
     
-    public func deleteSource(customer: String, source: String) throws -> Future<StripeSource> {
+    public func deleteSource(customer: String, source: String) throws -> Future<StripeDeletedObject> {
         return try deleteSource(customer: customer, source: source)
     }
     
@@ -306,7 +306,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
 
     /// Detach a source
     /// [Learn More →](https://stripe.com/docs/api/curl#detach_source)
-    public func deleteSource(customer: String, source: String) throws -> Future<StripeSource> {
+    public func deleteSource(customer: String, source: String) throws -> Future<StripeDeletedObject> {
         return try request.send(method: .DELETE, path: StripeAPIEndpoint.customerDetachSources(customer, source).endpoint)
     }
     
