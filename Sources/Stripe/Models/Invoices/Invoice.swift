@@ -31,6 +31,8 @@ public struct StripeInvoice: StripeModel {
     public var dueDate: Date?
     public var endingBalance: Int?
     public var forgiven: Bool?
+    public var hostedInvoiceUrl: String?
+    public var invoicePdf: String?
     public var lines: InvoiceLineGroup?
     public var livemode: Bool?
     public var metadata: [String: String]
@@ -68,6 +70,8 @@ public struct StripeInvoice: StripeModel {
         case dueDate = "due_date"
         case endingBalance = "ending_balance"
         case forgiven
+        case hostedInvoiceUrl = "hosted_invoice_url"
+        case invoicePdf = "invoice_pdf"
         case lines
         case livemode
         case metadata
