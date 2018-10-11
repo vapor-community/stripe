@@ -23,6 +23,8 @@ class InvoiceTests: XCTestCase {
     "date": 1234567890,
     "due_date": 1234567890,
     "forgiven": false,
+    "hosted_invoice_url": "https://pay.stripe.com/invoice/invst_zw7Gf743ihdarScjrVuMTtctoT",
+    "invoice_pdf": "https://pay.stripe.com/invoice/invst_zw7Gf743ihdarScjrVuMTtctoT/pdf",
     "id": "in_1BoJ2NKrZ43eBVAbQ8jb0Xfj",
     "lines": {
         "data": [
@@ -88,6 +90,8 @@ class InvoiceTests: XCTestCase {
                 XCTAssertEqual(invoice.date, Date(timeIntervalSince1970: 1234567890))
                 XCTAssertEqual(invoice.dueDate, Date(timeIntervalSince1970: 1234567890))
                 XCTAssertEqual(invoice.forgiven, false)
+                XCTAssertEqual(invoice.hostedInvoiceUrl, "https://pay.stripe.com/invoice/invst_zw7Gf743ihdarScjrVuMTtctoT")
+                XCTAssertEqual(invoice.invoicePdf, "https://pay.stripe.com/invoice/invst_zw7Gf743ihdarScjrVuMTtctoT/pdf")
                 XCTAssertEqual(invoice.livemode, false)
                 XCTAssertEqual(invoice.nextPaymentAttempt, Date(timeIntervalSince1970: 1234567890))
                 XCTAssertEqual(invoice.number, "fe61cc956c-0001")
