@@ -14,7 +14,7 @@ import Foundation
  */
 
 public struct StripeInvoiceItem: StripeModel {
-    public var id: String
+    public var id: String?
     public var object: String
     public var amount: Int?
     public var currency: StripeCurrency?

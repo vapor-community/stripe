@@ -14,7 +14,7 @@ import Foundation
  */
 
 public struct StripeInvoice: StripeModel {
-    public var id: String
+    public var id: String?
     public var object: String
     public var amountDue: Int?
     public var applicationFee: Int?
