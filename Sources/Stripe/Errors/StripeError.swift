@@ -210,6 +210,7 @@ public enum StripeDeclineCode: String, StripeModel {
     case stolenCard = "stolen_card"
     case stopPaymentOrder = "stop_payment_order"
     case testmodeDecline = "testmode_decline"
+    case testModeLiveCard = "test_mode_live_card"
     case transactionNotAllowed = "transaction_not_allowed"
     case tryAgainLater = "try_again_later"
     case withdrawalCountLimitExceeded = "withdrawal_count_limit_exceeded"
