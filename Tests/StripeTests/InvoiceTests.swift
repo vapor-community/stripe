@@ -14,14 +14,20 @@ class InvoiceTests: XCTestCase {
     let invoiceString = """
 {
     "amount_due": 0,
+    "amount_paid": 0,
+    "amount_remaining": 0,
     "attempt_count": 0,
     "attempted": false,
+    "auto_advance": true,
     "billing": "charge_automatically",
+    "billing_reason": "manual",
     "closed": false,
     "currency": "usd",
     "customer": "cus_CCiTI4Tpghl0nK",
     "date": 1234567890,
+    "default_source": null,
     "due_date": 1234567890,
+    "finalized_at": 1234567890,
     "forgiven": false,
     "hosted_invoice_url": "https://pay.stripe.com/invoice/invst_zw7Gf743ihdarScjrVuMTtctoT",
     "invoice_pdf": "https://pay.stripe.com/invoice/invst_zw7Gf743ihdarScjrVuMTtctoT/pdf",
@@ -61,6 +67,7 @@ class InvoiceTests: XCTestCase {
     "period_end": 1234567890,
     "period_start": 1234567890,
     "starting_balance": 0,
+    "status": "open",
     "subtotal": 0,
     "total": 0,
     "webhooks_delivered_at": 1234567890
@@ -81,14 +88,20 @@ class InvoiceTests: XCTestCase {
             futureInvoice.do { (invoice) in
                 XCTAssertEqual(invoice.id, "in_1BoJ2NKrZ43eBVAbQ8jb0Xfj")
                 XCTAssertEqual(invoice.amountDue, 0)
+                XCTAssertEqual(invoice.amountPaid, 0)
+                XCTAssertEqual(invoice.amountRemanining, 0)
                 XCTAssertEqual(invoice.attemptCount, 0)
                 XCTAssertEqual(invoice.attempted, false)
+                XCTAssertEqual(invoice.autoAdvance, true)
                 XCTAssertEqual(invoice.billing, "charge_automatically")
+                XCTAssertEqual(invoice.billingReason, "manual")
                 XCTAssertEqual(invoice.closed, false)
                 XCTAssertEqual(invoice.currency, .usd)
                 XCTAssertEqual(invoice.customer, "cus_CCiTI4Tpghl0nK")
                 XCTAssertEqual(invoice.date, Date(timeIntervalSince1970: 1234567890))
+                XCTAssertEqual(invoice.defaultSource, nil)
                 XCTAssertEqual(invoice.dueDate, Date(timeIntervalSince1970: 1234567890))
+                XCTAssertEqual(invoice.finalizedAt, Date(timeIntervalSince1970: 1234567890))
                 XCTAssertEqual(invoice.forgiven, false)
                 XCTAssertEqual(invoice.hostedInvoiceUrl, "https://pay.stripe.com/invoice/invst_zw7Gf743ihdarScjrVuMTtctoT")
                 XCTAssertEqual(invoice.invoicePdf, "https://pay.stripe.com/invoice/invst_zw7Gf743ihdarScjrVuMTtctoT/pdf")
@@ -100,6 +113,7 @@ class InvoiceTests: XCTestCase {
                 XCTAssertEqual(invoice.periodEnd, Date(timeIntervalSince1970: 1234567890))
                 XCTAssertEqual(invoice.periodStart, Date(timeIntervalSince1970: 1234567890))
                 XCTAssertEqual(invoice.startingBalance, 0)
+                XCTAssertEqual(invoice.status, .open)
                 XCTAssertEqual(invoice.subtotal, 0)
                 XCTAssertEqual(invoice.total, 0)
                 XCTAssertEqual(invoice.webhooksDeliveredAt, Date(timeIntervalSince1970: 1234567890))

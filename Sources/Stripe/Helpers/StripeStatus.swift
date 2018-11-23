@@ -26,6 +26,15 @@ public enum StripeSubscriptionStatus: String, Codable {
     case unpaid
 }
 
+// https://stripe.com/docs/api/invoices/object#invoice_object-status
+public enum StripeInvoiceStatus: String, Codable {
+    case draft
+    case open
+    case paid
+    case uncollectible
+    case void
+}
+
 public enum LegalEntityVerificationStatus: String, Codable {
     case unverified
     case pending
