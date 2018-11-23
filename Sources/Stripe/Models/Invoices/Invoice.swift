@@ -24,7 +24,7 @@ public struct StripeInvoice: StripeModel {
     public var attempted: Bool?
     public var autoAdvance: Bool?
     public var billing: String?
-    public var billingReason: String?
+    public var billingReason: StripeBillingReason?
     public var charge: String?
     public var closed: Bool?
     public var currency: StripeCurrency?

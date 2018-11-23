@@ -94,7 +94,7 @@ class InvoiceTests: XCTestCase {
                 XCTAssertEqual(invoice.attempted, false)
                 XCTAssertEqual(invoice.autoAdvance, true)
                 XCTAssertEqual(invoice.billing, "charge_automatically")
-                XCTAssertEqual(invoice.billingReason, "manual")
+                XCTAssertEqual(invoice.billingReason, .manual)
                 XCTAssertEqual(invoice.closed, false)
                 XCTAssertEqual(invoice.currency, .usd)
                 XCTAssertEqual(invoice.customer, "cus_CCiTI4Tpghl0nK")
