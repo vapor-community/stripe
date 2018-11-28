@@ -10,10 +10,12 @@ import Vapor
 import Foundation
 
 public protocol SubscriptionRoutes {
-    func create(customer: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: Date?, coupon: String?, daysUntilDue: Int?, items: [[String : Any]]?, metadata: [String: String]?, prorate: Bool?, taxPercent: Decimal?, trialEnd: Any?, trialFromPlan: Bool?, trialPeriodDays: Int?) throws -> Future<StripeSubscription>
+    func create(customer: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: Date?, cancelAtPeriodEnd: Bool?, coupon: String?, daysUntilDue: Int?, items: [[String : Any]]?, metadata: [String: String]?, prorate: Bool?, taxPercent: Decimal?, trialEnd: Any?, trialFromPlan: Bool?, trialPeriodDays: Int?) throws -> Future<StripeSubscription>
     func retrieve(id: String) throws -> Future<StripeSubscription>
     func update(subscription: String, applicationFeePercent: Decimal?, billing: String?, billingCycleAnchor: String?, cancelAtPeriodEnd: Bool?, coupon: String?, daysUntilDue: Int?, items: [[String: Any]]?, metadata: [String: String]?, prorate: Bool?, prorationDate: Date?, taxPercent: Decimal?, trialEnd: Any?, trialFromPlan: Bool?) throws -> Future<StripeSubscription>
-    func cancel(subscription: String, atPeriodEnd: Bool?) throws -> Future<StripeSubscription>
+    func cancel(subscription: String, invoiceNow: Bool?, prorate: Bool?) throws -> Future<StripeSubscription>
+    @available(*, deprecated, message: "Use update(subscription:cancelAtPeriodEnd:) instead")
+    func cancel(subscription: String, atPeriodEnd: Bool) throws -> Future<StripeSubscription>
     func listAll(filter: [String: Any]?) throws -> Future<StripeSubscriptionsList>
     func deleteDiscount(subscription: String) throws -> Future<StripeDeletedObject>
 }
@@ -23,6 +25,7 @@ extension SubscriptionRoutes {
                        applicationFeePercent: Decimal? = nil,
                        billing: String? = nil,
                        billingCycleAnchor: Date? = nil,
+                       cancelAtPeriodEnd: Bool? = nil,
                        coupon: String? = nil,
                        daysUntilDue: Int? = nil,
                        items: [[String: Any]]? = nil,
@@ -36,6 +39,7 @@ extension SubscriptionRoutes {
                           applicationFeePercent: applicationFeePercent,
                           billing: billing,
                           billingCycleAnchor: billingCycleAnchor,
+                          cancelAtPeriodEnd: cancelAtPeriodEnd,
                           coupon: coupon,
                           daysUntilDue: daysUntilDue,
                           items: items,
@@ -81,8 +85,8 @@ extension SubscriptionRoutes {
                           trialFromPlan: trialFromPlan)
     }
     
-    public func cancel(subscription: String, atPeriodEnd: Bool? = nil) throws -> Future<StripeSubscription> {
-        return try cancel(subscription: subscription, atPeriodEnd: atPeriodEnd)
+    public func cancel(subscription: String, invoiceNow: Bool? = nil, prorate: Bool? = nil) throws -> Future<StripeSubscription> {
+        return try cancel(subscription: subscription, invoiceNow: invoiceNow, prorate: prorate)
     }
     
     public func listAll(filter: [String : Any]? = nil) throws -> Future<StripeSubscriptionsList> {
@@ -107,6 +111,7 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
                        applicationFeePercent: Decimal?,
                        billing: String?,
                        billingCycleAnchor: Date?,
+                       cancelAtPeriodEnd: Bool?,
                        coupon: String?,
                        daysUntilDue: Int?,
                        items: [[String : Any]]?,
@@ -130,6 +135,10 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
         
         if let billingCycleAnchor = billingCycleAnchor {
             body["billing_cycle_anchor"] = Int(billingCycleAnchor.timeIntervalSince1970)
+        }
+        
+        if let cancelAtPeriodEnd = cancelAtPeriodEnd {
+            body["cancel_at_period_end"] = cancelAtPeriodEnd
         }
         
         if let coupon = coupon {
@@ -264,13 +273,23 @@ public struct StripeSubscriptionRoutes: SubscriptionRoutes {
     
     /// Cancel a subscription
     /// [Learn More →](https://stripe.com/docs/api/curl#cancel_subscription)
-    public func cancel(subscription: String, atPeriodEnd: Bool?) throws -> Future<StripeSubscription> {
+    public func cancel(subscription: String, invoiceNow: Bool?, prorate: Bool?) throws -> Future<StripeSubscription> {
         var body: [String: Any] = [:]
         
-        if let atPeriodEnd = atPeriodEnd {
-            body["at_period_end"] = atPeriodEnd
+        if let invoiceNow = invoiceNow {
+            body["invoice_now"] = invoiceNow
         }
         
+        if let prorate = prorate {
+            body["prorate"] = prorate
+        }
+        
+        return try request.send(method: .DELETE, path: StripeAPIEndpoint.subscriptions(subscription).endpoint, body: body.queryParameters)
+    }
+    
+    @available(*, deprecated, message: "Use update(subscription:cancelAtPeriodEnd:) instead")
+    public func cancel(subscription: String, atPeriodEnd: Bool) throws -> Future<StripeSubscription> {
+        let body = ["at_period_end": atPeriodEnd]
         return try request.send(method: .DELETE, path: StripeAPIEndpoint.subscriptions(subscription).endpoint, body: body.queryParameters)
     }
     
