@@ -215,5 +215,3 @@ public enum StripeDeclineCode: String, StripeModel {
     case tryAgainLater = "try_again_later"
     case withdrawalCountLimitExceeded = "withdrawal_count_limit_exceeded"
 }
-
-

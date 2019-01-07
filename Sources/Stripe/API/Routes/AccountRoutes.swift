@@ -245,7 +245,15 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
         }
         
         if let tos = tosAcceptance {
-            try tos.toEncodedDictionary().forEach { body["tos_acceptance[\($0)]"] = $1 }
+            if let tosDate = tos.date {
+                body["tos_acceptance[date]"] = Int(tosDate.timeIntervalSince1970)
+            }
+            if let tosIp = tos.ip {
+                body["tos_acceptance[ip]"] = tosIp
+            }
+            if let tosUserAgent = tos.userAgent {
+                body["tos_acceptance[user_agent]"] = tosUserAgent
+            }
         }
         
         return try request.send(method: .POST, path: StripeAPIEndpoint.account.endpoint, body: body.queryParameters)
