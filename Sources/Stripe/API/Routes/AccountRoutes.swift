@@ -9,9 +9,9 @@
 import Vapor
 
 public protocol AccountRoutes {
-    func create(type: ConnectedAccountType, email: String?, country: String?, accountToken: String?, businessLogo: String?, businessName: String?, businessPrimaryColor: String?, businessUrl: String?, debitNegativeBalances: Bool?, declineChargeOn: [String: Bool]?, defaultCurrency: StripeCurrency?, externalAccount: Any?, legalEntity: StripeConnectAccountLegalEntity?, metadata: [String: String]?, payoutSchedule: [String: String]?, payoutStatementDescriptor: String?, productDescription: String?, statementDescriptor: String?, supportEmail: String?, supportPhone: String?, supportUrl: String?, tosAcceptance: StripeTOSAcceptance?) throws -> Future<StripeConnectAccount>
+    func create(type: ConnectedAccountType, email: String?, country: String?, accountToken: String?, businessLogo: String?, businessName: String?, businessPrimaryColor: String?, businessUrl: String?, debitNegativeBalances: Bool?, declineChargeOn: [String: Bool]?, defaultCurrency: StripeCurrency?, externalAccount: Any?, legalEntity: [String: Any]?, metadata: [String: String]?, payoutSchedule: [String: String]?, payoutStatementDescriptor: String?, productDescription: String?, statementDescriptor: String?, supportEmail: String?, supportPhone: String?, supportUrl: String?, tosAcceptance: StripeTOSAcceptance?) throws -> Future<StripeConnectAccount>
     func retrieve(account: String) throws -> Future<StripeConnectAccount>
-    func update(account: String, businessName: String?, businessPrimaryColor: String?, businessUrl: String?, debitNegativeBalances: Bool?, declineChargeOn: [String: Bool]?, defaultCurrency: StripeCurrency?, email: String?, externalAccount: Any?, legalEntity: StripeConnectAccountLegalEntity?, metadata: [String: String]?, payoutSchedule: [String: String]?, payoutStatementDescriptor: String?, productDescription: String?, statementDescriptor: String?, supportEmail: String?, supportPhone: String?, supportUrl: String?, tosAcceptance: StripeTOSAcceptance?) throws -> Future<StripeConnectAccount>
+    func update(account: String, businessName: String?, businessPrimaryColor: String?, businessUrl: String?, debitNegativeBalances: Bool?, declineChargeOn: [String: Bool]?, defaultCurrency: StripeCurrency?, email: String?, externalAccount: Any?, legalEntity: [String: Any]?, metadata: [String: String]?, payoutSchedule: [String: String]?, payoutStatementDescriptor: String?, productDescription: String?, statementDescriptor: String?, supportEmail: String?, supportPhone: String?, supportUrl: String?, tosAcceptance: StripeTOSAcceptance?) throws -> Future<StripeConnectAccount>
     func delete(account: String) throws -> Future<StripeDeletedObject>
     func reject(account: String, for: AccountRejectReason) throws -> Future<StripeConnectAccount>
     func listAll(filter: [String: Any]?) throws -> Future<ConnectedAccountsList>
@@ -31,7 +31,7 @@ extension AccountRoutes {
                        declineChargeOn: [String: Bool]? = nil,
                        defaultCurrency: StripeCurrency? = nil,
                        externalAccount: Any? = nil,
-                       legalEntity: StripeConnectAccountLegalEntity? = nil,
+                       legalEntity: [String: Any]? = nil,
                        metadata: [String: String]? = nil,
                        payoutSchedule: [String: String]? = nil,
                        payoutStatementDescriptor: String? = nil,
@@ -78,7 +78,7 @@ extension AccountRoutes {
                        defaultCurrency: StripeCurrency? = nil,
                        email: String? = nil,
                        externalAccount: Any? = nil,
-                       legalEntity: StripeConnectAccountLegalEntity? = nil,
+                       legalEntity: [String: Any]? = nil,
                        metadata: [String : String]? = nil,
                        payoutSchedule: [String : String]? = nil,
                        payoutStatementDescriptor: String? = nil,
@@ -147,7 +147,7 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
                        declineChargeOn: [String: Bool]?,
                        defaultCurrency: StripeCurrency?,
                        externalAccount: Any?,
-                       legalEntity: StripeConnectAccountLegalEntity?,
+                       legalEntity: [String: Any]?,
                        metadata: [String: String]?,
                        payoutSchedule: [String: String]?,
                        payoutStatementDescriptor: String?,
@@ -202,14 +202,14 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
         
         if let externalAccountToken = externalAccount as? String {
             body["external_account"] = externalAccountToken
-        } else if let externalBankAccount = externalAccount as? StripeExternalBankAccount {
-            try externalBankAccount.toEncodedDictionary().forEach { body["external_account[\($0)]"] = $1 }
-        } else if let externalCardAccount = externalAccount as? StripeExternalCardAccount {
-            try externalCardAccount.toEncodedDictionary().forEach { body["external_account[\($0)]"] = $1 }
+        } else if let externalBankAccount = externalAccount as? [String: Any] {
+            externalBankAccount.forEach { body["external_account[\($0)]"] = $1 }
+        } else if let externalCardAccount = externalAccount as? [String: Any] {
+            externalCardAccount.forEach { body["external_account[\($0)]"] = $1 }
         }
         
         if let legalEntity = legalEntity {
-            try legalEntity.toEncodedDictionary().forEach { body["legal_entity[\($0)]"] = $1 }
+            legalEntity.forEach { body["legal_entity[\($0)]"] = $1 }
         }
         
         if let metadata = metadata {
@@ -276,7 +276,7 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
                        defaultCurrency: StripeCurrency?,
                        email: String?,
                        externalAccount: Any?,
-                       legalEntity: StripeConnectAccountLegalEntity?,
+                       legalEntity: [String: Any]?,
                        metadata: [String : String]?,
                        payoutSchedule: [String : String]?,
                        payoutStatementDescriptor: String?,
@@ -316,16 +316,16 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
             body["email"] = email
         }
         
-        if let externalBankAccount = externalAccount as? StripeExternalBankAccount {
-            try externalBankAccount.toEncodedDictionary().forEach { body["external_account[\($0)]"] = $1 }
-        }
-        
-        if let externalCardAccount = externalAccount as? StripeExternalCardAccount {
-            try externalCardAccount.toEncodedDictionary().forEach { body["external_account[\($0)]"] = $1 }
+        if let externalAccountToken = externalAccount as? String {
+            body["external_account"] = externalAccountToken
+        } else if let externalBankAccount = externalAccount as? [String: Any] {
+            externalBankAccount.forEach { body["external_account[\($0)]"] = $1 }
+        } else if let externalCardAccount = externalAccount as? [String: Any] {
+            externalCardAccount.forEach { body["external_account[\($0)]"] = $1 }
         }
         
         if let legalEntity = legalEntity {
-            try legalEntity.toEncodedDictionary().forEach { body["legal_entity[\($0)]"] = $1 }
+            legalEntity.forEach { body["legal_entity[\($0)]"] = $1 }
         }
         
         if let metadata = metadata {
