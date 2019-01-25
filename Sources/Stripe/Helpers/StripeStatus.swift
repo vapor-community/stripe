@@ -15,6 +15,7 @@ public enum StripeStatus: String, Codable {
     case pending
     case canceled
     case chargeable
+    case available
 }
 
 // https://stripe.com/docs/api/curl#subscription_object-status
