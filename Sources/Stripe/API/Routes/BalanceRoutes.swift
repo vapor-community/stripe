@@ -54,6 +54,6 @@ public struct StripeBalanceRoutes: BalanceRoutes {
         if let filter = filter {
             queryParams = filter.queryParameters
         }
-        return try request.send(method: .GET, path: StripeAPIEndpoint.account.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.balance.endpoint, query: queryParams)
     }
 }

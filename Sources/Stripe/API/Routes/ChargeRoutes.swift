@@ -280,6 +280,6 @@ public struct StripeChargeRoutes: ChargeRoutes {
             queryParams = filter.queryParameters
         }
         
-        return try request.send(method: .GET, path: StripeAPIEndpoint.account.endpoint, query: queryParams)
+        return try request.send(method: .GET, path: StripeAPIEndpoint.charges.endpoint, query: queryParams)
     }
 }
