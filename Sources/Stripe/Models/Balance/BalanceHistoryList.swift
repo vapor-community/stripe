@@ -16,7 +16,7 @@ public struct BalanceHistoryList: StripeModel {
     public var hasMore: Bool?
     public var totalCount: Int?
     public var url: String?
-    public var data: [StripeBalance]?
+    public var data: [StripeBalanceTransactionItem]?
     
     public enum CodingKeys: String, CodingKey {
         case object
