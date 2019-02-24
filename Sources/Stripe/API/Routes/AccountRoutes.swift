@@ -9,9 +9,34 @@
 import Vapor
 
 public protocol AccountRoutes {
-    func create(type: ConnectedAccountType, email: String?, country: String?, accountToken: String?, businessLogo: String?, businessName: String?, businessPrimaryColor: String?, businessUrl: String?, debitNegativeBalances: Bool?, declineChargeOn: [String: Bool]?, defaultCurrency: StripeCurrency?, externalAccount: Any?, legalEntity: [String: Any]?, metadata: [String: String]?, payoutSchedule: [String: String]?, payoutStatementDescriptor: String?, productDescription: String?, statementDescriptor: String?, supportEmail: String?, supportPhone: String?, supportUrl: String?, tosAcceptance: StripeTOSAcceptance?) throws -> Future<StripeConnectAccount>
+    func create(type: StripeConnectAccountType,
+                country: String?,
+                email: String?,
+                accountToken: String?,
+                businessProfile: [String: Any]?,
+                businessType: StripeConnectAccountBusinessType?,
+                company: [String: Any]?,
+                defaultCurrency: StripeCurrency?,
+                externalAccount: Any?,
+                individual: [String: Any]?,
+                metadata: [String: String]?,
+                requestedCapabilities: [String]?,
+                settings: [String: Any]?,
+                tosAcceptance: [String: Any]?) throws -> Future<StripeConnectAccount>
     func retrieve(account: String) throws -> Future<StripeConnectAccount>
-    func update(account: String, businessName: String?, businessPrimaryColor: String?, businessUrl: String?, debitNegativeBalances: Bool?, declineChargeOn: [String: Bool]?, defaultCurrency: StripeCurrency?, email: String?, externalAccount: Any?, legalEntity: [String: Any]?, metadata: [String: String]?, payoutSchedule: [String: String]?, payoutStatementDescriptor: String?, productDescription: String?, statementDescriptor: String?, supportEmail: String?, supportPhone: String?, supportUrl: String?, tosAcceptance: StripeTOSAcceptance?) throws -> Future<StripeConnectAccount>
+    func update(account accountId: String,
+                accountToken: String?,
+                businessProfile: [String: Any]?,
+                businessType: StripeConnectAccountBusinessType?,
+                company: [String: Any]?,
+                defaultCurrency: StripeCurrency?,
+                email: String?,
+                externalAccount: Any?,
+                individual: [String: Any]?,
+                metadata: [String: String]?,
+                requestedCapabilities: [String]?,
+                settings: [String: Any]?,
+                tosAcceptance: [String: Any]?) throws -> Future<StripeConnectAccount>
     func delete(account: String) throws -> Future<StripeDeletedObject>
     func reject(account: String, for: AccountRejectReason) throws -> Future<StripeConnectAccount>
     func listAll(filter: [String: Any]?) throws -> Future<ConnectedAccountsList>
@@ -19,49 +44,33 @@ public protocol AccountRoutes {
 }
 
 extension AccountRoutes {
-    public func create(type: ConnectedAccountType,
-                       email: String? = nil,
+    public func create(type: StripeConnectAccountType,
                        country: String? = nil,
+                       email: String? = nil,
                        accountToken: String? = nil,
-                       businessLogo: String? = nil,
-                       businessName: String? = nil,
-                       businessPrimaryColor: String? = nil,
-                       businessUrl: String? = nil,
-                       debitNegativeBalances: Bool? = nil,
-                       declineChargeOn: [String: Bool]? = nil,
+                       businessProfile: [String: Any]? = nil,
+                       businessType: StripeConnectAccountBusinessType? = nil,
+                       company: [String: Any]? = nil,
                        defaultCurrency: StripeCurrency? = nil,
                        externalAccount: Any? = nil,
-                       legalEntity: [String: Any]? = nil,
+                       individual: [String: Any]? = nil,
                        metadata: [String: String]? = nil,
-                       payoutSchedule: [String: String]? = nil,
-                       payoutStatementDescriptor: String? = nil,
-                       productDescription: String? = nil,
-                       statementDescriptor: String? = nil,
-                       supportEmail: String? = nil,
-                       supportPhone: String? = nil,
-                       supportUrl: String? = nil,
-                       tosAcceptance: StripeTOSAcceptance? = nil) throws -> Future<StripeConnectAccount> {
+                       requestedCapabilities: [String]? = nil,
+                       settings: [String: Any]? = nil,
+                       tosAcceptance: [String: Any]? = nil) throws -> Future<StripeConnectAccount> {
         return try create(type: type,
-                          email: email,
                           country: country,
+                          email: email,
                           accountToken: accountToken,
-                          businessLogo: businessLogo,
-                          businessName: businessName,
-                          businessPrimaryColor: businessPrimaryColor,
-                          businessUrl: businessUrl,
-                          debitNegativeBalances: debitNegativeBalances,
-                          declineChargeOn: declineChargeOn,
+                          businessProfile: businessProfile,
+                          businessType: businessType,
+                          company: company,
                           defaultCurrency: defaultCurrency,
                           externalAccount: externalAccount,
-                          legalEntity: legalEntity,
+                          individual: individual,
                           metadata: metadata,
-                          payoutSchedule: payoutSchedule,
-                          payoutStatementDescriptor: payoutStatementDescriptor,
-                          productDescription: productDescription,
-                          statementDescriptor: statementDescriptor,
-                          supportEmail: supportEmail,
-                          supportPhone: supportPhone,
-                          supportUrl: supportUrl,
+                          requestedCapabilities: requestedCapabilities,
+                          settings: settings,
                           tosAcceptance: tosAcceptance)
     }
     
@@ -70,42 +79,30 @@ extension AccountRoutes {
     }
     
     public func update(account accountId: String,
-                       businessName: String? = nil,
-                       businessPrimaryColor: String? = nil,
-                       businessUrl: String? = nil,
-                       debitNegativeBalances: Bool? = nil,
-                       declineChargeOn: [String : Bool]? = nil,
+                       accountToken: String? = nil,
+                       businessProfile: [String: Any]? = nil,
+                       businessType: StripeConnectAccountBusinessType? = nil,
+                       company: [String: Any]? = nil,
                        defaultCurrency: StripeCurrency? = nil,
                        email: String? = nil,
                        externalAccount: Any? = nil,
-                       legalEntity: [String: Any]? = nil,
-                       metadata: [String : String]? = nil,
-                       payoutSchedule: [String : String]? = nil,
-                       payoutStatementDescriptor: String? = nil,
-                       productDescription: String? = nil,
-                       statementDescriptor: String? = nil,
-                       supportEmail: String? = nil,
-                       supportPhone: String? = nil,
-                       supportUrl: String? = nil,
-                       tosAcceptance: StripeTOSAcceptance? = nil) throws -> Future<StripeConnectAccount> {
+                       individual: [String: Any]? = nil,
+                       metadata: [String: String]? = nil,
+                       requestedCapabilities: [String]? = nil,
+                       settings: [String: Any]? = nil,
+                       tosAcceptance: [String: Any]? = nil) throws -> Future<StripeConnectAccount> {
         return try update(account: accountId,
-                          businessName: businessName,
-                          businessPrimaryColor: businessPrimaryColor,
-                          businessUrl: businessUrl,
-                          debitNegativeBalances: debitNegativeBalances,
-                          declineChargeOn: declineChargeOn,
+                          accountToken: accountToken,
+                          businessProfile: businessProfile,
+                          businessType: businessType,
+                          company: company,
                           defaultCurrency: defaultCurrency,
                           email: email,
                           externalAccount: externalAccount,
-                          legalEntity: legalEntity,
+                          individual: individual,
                           metadata: metadata,
-                          payoutSchedule: payoutSchedule,
-                          payoutStatementDescriptor: payoutStatementDescriptor,
-                          productDescription: productDescription,
-                          statementDescriptor: statementDescriptor,
-                          supportEmail: supportEmail,
-                          supportPhone: supportPhone,
-                          supportUrl: supportUrl,
+                          requestedCapabilities: requestedCapabilities,
+                          settings: settings,
                           tosAcceptance: tosAcceptance)
     }
     
@@ -135,28 +132,20 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
     
     /// Create an account
     /// [Learn More →](https://stripe.com/docs/api/curl#create_account)
-    public func create(type: ConnectedAccountType,
-                       email: String?,
+    public func create(type: StripeConnectAccountType,
                        country: String?,
+                       email: String?,
                        accountToken: String?,
-                       businessLogo: String?,
-                       businessName: String?,
-                       businessPrimaryColor: String?,
-                       businessUrl: String?,
-                       debitNegativeBalances: Bool?,
-                       declineChargeOn: [String: Bool]?,
+                       businessProfile: [String: Any]?,
+                       businessType: StripeConnectAccountBusinessType?,
+                       company: [String: Any]?,
                        defaultCurrency: StripeCurrency?,
                        externalAccount: Any?,
-                       legalEntity: [String: Any]?,
+                       individual: [String: Any]?,
                        metadata: [String: String]?,
-                       payoutSchedule: [String: String]?,
-                       payoutStatementDescriptor: String?,
-                       productDescription: String?,
-                       statementDescriptor: String?,
-                       supportEmail: String?,
-                       supportPhone: String?,
-                       supportUrl: String?,
-                       tosAcceptance: StripeTOSAcceptance?) throws -> Future<StripeConnectAccount> {
+                       requestedCapabilities: [String]?,
+                       settings: [String: Any]?,
+                       tosAcceptance: [String: Any]?) throws -> Future<StripeConnectAccount> {
         var body: [String: Any] = [:]
         body["type"] = type.rawValue
         
@@ -172,28 +161,16 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
             body["account_token"] = accountToken
         }
         
-        if let businessLogo = businessLogo {
-            body["business_logo"] = businessLogo
+        if let businessProfile = businessProfile {
+            businessProfile.forEach { body["business_profile[\($0)]"] = $1 }
         }
         
-        if let businessname = businessName {
-            body["business_name"] = businessname
+        if let businessType = businessType {
+            body["business_type"] = businessType.rawValue
         }
         
-        if let businesscolor = businessPrimaryColor {
-            body["business_primary_color"] = businesscolor
-        }
-        
-        if let businessurl = businessUrl {
-            body["business_url"] = businessurl
-        }
-        
-        if let debNegBal = debitNegativeBalances {
-            body["debit_negative_balances"] = debNegBal
-        }
-        
-        if let declinechargeon = declineChargeOn {
-            declinechargeon.forEach { body["decline_charge_on[\($0)]"] = $1 }
+        if let company = company {
+            company.forEach { body["company[\($0)]"] = $1 }
         }
         
         if let currency = defaultCurrency {
@@ -202,58 +179,28 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
         
         if let externalAccountToken = externalAccount as? String {
             body["external_account"] = externalAccountToken
-        } else if let externalBankAccount = externalAccount as? [String: Any] {
-            externalBankAccount.forEach { body["external_account[\($0)]"] = $1 }
-        } else if let externalCardAccount = externalAccount as? [String: Any] {
-            externalCardAccount.forEach { body["external_account[\($0)]"] = $1 }
+        } else if let externalHashAccount = externalAccount as? [String: Any] {
+            externalHashAccount.forEach { body["external_account[\($0)]"] = $1 }
         }
         
-        if let legalEntity = legalEntity {
-            legalEntity.forEach { body["legal_entity[\($0)]"] = $1 }
+        if let individual = individual {
+            individual.forEach { body["individual[\($0)]"] = $1 }
         }
         
         if let metadata = metadata {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
-        if let payoutSchedule = payoutSchedule {
-            payoutSchedule.forEach { body["payout_schedule[\($0)]"] = $1 }
+        if let requestedCapabilities = requestedCapabilities {
+            body["requested_capabilities"] = requestedCapabilities
         }
         
-        if let payoutstatement = payoutStatementDescriptor {
-            body["payout_statement_descriptor"] = payoutstatement
-        }
-        
-        if let productDescription = productDescription {
-            body["product_description"] = productDescription
-        }
-        
-        if let statementdescriptor = statementDescriptor {
-            body["statement_descriptor"] = statementdescriptor
-        }
-        
-        if let supportEmail = supportEmail {
-            body["support_email"] = supportEmail
-        }
-        
-        if let supportPhone = supportPhone {
-            body["support_phone"] = supportPhone
-        }
-        
-        if let supportUrl = supportUrl {
-            body["support_url"] = supportUrl
+        if let settings = settings {
+            settings.forEach { body["settings[\($0)]"] = $1 }
         }
         
         if let tos = tosAcceptance {
-            if let tosDate = tos.date {
-                body["tos_acceptance[date]"] = Int(tosDate.timeIntervalSince1970)
-            }
-            if let tosIp = tos.ip {
-                body["tos_acceptance[ip]"] = tosIp
-            }
-            if let tosUserAgent = tos.userAgent {
-                body["tos_acceptance[user_agent]"] = tosUserAgent
-            }
+            tos.forEach { body["tos_acceptance[\($0)]"] = $1 }
         }
         
         return try request.send(method: .POST, path: StripeAPIEndpoint.account.endpoint, body: body.queryParameters)
@@ -268,44 +215,34 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
     /// Update an account
     /// [Learn More →](https://stripe.com/docs/api/curl#update_account)
     public func update(account accountId: String,
-                       businessName: String?,
-                       businessPrimaryColor: String?,
-                       businessUrl: String?,
-                       debitNegativeBalances: Bool?,
-                       declineChargeOn: [String : Bool]?,
+                       accountToken: String?,
+                       businessProfile: [String: Any]?,
+                       businessType: StripeConnectAccountBusinessType?,
+                       company: [String: Any]?,
                        defaultCurrency: StripeCurrency?,
                        email: String?,
                        externalAccount: Any?,
-                       legalEntity: [String: Any]?,
-                       metadata: [String : String]?,
-                       payoutSchedule: [String : String]?,
-                       payoutStatementDescriptor: String?,
-                       productDescription: String?,
-                       statementDescriptor: String?,
-                       supportEmail: String?,
-                       supportPhone: String?,
-                       supportUrl: String?,
-                       tosAcceptance: StripeTOSAcceptance?) throws -> Future<StripeConnectAccount> {
+                       individual: [String: Any]?,
+                       metadata: [String: String]?,
+                       requestedCapabilities: [String]?,
+                       settings: [String: Any]?,
+                       tosAcceptance: [String: Any]?) throws -> Future<StripeConnectAccount> {
         var body: [String: Any] = [:]
         
-        if let businessname = businessName {
-            body["business_name"] = businessname
+        if let accountToken = accountToken {
+            body["account_token"] = accountToken
         }
         
-        if let businesscolor = businessPrimaryColor {
-            body["business_primary_color"] = businesscolor
+        if let businessProfile = businessProfile {
+            businessProfile.forEach { body["business_profile[\($0)]"] = $1 }
         }
         
-        if let businessurl = businessUrl {
-            body["business_url"] = businessurl
+        if let businessType = businessType {
+            body["business_type"] = businessType.rawValue
         }
         
-        if let debNegBal = debitNegativeBalances {
-            body["debit_negative_balances"] = debNegBal
-        }
-        
-        if let declinechargeon = declineChargeOn {
-            declinechargeon.forEach { body["decline_charge_on[\($0)]"] = $1 }
+        if let company = company {
+            company.forEach { body["company[\($0)]"] = $1 }
         }
         
         if let currency = defaultCurrency {
@@ -318,50 +255,28 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
         
         if let externalAccountToken = externalAccount as? String {
             body["external_account"] = externalAccountToken
-        } else if let externalBankAccount = externalAccount as? [String: Any] {
-            externalBankAccount.forEach { body["external_account[\($0)]"] = $1 }
-        } else if let externalCardAccount = externalAccount as? [String: Any] {
-            externalCardAccount.forEach { body["external_account[\($0)]"] = $1 }
+        } else if let externalHashAccount = externalAccount as? [String: Any] {
+            externalHashAccount.forEach { body["external_account[\($0)]"] = $1 }
         }
         
-        if let legalEntity = legalEntity {
-            legalEntity.forEach { body["legal_entity[\($0)]"] = $1 }
+        if let individual = individual {
+            individual.forEach { body["individual[\($0)]"] = $1 }
         }
         
         if let metadata = metadata {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
-        if let payoutSchedule = payoutSchedule {
-            payoutSchedule.forEach { body["payout_schedule[\($0)]"] = $1 }
+        if let requestedCapabilities = requestedCapabilities {
+            body["requested_capabilities"] = requestedCapabilities
         }
         
-        if let payoutstatement = payoutStatementDescriptor {
-            body["payout_statement_descriptor"] = payoutstatement
-        }
-        
-        if let productDescription = productDescription {
-            body["product_description"] = productDescription
-        }
-        
-        if let statementdescriptor = statementDescriptor {
-            body["statement_descriptor"] = statementdescriptor
-        }
-        
-        if let supportEmail = supportEmail {
-            body["support_email"] = supportEmail
-        }
-        
-        if let supportPhone = supportPhone {
-            body["support_phone"] = supportPhone
-        }
-        
-        if let supportUrl = supportUrl {
-            body["support_url"] = supportUrl
+        if let settings = settings {
+            settings.forEach { body["settings[\($0)]"] = $1 }
         }
         
         if let tos = tosAcceptance {
-            try tos.toEncodedDictionary().forEach { body["tos_acceptance[\($0)]"] = $1 }
+            tos.forEach { body["tos_acceptance[\($0)]"] = $1 }
         }
         
         return try request.send(method: .POST, path: StripeAPIEndpoint.accounts(accountId).endpoint, body: body.queryParameters)
