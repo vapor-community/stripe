@@ -13,35 +13,33 @@ In your `Package.swift` file, add the following
 .package(url: "https://github.com/vapor-community/stripe-provider.git", from: "2.2.0")
 ~~~~
 
-Register the config and the provider to your Application
+Register the config and the provider in `configure.swift`
 ~~~~swift
-let config = StripeConfig(apiKey: "sk_12345678")
+let config = StripeConfig(productionKey: "sk_live_1234", testKey: "sk_test_1234")
 
 services.register(config)
-
 try services.register(StripeProvider())
-
-app = try Application(services: services)
-
-stripeClient = try app.make(StripeClient.self)
 ~~~~
 
-And you are all set. Interacting with the API is quite easy and adopts the `Future` syntax used in Vapor 3.
-Making calls to the api is straight forward.
+And you are all set. Interacting with the API is quite easy from any route handler.
 ~~~~swift
-let cardParams = ["exp_month": 1,
-                  "exp_year": 2030,
-                  "number": "4242424242424242",
-                  "cvc": 123,
-                  "object": "card"]
 
-let futureCharge = try stripeClient.charge.create(amount: 2500, currency: .usd, source: cardParams)
+struct ChargeToken: Content {
+    var token: String
+}
 
-futureCharge.do({ (charge) in
-    // do something with charge object...
-}).catch({ (error) in
-    print(error)
-})
+func chargeCustomer(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
+    return try req.content.decode(ChargeToken.self).flatMap { charge in
+        return try req.make(StripeClient.self).charge.create(amount: 2500, currency: .usd, source: charge.token).map { stripeCharge in
+            if stripeCharge.status == .success {
+                return .ok
+            } else {
+                print("Stripe charge status: \(stripeCharge.status.rawValue)")
+                return .badRequest
+            }
+        }
+    }
+}
 ~~~~
 
 And you can always check the documentation to see the required paramaters for specific API calls.
@@ -56,7 +54,9 @@ And you can always check the documentation to see the required paramaters for sp
 * [ ] Events
 * [x] File Links
 * [x] File Uploads
+* [ ] PaymentIntents
 * [x] Payouts
+* [x] Products
 * [x] Refunds
 * [x] Tokens
 ---
@@ -65,31 +65,60 @@ And you can always check the documentation to see the required paramaters for sp
 * [x] Cards
 * [x] Sources
 ---
-### Subscriptions
+### Checkout
+* [ ] Sessions
+---
+### Billing
 * [x] Coupons
 * [x] Discounts
 * [x] Invoices
 * [x] Invoice Items
+* [x] Products
 * [x] Plans
 * [x] Subscriptions
 * [x] Subscription items
+* [ ] Usage Records
 ---
 ### Connect
 * [x] Account
 * [ ] Application Fee Refunds
 * [ ] Application Fees
 * [ ] Country Specs
-* [x] External Accounts
+* [ ] External Accounts
+* [ ] Persons
+* [ ] Top-ups
 * [x] Transfers
 * [x] Transfer Reversals
 ---
-### Relay
+### Fraud
+* [ ] Reviews
+* [ ] Value Lists
+* [ ] Value List Items
+---
+### Issuing
+* [ ] Authorizations
+* [ ] Cardholders
+* [ ] Cards
+* [ ] Disputes
+* [ ] Transactions
+---
+### Terminal
+* [ ] Connection Tokens
+* [ ] Locations
+* [ ] Readers
+---
+### Orders
 * [x] Orders
 * [x] Order Items
-* [x] Products
 * [x] Returns
 * [x] SKUs
 * [x] Ephemeral Keys
+---
+### Sigma
+* [ ] Scheduled Queries
+---
+### Webhooks
+* [ ] Webhook Endpoints
 
 [stripe_home]: http://stripe.com "Stripe"
 [stripe_api]: https://stripe.com/docs/api "Stripe API Endpoints"
