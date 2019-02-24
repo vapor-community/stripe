@@ -17,7 +17,7 @@ public struct StripeConnectAccount: StripeModel {
     public var id: String
     public var object: String
     public var businessProfile: StripeConnectAccountBusinessProfile?
-    public var businessType: String?
+    public var businessType: StripeConnectAccountBusinessType?
     public var capabilities: StripeConnectAccountCapablities?
     public var chargesEnabled: Bool?
     public var company: StripeConnectAccountCompany?

@@ -22,8 +22,10 @@ public struct StripePerson: StripeModel {
     public var maidenName: String?
     public var metadata: [String: String]
     public var phone: String?
+    public var relationship: StripePersonRelationship?
+    public var requirements: StripePersonRequirements?
+    public var ssnLast4Provided: Bool?
     public var verification: StripePersonVerification?
-    public var status: StripePersonVerificationStatus?
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -40,8 +42,10 @@ public struct StripePerson: StripeModel {
         case maidenName = "maiden_name"
         case metadata
         case phone
+        case relationship
+        case requirements
+        case ssnLast4Provided = "ssn_last_4_provided"
         case verification
-        case status
     }
 }
 
@@ -76,13 +80,11 @@ public struct StripePersonRequirements: StripeModel {
     public var currentlyDue: [String]?
     public var eventuallyDue: [String]?
     public var pastDue: [String]?
-    public var ssnLast4Provided: Bool?
     
     private enum CodingKeys: String, CodingKey {
         case currentlyDue = "currently_due"
         case eventuallyDue = "eventually_due"
         case pastDue = "past_due"
-        case ssnLast4Provided = "ssn_last_4_provided"
     }
 }
 
@@ -90,11 +92,13 @@ public struct StripePersonVerification: StripeModel {
     public var details: String?
     public var detailsCode: StripePersonVerificationDetailsCode?
     public var document: StripePersonVerificationDocument?
+    public var status: StripePersonVerificationStatus?
     
     private enum CodingKeys: String, CodingKey {
         case details
         case detailsCode = "details_code"
         case document
+        case status
     }
 }
 
@@ -114,7 +118,7 @@ public struct StripePersonVerificationDocument: StripeModel {
     private enum CodingKeys: String, CodingKey {
         case back
         case details
-        case detailsCode = "datails_code"
+        case detailsCode = "details_code"
         case front
     }
 }
