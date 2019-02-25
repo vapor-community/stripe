@@ -20,6 +20,7 @@ public struct StripeCharge: StripeModel {
     public var amountRefunded: Int?
     public var application: String?
     public var applicationFee: String?
+    public var applicationFeeAmount: Int?
     public var balanceTransaction: String?
     public var captured: Bool
     public var created: Date?
@@ -38,6 +39,7 @@ public struct StripeCharge: StripeModel {
     public var order: String?
     public var outcome: StripeOutcome?
     public var paid: Bool?
+    public var paymentIntent: String?
     public var receiptEmail: String?
     public var receiptNumber: String?
     public var refunded: Bool?
@@ -49,6 +51,7 @@ public struct StripeCharge: StripeModel {
     public var statementDescriptor: String?
     public var status: StripeStatus?
     public var transfer: String?
+    public var transferData: StripeChargeTransferData?
     public var transferGroup: String?
     
     public enum CodingKeys: String, CodingKey {
@@ -58,6 +61,7 @@ public struct StripeCharge: StripeModel {
         case amountRefunded = "amount_refunded"
         case application
         case applicationFee = "application_fee"
+        case applicationFeeAmount = "application_fee_amount"
         case balanceTransaction = "balance_transaction"
         case captured
         case created
@@ -76,6 +80,7 @@ public struct StripeCharge: StripeModel {
         case order
         case outcome
         case paid
+        case paymentIntent = "payment_intent"
         case receiptEmail = "receipt_email"
         case receiptNumber = "receipt_number"
         case refunded
@@ -87,6 +92,12 @@ public struct StripeCharge: StripeModel {
         case statementDescriptor = "statement_descriptor"
         case status
         case transfer
+        case transferData = "transfer_data"
         case transferGroup = "transfer_group"
     }
+}
+
+public struct StripeChargeTransferData: StripeModel {
+    public var amount: Int?
+    public var destination: String?
 }

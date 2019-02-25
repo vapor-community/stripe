@@ -19,6 +19,7 @@ class ChargeTests: XCTestCase {
   "amount_refunded": 0,
   "application": "oops",
   "application_fee": "fee_something",
+  "application_fee_amount": 300,
   "balance_transaction": "txn_19XJJ02eZvKYlo2ClwuJ1rbA",
   "captured": false,
   "created": 1517704056,
@@ -45,6 +46,7 @@ class ChargeTests: XCTestCase {
     "type": "issuer_declined"
   },
   "paid": false,
+  "payment_intent": "bop",
   "receipt_email": "a@b.com",
   "receipt_number": "some number",
   "refunded": false,
@@ -61,7 +63,11 @@ class ChargeTests: XCTestCase {
   "source_transfer": "sickness",
   "statement_descriptor": "for a shirt",
   "status": "failed",
-  "transfer_group": "group a"
+  "transfer_group": "group a",
+  "transfer_data": {
+     "amount": 45,
+     "destination": "acc_123"
+   }
 }
 """
     
@@ -83,6 +89,7 @@ class ChargeTests: XCTestCase {
                 XCTAssertEqual(charge.amountRefunded, 0)
                 XCTAssertEqual(charge.application, "oops")
                 XCTAssertEqual(charge.applicationFee, "fee_something")
+                XCTAssertEqual(charge.applicationFeeAmount, 300)
                 XCTAssertEqual(charge.balanceTransaction, "txn_19XJJ02eZvKYlo2ClwuJ1rbA")
                 XCTAssertEqual(charge.captured, false)
                 XCTAssertEqual(charge.created, Date(timeIntervalSince1970: 1517704056))
@@ -103,6 +110,7 @@ class ChargeTests: XCTestCase {
                 XCTAssertEqual(charge.outcome?.type, .issuerDeclined)
                 
                 XCTAssertEqual(charge.paid, false)
+                XCTAssertEqual(charge.paymentIntent, "bop")
                 XCTAssertEqual(charge.receiptEmail, "a@b.com")
                 XCTAssertEqual(charge.receiptNumber, "some number")
                 XCTAssertEqual(charge.refunded, false)
@@ -111,6 +119,8 @@ class ChargeTests: XCTestCase {
                 XCTAssertEqual(charge.statementDescriptor, "for a shirt")
                 XCTAssertEqual(charge.status, .failed)
                 XCTAssertEqual(charge.transferGroup, "group a")
+                XCTAssertEqual(charge.transferData?.amount, 45)
+                XCTAssertEqual(charge.transferData?.destination, "acc_123")
                 
                 }.catch { (error) in
                     XCTFail("\(error)")
