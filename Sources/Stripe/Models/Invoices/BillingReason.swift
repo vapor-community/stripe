@@ -11,8 +11,8 @@ import Foundation
 public enum StripeBillingReason: String, Codable {
     case subscriptionCreate = "subscription_create"
     case subscriptionUpdate = "subscription_update"
-    case subscriptionCycle  = "subscription_cycle"
-    case subscription       = "subscription"
+    case subscriptionCycle = "subscription_cycle"
+    case subscription = "subscription"
     case manual
     case upcoming
 }

@@ -43,6 +43,13 @@ extension ErrorTests {
     ]
 }
 
+extension FileTests {
+    static let __allTests = [
+        ("testFileLinkParsedProperly", testFileLinkParsedProperly),
+        ("testFileUploadParsedProperly", testFileUploadParsedProperly),
+    ]
+}
+
 extension InvoiceTests {
     static let __allTests = [
         ("testInvoiceItemParsedProperly", testInvoiceItemParsedProperly),
@@ -138,11 +145,13 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(DisputeTests.__allTests),
         testCase(EphemeralKeyTests.__allTests),
         testCase(ErrorTests.__allTests),
+        testCase(FileTests.__allTests),
         testCase(InvoiceTests.__allTests),
         testCase(OrderTests.__allTests),
         testCase(PaymentSourceTests.__allTests),
         testCase(PayoutTests.__allTests),
         testCase(ProductTests.__allTests),
+        testCase(QueryEncodingTests.__allTests),
         testCase(RefundTests.__allTests),
         testCase(SKUTests.__allTests),
         testCase(SourceTests.__allTests),

@@ -15,20 +15,50 @@ class AccountTests: XCTestCase {
 {
   "id": "acct_1032D82eZvKYlo2C",
   "object": "account",
-  "business_logo": "logourl",
-  "business_name": "Stripe.com",
-  "business_url": "https://www.stripe.com",
+  "business_profile": {
+    "mcc": "hello",
+    "name": "Vapor",
+    "product_description": "Something",
+    "support_address" : {
+      "city": null,
+      "country": "US",
+      "line1": null,
+      "line2": null,
+      "postal_code": "12345",
+      "state": null
+    },
+    "support_email": "a@b.com",
+    "support_phone": "1",
+    "support_url": "http",
+    "url": "https://www.stripe.com"
+   },
+  "business_type": "individual",
+  "capabilities": {
+    "card_payments": "active",
+    "platform_payments": "inactive"
+  },
   "charges_enabled": false,
+  "company": {
+    "address": {
+      "city": null,
+      "country": "US",
+      "line1": null,
+      "line2": null,
+      "postal_code": null,
+      "state": null
+    },
+    "directors_provided": false,
+    "name": "Vapor",
+    "owners_provided": true,
+    "phone": "1",
+    "tax_id_provided": false,
+    "tax_id_registrar": "bob",
+    "vat_id_provided": true
+  },
   "country": "US",
   "created": 1385798567,
-  "debit_negative_balances": true,
-  "decline_charge_on": {
-    "avs_failure": true,
-    "cvc_failure": false
-  },
   "default_currency": "usd",
   "details_submitted": false,
-  "display_name": "Stripe.com",
   "email": "site@stripe.com",
   "external_accounts": {
     "object": "list",
@@ -66,26 +96,10 @@ class AccountTests: XCTestCase {
     "total_count": 2,
     "url": "/v1/accounts/acct_1032D82eZvKYlo2C/external_accounts"
   },
-  "legal_entity": {
-    "additional_owners": [
-        {
-            "first_name": "Malcom",
-            "last_name": "X",
-            "maiden_name": "old",
-            "personal_id_number_provided": true,
-            "verification": {
-              "details": "Nothing to see here",
-              "details_code": "failed_other",
-              "document": "thestuff.pdf",
-              "status": "verified"
-            },
-            "dob": {
-              "day": 10,
-              "month": 10,
-              "year": 2016
-            }
-        }
-    ],
+  "individual": {
+    "id": "person_8VPUvxRDdnt3Q8",
+    "object": "person",
+    "account": "acct_16Ds3sAU9AiAmxbB",
     "address": {
       "city": null,
       "country": "US",
@@ -94,74 +108,112 @@ class AccountTests: XCTestCase {
       "postal_code": null,
       "state": null
     },
-    "business_name": "Vapor codes",
-    "business_tax_id_provided": false,
+    "created": 1434353476,
     "dob": {
-      "day": 10,
-      "month": 10,
-      "year": 2016
+      "day": 1,
+      "month": 1,
+      "year": 2019
     },
-    "first_name": "Mike",
-    "last_name": "Jones",
-    "personal_address": {
-      "city": null,
-      "country": "US",
-      "line1": null,
-      "line2": null,
-      "postal_code": "12345",
-      "state": null
+    "first_name": null,
+    "id_number_provided": false,
+    "last_name": "carl",
+    "metadata": {},
+    "relationship": {
+      "account_opener": true,
+      "director": false,
+      "owner": true,
+      "percent_ownership": 100.0,
+      "title": "CEO"
     },
-    "personal_id_number_provided": false,
+    "requirements": {
+      "currently_due": [
+        "dob.day",
+        "dob.month",
+        "dob.year",
+        "first_name",
+        "last_name",
+        "ssn_last_4"
+      ],
+      "eventually_due": [],
+      "past_due": []
+    },
     "ssn_last_4_provided": false,
-    "type": "individual",
     "verification": {
       "details": null,
-      "details_code": "failed_other",
-      "document": null,
+      "details_code": "scan_name_mismatch",
+      "document": {
+        "back": null,
+        "details": null,
+        "details_code": "document_id_country_not_supported",
+        "front": null
+      },
       "status": "unverified"
     }
   },
   "metadata": {
   },
-  "payout_schedule": {
-    "delay_days": 7,
-    "interval": "daily"
-  },
-  "payout_statement_descriptor": "",
   "payouts_enabled": false,
-  "product_description": "Vapor",
-  "statement_descriptor": "",
-  "support_email": "a@b.com",
-  "support_phone": "1234567",
-  "timezone": "US/Pacific",
+  "requirements": {
+    "current_deadline": null,
+    "currently_due": [
+      "external_account",
+      "individual.address.city",
+      "individual.address.line1",
+      "individual.address.postal_code",
+      "individual.address.state",
+      "individual.dob.day",
+      "individual.dob.month",
+      "individual.dob.year",
+      "individual.first_name",
+      "individual.last_name",
+      "individual.ssn_last_4",
+      "product_description",
+      "tos_acceptance.date",
+      "tos_acceptance.ip"
+    ],
+    "disabled_reason": "requirements.past_due",
+    "eventually_due": [
+      "external_account",
+      "product_description",
+      "tos_acceptance.date",
+      "tos_acceptance.ip"
+    ],
+    "past_due": []
+  },
+  "settings": {
+    "branding": {
+      "icon": "wow",
+      "logo": null,
+      "primary_color": "FFFFFF"
+    },
+    "card_payments": {
+      "decline_on": {
+        "avs_failure": false,
+        "cvc_failure": true
+      }
+    },
+    "dashboard": {
+      "display_name": "StripeVapor",
+      "timezone": "America/Indianapolis"
+    },
+    "payments": {
+      "statement_descriptor": "BLAH"
+    },
+    "payouts": {
+      "debit_negative_balances": true,
+      "schedule": {
+        "delay_days": 2,
+        "interval": "daily"
+      },
+      "statement_descriptor": "MORE"
+    }
+  },
   "tos_acceptance": {
     "date": 1385798567,
     "ip": "0.0.0.0",
     "user_agent": "ios-safari"
   },
-  "type": "standard",
-  "verification": {
-    "disabled_reason": "fields_needed",
-    "due_by": 1385798567,
-    "fields_needed": [
-      "business_url",
-      "external_account",
-      "legal_entity.address.city",
-      "legal_entity.address.line1",
-      "legal_entity.address.postal_code",
-      "legal_entity.address.state",
-      "legal_entity.dob.day",
-      "legal_entity.dob.month",
-      "legal_entity.dob.year",
-      "legal_entity.first_name",
-      "legal_entity.last_name",
-      "legal_entity.type",
-      "product_description",
-      "support_phone",
-      "tos_acceptance.date",
-      "tos_acceptance.ip"
-    ]
-  }
+  "type": "standard"
 }
 """
     
@@ -174,108 +226,106 @@ class AccountTests: XCTestCase {
             var headers: HTTPHeaders = [:]
             headers.replaceOrAdd(name: .contentType, value: MediaType.json.description)
             let request = HTTPRequest(headers: headers, body: body)
-            let futureAccount = try decoder.decode(StripeConnectAccount.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop())
+            let account = try decoder.decode(StripeConnectAccount.self, from: request, maxSize: 65_536, on: EmbeddedEventLoop()).wait()
             
-            futureAccount.do { (account) in
-                XCTAssertEqual(account.id, "acct_1032D82eZvKYlo2C")
-                XCTAssertEqual(account.object, "account")
-                XCTAssertEqual(account.businessLogo, "logourl")
-                XCTAssertEqual(account.businessName, "Stripe.com")
-                XCTAssertEqual(account.businessUrl, "https://www.stripe.com")
-                XCTAssertEqual(account.chargesEnabled, false)
-                XCTAssertEqual(account.country, "US")
-                XCTAssertEqual(account.metadata, [:])
-                XCTAssertEqual(account.created, Date(timeIntervalSince1970: 1385798567))
-                XCTAssertEqual(account.debitNegativeBalances, true)
-                XCTAssertEqual(account.declineChargeOn?["avs_failure"], true)
-                XCTAssertEqual(account.declineChargeOn?["cvc_failure"], false)
-                XCTAssertEqual(account.defaultCurrency, .usd)
-                XCTAssertEqual(account.detailsSubmitted, false)
-                XCTAssertEqual(account.displayName, "Stripe.com")
-                XCTAssertEqual(account.email, "site@stripe.com")
-                
-                // Payout Schedule
-                XCTAssertEqual(account.payoutSchedule?.delayDays, 7)
-                XCTAssertEqual(account.payoutSchedule?.interval, .daily)
-                
-                XCTAssertEqual(account.payoutStatementDescriptor, "")
-                XCTAssertEqual(account.payoutsEnabled, false)
-                XCTAssertEqual(account.productDescription, "Vapor")
-                XCTAssertEqual(account.statementDescriptor, "")
-                XCTAssertEqual(account.supportEmail, "a@b.com")
-                XCTAssertEqual(account.supportPhone, "1234567")
-                XCTAssertEqual(account.timezone, "US/Pacific")
-                
-                // TOS acceptance
-                XCTAssertEqual(account.tosAcceptance?.date, Date(timeIntervalSince1970: 1385798567))
-                XCTAssertEqual(account.tosAcceptance?.ip, "0.0.0.0")
-                XCTAssertEqual(account.tosAcceptance?.userAgent, "ios-safari")
-                
-                XCTAssertEqual(account.type, .standard)
-                
-                // Verification
-                XCTAssertEqual(account.verification?.disabledReason, "fields_needed")
-                XCTAssertEqual(account.verification?.dueBy, Date(timeIntervalSince1970: 1385798567))
-                XCTAssertEqual(account.verification?.fieldsNeeded, ["business_url",
-                                                                    "external_account",
-                                                                    "legal_entity.address.city",
-                                                                    "legal_entity.address.line1",
-                                                                    "legal_entity.address.postal_code",
-                                                                    "legal_entity.address.state",
-                                                                    "legal_entity.dob.day",
-                                                                    "legal_entity.dob.month",
-                                                                    "legal_entity.dob.year",
-                                                                    "legal_entity.first_name",
-                                                                    "legal_entity.last_name",
-                                                                    "legal_entity.type",
-                                                                    "product_description",
-                                                                    "support_phone",
-                                                                    "tos_acceptance.date",
-                                                                    "tos_acceptance.ip"])
-                
-                // ExternalAccounts
-                XCTAssertEqual(account.externalAccounts?.object, "list")
-                XCTAssertEqual(account.externalAccounts?.hasMore, false)
-                XCTAssertEqual(account.externalAccounts?.totalCount, 2)
-                XCTAssertEqual(account.externalAccounts?.url, "/v1/accounts/acct_1032D82eZvKYlo2C/external_accounts")
-                XCTAssertEqual(account.externalAccounts?.cardAccounts?.count, 1)
-                XCTAssertEqual(account.externalAccounts?.bankAccounts?.count, 1)
-                XCTAssertEqual(account.externalAccounts?.cardAccounts?[0].id, "card_1BoJ2IKrZ43eBVAbSXsWRMXT")
-                XCTAssertEqual(account.externalAccounts?.bankAccounts?[0].id, "ba_1BnxhQ2eZvKYlo2C5cM6hYK1")
-                
-                // LegalEntity
-                XCTAssertEqual(account.legalEntity?.address?.country, "US")
-                XCTAssertEqual(account.legalEntity?.businessName, "Vapor codes")
-                XCTAssertEqual(account.legalEntity?.businessTaxIdProvided, false)
-                XCTAssertEqual(account.legalEntity?.dob?["day"], 10)
-                XCTAssertEqual(account.legalEntity?.dob?["month"], 10)
-                XCTAssertEqual(account.legalEntity?.dob?["year"], 2016)
-                XCTAssertEqual(account.legalEntity?.firstName, "Mike")
-                XCTAssertEqual(account.legalEntity?.lastName, "Jones")
-                XCTAssertEqual(account.legalEntity?.personalAddress?.country, "US")
-                XCTAssertEqual(account.legalEntity?.personalAddress?.postalCode, "12345")
-                XCTAssertEqual(account.legalEntity?.personalIdNumberProvided, false)
-                XCTAssertEqual(account.legalEntity?.ssnLast4Provided, false)
-                XCTAssertEqual(account.legalEntity?.type, "individual")
-                XCTAssertEqual(account.legalEntity?.verification?.detailsCode, .failedOther)
-                XCTAssertEqual(account.legalEntity?.verification?.status, .unverified)
-
-                // Additional Owners
-                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].firstName, "Malcom")
-                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].lastName, "X")
-                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].maidenName, "old")
-                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].personalIdNumberProvided, true)
-                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].verification?.details, "Nothing to see here")
-                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].verification?.detailsCode, .failedOther)
-                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].verification?.document, "thestuff.pdf")
-                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].verification?.status, .verified)
-                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].dob?["day"], 10)
-                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].dob?["month"], 10)
-                XCTAssertEqual(account.legalEntity?.additionalOwners?[0].dob?["year"], 2016)
-                
-                }.catch { (error) in
-                    XCTFail("\(error)")
-            }
+            XCTAssertEqual(account.id, "acct_1032D82eZvKYlo2C")
+            XCTAssertEqual(account.object, "account")
+            XCTAssertEqual(account.businessProfile?.url, "https://www.stripe.com")
+            XCTAssertEqual(account.businessProfile?.name, "Vapor")
+            XCTAssertEqual(account.businessProfile?.mcc, "hello")
+            XCTAssertEqual(account.businessProfile?.supportUrl, "http")
+            XCTAssertEqual(account.businessProfile?.productDescription, "Something")
+            XCTAssertEqual(account.businessProfile?.supportAddress?.postalCode, "12345")
+            XCTAssertEqual(account.businessProfile?.supportPhone, "1")
+            XCTAssertEqual(account.businessProfile?.supportEmail, "a@b.com")
+            XCTAssertEqual(account.businessType, .individual)
+            XCTAssertEqual(account.capabilities?.cardPayments, .active)
+            XCTAssertEqual(account.capabilities?.platformPayments, .inactive)
+            XCTAssertEqual(account.chargesEnabled, false)
+            XCTAssertEqual(account.company?.address?.country, "US")
+            XCTAssertEqual(account.company?.directorsProvided, false)
+            XCTAssertEqual(account.company?.name, "Vapor")
+            XCTAssertEqual(account.company?.ownersProvided, true)
+            XCTAssertEqual(account.company?.phone, "1")
+            XCTAssertEqual(account.company?.taxIdProvided, false)
+            XCTAssertEqual(account.company?.taxIdRegistrar, "bob")
+            XCTAssertEqual(account.company?.vatIdProvided, true)
+            XCTAssertEqual(account.country, "US")
+            XCTAssertEqual(account.created, Date(timeIntervalSince1970: 1385798567))
+            XCTAssertEqual(account.defaultCurrency, .usd)
+            XCTAssertEqual(account.detailsSubmitted, false)
+            XCTAssertEqual(account.email, "site@stripe.com")
+            
+            // ExternalAccounts
+            XCTAssertEqual(account.externalAccounts?.object, "list")
+            XCTAssertEqual(account.externalAccounts?.hasMore, false)
+            XCTAssertEqual(account.externalAccounts?.totalCount, 2)
+            XCTAssertEqual(account.externalAccounts?.url, "/v1/accounts/acct_1032D82eZvKYlo2C/external_accounts")
+            XCTAssertEqual(account.externalAccounts?.cardAccounts?.count, 1)
+            XCTAssertEqual(account.externalAccounts?.bankAccounts?.count, 1)
+            XCTAssertEqual(account.externalAccounts?.cardAccounts?[0].id, "card_1BoJ2IKrZ43eBVAbSXsWRMXT")
+            XCTAssertEqual(account.externalAccounts?.bankAccounts?[0].id, "ba_1BnxhQ2eZvKYlo2C5cM6hYK1")
+            
+            // Individual/Person
+            XCTAssertEqual(account.individual?.id, "person_8VPUvxRDdnt3Q8")
+            XCTAssertEqual(account.individual?.object, "person")
+            XCTAssertEqual(account.individual?.account, "acct_16Ds3sAU9AiAmxbB")
+            XCTAssertEqual(account.individual?.address?.country, "US")
+            XCTAssertEqual(account.individual?.created, Date(timeIntervalSince1970: 1434353476))
+            XCTAssertEqual(account.individual?.dob?.day, 1)
+            XCTAssertEqual(account.individual?.dob?.month, 1)
+            XCTAssertEqual(account.individual?.dob?.year, 2019)
+            XCTAssertEqual(account.individual?.firstName, nil)
+            XCTAssertEqual(account.individual?.idNumberProvided, false)
+            XCTAssertEqual(account.individual?.lastName, "carl")
+            XCTAssertEqual(account.individual?.metadata, [:])
+            XCTAssertEqual(account.individual?.relationship?.accountOpener, true)
+            XCTAssertEqual(account.individual?.relationship?.director, false)
+            XCTAssertEqual(account.individual?.relationship?.owner, true)
+            XCTAssertEqual(account.individual?.relationship?.percentOwnership, 100.0)
+            XCTAssertEqual(account.individual?.relationship?.title, "CEO")
+            XCTAssertEqual(account.individual?.requirements?.currentlyDue?.count, 6)
+            XCTAssertEqual(account.individual?.requirements?.eventuallyDue?.count, 0)
+            XCTAssertEqual(account.individual?.requirements?.pastDue?.count, 0)
+            XCTAssertEqual(account.individual?.ssnLast4Provided, false)
+            XCTAssertEqual(account.individual?.verification?.details, nil)
+            XCTAssertEqual(account.individual?.verification?.detailsCode, .scanNameMismatch)
+            XCTAssertEqual(account.individual?.verification?.document?.detailsCode, .documentIdCountryNotSupported)
+            XCTAssertEqual(account.individual?.verification?.status, .unverified)
+            
+            XCTAssertEqual(account.metadata, [:])
+            XCTAssertEqual(account.payoutsEnabled, false)
+            
+            // Requirements
+            XCTAssertEqual(account.requirements?.currentDeadline, nil)
+            XCTAssertEqual(account.requirements?.currentlyDue?.count, 14)
+            XCTAssertEqual(account.requirements?.disabledReason, "requirements.past_due")
+            XCTAssertEqual(account.requirements?.eventuallyDue?.count, 4)
+            XCTAssertEqual(account.requirements?.pastDue?.count, 0)
+            
+            // Settings
+            XCTAssertEqual(account.settings?.branding?.icon, "wow")
+            XCTAssertEqual(account.settings?.branding?.logo, nil)
+            XCTAssertEqual(account.settings?.branding?.primaryColor, "FFFFFF")
+            
+            XCTAssertEqual(account.settings?.cardPayments?.declineOn?.avsFailure, false)
+            XCTAssertEqual(account.settings?.cardPayments?.declineOn?.cvcFailure, true)
+            
+            XCTAssertEqual(account.settings?.dashboard?.displayName, "StripeVapor")
+            XCTAssertEqual(account.settings?.dashboard?.timezone, "America/Indianapolis")
+            
+            XCTAssertEqual(account.settings?.payments?.statementDescriptor, "BLAH")
+            XCTAssertEqual(account.settings?.payouts?.debitNegativeBalances, true)
+            XCTAssertEqual(account.settings?.payouts?.schedule?.delayDays, 2)
+            XCTAssertEqual(account.settings?.payouts?.schedule?.interval, .daily)
+            XCTAssertEqual(account.settings?.payouts?.statementDescriptor, "MORE")
+            
+            // TOS acceptance
+            XCTAssertEqual(account.tosAcceptance?.date, Date(timeIntervalSince1970: 1385798567))
+            XCTAssertEqual(account.tosAcceptance?.ip, "0.0.0.0")
+            XCTAssertEqual(account.tosAcceptance?.userAgent, "ios-safari")
+            
+            XCTAssertEqual(account.type, .standard)
         }
         catch {
             XCTFail("\(error)")

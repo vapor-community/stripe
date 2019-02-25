@@ -9,7 +9,7 @@
 import Vapor
 
 public protocol CustomerRoutes {
-    func create(accountBalance: Int?, businessVatId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, metadata: [String: String]?, shipping: ShippingLabel?, source: Any?) throws -> Future<StripeCustomer>
+    func create(accountBalance: Int?, coupon: String?, description: String?, email: String?, invoicePrefix: String?, invoiceSettings: [String: Any]?, metadata: [String: String]?, shipping: [String: Any]?, source: Any?, taxInfo: [String: String]?) throws -> Future<StripeCustomer>
     func retrieve(customer: String) throws -> Future<StripeCustomer>
     func update(customer: String, accountBalance: Int?, businessVatId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, metadata: [String: String]?, shipping: ShippingLabel?, source: Any?) throws -> Future<StripeCustomer>
     func delete(customer: String) throws -> Future<StripeDeletedObject>
@@ -23,23 +23,25 @@ public protocol CustomerRoutes {
 
 extension CustomerRoutes {
     public func create(accountBalance: Int? = nil,
-                       businessVatId: String? = nil,
                        coupon: String? = nil,
-                       defaultSource: String? = nil,
                        description: String? = nil,
                        email: String? = nil,
+                       invoicePrefix: String? = nil,
+                       invoiceSettings: [String: Any]? = nil,
                        metadata: [String: String]? = nil,
-                       shipping: ShippingLabel? = nil,
-                       source: Any? = nil) throws -> Future<StripeCustomer> {
+                       shipping: [String: Any]? = nil,
+                       source: Any? = nil,
+                       taxInfo: [String: String]? = nil) throws -> Future<StripeCustomer> {
         return try create(accountBalance: accountBalance,
-                          businessVatId: businessVatId,
                           coupon: coupon,
-                          defaultSource: defaultSource,
                           description: description,
                           email: email,
+                          invoicePrefix: invoicePrefix,
+                          invoiceSettings: invoiceSettings,
                           metadata: metadata,
                           shipping: shipping,
-                          source: source)
+                          source: source,
+                          taxInfo: taxInfo)
     }
     
     public func retrieve(customer: String) throws -> Future<StripeCustomer> {
@@ -108,30 +110,23 @@ public struct StripeCustomerRoutes: CustomerRoutes {
     /// Create a customer
     /// [Learn More →](https://stripe.com/docs/api/curl#create_customer)
     public func create(accountBalance: Int?,
-                       businessVatId: String?,
                        coupon: String?,
-                       defaultSource: String?,
                        description: String?,
                        email: String?,
+                       invoicePrefix: String?,
+                       invoiceSettings: [String: Any]?,
                        metadata: [String: String]?,
-                       shipping: ShippingLabel?,
-                       source: Any?) throws -> Future<StripeCustomer> {
+                       shipping: [String: Any]?,
+                       source: Any?,
+                       taxInfo: [String: String]?) throws -> Future<StripeCustomer> {
         var body: [String: Any] = [:]
         
         if let accountBalance = accountBalance {
             body["account_balance"] = accountBalance
         }
         
-        if let businessVatId = businessVatId {
-            body["business_vat_id"] = businessVatId
-        }
-        
         if let coupon = coupon {
             body["coupon"] = coupon
-        }
-        
-        if let defaultSource = defaultSource {
-            body["default_source"] = defaultSource
         }
         
         if let description = description {
@@ -142,20 +137,28 @@ public struct StripeCustomerRoutes: CustomerRoutes {
             body["email"] = email
         }
         
+        if let invoicePrefix = invoicePrefix {
+            body["invoice_prefix"] = invoicePrefix
+        }
+        
+        if let invoiceSettings = invoiceSettings {
+            invoiceSettings.forEach { body["invoice_settings[\($0)]"] = $1 }
+        }
+        
         if let metadata = metadata {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let shipping = shipping {
-            try shipping.toEncodedDictionary().forEach { body["shipping[\($0)]"] = $1 }
+            shipping.forEach { body["shipping[\($0)]"] = $1 }
         }
         
         if let tokenSource = source as? String {
             body["source"] = tokenSource
         }
         
-        if let cardDictionarySource = source as? [String: Any] {
-            cardDictionarySource.forEach { body["source[\($0)]"] = $1 }
+        if let dictionarySource = source as? [String: Any] {
+            dictionarySource.forEach { body["source[\($0)]"] = $1 }
         }
         
         return try request.send(method: .POST, path: StripeAPIEndpoint.customers.endpoint, body: body.queryParameters)

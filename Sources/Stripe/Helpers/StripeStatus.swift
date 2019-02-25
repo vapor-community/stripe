@@ -36,21 +36,8 @@ public enum StripeInvoiceStatus: String, Codable {
     case void
 }
 
-public enum LegalEntityVerificationStatus: String, Codable {
-    case unverified
+public enum StripeConnectAccountCapabilitiesStatus: String, Codable {
+    case active
+    case inactive
     case pending
-    case verified
-}
-
-public enum LegalEntityVerificationState: String, Codable {
-    case scanCorrupt = "scan_corrupt"
-    case scanNotReadable = "scan_not_readable"
-    case scanFailedGreyscale = "scan_failed_greyscale"
-    case scanNotUploaded = "scan_not_uploaded"
-    case scanIdTypeNotUploaded = "scan_id_type_not_supported"
-    case scanIdCountryNotSupported = "scan_id_country_not_supported"
-    case scanNameMismatch = "scan_name_mismatch"
-    case scanFailedOther = "scan_failed_other"
-    case failedKeyedIdentity = "failed_keyed_identity"
-    case failedOther = "failed_other"
 }
