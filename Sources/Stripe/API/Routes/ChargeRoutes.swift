@@ -9,9 +9,29 @@
 import Vapor
 
 public protocol ChargeRoutes {
-    func create(amount: Int, currency: StripeCurrency, applicationFee: Int?, capture: Bool?, description: String?, directAccountHeader: String?, destinationAccount: String?, destinationAmount: Int?, transferGroup: String?, onBehalfOf: String?, metadata: [String: String]?, receiptEmail: String?, shipping: ShippingLabel?, customer: String?, source: Any?, statementDescriptor: String?) throws -> Future<StripeCharge>
+    func create(amount: Int,
+                currency: StripeCurrency,
+                applicationFeeAmount: Int?,
+                capture: Bool?,
+                customer: String?,
+                description: String?,
+                metadata: [String: String]?,
+                onBehalfOf: String?,
+                receiptEmail: String?,
+                shipping: [String: Any]?,
+                source: Any?,
+                statementDescriptor: String?,
+                transferData: [String: Any]?,
+                transferGroup: String?) throws -> Future<StripeCharge>
     func retrieve(charge: String) throws -> Future<StripeCharge>
-    func update(charge: String, customer: String?, description: String?, fraudDetails: StripeFraudDetails?, metadata: [String: String]?, receiptEmail: String?, shipping: ShippingLabel?, transferGroup: String?) throws -> Future<StripeCharge>
+    func update(charge: String,
+                customer: String?,
+                description: String?,
+                fraudDetails: [String: Any]?,
+                metadata: [String: String]?,
+                receiptEmail: String?,
+                shipping: [String: Any]?,
+                transferGroup: String?) throws -> Future<StripeCharge>
     func capture(charge: String, amount: Int?, applicationFee: Int?, destinationAmount: Int?, receiptEmail: String?, statementDescriptor: String?) throws -> Future<StripeCharge>
     func listAll(filter: [String: Any]?) throws -> Future<ChargesList>
 }
@@ -19,36 +39,32 @@ public protocol ChargeRoutes {
 extension ChargeRoutes {
     public func create(amount: Int,
                        currency: StripeCurrency,
-                       applicationFee: Int? = nil,
+                       applicationFeeAmount: Int? = nil,
                        capture: Bool? = nil,
-                       description: String? = nil,
-                       directAccountHeader: String? = nil,
-                       destinationAccount: String? = nil,
-                       destinationAmount: Int? = nil,
-                       transferGroup: String? = nil,
-                       onBehalfOf: String? = nil,
-                       metadata: [String : String]? = nil,
-                       receiptEmail: String? = nil,
-                       shipping: ShippingLabel? = nil,
                        customer: String? = nil,
+                       description: String? = nil,
+                       metadata: [String: String]? = nil,
+                       onBehalfOf: String? = nil,
+                       receiptEmail: String? = nil,
+                       shipping: [String: Any]? = nil,
                        source: Any? = nil,
-                       statementDescriptor: String? = nil) throws -> Future<StripeCharge> {
+                       statementDescriptor: String? = nil,
+                       transferData: [String: Any]? = nil,
+                       transferGroup: String? = nil) throws -> Future<StripeCharge> {
         return try create(amount: amount,
                           currency: currency,
-                          applicationFee: applicationFee,
+                          applicationFeeAmount: applicationFeeAmount,
                           capture: capture,
+                          customer: customer,
                           description: description,
-                          directAccountHeader: directAccountHeader,
-                          destinationAccount: destinationAccount,
-                          destinationAmount: destinationAmount,
-                          transferGroup: transferGroup,
-                          onBehalfOf: onBehalfOf,
                           metadata: metadata,
+                          onBehalfOf: onBehalfOf,
                           receiptEmail: receiptEmail,
                           shipping: shipping,
-                          customer: customer,
                           source: source,
-                          statementDescriptor: statementDescriptor)
+                          statementDescriptor: statementDescriptor,
+                          transferData: transferData,
+                          transferGroup: transferGroup)
     }
     
     public func retrieve(charge: String) throws -> Future<StripeCharge> {
@@ -58,10 +74,10 @@ extension ChargeRoutes {
     public func update(charge chargeId: String,
                        customer: String? = nil,
                        description: String? = nil,
-                       fraudDetails: StripeFraudDetails? = nil,
+                       fraudDetails: [String: Any]? = nil,
                        metadata: [String: String]? = nil,
                        receiptEmail: String? = nil,
-                       shipping: ShippingLabel? = nil,
+                       shipping: [String: Any]? = nil,
                        transferGroup: String? = nil) throws -> Future<StripeCharge> {
         return try update(charge: chargeId,
                           customer: customer,
@@ -103,56 +119,41 @@ public struct StripeChargeRoutes: ChargeRoutes {
     /// [Learn More →](https://stripe.com/docs/api/curl#create_charge)
     public func create(amount: Int,
                        currency: StripeCurrency,
-                       applicationFee: Int?,
+                       applicationFeeAmount: Int?,
                        capture: Bool?,
-                       description: String?,
-                       directAccountHeader: String?,
-                       destinationAccount: String?,
-                       destinationAmount: Int?,
-                       transferGroup: String?,
-                       onBehalfOf: String?,
-                       metadata: [String : String]?,
-                       receiptEmail: String?,
-                       shipping: ShippingLabel?,
                        customer: String?,
+                       description: String?,
+                       metadata: [String: String]?,
+                       onBehalfOf: String?,
+                       receiptEmail: String?,
+                       shipping: [String: Any]?,
                        source: Any?,
-                       statementDescriptor: String?) throws -> Future<StripeCharge> {
+                       statementDescriptor: String?,
+                       transferData: [String: Any]?,
+                       transferGroup: String?) throws -> Future<StripeCharge> {
         var body: [String: Any] = ["amount": amount, "currency": currency.rawValue]
-        var headers: HTTPHeaders = [:]
-        if let applicationFee = applicationFee {
-            body["application_fee"] = applicationFee
+        if let applicationFeeAmount = applicationFeeAmount {
+            body["application_fee_amount"] = applicationFeeAmount
         }
         
         if let capture = capture {
             body["capture"] = capture
         }
         
-        if let directAccountHeader = directAccountHeader {
-            headers.replaceOrAdd(name: HTTPHeaderName.stripeAccount, value: directAccountHeader)
+        if let customer = customer {
+            body["customer"] = customer
         }
         
         if let description = description {
             body["description"] = description
         }
         
-        if let destinationAccount = destinationAccount {
-            body["destination[account]"] = destinationAccount
-        }
-        
-        if let destinationAmount = destinationAmount {
-            body["destination[amount]"] = destinationAmount
-        }
-        
-        if let transferGroup = transferGroup {
-            body["transfer_group"] = transferGroup
-        }
-        
-        if let onBehalfOf = onBehalfOf {
-            body["on_behalf_of"] = onBehalfOf
-        }
-        
         if let metadata = metadata {
             metadata.forEach { body["metadata[\($0)]"] = $1}
+        }
+       
+        if let onBehalfOf = onBehalfOf {
+            body["on_behalf_of"] = onBehalfOf
         }
         
         if let receiptEmail = receiptEmail {
@@ -160,26 +161,30 @@ public struct StripeChargeRoutes: ChargeRoutes {
         }
         
         if let shipping = shipping {
-            try shipping.toEncodedDictionary().forEach { body["shipping[\($0)]"] = $1 }
-        }
-        
-        if let customer = customer {
-            body["customer"] = customer
+           shipping.forEach { body["shipping[\($0)]"] = $1 }
         }
         
         if let tokenSource = source as? String {
             body["source"] = tokenSource
         }
         
-        if let cardDictionarySource = source as? [String: Any] {
-            cardDictionarySource.forEach { body["source[\($0)]"] = $1 }
+        if let hashSource = source as? [String: Any] {
+            hashSource.forEach { body["source[\($0)]"] = $1 }
         }
         
         if let statementDescriptor = statementDescriptor {
             body["statement_descriptor"] = statementDescriptor
         }
         
-        return try request.send(method: .POST, path: StripeAPIEndpoint.charges.endpoint, body: body.queryParameters, headers: headers)
+        if let transferData = transferData {
+            transferData.forEach { body["transfer_data[\($0)]"] = $1 }
+        }
+        
+        if let transferGroup = transferGroup {
+            body["transfer_group"] = transferGroup
+        }
+        
+        return try request.send(method: .POST, path: StripeAPIEndpoint.charges.endpoint, body: body.queryParameters)
     }
     
     /// Retrieve a charge
@@ -193,10 +198,10 @@ public struct StripeChargeRoutes: ChargeRoutes {
     public func update(charge chargeId: String,
                        customer: String?,
                        description: String?,
-                       fraudDetails: StripeFraudDetails?,
+                       fraudDetails: [String: Any]?,
                        metadata: [String: String]?,
                        receiptEmail: String?,
-                       shipping: ShippingLabel?,
+                       shipping: [String: Any]?,
                        transferGroup: String?) throws -> Future<StripeCharge> {
         var body: [String: Any] = [:]
         
@@ -209,19 +214,11 @@ public struct StripeChargeRoutes: ChargeRoutes {
         }
         
         if let fraud = fraudDetails {
-            if let userReport = fraud.userReport?.rawValue {
-                body["fraud_details[user_report]"] = userReport
-            }
-            
-            if let stripeReport = fraud.stripeReport?.rawValue {
-                body["fraud_details[stripe_report]"] = stripeReport
-            }
+            fraud.forEach { body["fraud_details[\($0)]"] = $1 }
         }
         
         if let metadata = metadata {
-            metadata.forEach { key, value in
-                body["metadata[\(key)]"] = value
-            }
+            metadata.forEach { body["metadata[\($0)]"] = $1 }
         }
         
         if let receiptEmail = receiptEmail {
@@ -229,7 +226,7 @@ public struct StripeChargeRoutes: ChargeRoutes {
         }
         
         if let shipping = shipping {
-            try shipping.toEncodedDictionary().forEach { body["shipping[\($0)]"] = $1 }
+            shipping.forEach { body["shipping[\($0)]"] = $1 }
         }
         
         if let transferGroup = transferGroup {
