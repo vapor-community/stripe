@@ -85,7 +85,7 @@ And you can always check the documentation to see the required paramaters for sp
 * [ ] Application Fees
 * [ ] Country Specs
 * [ ] External Accounts
-* [ ] Persons
+* [x] Persons
 * [ ] Top-ups
 * [x] Transfers
 * [x] Transfer Reversals
