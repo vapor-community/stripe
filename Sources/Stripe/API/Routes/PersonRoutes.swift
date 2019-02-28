@@ -202,7 +202,7 @@ public struct StripePersonRoutes: PersonRoutes {
                        phone: String?,
                        relationship: [String: Any]?,
                        ssnLast4: String?,
-                       verification: [String : Any]?) throws -> EventLoopFuture<StripePerson> {
+                       verification: [String: Any]?) throws -> EventLoopFuture<StripePerson> {
         var body: [String: Any] = [:]
         
         if let address = address {
