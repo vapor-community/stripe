@@ -123,6 +123,13 @@ internal enum StripeAPIEndpoint {
     case file
     case files(String)
     
+    // MARK: - PAYMENT INTENTS
+    case paymentIntent
+    case paymentIntents(String)
+    case paymentIntentsCapture(String)
+    case paymentIntentsConfirm(String)
+    case paymentIntentsCancel(String)
+
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -210,6 +217,13 @@ internal enum StripeAPIEndpoint {
         
         case .file: return FilesAPIBase + APIVersion + "files"
         case .files(let id): return FilesAPIBase + APIVersion + "files/\(id)"
+
+        case .paymentIntent: return APIBase + APIVersion + "payment_intents"
+        case .paymentIntents(let id): return APIBase + APIVersion + "payment_intents\(id)"
+        case .paymentIntentsCancel(let id): return APIBase + APIVersion + "payment_intents\(id)/cancel"
+        case .paymentIntentsConfirm(let id): return APIBase + APIVersion + "payment_intents\(id)/confirm"
+        case .paymentIntentsCapture(let id): return APIBase + APIVersion + "payment_intents\(id)/capture"
+
         }
     }
 }

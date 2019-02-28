@@ -93,7 +93,7 @@ public struct StripeOrderRoutes: OrderRoutes {
                        items: [[String: Any]]?,
                        metadata: [String: String]?,
                        shipping: ShippingLabel?) throws -> Future<StripeOrder> {
-        var body: [String: Any] = [:]
+        var body: [String: Any] = ["currency": currency.rawValue]
         
         if let coupon = coupon {
             body["coupon"] = coupon
