@@ -14,6 +14,7 @@ import Vapor
  */
 
 public struct StripeDeletedObject: StripeModel {
-    public var deleted: Bool
     public var id: String
+    public var object: String
+    public var deleted: Bool
 }
