@@ -46,7 +46,7 @@ And you can always check the documentation to see the required paramaters for sp
 
 ## JS Stripe integration
 
-Also make sure to check out stripes documenation to add the client JS magic on https://stripe.com/docs/checkout#integration-simple or https://stripe.com/docs/checkout#integration-custom
+Also make sure to check out stripes documenation to add the client JS magic [here]( https://stripe.com/docs/checkout#integration-simple) or  [here](https://stripe.com/docs/checkout#integration-custom)
 
 ## Whats Implemented
 
