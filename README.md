@@ -25,12 +25,12 @@ And you are all set. Interacting with the API is quite easy from any route handl
 ~~~~swift
 
 struct ChargeToken: Content {
-    var token: String
+    var stripeToken: String
 }
 
 func chargeCustomer(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
     return try req.content.decode(ChargeToken.self).flatMap { charge in
-        return try req.make(StripeClient.self).charge.create(amount: 2500, currency: .usd, source: charge.token).map { stripeCharge in
+        return try req.make(StripeClient.self).charge.create(amount: 2500, currency: .usd, source: charge.stripeToken).map { stripeCharge in
             if stripeCharge.status == .success {
                 return .ok
             } else {
