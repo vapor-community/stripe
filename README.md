@@ -44,6 +44,10 @@ func chargeCustomer(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
 
 And you can always check the documentation to see the required paramaters for specific API calls.
 
+## JS Stripe integration
+
+Also make sure to check out stripes documenation to add the client JS magic on https://stripe.com/docs/checkout#integration-simple or https://stripe.com/docs/checkout#integration-custom
+
 ## Whats Implemented
 
 ### Core Resources
