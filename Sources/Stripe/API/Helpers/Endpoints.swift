@@ -127,6 +127,12 @@ internal enum StripeAPIEndpoint {
     case person(String)
     case persons(String, String)
     
+    case applicationFee
+    case applicationFees(String)
+    
+    case applicationFeeRefund(String)
+    case applicationFeeRefunds(String, String)
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -216,7 +222,13 @@ internal enum StripeAPIEndpoint {
         case .files(let id): return FilesAPIBase + APIVersion + "files/\(id)"
         
         case .person(let account): return APIBase + APIVersion + "accounts/\(account)/persons"
-        case .persons(let account, let person): return APIBase + APIVersion + "accounts/\(account)/persons\(person)"
+        case .persons(let account, let person): return APIBase + APIVersion + "accounts/\(account)/persons/\(person)"
+            
+        case .applicationFee: return APIBase + APIVersion + "application_fees"
+        case .applicationFees(let fee): return APIBase + APIVersion + "application_fees/\(fee)"
+            
+        case .applicationFeeRefund(let fee): return APIBase + APIVersion + "application_fees/\(fee)/refunds"
+        case .applicationFeeRefunds(let fee, let refund): return APIBase + APIVersion + "application_fees/\(fee)/refunds/\(refund)"
         }
     }
 }

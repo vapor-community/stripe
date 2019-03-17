@@ -173,11 +173,11 @@ extension PersonRoutes {
                           verification: verification)
     }
     
-    func delete(account: String, person: String) throws -> EventLoopFuture<StripeDeletedObject> {
+    public func delete(account: String, person: String) throws -> EventLoopFuture<StripeDeletedObject> {
         return try delete(account: account, person: person)
     }
     
-    func listAll(account: String, filter: [String: Any]? = nil) throws -> EventLoopFuture<PersonsList> {
+    public func listAll(account: String, filter: [String: Any]? = nil) throws -> EventLoopFuture<PersonsList> {
         return try listAll(account: account, filter: filter)
     }
 }
