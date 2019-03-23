@@ -39,7 +39,7 @@ public protocol AccountRoutes {
                 tosAcceptance: [String: Any]?) throws -> Future<StripeConnectAccount>
     func delete(account: String) throws -> Future<StripeDeletedObject>
     func reject(account: String, for: AccountRejectReason) throws -> Future<StripeConnectAccount>
-    func listAll(filter: [String: Any]?) throws -> Future<ConnectedAccountsList>
+    func listAll(filter: [String: Any]?) throws -> Future<StripeConnectAccountList>
     func createLoginLink(for: String) throws -> Future<StripeConnectLoginLink>
 }
 
@@ -114,7 +114,7 @@ extension AccountRoutes {
         return try reject(account: account, for: `for`)
     }
     
-    public func listAll(filter: [String: Any]? = nil) throws -> Future<ConnectedAccountsList> {
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<StripeConnectAccountList> {
         return try listAll(filter: filter)
     }
     
@@ -297,7 +297,7 @@ public struct StripeConnectAccountRoutes: AccountRoutes {
     
     /// List all connected accounts
     /// [Learn More →](https://stripe.com/docs/api/curl#list_accounts)
-    public func listAll(filter: [String: Any]?) throws -> Future<ConnectedAccountsList> {
+    public func listAll(filter: [String: Any]?) throws -> Future<StripeConnectAccountList> {
         var queryParams = ""
         if let filter = filter {
             queryParams = filter.queryParameters

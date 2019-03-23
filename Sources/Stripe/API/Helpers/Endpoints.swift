@@ -133,6 +133,9 @@ internal enum StripeAPIEndpoint {
     case applicationFeeRefund(String)
     case applicationFeeRefunds(String, String)
     
+    case externalAccount(String)
+    case externalAccounts(String, String)
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -229,6 +232,9 @@ internal enum StripeAPIEndpoint {
             
         case .applicationFeeRefund(let fee): return APIBase + APIVersion + "application_fees/\(fee)/refunds"
         case .applicationFeeRefunds(let fee, let refund): return APIBase + APIVersion + "application_fees/\(fee)/refunds/\(refund)"
+            
+        case . externalAccount(let account): return APIBase + APIVersion + "accounts/\(account)/external_accounts"
+        case . externalAccounts(let account, let id): return APIBase + APIVersion + "accounts/\(account)/external_accounts/\(id)"
         }
     }
 }

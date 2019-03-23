@@ -88,7 +88,7 @@ Also make sure to check out stripes documenation to add the client JS magic [her
 * [x] Application Fee Refunds
 * [x] Application Fees
 * [ ] Country Specs
-* [ ] External Accounts
+* [x] External Accounts
 * [x] Persons
 * [ ] Top-ups
 * [x] Transfers

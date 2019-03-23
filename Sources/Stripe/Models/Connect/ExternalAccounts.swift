@@ -6,41 +6,41 @@
 //
 //
 
-/**
- External accounts list
- https://stripe.com/docs/api/curl#account_object-external_accounts
- */
-
-public struct ExternalAccountsList: StripeModel {
+/// External accounts list. [See here](https://stripe.com/docs/api/accounts/object#account_object-external_accounts)
+public struct StripeExternalAccountsList: StripeModel {
+    /// String representing the object’s type. Objects of the same type share the same value. Always has the value list.
     public var object: String
-    public var hasMore: Bool
-    public var totalCount: Int?
+    /**
+     Needs to be a string because the result can be an array of 2 possible types `StripeCard` and/or `StripeBankAccount`.
+     We'll actually decode the array of accounts seperately based on type and filtered based on object. See the initializer.
+     The `data` key is still needed in the `CodingKeys` and for decoding that property from the Stripe API, so we still have to declare it even though the type is unused.
+     */
+    private var data: String?
+    /// True if this list has another page of items after this one that can be fetched.
+    public var hasMore: Bool?
+    /// The URL where this list can be accessed.
     public var url: String?
-    // FIXME: - This is still quite hackey and i haven't come up with a great solution yet
-    public var data: String?
+    /// An array of `StripeCard`s associated with the account.
     public var cardAccounts: [StripeCard]?
+    /// /// An array of `StripeBankAccount`s associated with the account.
     public var bankAccounts: [StripeBankAccount]?
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         object = try container.decode(String.self, forKey: .object)
         hasMore = try container.decode(Bool.self, forKey: .hasMore)
-        totalCount = try container.decodeIfPresent(Int.self, forKey: .totalCount)
         url = try container.decodeIfPresent(String.self, forKey: .url)
         
         cardAccounts = try container.decodeIfPresent([StripeCard].self, forKey: .data)?.filter{ $0.object == "card" }
         bankAccounts = try container.decodeIfPresent([StripeBankAccount].self, forKey: .data)?.filter{ $0.object == "bank_account" }
     }
     
-    public enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case object
-        case hasMore = "has_more"
-        case totalCount = "total_count"
-        case url
         case data
+        case hasMore = "has_more"
+        case url
         case cardAccounts
         case bankAccounts
     }
 }
-
-public protocol ExternalAccount {}

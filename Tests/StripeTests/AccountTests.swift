@@ -93,7 +93,6 @@ class AccountTests: XCTestCase {
             }
     ],
     "has_more": false,
-    "total_count": 2,
     "url": "/v1/accounts/acct_1032D82eZvKYlo2C/external_accounts"
   },
   "individual": {
@@ -259,7 +258,6 @@ class AccountTests: XCTestCase {
             // ExternalAccounts
             XCTAssertEqual(account.externalAccounts?.object, "list")
             XCTAssertEqual(account.externalAccounts?.hasMore, false)
-            XCTAssertEqual(account.externalAccounts?.totalCount, 2)
             XCTAssertEqual(account.externalAccounts?.url, "/v1/accounts/acct_1032D82eZvKYlo2C/external_accounts")
             XCTAssertEqual(account.externalAccounts?.cardAccounts?.count, 1)
             XCTAssertEqual(account.externalAccounts?.bankAccounts?.count, 1)
