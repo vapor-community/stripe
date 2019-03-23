@@ -72,6 +72,7 @@ public final class StripeClient: Service {
     public var applicationFee: ApplicationFeesRoutes
     public var applicationFeeRefunds: ApplicationFeeRefundRoutes
     public var externalAccounts: ExternalAccountsRoutes
+    public var countrySpecs: CountrySpecRoutes
 
     internal init(apiKey: String, testKey: String?, client: Client) {
         let apiRequest = StripeAPIRequest(httpClient: client, apiKey: apiKey, testApiKey: testKey)
@@ -104,5 +105,6 @@ public final class StripeClient: Service {
         applicationFee = StripeApplicationFeeRoutes(request: apiRequest)
         applicationFeeRefunds = StripeApplicationFeeRefundRoutes(request: apiRequest)
         externalAccounts = StripeExternalAccountsRoutes(request: apiRequest)
+        countrySpecs = StripeCountrySpecRoutes(request: apiRequest)
     }
 }
