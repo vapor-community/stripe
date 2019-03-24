@@ -26,6 +26,12 @@ extension ChargeTests {
     ]
 }
 
+extension CountrySpecTests {
+    static let __allTests = [
+        ("testCountrySpecParsesProperly", testCountrySpecParsesProperly),
+    ]
+}
+
 extension CustomerTests {
     static let __allTests = [
         ("testCustomerParsedProperly", testCustomerParsedProperly),
@@ -136,6 +142,12 @@ extension TokenTests {
     ]
 }
 
+extension TopUpTests {
+    static let __allTests = [
+        ("testTopUpParsesProperly", testTopUpParsesProperly),
+    ]
+}
+
 extension TransferTests {
     static let __allTests = [
         ("testTransferParsedProperly", testTransferParsedProperly),
@@ -149,6 +161,7 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(ApplicationFeeTests.__allTests),
         testCase(BalanceTests.__allTests),
         testCase(ChargeTests.__allTests),
+        testCase(CountrySpecTests.__allTests),
         testCase(CustomerTests.__allTests),
         testCase(DisputeTests.__allTests),
         testCase(EphemeralKeyTests.__allTests),
@@ -165,6 +178,7 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(SourceTests.__allTests),
         testCase(SubscriptionTests.__allTests),
         testCase(TokenTests.__allTests),
+        testCase(TopUpTests.__allTests),
         testCase(TransferTests.__allTests),
     ]
 }

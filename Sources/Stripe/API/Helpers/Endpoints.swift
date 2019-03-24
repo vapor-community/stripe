@@ -139,6 +139,10 @@ internal enum StripeAPIEndpoint {
     case countrySpec
     case countrySpecs(String)
     
+    case topup
+    case topups(String)
+    case topupsCancel(String)
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -241,6 +245,10 @@ internal enum StripeAPIEndpoint {
             
         case .countrySpec: return APIBase + APIVersion + "country_specs"
         case .countrySpecs(let country): return APIBase + APIVersion + "country_specs/\(country)"
+            
+        case .topup: return APIBase + APIVersion + "topups"
+        case .topups(let id): return APIBase + APIVersion + "topups/\(id)"
+        case .topupsCancel(let id): return APIBase + APIVersion + "topups/\(id)/cancel"
         }
     }
 }
