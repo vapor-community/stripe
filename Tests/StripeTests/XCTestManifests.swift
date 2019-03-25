@@ -6,6 +6,13 @@ extension AccountTests {
     ]
 }
 
+extension ApplicationFeeTests {
+    static let __allTests = [
+        ("testApplicationFeeParsesProperly", testApplicationFeeParsesProperly),
+        ("testApplicationFeeRefundParsesProperly", testApplicationFeeRefundParsesProperly),
+    ]
+}
+
 extension BalanceTests {
     static let __allTests = [
         ("testBalanceParsedProperly", testBalanceParsedProperly),
@@ -139,6 +146,7 @@ extension TransferTests {
 public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(AccountTests.__allTests),
+        testCase(ApplicationFeeTests.__allTests),
         testCase(BalanceTests.__allTests),
         testCase(ChargeTests.__allTests),
         testCase(CustomerTests.__allTests),

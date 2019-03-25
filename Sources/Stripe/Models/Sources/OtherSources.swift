@@ -139,7 +139,7 @@ public struct ACHCreditTransfer: StripeModel {
 
 // MARK: - Basic Card
 public struct StripeBasicCard: StripeModel {
-    public var funding: FundingType
+    public var funding: StripeCardFundingType
     public var expMonth: Int
     public var country: String
     public var threeDSecure: String

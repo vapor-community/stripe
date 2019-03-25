@@ -26,7 +26,7 @@ public struct StripeConnectAccount: StripeModel {
     public var defaultCurrency: StripeCurrency?
     public var detailsSubmitted: Bool?
     public var email: String?
-    public var externalAccounts: ExternalAccountsList?
+    public var externalAccounts: StripeExternalAccountsList?
     public var individual: StripePerson?
     public var metadata: [String: String]
     public var payoutsEnabled: Bool?
@@ -56,6 +56,20 @@ public struct StripeConnectAccount: StripeModel {
         case settings
         case tosAcceptance = "tos_acceptance"
         case type
+    }
+}
+
+public struct StripeConnectAccountList: StripeModel {
+    public var object: String
+    public var hasMore: Bool
+    public var url: String?
+    public var data: [StripeConnectAccount]?
+    
+    private enum CodingKeys: String, CodingKey {
+        case object
+        case hasMore = "has_more"
+        case url
+        case data
     }
 }
 
