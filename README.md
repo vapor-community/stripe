@@ -95,7 +95,7 @@ Also make sure to check out stripes documenation to add the client JS magic [her
 * [x] Transfer Reversals
 ---
 ### Fraud
-* [ ] Reviews
+* [x] Reviews
 * [ ] Value Lists
 * [ ] Value List Items
 ---

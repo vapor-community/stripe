@@ -108,6 +108,12 @@ extension RefundTests {
     ]
 }
 
+extension ReviewTests {
+    static let __allTests = [
+        ("testTopUpParsesProperly", testTopUpParsesProperly),
+    ]
+}
+
 extension SKUTests {
     static let __allTests = [
         ("testSkuParsedProperly", testSkuParsedProperly),
@@ -174,6 +180,7 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(ProductTests.__allTests),
         testCase(QueryEncodingTests.__allTests),
         testCase(RefundTests.__allTests),
+        testCase(ReviewTests.__allTests),
         testCase(SKUTests.__allTests),
         testCase(SourceTests.__allTests),
         testCase(SubscriptionTests.__allTests),
