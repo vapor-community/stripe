@@ -147,6 +147,9 @@ internal enum StripeAPIEndpoint {
     case reviews(String)
     case reviewsApprove(String)
     
+    case valueListItem
+    case valueListItems(String)
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -257,6 +260,9 @@ internal enum StripeAPIEndpoint {
         case .review: return APIBase + APIVersion + "reviews"
         case .reviews(let id): return APIBase + APIVersion + "reviews/\(id)"
         case .reviewsApprove(let id): return APIBase + APIVersion + "reviews/\(id)/approve"
+            
+        case .valueListItem: return APIBase + APIVersion + "value_list_items"
+        case .valueListItems(let id): return APIBase + APIVersion + "value_list_items/\(id)"
         }
     }
 }

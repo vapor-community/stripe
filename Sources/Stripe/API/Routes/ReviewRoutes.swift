@@ -27,7 +27,7 @@ public protocol ReviewRoutes {
     /// - Parameter filter: A dictionary that will be used for the query parameters. [See More →](https://stripe.com/docs/api/radar/reviews/list).
     /// - Returns: A `StripeReviewList`.
     /// - Throws: A `StripeError`.
-    func listAll(filter: [String: Any]?)  throws -> EventLoopFuture<StripeReviewList>
+    func listAll(filter: [String: Any]?) throws -> EventLoopFuture<StripeReviewList>
 }
 
 extension ReviewRoutes {
