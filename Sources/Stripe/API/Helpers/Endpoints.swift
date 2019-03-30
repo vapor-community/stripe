@@ -150,6 +150,9 @@ internal enum StripeAPIEndpoint {
     case valueListItem
     case valueListItems(String)
     
+    case valueList
+    case valueLists(String)
+    
     var endpoint: String {
         switch self {
         case .balance: return APIBase + APIVersion + "balance"
@@ -263,6 +266,9 @@ internal enum StripeAPIEndpoint {
             
         case .valueListItem: return APIBase + APIVersion + "value_list_items"
         case .valueListItems(let id): return APIBase + APIVersion + "value_list_items/\(id)"
+            
+        case .valueList: return APIBase + APIVersion + "value_lists"
+        case .valueLists(let id): return APIBase + APIVersion + "value_lists/\(id)"
         }
     }
 }

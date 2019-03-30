@@ -75,6 +75,7 @@ public final class StripeClient: Service {
     public var countrySpecs: CountrySpecRoutes
     public var topup: TopUpRoutes
     public var valueListItems: ValueListItemRoutes
+    public var valueList: ValueListRoutes
 
     internal init(apiKey: String, testKey: String?, client: Client) {
         let apiRequest = StripeAPIRequest(httpClient: client, apiKey: apiKey, testApiKey: testKey)
@@ -110,5 +111,6 @@ public final class StripeClient: Service {
         countrySpecs = StripeCountrySpecRoutes(request: apiRequest)
         topup = StripeTopUpRoutes(request: apiRequest)
         valueListItems = StripeValueListItemRoutes(request: apiRequest)
+        valueList = StripeValueListRoutes(request: apiRequest)
     }
 }
