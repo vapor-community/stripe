@@ -96,7 +96,7 @@ Also make sure to check out stripes documenation to add the client JS magic [her
 ---
 ### Fraud
 * [x] Reviews
-* [ ] Value Lists
+* [x] Value Lists
 * [x] Value List Items
 ---
 ### Issuing
