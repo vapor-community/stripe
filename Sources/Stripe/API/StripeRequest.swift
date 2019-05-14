@@ -16,11 +16,11 @@ public protocol StripeRequest: class {
 }
 
 public extension StripeRequest {
-    public func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String = "", body: LosslessHTTPBodyRepresentable = HTTPBody(string: ""), headers: HTTPHeaders = [:]) throws -> Future<SM> {
+    func send<SM: StripeModel>(method: HTTPMethod, path: String, query: String = "", body: LosslessHTTPBodyRepresentable = HTTPBody(string: ""), headers: HTTPHeaders = [:]) throws -> Future<SM> {
         return try send(method: method, path: path, query: query, body: body, headers: headers)
     }
     
-    public func serializedResponse<SM: StripeModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<SM> {
+    func serializedResponse<SM: StripeModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<SM> {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
         
