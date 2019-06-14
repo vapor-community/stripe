@@ -1,28 +1,31 @@
-# Vapor Stripe Provider
+# StripeProvider
 
-![Swift](http://img.shields.io/badge/swift-4.1-brightgreen.svg)
-![Vapor](http://img.shields.io/badge/vapor-3.0-brightgreen.svg)
-[![CircleCI](https://circleci.com/gh/vapor-community/stripe-provider.svg?style=svg)](https://circleci.com/gh/vapor-community/stripe-provider)
+![Swift](http://img.shields.io/badge/swift-5.1-brightgreen.svg)
+![Vapor](http://img.shields.io/badge/vapor-4.0-brightgreen.svg)
 
-[Stripe][stripe_home] is a payment platform that handles credit cards, bitcoin and ACH transfers. They have become one of the best platforms for handling payments for projects, services or products.
 
-## Getting Started
+### StripeProvider is a Vapor wrapper around [StripeKit](https://github.com/vapor-community/StripeKit)
+
+## Usage guide
 In your `Package.swift` file, add the following
 
 ~~~~swift
-.package(url: "https://github.com/vapor-community/stripe-provider.git", from: "2.2.0")
+.package(url: "https://github.com/vapor-community/stripe-provider.git", from: "3.0.0")
 ~~~~
 
-Register the config and the provider in `configure.swift`
+Register the configuration and the provider in `configure.swift`
 ~~~~swift
-let config = StripeConfig(productionKey: "sk_live_1234", testKey: "sk_test_1234")
+import Stripe
+
+let stripeConfiguration = StripeConfiguration(apiKey: "sk_live_1234")
 
 services.register(config)
 try services.register(StripeProvider())
 ~~~~
 
-And you are all set. Interacting with the API is quite easy from any route handler.
+Now to make a charge
 ~~~~swift
+import Stripe
 
 struct ChargeToken: Content {
     var stripeToken: String
@@ -41,91 +44,6 @@ func chargeCustomer(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
     }
 }
 ~~~~
-
-And you can always check the documentation to see the required paramaters for specific API calls.
-
-## JS Stripe integration
-
-Also make sure to check out stripes documenation to add the client JS magic [here]( https://stripe.com/docs/checkout#integration-simple) or [here](https://stripe.com/docs/checkout#integration-custom)
-
-## Whats Implemented
-
-### Core Resources
-* [x] Balance
-* [x] Charges
-* [x] Customers
-* [x] Disputes  
-* [ ] Events
-* [x] File Links
-* [x] File Uploads
-* [ ] PaymentIntents
-* [x] Payouts
-* [x] Products
-* [x] Refunds
-* [x] Tokens
----
-### Payment Methods
-* [x] Bank Accounts
-* [x] Cards
-* [x] Sources
----
-### Checkout
-* [ ] Sessions
----
-### Billing
-* [x] Coupons
-* [x] Discounts
-* [x] Invoices
-* [x] Invoice Items
-* [x] Products
-* [x] Plans
-* [x] Subscriptions
-* [x] Subscription items
-* [ ] Usage Records
----
-### Connect
-* [x] Account
-* [x] Application Fee Refunds
-* [x] Application Fees
-* [x] Country Specs
-* [x] External Accounts
-* [x] Persons
-* [x] Top-ups
-* [x] Transfers
-* [x] Transfer Reversals
----
-### Fraud
-* [ ] Reviews
-* [ ] Value Lists
-* [ ] Value List Items
----
-### Issuing
-* [ ] Authorizations
-* [ ] Cardholders
-* [ ] Cards
-* [ ] Disputes
-* [ ] Transactions
----
-### Terminal
-* [ ] Connection Tokens
-* [ ] Locations
-* [ ] Readers
----
-### Orders
-* [x] Orders
-* [x] Order Items
-* [x] Returns
-* [x] SKUs
-* [x] Ephemeral Keys
----
-### Sigma
-* [ ] Scheduled Queries
----
-### Webhooks
-* [ ] Webhook Endpoints
-
-[stripe_home]: http://stripe.com "Stripe"
-[stripe_api]: https://stripe.com/docs/api "Stripe API Endpoints"
 
 ## License
 
