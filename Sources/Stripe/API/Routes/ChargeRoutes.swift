@@ -21,6 +21,7 @@ public protocol ChargeRoutes {
                 shipping: [String: Any]?,
                 source: Any?,
                 statementDescriptor: String?,
+                directChargeAccount: String?,
                 transferData: [String: Any]?,
                 transferGroup: String?) throws -> Future<StripeCharge>
     func retrieve(charge: String) throws -> Future<StripeCharge>
@@ -49,6 +50,7 @@ extension ChargeRoutes {
                        shipping: [String: Any]? = nil,
                        source: Any? = nil,
                        statementDescriptor: String? = nil,
+                       directChargeAccount: String? = nil,
                        transferData: [String: Any]? = nil,
                        transferGroup: String? = nil) throws -> Future<StripeCharge> {
         return try create(amount: amount,
@@ -63,6 +65,7 @@ extension ChargeRoutes {
                           shipping: shipping,
                           source: source,
                           statementDescriptor: statementDescriptor,
+                          directChargeAccount: directChargeAccount,
                           transferData: transferData,
                           transferGroup: transferGroup)
     }
@@ -129,6 +132,7 @@ public struct StripeChargeRoutes: ChargeRoutes {
                        shipping: [String: Any]?,
                        source: Any?,
                        statementDescriptor: String?,
+                       directChargeAccount: String?,
                        transferData: [String: Any]?,
                        transferGroup: String?) throws -> Future<StripeCharge> {
         var body: [String: Any] = ["amount": amount, "currency": currency.rawValue]
@@ -184,7 +188,12 @@ public struct StripeChargeRoutes: ChargeRoutes {
             body["transfer_group"] = transferGroup
         }
         
-        return try request.send(method: .POST, path: StripeAPIEndpoint.charges.endpoint, body: body.queryParameters)
+        var headers: HTTPHeaders = [:]
+        if let directChargeAccount = directChargeAccount {
+            headers.replaceOrAdd(name: HTTPHeaderName.stripeAccount, value: directChargeAccount)
+        }
+            
+        return try request.send(method: .POST, path: StripeAPIEndpoint.charges.endpoint, body: body.queryParameters, headers: headers)
     }
     
     /// Retrieve a charge
