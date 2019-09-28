@@ -6,7 +6,7 @@
 //
 
 import Vapor
-import StripeKit
+@_exported import StripeKit
 
 public struct StripeConfiguration {
     public var apiKey: String
