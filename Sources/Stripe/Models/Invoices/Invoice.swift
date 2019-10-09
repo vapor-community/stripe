@@ -29,13 +29,12 @@ public struct StripeInvoice: StripeModel {
     public var closed: Bool?
     public var currency: StripeCurrency?
     public var customer: String?
-    public var date: Date?
+    public var created: Date?
     public var defaultSource: String?
     public var description: String?
     public var discount: StripeDiscount?
     public var dueDate: Date?
     public var endingBalance: Int?
-    public var finalizedAt: Date?
     public var forgiven: Bool?
     public var hostedInvoiceUrl: String?
     public var invoicePdf: String?
@@ -51,6 +50,7 @@ public struct StripeInvoice: StripeModel {
     public var startingBalance: Int?
     public var statementDescriptor: String?
     public var status: StripeInvoiceStatus?
+    public var statusTransitions: StripeInvoiceStatusTransitions?
     public var subscription: String?
     public var subscriptionProrationDate: Int?
     public var subtotal: Int?
@@ -65,7 +65,7 @@ public struct StripeInvoice: StripeModel {
         case amountDue = "amount_due"
         case amountPaid = "amount_paid"
         case amountRemanining = "amount_remaining"
-        case applicationFee = "application_fee"
+        case applicationFee = "application_fee_amount"
         case attemptCount = "attempt_count"
         case attempted
         case autoAdvance = "auto_advance"
@@ -75,13 +75,12 @@ public struct StripeInvoice: StripeModel {
         case closed
         case currency
         case customer
-        case date
+        case created
         case defaultSource = "default_source"
         case description
         case discount
         case dueDate = "due_date"
         case endingBalance = "ending_balance"
-        case finalizedAt = "finalized_at"
         case forgiven
         case hostedInvoiceUrl = "hosted_invoice_url"
         case invoicePdf = "invoice_pdf"
@@ -97,6 +96,7 @@ public struct StripeInvoice: StripeModel {
         case startingBalance = "starting_balance"
         case statementDescriptor = "statement_descriptor"
         case status
+        case statusTransitions = "status_transitions"
         case subscription
         case subscriptionProrationDate = "subscription_proration_date"
         case subtotal

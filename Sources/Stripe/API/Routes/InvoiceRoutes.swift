@@ -113,7 +113,7 @@ public struct StripeInvoiceRoutes: InvoiceRoutes {
         body["customer"] = customer
         
         if let applicationFee = applicationFee {
-            body["application_fee"] = applicationFee
+            body["application_fee_amount"] = applicationFee
         }
         
         if let connectAccount = connectAccount {
@@ -195,7 +195,7 @@ public struct StripeInvoiceRoutes: InvoiceRoutes {
         var headers: HTTPHeaders = [:]
         
         if let applicationFee = applicationFee {
-            body["application_fee"] = applicationFee
+            body["application_fee_amount"] = applicationFee
         }
         
         if let connectAccount = connectAccount {
