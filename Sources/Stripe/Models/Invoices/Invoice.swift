@@ -44,6 +44,7 @@ public struct StripeInvoice: StripeModel {
     public var nextPaymentAttempt: Date?
     public var number: String?
     public var paid: Bool?
+	public var paymentIntent: PaymentIntent?
     public var periodEnd: Date?
     public var periodStart: Date?
     public var receiptNumber: String?
@@ -90,6 +91,7 @@ public struct StripeInvoice: StripeModel {
         case nextPaymentAttempt = "next_payment_attempt"
         case number
         case paid
+		case paymentIntent = "payment_intent"
         case periodEnd = "period_end"
         case periodStart = "period_start"
         case receiptNumber = "receipt_number"

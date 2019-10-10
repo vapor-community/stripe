@@ -29,6 +29,7 @@ public struct StripeSubscription: StripeModel {
     public var discount: StripeDiscount?
     public var endedAt: Date?
     public var items: SubscriptionItemsList?
+	public var latestInvoice: StripeInvoice?
     public var livemode: Bool?
     public var metadata: [String: String]
     public var plan: StripePlan?
@@ -55,6 +56,7 @@ public struct StripeSubscription: StripeModel {
         case discount
         case endedAt = "ended_at"
         case items
+		case latestInvoice = "latest_invoice"
         case livemode
         case metadata
         case plan
