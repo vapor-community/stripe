@@ -8,20 +8,16 @@
 import Vapor
 @_exported import StripeKit
 
-public struct StripeConfiguration {
-    public var apiKey: String
+public final class StripeProvider: Provider {
+    private let apiKey: String
     
     public init(apiKey: String) {
         self.apiKey = apiKey
     }
-}
-
-public final class StripeProvider: Provider {
-    public init() { }
-    public func register(_ s: inout Services) {
-        s.register(StripeClient.self) { container -> StripeClient in
-            let providerConfiguration = try container.make(StripeConfiguration.self)
-            return StripeClient(eventLoop: container.eventLoop, apiKey: providerConfiguration.apiKey)
+    
+    public func register(_ app: Application) {
+        app.register(StripeClient.self) { app in
+            return StripeClient(eventLoop: app.make(), apiKey: self.apiKey)
         }
     }
 }
