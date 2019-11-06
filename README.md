@@ -6,6 +6,11 @@
 
 ### StripeProvider is a Vapor wrapper around [StripeKit](https://github.com/vapor-community/StripeKit)
 
+## API versioning
+The current version of StripeProvider supports api version [2019-11-05](https://stripe.com/docs/upgrades#2019-11-05)
+Check the releases page to pin the StripeProvider to a specific Stripe API version.
+(But you should probably upgrade when you get a chance to stay current 😉)
+
 ## Usage guide
 In your `Package.swift` file, add the following
 
