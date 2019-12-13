@@ -49,13 +49,13 @@ public protocol PaymentIntentsRoutes {
                 source: String?,
                 statementDescriptor: String?,
                 transferData: [String: Any]?,
-                transferGroup: String?) -> Future<PaymentIntent>
+                transferGroup: String?) throws -> Future<PaymentIntent>
 
     /// Retrieves the details of a PaymentIntent that has previously been created.
     ///
     /// - Parameter id: The identifier of the paymentintent to be retrieved.
     /// - Returns: A `StripePaymentIntent`.
-    func retrieve(id: String) -> Future<PaymentIntent>
+    func retrieve(id: String) throws -> Future<PaymentIntent>
 
     /// Updates a PaymentIntent object.
     ///
@@ -90,7 +90,7 @@ public protocol PaymentIntentsRoutes {
                 shipping: [String: Any]?,
                 source: String?,
                 statementDescriptor: String?,
-                transferGroup: String?) -> Future<PaymentIntent>
+                transferGroup: String?) throws -> Future<PaymentIntent>
 
     /// Confirm that your customer intends to pay with current or provided payment method. Upon confirmation, the PaymentIntent will attempt to initiate a payment. /n If the selected payment method requires additional authentication steps, the PaymentIntent will transition to the `requires_action` status and suggest additional actions via `next_action`. If payment fails, the PaymentIntent will transition to the `requires_payment_method` status. If payment succeeds, the PaymentIntent will transition to the `succeeded` status (or `requires_capture`, if `capture_method` is set to `manual`). /n If the `confirmation_method` is `automatic`, payment may be attempted using our client SDKs and the PaymentIntent’s client_secret. After `next_action`s are handled by the client, no additional confirmation is required to complete the payment. /n If the `confirmation_method` is `manual`, all payment attempts must be initiated using a secret key. If any actions are required for the payment, the PaymentIntent will return to the `requires_confirmation` state after those actions are completed. Your server needs to then explicitly re-confirm the PaymentIntent to initiate the next payment attempt. Read the expanded documentation to learn more about manual confirmation.
     ///
@@ -109,7 +109,7 @@ public protocol PaymentIntentsRoutes {
                  returnUrl: String?,
                  savePaymentMethod: Bool?,
                  shipping: [String: Any]?,
-                 source: String?) -> Future<PaymentIntent>
+                 source: String?) throws -> Future<PaymentIntent>
 
     /// Capture the funds of an existing uncaptured PaymentIntent when its status is `requires_capture`. /n Uncaptured PaymentIntents will be canceled exactly seven days after they are created. /n Read the expanded documentation to learn more about separate authorization and capture.
     ///
@@ -118,7 +118,7 @@ public protocol PaymentIntentsRoutes {
     ///   - amountToCapture: The amount to capture from the PaymentIntent, which must be less than or equal to the original amount. Any additional amount will be automatically refunded. Defaults to the full `amount_capturable` if not provided.
     ///   - applicationfeeAmount: The amount of the application fee (if any) that will be applied to the payment and transferred to the application owner’s Stripe account. For more information, see the PaymentIntents Connect usage guide.
     /// - Returns: A `StripePaymentIntent`.
-    func capture(id: String, amountToCapture: Int?, applicationFeeAmount: Int?) -> Future<PaymentIntent>
+    func capture(id: String, amountToCapture: Int?, applicationFeeAmount: Int?) throws -> Future<PaymentIntent>
 
     ///  PaymentIntent object can be canceled when it is in one of these statuses: `requires_payment_method`, `requires_capture`, `requires_confirmation`, `requires_action`. /n Once canceled, no additional charges will be made by the PaymentIntent and any operations on the PaymentIntent will fail with an error. For PaymentIntents with `status='requires_capture'`, the remaining `amount_capturable` will automatically be refunded.
     ///
@@ -126,13 +126,13 @@ public protocol PaymentIntentsRoutes {
     ///   - id: The identifier of the paymentintent to cancel.
     ///   - cancellationReason: Reason for canceling this PaymentIntent. If set, possible values are `duplicate`, `fraudulent`, `requested_by_customer`, or `failed_invoice`
     /// - Returns: A `StripePaymentIntent`.
-    func cancel(id: String, cancellationReason: PaymentIntentCancellationReason?) -> Future<PaymentIntent>
+    func cancel(id: String, cancellationReason: PaymentIntentCancellationReason?) throws -> Future<PaymentIntent>
 
     /// Returns a list of PaymentIntents.
     ///
     /// - Parameter filter: A dictionary that contains the filters. More info [here](https://stripe.com/docs/api/payment_intents/list).
     /// - Returns: A `StripePaymentIntentsList`.
-    func listAll(filter: [String: Any]?) -> Future<PaymentIntentsList>
+    func listAll(filter: [String: Any]?) throws -> Future<PaymentIntentsList>
 }
 
 extension PaymentIntentsRoutes {
@@ -154,8 +154,8 @@ extension PaymentIntentsRoutes {
                        source: String? = nil,
                        statementDescriptor: String? = nil,
                        transferData: [String: Any]? = nil,
-                       transferGroup: String? = nil) -> Future<PaymentIntent> {
-        return create(amount: amount,
+                       transferGroup: String? = nil) throws -> Future<PaymentIntent> {
+        return try create(amount: amount,
                           currency: currency,
                           applicationFeeAmount: applicationFeeAmount,
                           captureMethod: captureMethod,
@@ -176,8 +176,8 @@ extension PaymentIntentsRoutes {
                           transferGroup: transferGroup)
     }
 
-    public func retrieve(id: String) -> Future<PaymentIntent> {
-        return retrieve(id: id)
+    public func retrieve(id: String) throws -> Future<PaymentIntent> {
+        return try retrieve(id: id)
     }
 
     public func update(id: String,
@@ -194,8 +194,8 @@ extension PaymentIntentsRoutes {
                        shipping: [String: Any]? = nil,
                        source: String? = nil,
                        statementDescriptor: String? = nil,
-                       transferGroup: String? = nil) -> Future<PaymentIntent> {
-        return update(id: id,
+                       transferGroup: String? = nil) throws -> Future<PaymentIntent> {
+        return try update(id: id,
                           amount: amount,
                           applicationFeeAmount: applicationFeeAmount,
                           currency: currency,
@@ -218,8 +218,8 @@ extension PaymentIntentsRoutes {
                         returnUrl: String? = nil,
                         savePaymentMethod: Bool? = nil,
                         shipping: [String: Any]? = nil,
-                        source: String? = nil) -> Future<PaymentIntent> {
-        return confirm(id: id,
+                        source: String? = nil) throws -> Future<PaymentIntent> {
+        return try confirm(id: id,
                            paymentMethod: paymentMethod,
                            receiptEmail: receiptEmail,
                            returnUrl: returnUrl,
@@ -228,16 +228,16 @@ extension PaymentIntentsRoutes {
                            source: source)
     }
 
-    public func capture(id: String, amountToCapture: Int? = nil, applicationFeeAmount: Int? = nil) -> Future<PaymentIntent> {
-        return capture(id: id, amountToCapture: amountToCapture, applicationFeeAmount: applicationFeeAmount)
+    public func capture(id: String, amountToCapture: Int? = nil, applicationFeeAmount: Int? = nil) throws -> Future<PaymentIntent> {
+        return try capture(id: id, amountToCapture: amountToCapture, applicationFeeAmount: applicationFeeAmount)
     }
 
-    public func cancel(id: String, cancellationReason: PaymentIntentCancellationReason? = nil) -> Future<PaymentIntent> {
-        return cancel(id: id, cancellationReason: cancellationReason)
+    public func cancel(id: String, cancellationReason: PaymentIntentCancellationReason? = nil) throws -> Future<PaymentIntent> {
+        return try cancel(id: id, cancellationReason: cancellationReason)
     }
 
-    public func listAll(filter: [String: Any]? = nil) -> Future<PaymentIntentsList> {
-        return listAll(filter: filter)
+    public func listAll(filter: [String: Any]? = nil) throws -> Future<PaymentIntentsList> {
+        return try listAll(filter: filter)
     }
 }
 
