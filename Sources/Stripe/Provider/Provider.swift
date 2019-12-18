@@ -69,6 +69,7 @@ public final class StripeClient: Service {
     public var fileLinks: FileLinkRoutes
     public var files: FileRoutes
     public var person: PersonRoutes
+    public var paymentIntents: PaymentIntentsRoutes
 
     internal init(apiKey: String, testKey: String?, client: Client) {
         let apiRequest = StripeAPIRequest(httpClient: client, apiKey: apiKey, testApiKey: testKey)
@@ -98,5 +99,6 @@ public final class StripeClient: Service {
         fileLinks = StripeFileLinkRoutes(request: apiRequest)
         files = StripeFileRoutes(request: apiRequest)
         person = StripePersonRoutes(request: apiRequest)
+        paymentIntents = StripePaymentIntentsRoutes(request: apiRequest)
     }
 }

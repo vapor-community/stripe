@@ -54,7 +54,7 @@ And you can always check the documentation to see the required paramaters for sp
 * [ ] Events
 * [x] File Links
 * [x] File Uploads
-* [ ] PaymentIntents
+* [x] PaymentIntents
 * [x] Payouts
 * [x] Products
 * [x] Refunds

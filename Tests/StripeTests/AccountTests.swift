@@ -35,7 +35,7 @@ class AccountTests: XCTestCase {
   "business_type": "individual",
   "capabilities": {
     "card_payments": "active",
-    "platform_payments": "inactive"
+    "transfers": "inactive"
   },
   "charges_enabled": false,
   "company": {

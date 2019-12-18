@@ -89,7 +89,7 @@ public struct StripeConnectAccountCapablities: StripeModel {
     private enum CodingKeys: String, CodingKey {
         case cardPayments = "card_payments"
         case legacyPayments = "legacy_payments"
-        case platformPayments = "platform_payments"
+        case platformPayments = "transfers"
     }
 }
 
