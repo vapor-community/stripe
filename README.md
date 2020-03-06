@@ -1,26 +1,25 @@
-# Vapor Stripe Provider
+# Stripe
 
-![Swift](http://img.shields.io/badge/swift-4.1-brightgreen.svg)
-![Vapor](http://img.shields.io/badge/vapor-3.0-brightgreen.svg)
-[![CircleCI](https://circleci.com/gh/vapor-community/stripe-provider.svg?style=svg)](https://circleci.com/gh/vapor-community/stripe-provider)
+![Swift](http://img.shields.io/badge/swift-5.2-brightgreen.svg)
+![Vapor](http://img.shields.io/badge/vapor-4.0-brightgreen.svg)
 
-[Stripe][stripe_home] is a payment platform that handles credit cards, bitcoin and ACH transfers. They have become one of the best platforms for handling payments for projects, services or products.
 
-## Getting Started
+### Stripe is a Vapor wrapper around [StripeKit](https://github.com/vapor-community/stripe-kit)
+
+## Usage guide
 In your `Package.swift` file, add the following
 
 ~~~~swift
-.package(url: "https://github.com/vapor-community/stripe-provider.git", from: "3.0.0-beta")
+.package(url: "https://github.com/vapor-community/stripe.git", from: "5.0.0")
 ~~~~
 
-Register the provider in `configure.swift`
-~~~~swift
-import Stripe
 
-app.provider(StripeProvider(apiKey: "YOUR_API_KEY"))
-~~~~
+To use Stripe in your Vapor application, set the environment variable for you Stripe API key
+~~~
+export STRIPE_API_KEY="sk_123456"      
+~~~
 
-And you are all set. Interacting with the API is quite easy from any route handler.
+Now you can access a `StripeClient` via `Request`.
 ~~~~swift
 
 struct ChargeToken: Content {
@@ -29,7 +28,7 @@ struct ChargeToken: Content {
 
 func chargeCustomer(_ req: Request) throws -> EventLoopFuture<HTTPStatus> {
     return try req.content.decode(ChargeToken.self).flatMap { charge in
-        return req.make(StripeClient.self).charge.create(amount: 2500, currency: .usd, source: charge.stripeToken).map { stripeCharge in
+        return req.stripe.charge.create(amount: 2500, currency: .usd, source: charge.stripeToken).map { stripeCharge in
             if stripeCharge.status == .success {
                 return .ok
             } else {
@@ -124,7 +123,7 @@ And you can always check the documentation to see the required paramaters for sp
 
 ## License
 
-Vapor Stripe Provider is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
+Stripe is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
 
 ## Want to help?
 Feel free to submit a pull request whether it's a clean up, a new approach to handling things, adding a new part of the API, or even if it's just a typo. All help is welcomed! 😀
