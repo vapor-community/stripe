@@ -38,5 +38,3 @@ extension Request {
         }
     }
 }
-
-extension StripeModel: Content {}
