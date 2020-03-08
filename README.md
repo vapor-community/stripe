@@ -4,13 +4,13 @@
 ![Vapor](http://img.shields.io/badge/vapor-4.0-brightgreen.svg)
 
 
-### Stripe is a Vapor wrapper around [StripeKit](https://github.com/vapor-community/stripe-kit)
+### Stripe is a Vapor helper to use [StripeKit](https://github.com/vapor-community/stripe-kit)
 
 ## Usage guide
 In your `Package.swift` file, add the following
 
 ~~~~swift
-.package(url: "https://github.com/vapor-community/stripe.git", from: "5.0.0")
+.package(url: "https://github.com/vapor-community/stripe.git", from: "4.0.0")
 ~~~~
 
 
