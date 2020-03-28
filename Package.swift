@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Stripe",
+    name: "stripe",
     platforms: [
         .macOS(.v10_15)
     ],
@@ -11,7 +11,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0-rc.1"),
-        .package(url: "https://github.com/vapor-community/stripe-kit.git", from: "6.0.0"),
+        .package(url: "https://github.com/vapor-community/stripe-kit.git", from: "6.1.0"),
     ],
     targets: [
         .target(name: "Stripe", dependencies: [
