@@ -13,7 +13,7 @@ extension Application {
         guard let stripeKey = Environment.get("STRIPE_API_KEY") else {
             fatalError("STRIPE_API_KEY env var required")
         }
-        return .init(httpClient: self.client.http,
+        return .init(httpClient: self.http.client.shared,
                      eventLoop: self.eventLoopGroup.next(),
                      apiKey: stripeKey)
     }
@@ -30,7 +30,7 @@ extension Request {
             guard let stripeKey = Environment.get("STRIPE_API_KEY") else {
                 fatalError("STRIPE_API_KEY env var required")
             }
-            let new = StripeClient(httpClient: self.application.client.http,
+            let new = StripeClient(httpClient: self.application.http.client.shared,
                                    eventLoop: self.eventLoop,
                                    apiKey: stripeKey)
             self.application.storage[StripeKey.self] = new
