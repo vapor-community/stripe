@@ -41,7 +41,6 @@ extension Request {
 
 extension StripeClient {
     public static func verifySignature(for req: Request, secret: String, tolerance: Double = 300) throws {
-        
         guard let header = req.headers.first(name: "Stripe-Signature") else {
             throw StripeSignatureError.unableToParseHeader
         }
