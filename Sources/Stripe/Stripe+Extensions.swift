@@ -1,5 +1,5 @@
 //
-//  Stripe+Extensins.swift
+//  Stripe+Extensions.swift
 //  
 //
 //  Created by Andrew Edwards on 6/14/19.
