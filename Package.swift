@@ -11,7 +11,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
-        .package(url: "https://github.com/vapor-community/stripe-kit.git", from: "16.0.0"),
+        .package(url: "https://github.com/vapor-community/stripe-kit.git", from: "16.2.1"),
     ],
     targets: [
         .target(name: "Stripe", dependencies: [
